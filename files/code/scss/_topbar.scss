@@ -1,0 +1,81 @@
+$top-panel--color: #464646;
+
+.top-panel {
+	@include flexbox(auto, center, center, auto);
+	width: 100%;
+	height: 50px;
+	background-color: $top-panel--color;
+	overflow: hidden;
+
+	$brandheight: 20px;
+
+	.brand {
+		@include user-select(none);
+		white-space: nowrap;
+		cursor: default;
+		font-size: 0;
+
+		& > * {
+			display: inline-block;
+			vertical-align: middle;
+		}
+
+		img {
+			height: $brandheight;
+			margin-right: 5px;
+		}
+
+		.text {
+			@include transition(.5s);
+
+			text-transform: uppercase;
+			text-decoration: none;
+			font-family: Tahoma, Geneva, Arial, sans-serif;
+			font-weight: bold;
+			letter-spacing: 2px;
+			font-size: $brandheight;
+			color: #fff;
+
+			&:hover {
+				//opacity: .85;
+				text-shadow: 1px 1px 2px #cccccc;
+			}
+		}
+	}
+
+	.right-panel {
+		position: absolute;
+		top: 10px;	right: 5px;
+		width: auto !important; height: auto;
+		font-size: 20px;
+
+		a {
+			text-decoration: none;
+		}
+
+		.rp-elem {
+			display: inline-block;
+			background-color: #5f5f5f;
+			border-radius: 5px;
+			padding: 2.5px 10px;
+			opacity: 0.7;
+			color: #fff;
+
+			cursor: pointer;
+			@include user-select(none);
+			@include transition(.3s);
+
+			&:hover {
+				opacity: 1;
+			}
+		}
+	}
+}
+
+@media screen and (max-width: 499px) {
+	.top-panel {
+		.right-panel {
+			display: none;
+		}
+	}
+}

@@ -1,0 +1,64 @@
+@mixin transition($sec) {
+	-webkit-transition: all $sec ease-in-out;
+	   -moz-transition: all $sec ease-in-out;
+			    transition: all $sec ease-in-out;
+}
+
+@mixin user-select($select) {
+	-webkit-user-select: $select;
+	   -moz-user-select: $select;
+			    user-select: $select;
+}
+
+@mixin flexbox($direction, $justify, $align-items, $align-content) {
+	display: flex;
+	@if $direction == auto {
+		//flex-direction: row;
+	} @else {
+		flex-direction: $direction;
+	}
+	@if $justify == auto {
+		//justify-content: flex-start;
+	} @else {
+		justify-content: $justify;
+	}
+	@if $align-items == auto {
+		//align-items: stretch;
+	} @else {
+		align-items: $align-items;
+	}
+	@if $align-content == auto {
+		//align-content: stretch;
+	} @else {
+		align-content: $align-content;
+	}
+}
+
+@mixin selection($color) {
+	::-webkit-selection {
+		background-color: $color;
+	}
+
+	::-moz-selection {
+		background-color: $color;
+	}
+
+	::selection {
+		background-color: $color;
+	}
+}
+
+@mixin filter($settings...) {
+	-webkit-filter: $settings;
+	   -moz-filter: $settings;
+	        filter: $settings;
+}
+
+@mixin opacity {
+	opacity: 0.9;
+}
+
+// .inline-middle {
+// 	vertical-align: middle;
+// 	display: inline-block;
+// }
