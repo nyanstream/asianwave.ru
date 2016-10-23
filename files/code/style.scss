@@ -8,7 +8,7 @@
 	padding: 0; margin: 0;
 }
 
-//@import 'scss/events/halloween-2016';
+@import 'scss/events/halloween-2016';
 
 $pagewidth: 960px;
 $primecolor: #FF305E;
@@ -106,6 +106,7 @@ $btnwidth: 300px;
 
 .btns {
 	@include user-select(none);
+	font-size: 0;
 
 	.container > a {
 		display: inline-block;
@@ -119,10 +120,10 @@ $btnwidth: 300px;
 
 		box-shadow: 0 5px 20px rgba(0,0,0,0.5);
 		@include transition(.3s);
-		//background-color: #ccc;
 
 		&:hover {
 			background-size: 70%, 105%;
+			//box-shadow: 5px 10px 20px rgba(0,0,0,0.5);
 		}
 	}
 
@@ -138,7 +139,8 @@ $btnwidth: 300px;
 
 footer {
 	text-align: center;
-	margin: 20px 0;
+	margin: 25px 0;
+	cursor: default;
 
 	p {
 		padding: 0 5px;
@@ -160,7 +162,7 @@ footer {
 	}
 }
 
-@media screen and (max-width: #{$btnpadding * 2 + $btnwidth * 2}) {
+@media screen and (max-width: #{$btnpadding * 5 + $btnwidth * 2}) {
 	.top-panel {
 		.container {
 			text-align: center;

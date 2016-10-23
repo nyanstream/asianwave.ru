@@ -12,26 +12,10 @@
 
 @mixin flexbox($direction, $justify, $align-items, $align-content) {
 	display: flex;
-	@if $direction == auto {
-		//flex-direction: row;
-	} @else {
-		flex-direction: $direction;
-	}
-	@if $justify == auto {
-		//justify-content: flex-start;
-	} @else {
-		justify-content: $justify;
-	}
-	@if $align-items == auto {
-		//align-items: stretch;
-	} @else {
-		align-items: $align-items;
-	}
-	@if $align-content == auto {
-		//align-content: stretch;
-	} @else {
-		align-content: $align-content;
-	}
+	@if $direction != auto {flex-direction: $direction;}
+	@if $justify != auto {justify-content: $justify;}
+	@if $align-items != auto {align-items: $align-items;}
+	@if $align-content != auto {align-content: $align-content;}
 }
 
 @mixin selection($color) {
