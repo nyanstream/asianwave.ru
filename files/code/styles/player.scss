@@ -1,0 +1,263 @@
+@import 'scss/mixins'; // миксины
+@import 'scss/vars'; // переменные
+@import 'fonts/style'; // шрифты
+
+* {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+
+	padding: 0; margin: 0;
+}
+
+//@include selection(#8400a5);
+
+$fontsize: 16px;
+
+.player-container {
+	@include flexbox(auto, space-between, auto, auto);
+	@include user-select(none);
+	font-family: Roboto, Arial, sans-serif;
+	font-size: 0;
+
+	overflow: hidden;
+
+	position: relative;
+
+	height: 40px;
+	width: 100%;
+
+	&.theme-dark {
+		background: $top-panel--color;
+		//background: linear-gradient(to top, #300, #000000);
+		background-repeat: no-repeat;
+
+		border: 1px solid lighten($top-panel--color, 5%);
+		color: #fff;
+
+		a {
+			color: #cacaca;
+			text-decoration: none;
+			@include transition(.3s);
+
+			&:hover {
+				color: #ececec;
+			}
+		}
+
+		.player-elem {
+			border-right: 1px solid lighten($top-panel--color, 10%);
+		}
+	}
+
+	&.online {
+		.p-song.search {
+			display: block;
+		}
+
+		.p-elem.djname, .p-elem.listeners {
+			display: flex;
+		}
+	}
+
+	&.offline {
+		.p-song.search, .p-elem.djname, .p-elem.listeners {
+			display: none;
+		}
+	}
+
+} // .p-container
+
+.player-elem {
+	@include flexbox(auto, center, center, auto);
+	font-size: 16px;
+
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
+
+	height: 100%;
+	padding: 0 5px 0 5px;
+
+	border-right: 1px solid #000;
+
+	// &:last-child {
+	// 	border-right: 0;
+	// }
+
+	&.controls {
+		min-width: 160px;
+		max-width: 160px;
+
+		&.mobile {
+			min-width: auto;
+			max-width: none;
+			padding: 0 10px 0 10px;
+
+			.p-ctrl {
+				&.mute, &.volume {
+					display: none;
+				}
+
+				&.playpause {
+					font-size: 25px;
+				}
+			}
+		}
+	} // &.controls
+
+	&.songnow {
+		width: 100%;
+		justify-content: flex-start;
+
+		.player-song {
+			&.playlist, &.search {
+				margin-right: 5px;
+			}
+
+			&.search {
+				font-size: 0;
+
+				li {
+					list-style: none;
+					display: inline;
+					cursor: default;
+					font-size: 1rem;
+
+					.srch {
+						&-vk {
+							font-size: 1.2em;
+						}
+					}
+				}
+			}
+
+			&.song {
+				white-space: nowrap;
+				text-overflow: ellipsis;
+				overflow: hidden;
+				&[title] {
+					cursor: help;
+				}
+			}
+		}
+	} // &.songnow
+
+	&.djname {
+		min-width: 160px;
+
+		&[title] {
+			cursor: help;
+		}
+	}
+
+	&.listeners {
+		min-width: 40px;
+		border-right: 0 !important; // ставить в другое место, если этот элемент станет не последним
+		&[title] {
+			cursor: help;
+		}
+	}
+} // .p-elem
+
+.player-ctrl {
+	display: inline-block;
+	height: 1em;
+	cursor: pointer;
+	@include inline-middle;
+	@include transition(.2s);
+
+	&.playpause:hover, &.playpause:active,
+	&.mute:hover, &.mute:active {
+		opacity: 0.8;
+	}
+
+	&.volume {
+		outline: none;
+		background: transparent;
+
+		$slidercolor: #E5E5E5;
+
+		@each $browser, $track, $range in (webkit, 'slider-runnable', slider), (moz, range, range) { // хром это грёбаное дерьмо в плане кастомизации рэнжа, как оказалось, поэтому здесь КОСТЫЛИ :\
+			& {
+				-#{$browser}-appearance: none;
+				@if $browser == webkit {
+					width: 100px;
+				}
+			}
+
+			&::-#{$browser}-#{$track}-track {
+					-#{$browser}-appearance: none;
+					margin: 10px 0px 8px 5px;
+					@if $browser == webkit {
+						max-width: 100px;
+					}
+					width: 100px; height: 10px;
+					border-radius: 4px;
+					background-color: $slidercolor;
+					vertical-align: middle;
+
+					@include transition(.2s);
+
+					&:focus {
+						outline: none;
+					}
+				}
+
+			&::-#{$browser}-#{$range}-thumb {
+				-#{$browser}-appearance: none;
+				@if $browser == webkit {
+					margin-top: -4px;
+				}
+				border-radius: 10px;
+				background-color: lighten($slidercolor, 10%);
+				border: 1px solid #999;
+				width: 18px; height: 18px;
+				cursor: pointer;
+
+				@include transition(.2s);
+
+				&:hover {
+						background-color: darken($slidercolor, 5%);
+				}
+
+				&:active {
+						background-color: darken($slidercolor, 10%);
+				}
+			}
+		}
+	} // &.volume
+} // .p-ctrl
+
+@media screen and (max-width: 449px) {
+	.player-container {
+		.player-elem {
+			&.songnow {
+				border-right: 0;
+
+				.player-song.search {
+					display: none !important;
+				}
+			}
+
+			&.djname, &.listeners, &.reload {
+				display: none !important;
+			}
+		}
+	}
+}
+
+@media screen and (max-width: 199px) {
+	.player-container {
+		.player-elem {
+			&.controls {
+				border-right: 0;
+				width: 100% !important;
+			}
+
+			&.songnow {
+				display: none !important;
+			}
+		}
+	}
+}

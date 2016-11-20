@@ -1,21 +1,19 @@
-$top-panel--color: #464646;
-$top-panel--height: 50px;
+@import 'vars'; // переменные
 
 .top-panel {
-	@include flexbox(auto, center, center, auto);
+	@include flexbox(center, center, center, auto);
 	position: relative;
 	width: 100%;
 	height: $top-panel--height;
 	background-color: $top-panel--color;
 	overflow: hidden;
 
-	$brandheight: 20px;
-
 	.brand {
 		@include user-select(none);
 		white-space: nowrap;
 		cursor: default;
 		font-size: 0;
+		margin-left: 15px;
 
 		& > * {
 			display: inline-block;
@@ -23,7 +21,8 @@ $top-panel--height: 50px;
 		}
 
 		img {
-			height: $brandheight;
+			height: $top-panel--brandheight;
+			//image-rendering: pixelated;
 			margin-right: 5px;
 		}
 
@@ -35,7 +34,7 @@ $top-panel--height: 50px;
 			font-family: Tahoma, Geneva, Arial, sans-serif;
 			font-weight: bold;
 			letter-spacing: 2px;
-			font-size: $brandheight;
+			font-size: $top-panel--brandheight;
 			color: #fff;
 
 			&:hover {
@@ -57,7 +56,7 @@ $top-panel--height: 50px;
 
 		.rp-elem {
 			display: inline-block;
-			background-color: #5f5f5f;
+			background-color: lighten($top-panel--color, 10%);
 			border-radius: 5px;
 			padding: 2.5px 10px;
 			opacity: 0.7;
@@ -74,7 +73,7 @@ $top-panel--height: 50px;
 	}
 }
 
-@media screen and (max-width: 549px) {
+@media screen and (max-width: 649px) {
 	.top-panel {
 		.right-panel {
 			display: none;

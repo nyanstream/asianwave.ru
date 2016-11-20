@@ -42,7 +42,7 @@
 	opacity: 0.9;
 }
 
-// .inline-middle {
-// 	vertical-align: middle;
-// 	display: inline-block;
-// }
+@mixin inline-middle {
+	vertical-align: middle;
+	display: inline-block;
+}

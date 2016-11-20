@@ -2,11 +2,20 @@
 
 # Errorpages
 Options All -Indexes
-# ErrorDocument 404 /files/other/error.html
-# ErrorDocument 403 /files/other/error.html
+ErrorDocument 404 /files/error-pages/404.html
+ErrorDocument 403 /files/error-pages/403.html
 
 # Configurations
 AddDefaultCharset utf-8
+
+RewriteEngine on
+RewriteBase /
+RewriteCond %{THE_REQUEST} ^[A-Z]{3,9}\ /([^.]+)\.html\ HTTP
+RewriteRule ^([^.]+)\.html$ /$1 [R=301,L]
+RewriteCond %{REQUEST_URI} !(\.[^./]+)$
+RewriteCond %{REQUEST_fileNAME} !-d
+RewriteCond %{REQUEST_fileNAME} !-f
+RewriteRule (.*) /$1.html [L]
 
 RewriteEngine on
 RewriteCond %{HTTP_HOST} ^www\.
@@ -19,7 +28,16 @@ RewriteCond %{HTTPS} !on
 RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI}
 
 <IfModule mod_headers.c>
-	Header always set X-Frame-Options SAMEORIGIN
+	Header set Content-Security-Policy "default-src 'self' https:; \
+		connect-src 'self' https: mc.yandex.ru; \
+		child-src 'self' https: asianwaveru.chatovod.ru vk.com *.youtube-nocookie.com; \
+		frame-ancestors 'self' https: vk.com; \
+		style-src 'self' https: 'unsafe-inline' *.googleapis.com; \
+		font-src 'self' https: *.gstatic.com; \
+		img-src 'self' data: https: vk.com www.google-analytics.com mc.yandex.ru; \
+		media-src 'self' http: *.myradio24.com:*; \
+		script-src 'self' https: 'unsafe-inline' www.google-analytics.com mc.yandex.ru vk.com cdnjs.cloudflare.com cdn.jsdelivr.net; \
+		plugin-types application/x-shockwave-flash"
 </IfModule>
 
 <IfModule mod_deflate.c>
@@ -55,6 +73,11 @@ RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI}
 	Header set Cache-Control "max-age=172800, public, must-revalidate"
 </FilesMatch>
 
-Redirect 301 /app-vk https://vk.com/app4426688
-Redirect 301 /app-chrome https://chrome.google.com/webstore/detail/ecbegehkeefmdjnjhldeogkhbhhjhfje
-# Redirect 301 /app-opera https://vk.com/app4426688
+# расширения
+Redirect 301 /app--vk https://vk.com/app4426688
+Redirect 301 /app--chrome https://chrome.google.com/webstore/detail/ecbegehkeefmdjnjhldeogkhbhhjhfje
+# Redirect 301 /app--opera
+
+# фикс адресов разделов
+Redirect 301 /anime/ /anime
+Redirect 301 /radio/ /radio

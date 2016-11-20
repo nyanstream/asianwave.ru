@@ -216,8 +216,8 @@
 		<p>Последнее обновление оповещения: <span class="notiTS"></span></p>
 		<p>Точное московское время (на момент загрузки страницы): <?php echo date('Y-m-d H:i:s', time()) ?></p>
 	</footer>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.15.1/moment.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.15.1/locale/ru.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.16.0/moment.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.16.0/locale/ru.js"></script>
 	<script type="text/javascript">
 		'use strict';
 

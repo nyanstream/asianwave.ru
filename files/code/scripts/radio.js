@@ -1,5 +1,11 @@
 'use strict';
 
+console.info('Используйте эту консоль с осторожностью!');
+
+function _elem(querySelector) {return document.querySelector(querySelector)}
+function _xss(value) {return value.toString().replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/'/g, "&#39;").replace(/"/g, "&#34;")}
+function _extLink(link, text) {return '<a href="' + _xss(link) + '" target="_blank" rel="nofollow noopener">' + _xss(text) + '</a>'}
+
 /*
 	* функция для склонения слов от числительных.
 	* Взято здесь: https://gist.github.com/ivan1911/5327202#gistcomment-1669858.
@@ -14,7 +20,7 @@ function declOfNum(number, titles) {
 	* Смена бекграундов
 */
 
-var awlogo = document.querySelector('.brand img[alt="logo"]');
+var awlogo = _elem('.brand img[alt="logo"]');
 
 function changeBckg(){
 	var e = 9, bckgsFolder = '../files/img/radio-bckgs/';
@@ -27,14 +33,14 @@ awlogo.addEventListener('click', changeBckg);
 	* Инициация виджета ВК
 */
 
-var VK, vkElem = document.querySelector('#vk_group');
+var VK, vkElem = _elem('#vk_group');
 
 if (VK) {
 	VK.Widgets.Group("vk_group", {mode: 2, width: 350, height: 420}, 120842574);
 } else {
 	vkElem.classList.add('text-place');
 	vkElem.style.textAlign = 'center';
-	vkElem.innerHTML = '<p>Подписывайтесь на <a href="https://vk.com/awaveradio" target="_blank" rel="nofollow noopener">наше сообщество ВК</a>, чтобы быть в курсе всех новостей!</p>';
+	vkElem.innerHTML = '<p>Подписывайтесь на ' + _extLink('https://vk.com/awaveradio', 'наше сообщество ВК') + ', чтобы быть в курсе всех новостей!</p>';
 }
 //VK.Widgets.Group("vk_group", {mode: 2, width: "250", height: "550"}, 120842574);
 
@@ -45,7 +51,7 @@ if (VK) {
 var mr24url_1 = 'myra', mr24url_2 = 'dio24.c', mr24url_3 = 'om',
 		mr24url = mr24url_1 + mr24url_2 + mr24url_3;
 
-var songsBox = document.querySelector('.songs'), stream_port = 7934,
+var songsBox = _elem('.songs'), stream_port = 7934,
 		mr24api = 'https://'+mr24url+'/users/'+stream_port+'/status.json';
 
 function loadInfo(){
@@ -56,9 +62,9 @@ function loadInfo(){
 				return;
 			}
 			response.json().then(function(data) {
-				var i, songsData = data['songs'].reverse(),	tableBody = '';
-				for (i = 0; i < (songsData.length - 1) / 2; i++) {
-					var sdata = '<tr><td class="awd--time">' + songsData[i][0] + '</td><td class="awd--fullsong">' + songsData[i][1] + '</td></tr>';
+				var songsData = data['songs'].reverse(),	tableBody = '';
+				for (var i = 0; i < (songsData.length - 1) / 2; i++) {
+					var sdata = '<tr><td class="awd--time">' + _xss(songsData[i][0]) + '</td><td class="awd--fullsong">' + _xss(songsData[i][1]) + '</td></tr>';
 					tableBody += sdata;
 				}
 				//console.log(songsData.length);
@@ -71,13 +77,13 @@ function loadInfo(){
 
 				if (qenable = '1' && awrj != 'Auto-DJ') {
 					orderBox.style.display = 'block';
-					orderBox.setAttribute('href', 'https://'+mr24url+'/?to=table&port='+stream_port);
+					orderBox.setAttribute('href', 'https://' + mr24url + '/?to=table&port=' + stream_port);
 					switch (songsqueue) {
 						case 0:
 							orderQueue.textContent = 'заказов нет';
 							break;
 						default:
-							orderQueue.innerHTML = '<span class="awd--queue">' + declOfNum(songsqueue, [zkzd+'з', zkzd+'за', zkzd+'зов']);
+							orderQueue.innerHTML = '<span class="awd--queue">' + _xss(declOfNum(songsqueue, [zkzd+'з', zkzd+'за', zkzd+'зов']));
 					}
 				} else {
 					orderBox.style.display = 'none';

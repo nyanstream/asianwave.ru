@@ -1,4 +1,5 @@
 @import 'scss/mixins'; // миксины
+@import 'fonts/style'; // иконочные шрифты
 
 * {
 	-webkit-box-sizing: border-box;
@@ -8,13 +9,13 @@
 	padding: 0; margin: 0;
 }
 
-@keyframes online-blink {
-	0% {@include filter(brightness(1))}
-	25% {@include filter(brightness(0.85))}
-	50% {@include filter(brightness(0.7))}
-	75% {@include filter(brightness(0.85))}
-	100% {@include filter(brightness(1))}
-}
+// @keyframes online-blink {
+// 	0% {@include filter(brightness(1))}
+// 	25% {@include filter(brightness(.85))}
+// 	50% {@include filter(brightness(.7))}
+// 	75% {@include filter(brightness(.85))}
+// 	100% {@include filter(brightness(1))}
+// }
 
 html, body, .container {
 	width: 100%;
@@ -38,19 +39,19 @@ body {
 	//min-width: 350px;
 }
 
+//$primecolor: #f0640a;
 $primecolor: #FF305E;
 $pagewidth: 1000px;
 
-@import 'scss/topbar.scss';
+@import 'scss/topbar';
 
 .container {
 	font-family: Roboto, Arial, sans-serif;
 }
 
-.right-panel {
-	.closeTabs {
-		margin-left: 5px;
-	}
+q {
+	&:before {content: '\300c'}
+	&:after {content: '\300d'}
 }
 
 .anime {
@@ -110,17 +111,29 @@ $pagewidth: 1000px;
 	a {
 		text-decoration: none;
 		color: $primecolor;
-		border-bottom: 0.5px dashed $primecolor;
+		border-bottom: 1px dashed $primecolor;
 
 		@include transition(.3s);
+
+		// @supports (text-decoration-style: dotted) {
+		// 	text-decoration: underline dotted;
+		// 	border-bottom: 0;
+		// }
 
 		&:visited {
 			color: $primecolor;
 		}
 
 		&:hover {
-			color: darken($primecolor, 15%);
-			border-bottom: 0.5px solid darken($primecolor, 15%);
+			// color: darken($primecolor, 15%);
+			// border-bottom: .5px solid darken($primecolor, 15%);
+			color: darken($primecolor, 10%);
+			border-bottom: 1px solid darken($primecolor, 10%);
+
+			// @supports (text-decoration-style: dotted) {
+			// 	text-decoration-style: solid;
+			// 	border-bottom: 0;
+			// }
 		}
 	}
 }
@@ -134,31 +147,31 @@ $pagewidth: 1000px;
 		background-size: cover;
 	}
 
-	.notify {
-		$noti--offset: 10px;
+	$p--offset: 10px;
+
+	.noti {
 		display: none;
 		position: absolute;
 		width: auto; height: auto;
 		max-width: 385px; max-height: calc(100% - 100px);
-		overflow-y: auto;
-		top: $noti--offset; left: $noti--offset;
-		background-color: rgba(255, 255, 255, 0.8);
+		top: $p--offset; left: $p--offset;
+		background-color: rgba(255, 255, 255, .8);
 		padding: 5px 5px 10px 1.2em; z-index: 999;
-		cursor: default;
 		font-size: 20px;
+		cursor: default;
 
 		@include user-select(none);
 		@include transition(.5s);
 
 		// &:hover {
-		// 	background-color: rgba(255, 255, 255, 0.85);
+		// 	background-color: rgba(255, 255, 255, .85);
 		// }
 
-		.noti-close {
+		&-close {
 			display: inline-block;
 			position: relative;
 			cursor: pointer;
-			left: -0.8em;
+			left: -.8em;
 
 			@include transition(.3s);
 
@@ -167,10 +180,33 @@ $pagewidth: 1000px;
 			}
 		}
 
-		& > .noti-content {
+		&-content {
 			margin-top: -1.2em;
+			line-height: 1.3em;
+			overflow-y: auto;
+		}
+
+		&-undis {
+			font-size: .7em;
+			margin-top: 5px;
 		}
 	}
+
+	// .stream-selector {
+	// 	display: none;
+	// 	position: absolute;
+	// 	width: auto; height: auto;
+	// 	bottom: $p--offset; left: $p--offset;
+	// 	padding: 2px; z-index: 999;
+	// 	font-size: 13px;
+	// 	opacity: .2;
+	//
+	// 	@include transition(.5s);
+	//
+	// 	&:hover {
+	// 		opacity: 1;
+	// 	}
+	// }
 
 	&.noflash {
 		background-color: #fff;
@@ -202,6 +238,10 @@ $pagewidth: 1000px;
 				color: #fff;
 			}
 		}
+
+		.noti {
+			background-color: rgba(241, 241, 241, 0.8);
+		}
 	}
 }
 
@@ -227,8 +267,8 @@ $pagewidth: 1000px;
 			list-style: none;
 			cursor: pointer;
 
-			border-left: 0.5px solid darken($tabcolor, 3%);
-			border-right: 0.5px solid darken($tabcolor, 3%);
+			border-left: .5px solid darken($tabcolor, 3%);
+			border-right: .5px solid darken($tabcolor, 3%);
 
 			&:first-child {
 				border-left: 0;

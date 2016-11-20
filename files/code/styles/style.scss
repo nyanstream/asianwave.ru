@@ -8,7 +8,7 @@
 	padding: 0; margin: 0;
 }
 
-@import 'scss/events/halloween-2016';
+//@import 'scss/events/halloween-2016';
 
 $pagewidth: 960px;
 $primecolor: #FF305E;
@@ -42,7 +42,7 @@ body, html {
 }
 
 body {
-	background-image: url('../img/bckg.png');
+	background-image: url('../../img/bckg.png');
 	background-position: bottom center;
 	background-repeat: no-repeat;
 	background-size: 100%;
@@ -82,7 +82,7 @@ body {
 	.logo {
 		width: 120px; height: 120px;
 		background-color: $primecolor;
-		background-image: url('../img/logo.png');
+		background-image: url('../../img/logo.png');
 		background-position: center center;
 		background-repeat: no-repeat;
 		background-size: 80%;
@@ -129,10 +129,10 @@ $btnwidth: 300px;
 
 	@each $afon in anime, radio {
 		.container a[href*='#{$afon}'] {
-			background-image: url('../img/#{$afon}-btn.png'), url('../img/#{$afon}-fon.png');
+			background-image: url('../../img/#{$afon}-btn.png'), url('../../img/#{$afon}-fon.png');
 		}
 		.container a[href*='#{$afon}']:hover {
-			background-image: url('../img/hover-btn.png'), url('../img/#{$afon}-fon.png');
+			background-image: url('../../img/hover-btn.png'), url('../../img/#{$afon}-fon.png');
 		}
 	}
 } // .btns
@@ -149,9 +149,9 @@ footer {
 }
 
 .css-preload {
-	background-image: url('../img/hover-btn.png');
-	width: 0px; height: 0px;
-	background-size: 0px 0px;
+	background-image: url('../../img/hover-btn.png');
+	width: 1px; height: 1px;
+	background-size: 0 0;
 	font-size: 0;
 }
 

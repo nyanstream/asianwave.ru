@@ -1,12 +1,14 @@
 'use strict';
 
-console.info('Используйте эту консоль с осторожностью!')
+console.info('Используйте эту консоль с осторожностью!');
 
 function _elem(querySelector) {return document.querySelector(querySelector)}
-function _elemAll(querySelector) {return document.querySelectorAll(querySelector)}
+function _elems(querySelector) {return document.querySelectorAll(querySelector)}
 function _ls(ls_item) {return localStorage.getItem(ls_item)}
 function _ls_rm(ls_item) {return localStorage.removeItem(ls_item)}
 function _ls_set(ls_item, ls_item_var) {return localStorage.setItem(ls_item, ls_item_var)}
+function _xss(value) {return value.toString().replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/'/g, "&#39;").replace(/"/g, "&#34;")}
+function _extLink(link, text) {return '<a href="' + _xss(link) + '" target="_blank" rel="nofollow noopener">' + _xss(text) + '</a>'}
 
 /*
  * Детект поддержки флеша
@@ -14,7 +16,7 @@ function _ls_set(ls_item, ls_item_var) {return localStorage.setItem(ls_item, ls_
 
 var hasFlash = navigator.mimeTypes["application/x-shockwave-flash"], playerElem = _elem('.player');
 
-if (hasFlash == undefined) {
+if (!hasFlash || !hasFlash.enabledPlugin) {
 	playerElem.classList.add('noflash');
 	//clearInterval(aw_timer);
 }
@@ -79,10 +81,9 @@ window.addEventListener("load", function() {
  * Виджет ВК
 */
 
-var VK, tabsLi = document.querySelectorAll('.tabs ul li[data-tab]'), wheight = document.querySelector('.tabs').clientHeight - 25;
-if (wheight > 1200) {
-	wheight = 1200;
-}
+var VK, tabsUl = _elem('.tabs ul'), tabsLi = tabsUl.querySelectorAll('li[data-tab]'), wheight = document.querySelector('.tabs').clientHeight - tabsUl.clientHeight;
+
+if (wheight > 1200) {	wheight = 1200; }
 
 if (VK) {
 	VK.Widgets.Group("vk_group", {mode: 2, width: "400", height: wheight}, 120842574);
@@ -117,16 +118,15 @@ closeTabsCtr.addEventListener('click', closeTabs);
  * Уведомления
 */
 
-var notiEl = _elem('.notify');
+var notiEl = _elem('.noti');
 
 function spawnNoti(text, id) {
 	var notiClose = document.createElement('div'), notiContent = document.createElement('div'), ls_item = 'awnoti_' + id;
-	notiEl.classList.add('notify');
 	notiEl.dataset.noti = id;
 	notiEl.textContent = '';
 
 	notiClose.classList.add('noti-close');
-	notiClose.setAttribute('title', 'Закрыть');
+	notiClose.setAttribute('title', 'Скрыть оповещение');
 	notiClose.textContent = '\u00D7';
 
 	notiContent.classList.add('noti-content');
@@ -145,6 +145,14 @@ function spawnNoti(text, id) {
 
 	notiEl.appendChild(notiClose);
 	notiEl.appendChild(notiContent);
+
+	if (!lsTest()) {
+		var notiUndisable = document.createElement('div');
+
+		notiUndisable.classList.add('noti-undis');
+		notiUndisable.textContent = 'Внимание! У вас отключено local storage, поэтому скрытие оповещения запомиинаться не будет.';
+		notiEl.appendChild(notiUndisable);
+	}
 
 	if (notiEl.dataset.noti && !_ls(ls_item)) {
 		notiEl.style.display = 'block';
@@ -187,12 +195,12 @@ function loadInfo(){
 				var tableBody = '', tableBodyT = '', shedData = data, nowTime = Math.round(new Date().getTime()/1000), sdata = '', sdataT = '';
 
 				for (var i = 1; i < shedData.length - 1; i++) {
-					var newShedData = moment.unix(shedData[i][0]).format('D MMMM') + '<br>' + moment.unix(shedData[i][0]).format('HH:mm') + ' &ndash; ' + moment.unix(shedData[i][1]).format('HH:mm') + '</td>', nazvaniue;
+					var newShedData = moment.unix(shedData[i][0]).format('D MMMM') + '<br>' + moment.unix(shedData[i][0]).format('HH:mm') + ' &ndash; ' + moment.unix(shedData[i][1]).format('HH:mm') + '</td>', nazvaniue = '';
 
 					if (shedData[i][3]) {
-						nazvaniue = '<a href="'+shedData[i][3]+'" target="_blank" rel="nofollow noopener">'+shedData[i][2]+'</a>';
+						nazvaniue = _extLink(shedData[i][3], shedData[i][2]);
 					} else {
-						nazvaniue = shedData[i][2];
+						nazvaniue = _xss(shedData[i][2]);
 					}
 
 					if (shedData[i][0] < nowTime && shedData[i][1] > nowTime) {
