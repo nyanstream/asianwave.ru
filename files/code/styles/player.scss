@@ -2,17 +2,9 @@
 @import 'scss/vars'; // переменные
 @import 'fonts/style'; // шрифты
 
-* {
-	-webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;
-	box-sizing: border-box;
-
-	padding: 0; margin: 0;
-}
+@include reset;
 
 //@include selection(#8400a5);
-
-$fontsize: 16px;
 
 .player-container {
 	@include flexbox(auto, space-between, auto, auto);
@@ -51,22 +43,22 @@ $fontsize: 16px;
 	}
 
 	&.online {
-		.p-song.search {
+		.player-song.search {
 			display: block;
 		}
 
-		.p-elem.djname, .p-elem.listeners {
+		.player-elem.djname, .player-elem.listeners {
 			display: flex;
 		}
 	}
 
 	&.offline {
-		.p-song.search, .p-elem.djname, .p-elem.listeners {
+		.player-song.search, .player-elem.djname, .player-elem.listeners {
 			display: none;
 		}
 	}
 
-} // .p-container
+} // .player-container
 
 .player-elem {
 	@include flexbox(auto, center, center, auto);
@@ -94,7 +86,7 @@ $fontsize: 16px;
 			max-width: none;
 			padding: 0 10px 0 10px;
 
-			.p-ctrl {
+			.player-ctrl {
 				&.mute, &.volume {
 					display: none;
 				}
@@ -158,7 +150,7 @@ $fontsize: 16px;
 			cursor: help;
 		}
 	}
-} // .p-elem
+} // .player-elem
 
 .player-ctrl {
 	display: inline-block;
@@ -227,7 +219,7 @@ $fontsize: 16px;
 			}
 		}
 	} // &.volume
-} // .p-ctrl
+} // .player-ctrl
 
 @media screen and (max-width: 449px) {
 	.player-container {

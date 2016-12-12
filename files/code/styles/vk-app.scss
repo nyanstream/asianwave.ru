@@ -1,13 +1,7 @@
 @import 'scss/mixins'; // миксины
 @import 'fonts/style'; // миксины
 
-* {
-	-webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;
-	box-sizing: border-box;
-
-	padding: 0; margin: 0;
-}
+@include reset;
 
 $pagewidth: 860px;
 

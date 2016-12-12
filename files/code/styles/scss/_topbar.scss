@@ -1,5 +1,3 @@
-@import 'vars'; // переменные
-
 .top-panel {
 	@include flexbox(center, center, center, auto);
 	position: relative;

@@ -1,13 +1,8 @@
 @import 'scss/mixins'; // миксины
+@import 'scss/vars'; // переменные
 @import 'fonts/style'; // иконочные шрифты
 
-* {
-	-webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;
-	box-sizing: border-box;
-
-	padding: 0; margin: 0;
-}
+@include reset;
 
 // @keyframes online-blink {
 // 	0% {@include filter(brightness(1))}
@@ -156,7 +151,7 @@ q {
 		max-width: 385px; max-height: calc(100% - 100px);
 		top: $p--offset; left: $p--offset;
 		background-color: rgba(255, 255, 255, .8);
-		padding: 5px 5px 10px 1.2em; z-index: 999;
+		padding: 5px 5px 10px 1.2em; z-index: 2;
 		font-size: 20px;
 		cursor: default;
 
@@ -192,21 +187,33 @@ q {
 		}
 	}
 
-	// .stream-selector {
-	// 	display: none;
-	// 	position: absolute;
-	// 	width: auto; height: auto;
-	// 	bottom: $p--offset; left: $p--offset;
-	// 	padding: 2px; z-index: 999;
-	// 	font-size: 13px;
-	// 	opacity: .2;
-	//
-	// 	@include transition(.5s);
-	//
-	// 	&:hover {
-	// 		opacity: 1;
-	// 	}
-	// }
+	/*.super-ctrls {
+		position: absolute;
+		width: 100%; height: 130px;
+		pointer-events: none;
+		top: 0; z-index: 2;
+
+		&:hover .stream-selector {
+			display: block;
+		}
+
+		.stream-selector {
+			display: none;
+			position: absolute;
+			width: auto; height: auto;
+			top: $p--offset; right: $p--offset;
+			padding: 2px; z-index: 3;
+			font-size: 13px;
+			opacity: .2;
+
+			@include transition(.5s);
+
+			&:hover {
+				opacity: 1;
+				pointer-events: none;
+			}
+		}
+	}*/
 
 	&.noflash {
 		background-color: #fff;

@@ -1,13 +1,8 @@
 @import 'scss/mixins'; // миксины
+@import 'scss/vars'; // переменные
 @import 'fonts/style'; // иконочные шрифты
 
-* {
-	-webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;
-	box-sizing: border-box;
-
-	padding: 0; margin: 0;
-}
+@include reset;
 
 html, body {
 	min-width: 100%;
@@ -31,7 +26,7 @@ body {
 
 $pagewidth: 1000px;
 
-@import 'scss/topbar.scss';
+@import 'scss/topbar';
 
 .container {
 	font-family: Roboto, Arial, sans-serif;
@@ -70,6 +65,23 @@ $pagewidth: 1000px;
 			// 	display: inline-block;
 			// 	vertical-align: top;
 			// }
+		}
+	}
+
+	a {
+		text-decoration: none;
+		color: $primecolor;
+		border-bottom: 1px dashed $primecolor;
+
+		@include transition(.3s);
+
+		&:visited {
+			color: $primecolor;
+		}
+
+		&:hover {
+			color: darken($primecolor, 10%);
+			border-bottom: 1px solid darken($primecolor, 10%);
 		}
 	}
 }
@@ -180,21 +192,6 @@ $pagewidth: 1000px;
 			margin-top: 5px;
 			font-size: 0.8em;
 		}
-	}
-}
-
-a {
-	$links-color: #000fdc;
-
-	color: $links-color;
-	text-decoration: none;
-
-	&:visited {
-		color: $links-color;
-	}
-
-	&:hover {
-		color: darken($links-color, 10%);
 	}
 }
 
