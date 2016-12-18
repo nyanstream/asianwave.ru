@@ -34,11 +34,21 @@ body {
 	//min-width: 350px;
 }
 
-//$primecolor: #f0640a;
-$primecolor: #FF305E;
 $pagewidth: 1000px;
 
 @import 'scss/topbar';
+
+/* NY lazy special */
+
+.anime {
+	.player {
+		background-color: #0F1528;
+		embed {
+			background-image: url('/files/img/events/newyear-2016/anime-offline.png');
+		}
+	}
+}
+/* /ny */
 
 .container {
 	font-family: Roboto, Arial, sans-serif;
@@ -137,6 +147,7 @@ q {
 	background-color: #000;
 
 	& > *:nth-child(1) {
+		background-image: url('/files/img/anime-offline.png');
 		background-repeat: no-repeat;
 		background-position: center bottom;
 		background-size: cover;
@@ -224,6 +235,7 @@ q {
 
 		.warning {
 			@include flexbox(auto, center, center, auto);
+			padding: 0 5px;
 
 			p {
 				text-align: center;
@@ -238,7 +250,7 @@ q {
 				//height: 1.5em;
 				//padding: 2.5px 0;
 				padding: 2.5px 5px;
-				margin-top: 5px;
+				margin-top: 10px;
 				border-radius: 5px;
 				white-space: nowrap;
 				text-align: center;

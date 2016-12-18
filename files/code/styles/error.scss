@@ -1,8 +1,7 @@
-@import 'scss/mixins';
+@import 'scss/mixins'; // миксины
+@import 'scss/vars'; // переменные
 
 @include reset;
-
-$primecolor: #FF305E;
 
 html, body {
 	width: 100%;

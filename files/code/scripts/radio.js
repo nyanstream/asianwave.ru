@@ -17,6 +17,22 @@ function declOfNum(number, titles) {
 }
 
 /*
+ * Детект хрома
+*/
+
+var isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor),
+		isOpera = /OPR\//.test(navigator.userAgent),
+		chrExtBtn = _elem('.right-panel [href*="--chrome"]');
+
+if (!isChrome) { chrExtBtn.style.display = 'none'; }
+if (isOpera) {
+	chrExtBtn.querySelector('.icon').classList.remove('icon-chrome');
+	chrExtBtn.querySelector('.icon').classList.add('icon-opera');
+	chrExtBtn.setAttribute('href', '/app--opera');
+	chrExtBtn.setAttribute('title', 'Раширение для Opera');
+}
+
+/*
 	* Смена бекграундов
 */
 
@@ -36,7 +52,7 @@ awlogo.addEventListener('click', changeBckg);
 var VK, vkElem = _elem('#vk_group');
 
 if (VK) {
-	VK.Widgets.Group("vk_group", {mode: 2, width: 350, height: 420}, 120842574);
+	VK.Widgets.Group("vk_group", {mode: 2, width: 350, height: 420, color3: '628CC5'}, 120842574);
 } else {
 	vkElem.classList.add('text-place');
 	vkElem.style.textAlign = 'center';

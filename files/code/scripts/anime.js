@@ -11,6 +11,22 @@ function _xss(value) {return value.toString().replace(/</g, "&lt;").replace(/>/g
 function _extLink(link, text) {return '<a href="' + _xss(link) + '" target="_blank" rel="nofollow noopener">' + _xss(text) + '</a>'}
 
 /*
+ * Детект хрома
+*/
+
+var isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor),
+		isOpera = /OPR\//.test(navigator.userAgent),
+		chrExtBtn = _elem('.right-panel [href*="--chrome"]');
+
+if (!isChrome) { chrExtBtn.style.display = 'none'; }
+if (isOpera) {
+	chrExtBtn.querySelector('.icon').classList.remove('icon-chrome');
+	chrExtBtn.querySelector('.icon').classList.add('icon-opera');
+	chrExtBtn.setAttribute('href', '/app--opera');
+	chrExtBtn.setAttribute('title', 'Раширение для Opera');
+}
+
+/*
  * Детект поддержки флеша
 */
 
@@ -86,7 +102,7 @@ var VK, tabsUl = _elem('.tabs ul'), tabsLi = tabsUl.querySelectorAll('li[data-ta
 if (wheight > 1200) {	wheight = 1200; }
 
 if (VK) {
-	VK.Widgets.Group("vk_group", {mode: 2, width: "400", height: wheight}, 120842574);
+	VK.Widgets.Group("vk_group", {mode: 2, width: "400", height: wheight, color3: '628CC5'}, 120842574);
 } else {
 	for (var f = 0; f < tabsLi.length; f++) {
 		tabsLi[f].style.width = '50%';
@@ -115,7 +131,32 @@ function closeTabs() {
 closeTabsCtr.addEventListener('click', closeTabs);
 
 /*
+ * Старый цвет шапки (NY Special)
+*/
+
+var oldHeadStyle = document.createElement('style'),
+		nyako = _elem('.top-panel .brand img');
+
+function _oldHeadColor() {
+	oldHeadStyle.innerHTML = '.top-panel{background-color:#464646;}.top-panel .brand .text:hover{text-shadow:1px 1px 2px #ccc}.top-panel .right-panel .rp-elem{background-color:#606060;}.tabs ul li{background-color:#464646;border-left:0.5px solid #3e3e3e;border-right:0.5px solid #3e3e3e}.tabs ul li:hover{background-color:#393939}.tabs ul li.active{background-color:#2d2d2d}.tabs ul li.active:hover{background-color:#2d2d2d}';
+
+	document.getElementsByTagName('head')[0].appendChild(oldHeadStyle);
+	_ls_set('aw_iamoldfag', true);
+}
+
+if (_ls('aw_iamoldfag')) {
+	_oldHeadColor();
+	nyako.addEventListener('dblclick', function() {
+		_ls_rm('aw_iamoldfag');
+		oldHeadStyle.innerHTML = '';
+	});
+} else {
+	nyako.addEventListener('dblclick', _oldHeadColor);
+}
+
+/*
  * Уведомления
+ * @TODO переписать, чтобы вместо каждый раз создаваемого айтема в сторадже был один айтем с массивом айдишников
 */
 
 var notiEl = _elem('.noti');
@@ -150,7 +191,7 @@ function spawnNoti(text, id) {
 		var notiUndisable = document.createElement('div');
 
 		notiUndisable.classList.add('noti-undis');
-		notiUndisable.textContent = 'Внимание! У вас отключено local storage, поэтому скрытие оповещения запомиинаться не будет.';
+		notiUndisable.textContent = 'Внимание! У вас отключено хранение данных, поэтому скрытие оповещения запомиинаться не будет.';
 		notiEl.appendChild(notiUndisable);
 	}
 
@@ -176,12 +217,14 @@ function notiLSClear() {
  * Запросы к API
 */
 
-var api_shed = '/api/streams-shed.json', api_noti = '/api/noti.json', streamShed = _elem('.shedule');
+var host = 'https://asianwave.ru', api_shed = '/api/streams-shed.json', api_noti = '/api/noti.json', streamShed = _elem('.shedule');
 
-if (location.hostname === '127.0.0.1') { // debuh
-	var host = 'https://asianwave.ru';
-	api_shed = host + api_shed;
-	api_noti = host + api_noti;
+switch (location.hostname) {
+	case '127.0.0.1':
+	case 'localhost':
+		api_shed = host + api_shed;
+		api_noti = host + api_noti;
+		break;
 }
 
 function loadInfo(){
@@ -208,7 +251,8 @@ function loadInfo(){
 					} else if (shedData[i][1] > nowTime + (shedData[i-1][1] - shedData[i-1][0]) && shedData[i][1] < nowTime + (shedData[i][1] - shedData[i-1][0])) {
 						sdata = '<tr class="air--next"><td>' + newShedData + '<td><b>Далее через ' + moment.unix(shedData[i][0]).toNow(true) + ':</b><br>' + nazvaniue + '</td></tr>';
 					} else if ((moment.unix(shedData[i][0]).dayOfYear() - moment.unix(nowTime).dayOfYear()) < -1) {
-						sdata = '<tr class="air--finished air--tooOld"><td>' + newShedData + '<td>' + nazvaniue + '</td></tr>';
+						//sdata = '<tr class="air--finished air--tooOld"><td>' + newShedData + '<td>' + nazvaniue + '</td></tr>';
+						sdata = '';
 					} else if (shedData[i][0] < nowTime) {
 						sdata = '<tr class="air--finished"><td>' + newShedData + '<td>' + nazvaniue + '</td></tr>';
 					} else if (moment.unix(shedData[i][0]).dayOfYear() > moment.unix(nowTime).dayOfYear()) {
@@ -237,7 +281,7 @@ function loadInfo(){
 			});
 		});
 	} else {
-		streamShed.style.display = 'none';
+		streamShed.innerHTML = '<tbody><tr><td>Ваш браузер устарел.</td></tr></tbody>';
 		clearInterval(aw_timer);
 	}
 }

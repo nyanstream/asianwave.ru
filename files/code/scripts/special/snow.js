@@ -1,3 +1,5 @@
+// https://github.com/nicholas-c/canvas-snow
+
 ;(function() {
 	var particleCount = 350,
 		particleMax   = 500,

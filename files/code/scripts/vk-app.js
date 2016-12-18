@@ -16,3 +16,7 @@ function ctrlu() {return false;}
 document.ondragstart = ctrlu;
 document.onselectstart = ctrlu;
 document.oncontextmenu = ctrlu;
+
+// window.addEventListener('ondragstart', ctrlu, true);
+// window.addEventListener('onselectstart', ctrlu, true);
+// document.addEventListener('oncontextmenu', ctrlu, true);

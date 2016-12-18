@@ -69,7 +69,7 @@ if (lsTest() == true) {
 var stream,	stream_src, steram_vol,
 		m3upl = _elem('.player-song.playlist .m3u-pl');
 
-stream_src = 'http://listen'+stream_srv+'.'+mr24url+':9000/'+stream_port;
+stream_src = 'https://listen'+stream_srv+'.'+mr24url+'/'+stream_port;
 stream = new Audio(stream_src);
 
 stream.preload = 'none';

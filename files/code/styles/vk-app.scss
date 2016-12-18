@@ -1,9 +1,23 @@
 @import 'scss/mixins'; // миксины
+@import 'scss/vars'; // переменные
 @import 'fonts/style'; // миксины
 
 @include reset;
 
 $pagewidth: 860px;
+
+/* NY lazy special */
+
+body {
+	background-image: url('/files/img/events/newyear-2016/bckg.png') !important;
+	background-size: 126% !important;
+}
+
+.top-panel .logo {
+	background-image: url('/files/img/events/newyear-2016/logo.png') !important;
+}
+
+/* /ny */
 
 body, html {
 	width: 100%;
@@ -49,7 +63,7 @@ body {
 .top-panel {
 	& {
 		@include flexbox(auto, auto, center, auto);
-		background-color: #FF305E;
+		background-color: $primecolor;
 		box-shadow: 0 5px 20px rgba(0,0,0,0.5);
 		margin: 50px 0 55px 0;
 		height: 50px;
@@ -68,7 +82,7 @@ body {
 
 	.logo {
 		width: 120px; height: 120px;
-		background-color: #FF305E;
+		background-color: $primecolor;
 		background-image: url('/files/img/logo.png');
 		background-position: center center;
 		background-repeat: no-repeat;
