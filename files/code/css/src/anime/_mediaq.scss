@@ -1,0 +1,36 @@
+@media screen and (max-width: 1299px) {
+	.anime {
+		.player {
+			& > *:nth-child(1) {
+				background-position: center center;
+				background-size: 130%;
+			}
+		}
+	}
+}
+
+@media screen and (max-width: 799px) {
+	.anime {
+		& > * {
+			display: inline-block;
+			vertical-align: middle;
+			height: auto; width: 100% !important;
+		}
+
+		.player {
+			height: 40%;
+			min-height: 350px;
+		}
+
+		.tabs {
+			height: 60%;
+			min-height: 400px;
+		}
+
+		&.notabs {
+			.player {
+				height: 100%;
+			}
+		}
+	}
+}

@@ -1,0 +1,41 @@
+.right-panel {
+	$links-size: 23px;
+	$links-color: #fff;
+
+	& > * {
+		display: inline-block;
+		vertical-align: middle;
+	}
+
+	//width: #{$links-size * 3}; // кол-во иконок + 1
+	width: 100%;
+	text-align: right;
+	margin-right: 20px;
+	cursor: default;
+
+	a {
+		text-decoration: none;
+		font-size: $links-size;
+		color: $links-color;
+
+		@include transition(.3s);
+
+		&:visited {
+			color: $links-color;
+		}
+
+		&:hover {
+			color: darken($links-color, 5%)
+		}
+	}
+
+	.order-box {
+		display: none;
+		color: $links-color;
+		font-family: Roboto, Arial, sans-serif;
+
+		&:after {
+			content: '\0020\007C\0020';
+		}
+	}
+} // .right-panel

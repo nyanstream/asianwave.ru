@@ -1,0 +1,36 @@
+&.songnow {
+	width: 100%;
+	justify-content: flex-start;
+
+	.player-song {
+		&.playlist, &.search {
+			margin-right: 5px;
+		}
+
+		&.search {
+			font-size: 0;
+
+			li {
+				list-style: none;
+				display: inline;
+				cursor: default;
+				font-size: 1rem;
+
+				.srch {
+					&-vk {
+						font-size: 1.2em;
+					}
+				}
+			}
+		}
+
+		&.song {
+			white-space: nowrap;
+			text-overflow: ellipsis;
+			overflow: hidden;
+			&[title] {
+				cursor: help;
+			}
+		}
+	}
+} // &.songnow

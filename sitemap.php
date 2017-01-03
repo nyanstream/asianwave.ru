@@ -5,7 +5,7 @@
 	$url = 'https://' . $_SERVER['SERVER_NAME'];
 	$content = ['index', 'radio', 'anime'];
 
-	$sm = '<urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
+	$sm = '<urlset xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance" xmlns:image="https://www.google.com/schemas/sitemap-image/1.1" xsi:schemaLocation="https://www.sitemaps.org/schemas/sitemap/0.9 https://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="https://www.sitemaps.org/schemas/sitemap/0.9">';
 
 	for ($e = 0; $e <= (count($content) - 1); $e++) {
 		$sm .= '<url>';
@@ -18,7 +18,7 @@
 		$sm .= '</url>';
 	}
 
-	$sm .= '</urlset>';
+	$sm .= "</urlset>\n"; // двойные кавычки нужны, чтобы отображался перевод строки
 
 	echo $sm;
 ?>

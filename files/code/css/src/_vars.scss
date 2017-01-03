@@ -1,0 +1,14 @@
+
+/* Верхняя панель */
+//$top-panel--color: #464646;
+$top-panel--height: 40px;
+$top-panel--brandheight: 20px;
+
+/* Стандартный размер шрифта */
+$fontsize: 16px;
+
+/* Главный цвет */
+//$primecolor: #FF305E;
+
+$primecolor: #628CC5;
+$top-panel--color: darken($primecolor, 5%);

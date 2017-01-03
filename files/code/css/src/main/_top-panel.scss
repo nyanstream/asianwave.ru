@@ -1,0 +1,41 @@
+.top-panel {
+	& {
+		@include flexbox(auto, auto, center, auto);
+		background-color: $primecolor;
+		box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+		margin: 50px 0 55px 0;
+		height: 50px;
+		@include user-select(none);
+	}
+
+	.container {
+		text-align: left;
+	}
+
+	.container > * {
+		display: inline-block;
+		vertical-align: middle;
+		cursor: default;
+	}
+
+	.logo {
+		width: 120px; height: 120px;
+		background-color: $primecolor;
+		background-image: url('../../img/logo.png');
+		background-position: center center;
+		background-repeat: no-repeat;
+		background-size: 80%;
+		border-radius: 99px;
+		box-shadow: 0 5px 10px rgba(0,0,0,0.5);
+    margin-right: 25px;
+	}
+
+	.brand {
+		text-transform: uppercase;
+		font-family: Tahoma, Geneva, Arial, sans-serif;
+		font-weight: bold;
+		letter-spacing: 2px;
+		font-size: 25px;
+		color: #fff;
+	}
+} // .top-panel

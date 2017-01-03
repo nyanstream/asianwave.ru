@@ -9,7 +9,7 @@
 
 	if(@filemtime($file) < time() - 10) {
 		//$eientei_info = json_decode(@file_get_contents($eientei));*/
-		$cg_info = json_decode(@file_get_contents($cg));
+		//$cg_info = json_decode(@file_get_contents($cg));
 		$mr24_info = json_decode(@file_get_contents($mr24));
 
 		//$fcount = count($eientei_info);

@@ -1,5 +1,6 @@
 User-agent: *
 Disallow: /api/
 Disallow: /apps/
+Disallow: /*.swf$
 Host: asianwave.ru
 Sitemap: https://asianwave.ru/sitemap.php

@@ -5,6 +5,9 @@
 	/* @TODO
 	 * сделать красивый вывод во второй функции на пхп
 	 * сделать экранирование символа "\" (пока что значение просто не срабатывает, если он есть)
+	 * сделать отключение инпута удаления последнего оповещения, если его нет
+	 * показывать текст оповещения, если оно есть
+	 * запихнуть удаление последнего элемента расписания в пункт создания (как с нотификациями)
 	 */
 
 	/*
@@ -92,7 +95,7 @@
 		});
 		file_put_contents(dirname(__FILE__) . '/' . $shed, json_encode($shed_data));
 	}
-	
+
 	//echo count($shed_data);
 
 	for ($e = 1; $e <= (count($shed_data) - 2); $e++) {
@@ -111,7 +114,7 @@
 		});
 		file_put_contents(dirname(__FILE__) . '/' . $shed, json_encode($shed_data));
 	}
-	
+
 	/*
 	 * Манипулятор оповещений
 	 */
@@ -125,9 +128,7 @@
 			$noti_data = [json_decode('"'.$noti_text.'"'), time()];
 		}
 
-		if ($noti_data[0] != null) {
-			file_put_contents(dirname(__FILE__) . '/' . $noti, json_encode($noti_data));
-		}
+		file_put_contents(dirname(__FILE__) . '/' . $noti, json_encode($noti_data));
 	}
 ?>
 <!DOCTYPE HTML>
@@ -139,9 +140,9 @@
 	<title>Asian Wave / Control panel</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="shortcut icon" href="/files/img/favicon.ico">
-	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
 	<style>
-		body {font-family: 'Open Sans', Arial, sans-serif;}
+		body {font-family: Roboto, Arial, sans-serif;}
 		input {margin: 0 5px;}
 		input[type=submit] {margin: 0 5px 0 0;}
 		input[type=text], input[type=number] {padding: 2.5px;}
@@ -174,12 +175,12 @@
 	<?php // echo 'аутпут: <span class="dev">' . unicodeString(json_encode($shed_data)) . '</span><br>' ?>
 	<form class="add-air" action="?succ" method="post"><fieldset>
 		<legend>Добавление нового эфира</legend>
-		<p><label for="time_start">Время начала:<input required type="datetime-local" name="time_start"></label></p>
+		<p><label for="time_start">Время начала:<input required type="datetime-local" name="time_start" value="2016-05-06T00:00"></label></p>
 		<p style="font-size: 0.9em;"><i>Время должно быть московским.</i></p>
 		<p><label for="time_end">Продолжительность (в минутах):<input required type="number" name="duration" placeholder="60"></label></p>
 		<p><label for="elname">Название:<input required type="text" name="airname" placeholder="напр. Binan Koukou Chikyuu Bouei-bu LOVE! (1-2)"></label></p>
-		<p><label for="ellink">Ссылка (опционально):<input type="text" name="ellink" placeholder="напр. https://shikimori.org/animes/1639"></label></p>
-		<p style="margin-top: 25px;"><input type="submit" value="Создать" name="add_air"><label for="add_air"><i>Внимательно проверьте введённые данные перед отправкой!</i></label></p>
+		<p><label for="ellink">Ссылка:<input type="text" name="ellink" placeholder="напр. https://shikimori.org/animes/1639"></label></p>
+		<p style="margin-top: 25px;"><input type="submit" value="Создать" name="add_air"><label for="add_air"><i>Внимательно проверьте введённые данные!</i></label></p>
 	</fieldset></form>
 	<form class="last-clear" action="?succ" method="post"><fieldset>
 		<legend>Удалить последний эфир из расписания</legend>
@@ -205,7 +206,7 @@
 		<p><label for="noti_text">Текст:<input required type="text" name="noti_text" placeholder="напр. Розыгрыш BMW M3, не пропусти!"></label></p>
 		<details>
 			<summary>Памятка по разметке</summary>
-			<p class="protip">Для стилизации текста можно использовать <kbd>&lt;b&gt;<b>жирный шрифт</b>&lt;/b&gt;</kbd> и <kbd>&lt;i&gt;<i>курсив</i>&lt;/i&gt;</kbd>. Делить на абзацы можно с помощью <kbd>&lt;br&gt;</kbd>.<br>Ссылки должны быть вида <kbd>&lt;a href="https://..."&gt;текст&lt;/a&gt;</kbd>.<br>В случае локальных ссылок сделует использовать <kbd>&lt;a href="/pisos"&gt;&lt;текст&lt;/a&gt;</kbd>.</p>
+			<p class="protip">Для стилизации текста можно использовать <kbd>&lt;b&gt;<b>жирный шрифт</b>&lt;/b&gt;</kbd> и <kbd>&lt;i&gt;<i>курсив</i>&lt;/i&gt;</kbd>. Делить на абзацы можно с помощью <kbd>&lt;br&gt;</kbd>.<br>Ссылки должны быть вида <kbd>&lt;a href="https://..."&gt;текст&lt;/a&gt;</kbd>. В случае локальных ссылок сделует использовать <kbd>&lt;a href="/pisos"&gt;&lt;текст&lt;/a&gt;</kbd>.</p>
 		</details>
 		<p><label for="noti_remove">Удалить последнее оповещение?<input type="checkbox" name="noti_remove"></p>
 		<p style="margin-top: 15px;"><input type="submit" value="Создать" name="noti_action"></p>
@@ -216,8 +217,8 @@
 		<p>Последнее обновление оповещения: <span class="notiTS"></span></p>
 		<p>Точное московское время (на момент загрузки страницы): <?php echo date('Y-m-d H:i:s', time()) ?></p>
 	</footer>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.16.0/moment.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.16.0/locale/ru.js"></script>
+	<script src="/files/code/js/libs/moment/moment.min.js" defer></script>
+	<script src="/files/code/js/libs/moment/moment-ru.min.js" defer></script>
 	<script type="text/javascript">
 		'use strict';
 
@@ -234,7 +235,7 @@
 
 		function lastClVeevod() {
 			var l, lTimeS = '<?php echo $shed_data[count($shed_data)-2][0]; ?>', lTimeE = '<?php echo $shed_data[count($shed_data)-2][1]; ?>', lAirN = '<?php echo $shed_data[count($shed_data)-2][2]; ?>', lVeevodEl = document.createElement('samp'), lVeevodElPar = _elem('.lVeevod'), lInputs = _elems('.last-clear input');
-			
+
 			if (lTimeS != 0) {
 				lVeevodEl.textContent = 'Название: ' + lAirN + '. Начало ' + moment.unix(lTimeS).format('DD MMMM YYYY в HH:mm') + '; конец ' + moment.unix(lTimeE).format('DD MMMM YYYY в HH:mm');
 			} else {
@@ -243,7 +244,7 @@
 					lInputs[l].setAttribute('disabled','');
 				}
 			}
-			
+
 			lVeevodElPar.appendChild(lVeevodEl);
 		}
 

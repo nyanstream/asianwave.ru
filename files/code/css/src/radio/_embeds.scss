@@ -1,0 +1,33 @@
+.embed {
+	@include opacity;
+
+	&.player {
+		width: 100%;
+		height: 40px;
+		border: 0;
+		opacity: 1;
+		margin-bottom: 5px;
+		//box-shadow: 0 0 15px rgba(0,0,0,0.5);
+		box-shadow: 0 0 5px rgba(0,0,0,0.5); /* NY */
+	}
+
+	&.chat {
+		width: 100%;
+		height: 550px;
+		border: 0;
+	}
+
+	&#vk_group {
+		//height: 100% !important;
+		//width: 100% !important;
+		//max-width: 350px !important;
+		& > iframe {
+			height: 100% !important;
+			width: 100% !important;
+		}
+
+		&.text-place {
+			text-align: center;
+		}
+	}
+}

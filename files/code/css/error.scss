@@ -1,0 +1,56 @@
+@import 'src/mixins'; // миксины
+@import 'src/vars'; // переменные
+
+@include reset;
+
+body {
+	@at-root html, & {
+		width: 100%; height: 100%;
+
+		overflow-x: hidden;
+	}
+
+	@include flexbox(auto, center, center, auto);
+	background-color: #fff;
+	min-height: 300px;
+}
+
+main {
+	font-family: Roboto, Arial, sans-serif;
+	font-size: 24px;
+	letter-spacing: 1.2px;
+	padding: 10px;
+	color: #000;
+}
+
+a {
+	text-decoration: none;
+	color: $primecolor;
+	border-bottom: 1px dashed $primecolor;
+
+	@include transition(.3s);
+
+	&:visited {
+		color: $primecolor;
+	}
+
+	&:hover {
+		color: darken($primecolor, 10%);
+		border-bottom: 1px solid darken($primecolor, 10%);
+	}
+}
+
+small {
+	font-size: .6em;
+	color: #828282;
+}
+
+h3 {
+	margin-top: 1.5em;
+}
+
+@media screen and (max-width: 459px) {
+	small {
+		display: none;
+	}
+}

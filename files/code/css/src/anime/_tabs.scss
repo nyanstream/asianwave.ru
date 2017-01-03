@@ -1,0 +1,82 @@
+.tabs {
+	$tabcolor: $top-panel--color;
+	$tabcelheight: 25px;
+
+	ul {
+		height: $tabcelheight;
+		font-size: 0;
+		@include user-select(none);
+
+		li {
+			display: inline-block;
+			background-color: $tabcolor;
+			//width: 50%;
+			width: calc(100% / 3);
+			height: 100%;
+			padding: 2px;
+			font-size: 16px;
+			text-align: center;
+			color: #fff;
+			list-style: none;
+			cursor: pointer;
+
+			border-left: .5px solid darken($tabcolor, 3%);
+			border-right: .5px solid darken($tabcolor, 3%);
+
+			&:first-child {
+				border-left: 0;
+			}
+
+			&:last-child {
+				border-right: 0;
+			}
+
+			&:hover {
+				background-color: darken($tabcolor, 5%);
+			}
+
+			&.active {
+				background-color: darken($tabcolor, 10%);
+
+				&:hover {
+					background-color: darken($tabcolor, 10%);
+				}
+			}
+		}
+	}
+
+	[id*='tab_'] {
+		display: none;
+		width: 100%;
+		height: calc(100% - #{$tabcelheight});
+		overflow: hidden;
+	}
+
+	@import 'tabs__shed';
+
+	#tab_news {
+		#vk_group {
+			height: 100% !important;
+			//width: 100% !important;
+			margin: 0 auto;
+			iframe {
+				height: 100% !important;
+				//width: 100% !important;
+			}
+		}
+	}
+
+	noscript {
+		@include flexbox(auto, center, center, auto);
+
+		height: 100%;
+		min-height: 200px;
+		font-size: 16px;
+		text-align: center;
+		padding: 0 5px;
+
+		p {
+			margin: 5px 0;
+		}
+	}
+}

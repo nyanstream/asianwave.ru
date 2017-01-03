@@ -28,6 +28,8 @@ RewriteCond %{HTTPS} !on
 RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI}
 
 <IfModule mod_headers.c>
+	Header set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload" env=HTTPS
+
 	Header set Content-Security-Policy "default-src 'self' https:; \
 		connect-src 'self' https: mc.yandex.ru; \
 		child-src 'self' https: asianwaveru.chatovod.ru vk.com *.youtube-nocookie.com; \
@@ -35,7 +37,7 @@ RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI}
 		style-src 'self' https: 'unsafe-inline' *.googleapis.com; \
 		font-src 'self' https: *.gstatic.com; \
 		img-src 'self' data: https: vk.com www.google-analytics.com mc.yandex.ru; \
-		media-src 'self' http: *.myradio24.com:*; \
+		media-src 'self' *.myradio24.com; \
 		script-src 'self' https: 'unsafe-inline' www.google-analytics.com mc.yandex.ru vk.com cdnjs.cloudflare.com cdn.jsdelivr.net; \
 		plugin-types application/x-shockwave-flash"
 </IfModule>
@@ -76,7 +78,7 @@ RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI}
 # расширения
 Redirect 301 /app--vk https://vk.com/app4426688
 Redirect 301 /app--chrome https://chrome.google.com/webstore/detail/ecbegehkeefmdjnjhldeogkhbhhjhfje
-# Redirect 301 /app--opera
+Redirect 301 /app--opera https://addons.opera.com/ru/extensions/details/asian-wave/
 
 # фикс адресов разделов
 Redirect 301 /anime/ /anime

@@ -1,0 +1,70 @@
+@media screen and (max-width: #{$pagewidth - 1px}) {
+	.radio {
+		width: 100%;
+		padding-bottom: 20px;
+
+		.custom-width {
+			display: block;
+			text-align: center;
+
+			& > * {
+				width: 100% !important;
+			}
+
+			.chat-box {
+				padding: 0;
+			}
+
+			.widgets-box {
+				margin-top: 10px;
+				padding-right: 0;
+
+				& > * {
+					display: inline-block;
+					vertical-align: top;
+				}
+			}
+		}
+	}
+
+	.embed {
+		&.chat {
+			height: 450px;
+		}
+
+		&#vk_group.text-place {
+			margin-bottom: 15px;
+		}
+	}
+
+	.songs-box {
+		margin-top: 0 !important;
+		// width: 49% !important;
+	}
+
+	.order-box {
+		margin-bottom: 10px;
+	}
+}
+
+@media screen and (max-width: 719px) {
+	body {
+		overflow-x: auto;
+	}
+
+	// .embed {
+	// 	&#vk_group {
+	// 		width: 100% !important;
+	// 	}
+	// }
+
+	.songs-box {
+		margin-top: 10px !important;
+	}
+
+	.embed {
+		&#vk_group.text-place {
+			margin-bottom: 5px;
+		}
+	}
+}

@@ -1,0 +1,63 @@
+@import 'src/mixins'; // миксины
+@import 'src/vars'; // переменные
+@import 'fonts/style'; // иконочные шрифты
+
+@import 'src/every';
+
+body {
+	background-position: center center;
+	background-repeat: no-repeat;
+	background-size: cover;
+}
+
+$pagewidth: 1000px;
+
+@import 'src/topbar';
+
+.radio {
+	//width: $pagewidth;
+	width: 100%;
+	margin: 0 auto;
+	margin-top: 10px;
+	padding: 0 10px 30px;
+
+	.full-width {
+		width: 100%;
+	}
+
+	.custom-width {
+		@include flexbox(auto, space-around, flex-start, auto);
+
+		.chat-box {
+			width: 100%;
+			padding: 0 20px 0 10px;
+		}
+
+		.widgets-box {
+			width: 370px;
+			padding: 0 20px 0 0;
+
+			.text-place {
+				background-color: #fff;
+				padding: 5px;
+				box-shadow: 0 0 15px rgba(0,0,0,0.5);
+			}
+
+			// & > * {
+			// 	display: inline-block;
+			// 	vertical-align: top;
+			// }
+		}
+	}
+}
+
+/* Стилизация "встраиваемых" элементов */
+@import 'src/radio/embeds';
+
+/* Блок с выводом последних треков */
+@import 'src/radio/songs-box';
+
+/* Блок заказа треков */
+@import 'src/radio/order-box';
+
+@import 'src/radio/mediaq';

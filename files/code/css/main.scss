@@ -1,0 +1,56 @@
+@import 'src/mixins'; // миксины
+
+@include reset;
+
+@import 'src/main/events/newyear-2016';
+
+$pagewidth: 960px;
+$primecolor: #FF305E;
+
+@import 'src/main/scrollbar';
+
+body {
+	@at-root html, & {
+		width: 100%; height: 100%;
+
+		overflow-x: hidden;
+		font-size: 0;
+	}
+
+	background-image: url('../../img/bckg.png');
+	background-position: bottom center;
+	background-repeat: no-repeat;
+	background-size: 100%;
+}
+
+.top-panel, .btns {
+	width: 100%;
+	text-align: center;
+}
+
+.container {
+	width: $pagewidth;
+	font-family: Roboto, Arial, sans-serif;
+	margin: 0 auto;
+}
+
+@import 'src/main/top-panel';
+
+$btnpadding: 35px;
+$btnwidth: 300px;
+
+@import 'src/main/btns';
+
+footer {
+	text-align: center;
+	font-size: 16px;
+	margin: 25px 0;
+	cursor: default;
+
+	p {
+		padding: 0 5px;
+		color: rgba(128, 128, 128, 0.5);
+	}
+}
+
+@import 'src/main/mediaq';

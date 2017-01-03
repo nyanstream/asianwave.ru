@@ -1,0 +1,80 @@
+.top-panel {
+	@include flexbox(auto, center, center, auto);
+	position: relative;
+	width: 100%;
+	height: $top-panel--height;
+	background-color: $top-panel--color;
+	overflow: hidden;
+
+	a {
+		text-decoration: none;
+	}
+
+	.brand {
+		@include user-select(none);
+		white-space: nowrap;
+		cursor: default;
+		font-size: 0;
+		margin-left: 15px;
+
+		& > * {
+			display: inline-block;
+			vertical-align: middle;
+		}
+
+		img {
+			height: $top-panel--brandheight;
+			//image-rendering: pixelated;
+			margin-right: 5px;
+		}
+
+		.text {
+			@include transition(.5s);
+
+			text-transform: uppercase;
+			font-family: Tahoma, Geneva, Arial, sans-serif;
+			font-weight: bold;
+			letter-spacing: 2px;
+			font-size: $top-panel--brandheight;
+			color: #fff;
+
+			&:hover {
+				//opacity: .85;
+				text-shadow: 1px 1px 2px #ccc;
+			}
+		}
+	}
+
+	.right-panel {
+		position: absolute;
+		top: 5px; right: 5px;
+		width: auto !important; height: auto;
+		font-size: 18px;
+		padding: 2px 0;
+
+		.rp-elem {
+			display: inline-block;
+			background-color: lighten($top-panel--color, 10%);
+			border-radius: 5px;
+			padding: 2.5px 10px;
+			opacity: 0.7;
+			color: #fff;
+
+			cursor: pointer;
+			@include user-select(none);
+			@include transition(.3s);
+
+			&:hover {
+				opacity: 1;
+			}
+		}
+	}
+}
+
+@media screen and (max-width: 649px) {
+	.top-panel {
+		.right-panel {
+			display: none;
+		}
+	}
+}

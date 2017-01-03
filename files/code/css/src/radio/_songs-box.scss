@@ -1,0 +1,42 @@
+.songs-box {
+	width: 350px;
+	margin-top: 20px;
+	font-size: 16px;
+
+	@include opacity;
+
+	.songs {
+		caption {
+			margin: 2px 0 5px 0;
+			font-size: 1.1em;
+		}
+
+		tr {
+			td {
+				padding: 2px;
+				vertical-align: middle;
+			}
+
+			td:nth-child(odd){
+				font-weight: bold;
+				text-align: center;
+			}
+
+			td:nth-child(even){
+				padding-left: 5px;;
+			}
+		}
+	}
+
+	noscript {
+		text-align: center;
+
+		p {
+			margin-top: 0.5em;
+
+			&:first-child {
+				margin-top: 0;
+			}
+		}
+	}
+}

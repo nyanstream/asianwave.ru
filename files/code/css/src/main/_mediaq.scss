@@ -1,0 +1,35 @@
+@media screen and (max-width: #{$pagewidth - 1px}) {
+	.container {
+		width: 100%;
+		padding: 0 10px;
+	}
+}
+
+@media screen and (max-width: #{$btnpadding * 5 + $btnwidth * 2}) {
+	.top-panel {
+		.container {
+			text-align: center;
+		}
+
+		.logo {
+			margin-right: 0;
+		}
+
+		.brand {
+			display: none;
+		}
+	}
+
+	.btns {
+		.container > a {
+			width: 250px; height: 250px;
+			margin: 5px;
+
+			background-position: center center, center center;
+
+			&:hover {
+				background-size: 70%, 100%;
+			}
+		}
+	}
+}

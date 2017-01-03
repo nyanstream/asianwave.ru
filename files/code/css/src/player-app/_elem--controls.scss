@@ -1,0 +1,20 @@
+&.controls {
+	min-width: 160px;
+	max-width: 160px;
+
+	&.mobile {
+		min-width: auto;
+		max-width: none;
+		padding: 0 10px 0 10px;
+
+		.player-ctrl {
+			&.mute, &.volume {
+				display: none;
+			}
+
+			&.playpause {
+				font-size: 25px;
+			}
+		}
+	}
+} // &.controls

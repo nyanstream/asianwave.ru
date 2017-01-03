@@ -1,0 +1,44 @@
+.btns {
+	@include user-select(none);
+
+	.container > a {
+		display: inline-block;
+		width: $btnwidth; height: 500px;
+		margin: 0 $btnpadding 0 $btnpadding;
+
+		background-repeat: no-repeat, no-repeat;
+		background-color: #fff;
+		background-position: bottom 20px center, center center;
+		background-size: 70%, 100%;
+
+		box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+		@include transition(.3s);
+
+		&:hover {
+			background-size: 70%, 105%;
+			//box-shadow: 5px 10px 20px rgba(0,0,0,0.5);
+		}
+	}
+
+	/*
+		* @TODO
+		* Расширить список рестайловых переменных
+	*/
+
+	@if (variable-exists(btns-restyle) == false) {
+		@each $afon in anime, radio {
+			.container a[href*='#{$afon}'] {
+				background-image: url('../../img/#{$afon}-btn.png'), url('../../img/#{$afon}-fon.png');
+			}
+			.container a[href*='#{$afon}']:hover {
+				background-image: url('../../img/hover-btn.png'), url('../../img/#{$afon}-fon.png');
+			}
+		}
+	}
+} // .btns
+
+.css-preload {
+	background-image: url('../../img/hover-btn.png');
+	width: 1px; height: 1px;
+	background-size: 0 0;
+}
