@@ -40,9 +40,9 @@ makeTabs('.tabs');
 var songsBox = _elem('.songs'), stream_port = 7934,
 		mr24url = 'myradio24.com', mr24api = 'https://'+mr24url+'/users/'+stream_port+'/status.json';
 
-function loadInfo(){
-	if(self.fetch) {
-		window.fetch(mr24api+'?ts='+Date.now()).then(function(response){
+function loadInfo() {
+	if (self.fetch) {
+		window.fetch(mr24api+'?ts='+Date.now()).then(function(response) {
 			if (response.status !== 200) {
 				//songsBox.innerHTML = '<tbody><tr><td>Сервер радио временно недоступен.</tr></td></tbody>';
 				return;

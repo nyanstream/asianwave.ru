@@ -3,10 +3,7 @@
 	date_default_timezone_set("Europe/Moscow");
 
 	/* @TODO
-	 * сделать красивый вывод во второй функции на пхп
 	 * сделать экранирование символа "\" (пока что значение просто не срабатывает, если он есть)
-	 * сделать отключение инпута удаления последнего оповещения, если его нет
-	 * показывать текст оповещения, если оно есть
 	 * запихнуть удаление последнего элемента расписания в пункт создания (как с нотификациями)
 	 */
 
@@ -19,6 +16,7 @@
 	//$shed_arch = 'streams-shed-arch.json';
 
 	$shed_data = json_decode(@file_get_contents($shed));
+	$noti_cnt = json_decode(@file_get_contents($noti));
 
 	/*
 	 * Функция, преобразующая юникод в читабельный вид (в основном для дебага)
@@ -142,13 +140,13 @@
 	<link rel="shortcut icon" href="/files/img/favicon.ico">
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
 	<style>
-		body {font-family: Roboto, Arial, sans-serif;}
-		input {margin: 0 5px;}
-		input[type=submit] {margin: 0 5px 0 0;}
-		input[type=text], input[type=number] {padding: 2.5px;}
-		input[type=text] {width: 400px;}
-		input[type=number] {width: 70px;}
-		label {vertical-align: middle;}
+		body { font-family: Roboto, Arial, sans-serif; }
+		input { margin: 0 5px; }
+		input[type=submit] { margin: 0 5px 0 0; }
+		input[type=text], input[type=number] { padding: 2.5px; }
+		input[type=text] { width: 400px; }
+		input[type=number] { width: 70px; }
+		p label, p input { vertical-align: middle; }
 		footer {
 			margin-top: 15px;
 			padding-right: 5px;
@@ -156,60 +154,106 @@
 			font-size: .9em;
 			color: #a9a9a9;
 		}
-		form {margin-top: 10px;}
-		form:first-child {margin-top: 0;}
-		.succ {color: green;}
+		form { margin-top: 10px; }
+		form:first-child { margin-top: 0; }
+		.succ { color: green; }
 		samp {
 			padding: 5px;
 			background-color: #e4e4e4;
 			line-height: 27px;
 		}
-		.shed-force-sort {display: none;}
+		.shed-force-sort { display: none; }
+		details summary { cursor: pointer; }
 		.protip {
 			font-size: 0.9em;
 			margin: 5px 0 0 1em;
 		}
 	</style>
-	<?php // if(isset($_GET["succ"])) {echo '<script>document.location.href="'. $_SERVER['PHP_SELF'] .'"</script><noscript><meta refresh="0;'. $_SERVER['PHP_SELF'] .'"></noscript>';} ?>
 </head><body>
-	<?php // echo 'аутпут: <span class="dev">' . unicodeString(json_encode($shed_data)) . '</span><br>' ?>
 	<form class="add-air" action="?succ" method="post"><fieldset>
 		<legend>Добавление нового эфира</legend>
-		<p><label for="time_start">Время начала:<input required type="datetime-local" name="time_start" value="2016-05-06T00:00"></label></p>
-		<p style="font-size: 0.9em;"><i>Время должно быть московским.</i></p>
-		<p><label for="time_end">Продолжительность (в минутах):<input required type="number" name="duration" placeholder="60"></label></p>
-		<p><label for="elname">Название:<input required type="text" name="airname" placeholder="напр. Binan Koukou Chikyuu Bouei-bu LOVE! (1-2)"></label></p>
-		<p><label for="ellink">Ссылка:<input type="text" name="ellink" placeholder="напр. https://shikimori.org/animes/1639"></label></p>
-		<p style="margin-top: 25px;"><input type="submit" value="Создать" name="add_air"><label for="add_air"><i>Внимательно проверьте введённые данные!</i></label></p>
+		<p>
+			<label for="time_start">Время начала:</label>
+			<input required type="datetime-local" name="time_start" value="2016-05-06T00:00">
+		</p>
+		<p style="font-size: 0.9em;">
+			<i>Время должно быть московским.</i>
+		</p>
+		<p>
+			<label for="time_end">Продолжительность (в минутах):</label>
+			<input required type="number" name="duration" placeholder="60">
+		</p>
+		<p>
+			<label for="elname">Название:</label>
+			<input required type="text" name="airname" placeholder="напр. Binan Koukou Chikyuu Bouei-bu LOVE! (1-2)">
+		</p>
+		<p>
+			<label for="ellink">Ссылка:</label>
+			<input type="text" name="ellink" placeholder="напр. https://shikimori.org/animes/1639">
+		</p>
+		<p style="margin-top: 25px;">
+			<input type="submit" value="Создать" name="add_air">
+			<label for="add_air"><i>Внимательно проверьте введённые данные!</i></label>
+		</p>
 	</fieldset></form>
 	<form class="last-clear" action="?succ" method="post"><fieldset>
 		<legend>Удалить последний эфир из расписания</legend>
-		<p class="lVeevod"></p>
-		<p><label for="last_chear_confr">Вы точно этого хотите?<input required type="checkbox" name="last_chear_confr"></p>
-		<p style="margin-top: 15px;"><input type="submit" value="Удалить" name="last_clear"></p>
+		<!--<p class="lVeevod">-->
+		<p>
+			<?php echo '<samp>'; if ($shed_data[count($shed_data)-2][0] !== 0) { echo 'Название: <q>' . $shed_data[count($shed_data)-2][2] . '</q>. Начало ' . date('Y-m-d в H:i', $shed_data[count($shed_data)-2][0]) . '; конец ' . date('Y-m-d в H:i', $shed_data[count($shed_data)-2][1]); } else { echo 'Очистка не требуется'; } echo '.</samp>' ?>
+		</p>
+		<p>
+			<label for="last_chear_confr">Вы точно этого хотите?</label>
+			<input required type="checkbox" name="last_chear_confr">
+		</p>
+		<p style="margin-top: 15px;">
+			<input type="submit" value="Удалить" name="last_clear">
+		</p>
 	</fieldset></form>
 	<form class="shed-force-sort" action="?succ" method="post"><fieldset>
 		<legend>Форсированная сортировка по времени старта</legend>
-		<p><label for="sf_confr">Вы точно этого хотите?<input required type="checkbox" name="sf_confr"></p>
-		<p style="margin-top: 15px;"><input type="submit" value="Отсортировать" name="shed_force_sort"></p>
+		<p>
+			<label for="sf_confr">Вы точно этого хотите?</label>
+			<input required type="checkbox" name="sf_confr">
+		</p>
+		<p style="margin-top: 15px;">
+			<input type="submit" value="Отсортировать" name="shed_force_sort">
+		</p>
 	</fieldset></form>
 	<form class="expired-clear" action="?succ" method="post"><fieldset>
 		<legend>Удалить "просроченные" эфиры из расписания</legend>
-		<p><?php// echo '<samp>Просроченных эфиров'; if(($shed_data[0][1] > time()) && ($expr_count != 1)) {echo ' нет.</samp>';} else {echo ': ' . $expr_count . '</samp>';} ?></p>
-		<p><?php echo '<samp>Просроченных эфиров'; if($shed_data[1][1] > time() && $expr_count = 1) {echo ' нет</samp>';} else {echo ': ' . $expr_count . '</samp>';} ?></p>
-		<p><label for="expire_chear_confr">Вы точно этого хотите?<input required type="checkbox" name="expire_chear_confr"></p>
-		<p style="margin-top: 15px;"><input type="submit" value="Удалить" name="expired_clear"></p>
+		<p>
+			<?php echo '<samp>Просроченных эфиров'; if($shed_data[1][1] > time() && $expr_count = 1) { echo ' нет</samp>'; } else { echo ': ' . $expr_count . '</samp>'; } ?>
+		</p>
+		<p>
+			<label for="expire_chear_confr">Вы точно этого хотите?</label>
+			<input required type="checkbox" name="expire_chear_confr">
+		</p>
+		<p style="margin-top: 15px;">
+			<input type="submit" value="Удалить" name="expired_clear">
+		</p>
 	</fieldset></form>
 	<hr>
 	<form class="noti-action" action="?succ" method="post"><fieldset>
 		<legend>Работа с оповещениями</legend>
-		<p><label for="noti_text">Текст:<input required type="text" name="noti_text" placeholder="напр. Розыгрыш BMW M3, не пропусти!"></label></p>
+		<p>
+			<?php if (isset($noti_cnt[0])) { echo '<samp>Текущее оповещение: <q>' . $noti_cnt[0] . '</q></samp>'; }  ?>
+		</p>
+		<p>
+			<label for="noti_text">Текст:</label>
+			<input required type="text" name="noti_text" placeholder="напр. Розыгрыш BMW M3, не пропусти!">
+		</p>
 		<details>
 			<summary>Памятка по разметке</summary>
 			<p class="protip">Для стилизации текста можно использовать <kbd>&lt;b&gt;<b>жирный шрифт</b>&lt;/b&gt;</kbd> и <kbd>&lt;i&gt;<i>курсив</i>&lt;/i&gt;</kbd>. Делить на абзацы можно с помощью <kbd>&lt;br&gt;</kbd>.<br>Ссылки должны быть вида <kbd>&lt;a href="https://..."&gt;текст&lt;/a&gt;</kbd>. В случае локальных ссылок сделует использовать <kbd>&lt;a href="/pisos"&gt;&lt;текст&lt;/a&gt;</kbd>.</p>
 		</details>
-		<p><label for="noti_remove">Удалить последнее оповещение?<input type="checkbox" name="noti_remove"></p>
-		<p style="margin-top: 15px;"><input type="submit" value="Создать" name="noti_action"></p>
+		<p>
+			<label for="noti_remove">Удалить последнее оповещение?</label>
+			<input type="checkbox" name="noti_remove" <?php if (!isset($noti_cnt[0])) { echo ' disabled'; } ?>>
+		</p>
+		<p style="margin-top: 15px;">
+			<input type="submit" value="Создать" name="noti_action">
+		</p>
 	</fieldset></form>
 	<footer>
 		<p>Asian Wave Control panel v0.2</p>
@@ -217,64 +261,59 @@
 		<p>Последнее обновление оповещения: <span class="notiTS"></span></p>
 		<p>Точное московское время (на момент загрузки страницы): <?php echo date('Y-m-d H:i:s', time()) ?></p>
 	</footer>
-	<script src="/files/code/js/libs/moment/moment.min.js" defer></script>
-	<script src="/files/code/js/libs/moment/moment-ru.min.js" defer></script>
+	<script src="/files/code/js/libs/moment/moment.min.js"></script>
+	<script src="/files/code/js/libs/moment/moment-ru.min.js"></script>
 	<script type="text/javascript">
 		'use strict';
 
-		function _elem(sel) {return document.querySelector(sel)}
-		function _elems(sel) {return document.querySelectorAll(sel)}
+		function _elem(sel) { return document.querySelector(sel) }
+		function _elems(sel) { return document.querySelectorAll(sel) }
 
-		function resetForms() {
-			var f, formsEls = document.getElementsByTagName('form');
+		;(function resetForms() {
+			let formsEls = document.getElementsByTagName('form');
 
-			for (f = 0; f < formsEls.length; f++) {
-				formsEls[f].reset;
+			for (let i = 0; i < formsEls.length; i++) {
+				formsEls[i].reset;
 			}
-		}
+		})();
 
-		function lastClVeevod() {
-			var l, lTimeS = '<?php echo $shed_data[count($shed_data)-2][0]; ?>', lTimeE = '<?php echo $shed_data[count($shed_data)-2][1]; ?>', lAirN = '<?php echo $shed_data[count($shed_data)-2][2]; ?>', lVeevodEl = document.createElement('samp'), lVeevodElPar = _elem('.lVeevod'), lInputs = _elems('.last-clear input');
+		;(function lastClVeevod() {
+			let lTimeS = '<?php echo $shed_data[count($shed_data)-2][0]; ?>', lInputs = _elems('.last-clear input');
 
-			if (lTimeS != 0) {
-				lVeevodEl.textContent = 'Название: ' + lAirN + '. Начало ' + moment.unix(lTimeS).format('DD MMMM YYYY в HH:mm') + '; конец ' + moment.unix(lTimeE).format('DD MMMM YYYY в HH:mm');
-			} else {
-				lVeevodEl.textContent = 'Очистка не требуется';
-				for (l = 0; l < lInputs.length; l++) {
-					lInputs[l].setAttribute('disabled','');
+			if (lTimeS = 0) {
+				for (let i = 0; i < lInputs.length; i++) {
+					lInputs[i].setAttribute('disabled', '');
 				}
 			}
+		})();
 
-			lVeevodElPar.appendChild(lVeevodEl);
-		}
+		;(function exprCheck() {
+			let air_exp = <?php if($shed_data[1][1] > time() && $expr_count = 1) {echo 'false';} else {echo 'true';} ?> , exprFInputs = _elems('.expired-clear input');
 
-		function exprCheck() {
-			var e, air_exp = <?php if($shed_data[1][1] > time() && $expr_count = 1) {echo 'false';} else {echo 'true';} ?> , exprFInputs = _elems('.expired-clear input');
 			if (!air_exp) {
-				for (e = 0; e < exprFInputs.length; e++) {
-					exprFInputs[e].setAttribute('disabled','');
+				for (let i = 0; i < exprFInputs.length; i++) {
+					exprFInputs[i].setAttribute('disabled', '');
 				}
 			}
-		}
+		})();
 
-		function toLocalTime() {
-			var i, lastTS = <?php echo $shed_data[count($shed_data) - 2][1]; ?>, inputsLT = _elems('input[type*=datetime]')
+		;(function toLocalTime() {
+			let lastTS = <?php echo $shed_data[count($shed_data) - 2][1]; ?>, inputsLT = _elems('input[type*=datetime]')
 
-			for (i = 0; i < inputsLT.length; i++) {
-				//inputsLT[i].setAttribute('value', dateNow + 'T' + timeNow);
+			for (let i = 0; i < inputsLT.length; i++) {
 				inputsLT[i].setAttribute('value', moment.unix(lastTS).format('YYYY-MM-DDTHH:mm'));
 			}
-		}
+		})();
 
-		function fileUpdate() {
-			var shedTS = '<?php echo @filemtime($shed) ?>', notiTS = '<?php echo @filemtime($noti) ?>', shedTSEl = _elem('.shedTS'), notiTSEl = _elem('.notiTS');
+		;(function fileUpdate() {
+			let shedTS = '<?php echo @filemtime($shed) ?>', notiTS = '<?php echo @filemtime($noti) ?>', shedTSEl = _elem('.shedTS'), notiTSEl = _elem('.notiTS');
 
 			shedTSEl.textContent = moment.unix(shedTS).from();
 			notiTSEl.textContent = moment.unix(notiTS).from();
-		}
+		})();
 
-		function notiDisable() {
-			var notiCreateF = _elem('[name="noti_text"]'), notiSubmitBtn = _elem('[name="noti_action"]');
+		;(function notiDisable() {
+			let notiCreateF = _elem('[name="noti_text"]'), notiSubmitBtn = _elem('[name="noti_action"]');
 
 			document.querySelector('[name="noti_remove"]').addEventListener('change', function() {
 				if (this.checked) {
@@ -286,14 +325,14 @@
 					notiSubmitBtn.value = 'Создать';
 				}
 			});
-		}
+		})();
 
-		resetForms();
-		exprCheck();
-		lastClVeevod();
-		toLocalTime();
-		fileUpdate();
-		notiDisable();
+		//resetForms();
+		//exprCheck();
+		//lastClVeevod();
+		//toLocalTime();
+		//fileUpdate();
+		//notiDisable();
 	</script>
 	<?php endif; ?>
 </body></html>

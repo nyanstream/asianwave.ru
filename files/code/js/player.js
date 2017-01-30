@@ -199,23 +199,23 @@ var mr24info = 'https://' + mr24url + '/users/' + stream_port + '/status.json',
 		dj_elem = _elem('.player-elem.djname'),
 		listeners_elem = _elem('.player-elem.listeners'),
 		srch_main = _elem('.player-song.search'),
-		srch_vk = _elem('.player-song.search .srch-vk'),
-		srch_google = _elem('.player-song.search .srch-google'),
+		srch_vk = srch_main.querySelector('.srch-vk'),
+		srch_google = srch_main.querySelector('.srch-google'),
 		data_song, data_dj, data_listeners, slsh = 'челове';
 
 /*
 	* Функция, которая запрашивает инфу в плеер с серверов MyRadio24
 */
 
-function loadInfo(){
-	if(self.fetch) {
+function loadInfo() {
+	if (self.fetch) {
 		window.fetch(mr24info + '?from=aw_player&ts=' + Date.now()).then(function(response){
 			if (response.status !== 200) {
 				console.log('Ошибка сервера радио!')
 				return;
 			}
 			response.json().then(function(data) {
-				if(data['online'] != 0) {
+				if (data['online'] != 0) {
 						var data_song = data['song'],
 						data_last_song = data['songs'],
 						data_next_song = data['nextsongs'],
@@ -243,6 +243,7 @@ function loadInfo(){
 							case 'Auto-DJ':
 								song_elem.setAttribute('title', 'Играющий сейчас трек. Далее: \u00AB'+data_next_song+'\u00BB');
 								dj_elem.setAttribute('title', 'Вещает автодиджей');
+								dj_elem.textContent = 'Asian Wave Radio';
 								break;
 							default:
 								dj_elem.setAttribute('title', 'Кто-то вещает, ничего себе!');

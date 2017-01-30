@@ -228,7 +228,7 @@ switch (location.hostname) {
 }
 
 function loadInfo() {
-	if(self.fetch) {
+	if (self.fetch) {
 		window.fetch(api_shed + '?ts=' + Date.now()).then(function(response) {
 			if (response.status !== 200) {
 				streamShed.style.display = 'none';

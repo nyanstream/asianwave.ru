@@ -69,9 +69,9 @@ var mr24url_1 = 'myra', mr24url_2 = 'dio24.c', mr24url_3 = 'om',
 var songsBox = _elem('.songs'), stream_port = 7934,
 		mr24api = 'https://' + mr24url + '/users/' + stream_port + '/status.json';
 
-function loadInfo(){
-	if(self.fetch) {
-		window.fetch(mr24api + '?ts=' + Date.now()).then(function(response){
+function loadInfo() {
+	if (self.fetch) {
+		window.fetch(mr24api + '?ts=' + Date.now()).then(function(response) {
 			if (response.status !== 200) {
 				songsBox.innerHTML = '<tbody><tr><td>Сервер радио временно недоступен.</tr></td></tbody>';
 				return;

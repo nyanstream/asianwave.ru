@@ -30,15 +30,15 @@ RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI}
 <IfModule mod_headers.c>
 	Header set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload" env=HTTPS
 
-	Header set Content-Security-Policy "default-src 'self' https:; \
-		connect-src 'self' https: mc.yandex.ru; \
-		child-src 'self' https: asianwaveru.chatovod.ru vk.com *.youtube-nocookie.com; \
-		frame-ancestors 'self' https: vk.com; \
-		style-src 'self' https: 'unsafe-inline' *.googleapis.com; \
-		font-src 'self' https: *.gstatic.com; \
-		img-src 'self' data: https: vk.com www.google-analytics.com mc.yandex.ru; \
+	Header set Content-Security-Policy "default-src 'self'; \
+		connect-src 'self' mc.yandex.ru myradio24.com; \
+		child-src 'self' asianwaveru.chatovod.ru chatovod.ru vk.com *.youtube-nocookie.com; \
+		frame-ancestors 'self' vk.com; \
+		style-src 'self' 'unsafe-inline' *.googleapis.com; \
+		font-src 'self' *.gstatic.com; \
+		img-src 'self' data: vk.com www.google-analytics.com mc.yandex.ru i.imgur.com; \
 		media-src 'self' *.myradio24.com; \
-		script-src 'self' https: 'unsafe-inline' www.google-analytics.com mc.yandex.ru vk.com cdnjs.cloudflare.com cdn.jsdelivr.net; \
+		script-src 'self' 'unsafe-inline' www.google-analytics.com mc.yandex.ru vk.com cdn.jsdelivr.net; \
 		plugin-types application/x-shockwave-flash"
 </IfModule>
 
@@ -83,3 +83,6 @@ Redirect 301 /app--opera https://addons.opera.com/ru/extensions/details/asian-wa
 # фикс адресов разделов
 Redirect 301 /anime/ /anime
 Redirect 301 /radio/ /radio
+
+# фикс для расширения
+Redirect 301 /files/code/styles/ /files/code/css/
