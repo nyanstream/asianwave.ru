@@ -1,11 +1,7 @@
 'use strict';
 
-function _elem(querySelector) {return document.querySelector(querySelector)}
-function _elems(querySelector) {return document.querySelectorAll(querySelector)}
-// function _ls(ls_item) {return localStorage.getItem(ls_item)}
-// function _ls_rm(ls_item) {return localStorage.removeItem(ls_item)}
-// function _ls_set(ls_item, ls_item_var) {return localStorage.setItem(ls_item, ls_item_var)}
-// function _extLink(link, text) {return '<a href="' + link.toString() + '" target="_blank" rel="nofollow noopener">' + text.toString() + '</a>'}
+function _elem(qS) { return document.querySelector(qS) }
+function _elems(qS) { return document.querySelectorAll(qS) }
 
 function makeTabs(selector) {
 	var tab_lists_anchors = _elems(selector + ' li'), divs = _elem(selector + '_tabs').querySelectorAll('div[id*="tab_"]');
@@ -42,7 +38,7 @@ var songsBox = _elem('.songs'), stream_port = 7934,
 
 function loadInfo() {
 	if (self.fetch) {
-		window.fetch(mr24api+'?ts='+Date.now()).then(function(response) {
+		window.fetch(mr24api, { cache: 'no-cache' }).then(function(response) {
 			if (response.status !== 200) {
 				//songsBox.innerHTML = '<tbody><tr><td>Сервер радио временно недоступен.</tr></td></tbody>';
 				return;

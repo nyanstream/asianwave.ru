@@ -2,9 +2,9 @@
 
 console.info('Используйте эту консоль с осторожностью!');
 
-function _elem(querySelector) {return document.querySelector(querySelector)}
-function _xss(value) {return value.toString().replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/'/g, "&#39;").replace(/"/g, "&#34;")}
-function _extLink(link, text) {return '<a href="' + _xss(link) + '" target="_blank" rel="nofollow noopener">' + _xss(text) + '</a>'}
+function _elem(qS) { return document.querySelector(qS) }
+function _xss(value) { return value.toString().replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/'/g, '&#39;').replace(/"/g, '&#34;') }
+function _extLink(link, text) { return '<a href="' + _xss(link) + '" target="_blank" rel="nofollow noopener">' + _xss(text) + '</a>' }
 
 /*
 	* функция для склонения слов от числительных.
@@ -36,12 +36,12 @@ if (isOpera) {
 	* Смена бекграундов
 */
 
-;(function changeBckg(){
+;(function changeBckg() {
 	var awlogo = _elem('.brand img[alt="logo"]'),	e = 9, bckgsFolder = '/files/img/radio-bckgs/';
 
 	document.body.style.backgroundImage = 'url(' + bckgsFolder +  Math.floor(Math.random()*e + 1) + '.jpg)';
 
-	awlogo.addEventListener('click', changeBckg);
+	awlogo.addEventListener('dblclick', changeBckg);
 })();
 
 /*
@@ -71,7 +71,7 @@ var songsBox = _elem('.songs'), stream_port = 7934,
 
 function loadInfo() {
 	if (self.fetch) {
-		window.fetch(mr24api + '?ts=' + Date.now()).then(function(response) {
+		window.fetch(mr24api, {cache: 'no-cache'}).then(function(response) {
 			if (response.status !== 200) {
 				songsBox.innerHTML = '<tbody><tr><td>Сервер радио временно недоступен.</tr></td></tbody>';
 				return;
@@ -86,7 +86,7 @@ function loadInfo() {
 				//songsBox.innerHTML = '<tbody><caption>Последние песни:</caption><tr><th>Время</th><th>Трек</th></tr>' + tableBody + '</tbody>';
 				songsBox.innerHTML = '<caption>Последние песни:</caption><tbody>' + tableBody + '</tbody>';
 
-				var qenable = data['enabletable'], awrj = data['djname'], songsqueue = data['turntable'], orderBox = document.querySelector('.order-box'), orderQueue = document.querySelector('.order-box .queue'), zkzd = '</span> зака';
+				var qenable = data['enabletable'], awrj = data['djname'], songsqueue = data['turntable'], orderBox = _elem('.order-box'), orderQueue = _elem('.order-box .queue'), zkzd = '</span> зака';
 
 				//var qenable = 1, songsqueue = 20, awrj = '1'; //debuh
 

@@ -11,7 +11,7 @@
 	}
 
 	.brand {
-		@include user-select(none);
+		user-select: none;
 		white-space: nowrap;
 		cursor: default;
 		font-size: 0;
@@ -57,11 +57,11 @@
 			background-color: lighten($top-panel--color, 10%);
 			border-radius: 5px;
 			padding: 2.5px 10px;
-			opacity: 0.7;
+			opacity: .7;
 			color: #fff;
 
 			cursor: pointer;
-			@include user-select(none);
+			user-select: none;
 			@include transition(.3s);
 
 			&:hover {

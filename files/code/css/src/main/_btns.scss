@@ -1,5 +1,5 @@
 .btns {
-	@include user-select(none);
+	user-select: none;
 
 	.container > a {
 		display: inline-block;
@@ -11,12 +11,12 @@
 		background-position: bottom 20px center, center center;
 		background-size: 70%, 100%;
 
-		box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+		box-shadow: 0 5px 20px rgba(0, 0, 0, .5);
 		@include transition(.3s);
 
 		&:hover {
 			background-size: 70%, 105%;
-			//box-shadow: 5px 10px 20px rgba(0,0,0,0.5);
+			//box-shadow: 5px 10px 20px rgba(0, 0, 0, .5);
 		}
 	}
 

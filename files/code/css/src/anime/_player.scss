@@ -4,7 +4,8 @@
 	& > *:nth-child(1) {
 		background-image: url('/files/img/anime-offline.png');
 		background-repeat: no-repeat;
-		background-position: center bottom;
+		//background-position: center bottom;
+		background-position: left bottom;
 		background-size: cover;
 	}
 

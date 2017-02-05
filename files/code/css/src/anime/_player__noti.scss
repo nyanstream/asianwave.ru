@@ -1,15 +1,17 @@
 .noti {
 	display: none;
 	position: absolute;
+
 	width: auto; height: auto;
 	max-width: 385px; max-height: calc(100% - 100px);
+
 	top: $p--offset; left: $p--offset;
 	background-color: rgba(255, 255, 255, .8);
 	padding: 5px 5px 10px 1.2em; z-index: 2;
 	font-size: 20px;
 	cursor: default;
 
-	@include user-select(none);
+	user-select: none;
 	@include transition(.5s);
 
 	// &:hover {

@@ -8,19 +8,18 @@
 
 .player-container {
 	@include flexbox(auto, space-between, auto, auto);
-	@include user-select(none);
+	user-select: none;
+
 	font-family: Roboto, Arial, sans-serif;
 	font-size: 0;
 
 	overflow: hidden;
 
 	position: relative;
-
-	height: 40px;
-	width: 100%;
+	width: 100%; height: 40px;
 
 	/* Светлая тема плеера */
-	@import 'src/player-app/container--theme-light';
+	@import 'src/player-app/container--themes';
 
 	/* "Состояния" плеера (если онлайн и если оффлайн) */
 	@import 'src/player-app/container--states';
@@ -75,11 +74,29 @@
 
 	// &.playpause:hover, &.playpause:active,
 	// &.mute:hover, &.mute:active {
-	// 	opacity: 0.8;
+	// 	opacity: .8;
 	// }
 
 	/* Стилизация бегунка выбора громкости */
 	@import 'src/player-app/ctrl--volume';
 } // .player-ctrl
+
+.noframe {
+	text-align: center;
+	font-size: 2em;
+
+	a {
+		text-decoration: none;
+		color: #000;
+
+		&:visited {
+			color: #000;
+		}
+
+		&:hover {
+			color: red;
+		}
+	}
+}
 
 @import 'src/player-app/mediaq';

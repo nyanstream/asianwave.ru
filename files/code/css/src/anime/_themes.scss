@@ -1,0 +1,35 @@
+.container[data-theme='old-gray'] {
+	.top-panel {
+		background-color: #464646;
+
+		.brand {
+			.text:hover {
+				text-shadow:1px 1px 2px #ccc;
+			}
+		}
+
+		.right-panel .rp-elem {
+			background-color: #606060;
+		}
+	}
+
+	.tabs {
+		ul li {
+			background-color: #464646;
+			border-left: .5px solid #3e3e3e;
+			border-right: .5px solid #3e3e3e;
+
+			&:hover {
+				background-color: #393939;
+			}
+
+			&.active {
+				background-color: #2d2d2d;
+
+				&:hover {
+					background-color: #2d2d2d;
+				}
+			}
+		}
+	}
+}

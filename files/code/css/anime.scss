@@ -2,21 +2,15 @@
 @import 'src/vars'; // переменные
 @import 'fonts/style'; // иконочные шрифты
 
-// @keyframes online-blink {
-// 	0% {@include filter(brightness(1))}
-// 	25% {@include filter(brightness(.85))}
-// 	50% {@include filter(brightness(.7))}
-// 	75% {@include filter(brightness(.85))}
-// 	100% {@include filter(brightness(1))}
-// }
-
 @import 'src/every';
 
 $pagewidth: 1000px;
 
 @import 'src/topbar';
 
-@import 'src/anime/special';
+@import 'src/anime/themes';
+
+//@import 'src/anime/special';
 
 .anime {
 	width: 100%;

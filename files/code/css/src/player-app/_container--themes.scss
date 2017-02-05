@@ -1,4 +1,4 @@
-&.theme-light {
+&[data-theme="light"] {
 	background: $top-panel--color;
 	background-repeat: no-repeat;
 
@@ -30,4 +30,4 @@
 	.player-elem {
 		border-right: 1px solid lighten($top-panel--color, 10%);
 	}
-} // &.theme-light
+} // &[data-theme="light"]

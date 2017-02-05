@@ -2,13 +2,13 @@
 
 console.info('Используйте эту консоль с осторожностью!');
 
-function _elem(querySelector) {return document.querySelector(querySelector)}
-function _elems(querySelector) {return document.querySelectorAll(querySelector)}
-function _ls(ls_item) {return localStorage.getItem(ls_item)}
-function _ls_rm(ls_item) {return localStorage.removeItem(ls_item)}
-function _ls_set(ls_item, ls_item_var) {return localStorage.setItem(ls_item, ls_item_var)}
-function _xss(value) {return value.toString().replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/'/g, "&#39;").replace(/"/g, "&#34;")}
-function _extLink(link, text) {return '<a href="' + _xss(link) + '" target="_blank" rel="nofollow noopener">' + _xss(text) + '</a>'}
+function _elem(qS) { return document.querySelector(qS) }
+function _elems(qS) { return document.querySelectorAll(qS) }
+function _ls(ls_item) { return localStorage.getItem(ls_item) }
+function _ls_rm(ls_item) { return localStorage.removeItem(ls_item) }
+function _ls_set(ls_item, ls_item_var) { return localStorage.setItem(ls_item, ls_item_var) }
+function _xss(value) { return value.toString().replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/'/g, '&#39;').replace(/"/g, '&#34;') }
+function _extLink(link, text) { return '<a href="' + _xss(link) + '" target="_blank" rel="nofollow noopener">' + _xss(text) + '</a>' }
 
 /*
  * Детект хрома
@@ -18,7 +18,7 @@ var isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator
 		isOpera = /OPR\//.test(navigator.userAgent),
 		chrExtBtn = _elem('.right-panel [href*="--chrome"]');
 
-if (!isChrome) { chrExtBtn.style.display = 'none'; }
+if (!isChrome) { chrExtBtn.style.display = 'none' }
 if (isOpera) {
 	chrExtBtn.querySelector('.icon').classList.remove('icon-chrome');
 	chrExtBtn.querySelector('.icon').classList.add('icon-opera');
@@ -99,7 +99,7 @@ window.addEventListener('load', function() {
 
 var VK, tabsUl = _elem('.tabs ul'), tabsLi = tabsUl.querySelectorAll('li[data-tab]'), wheight = document.querySelector('.tabs').clientHeight - tabsUl.clientHeight;
 
-if (wheight > 1200) {	wheight = 1200; }
+if (wheight > 1200) {	wheight = 1200 }
 
 if (VK) {
 	VK.Widgets.Group('vk_group', {mode: 2, width: "400", height: wheight, color3: '628CC5'}, 120842574);
@@ -134,13 +134,10 @@ closeTabsCtr.addEventListener('click', closeTabs);
  * Старый цвет шапки (NY Special)
 */
 
-var oldHeadStyle = document.createElement('style'),
-		nyako = _elem('.top-panel .brand img');
+var container = _elem('.container'), nyako = _elem('.top-panel .brand img');
 
 function _oldHeadColor() {
-	oldHeadStyle.innerHTML = '.top-panel{background-color:#464646;}.top-panel .brand .text:hover{text-shadow:1px 1px 2px #ccc}.top-panel .right-panel .rp-elem{background-color:#606060;}.tabs ul li{background-color:#464646;border-left:0.5px solid #3e3e3e;border-right:0.5px solid #3e3e3e}.tabs ul li:hover{background-color:#393939}.tabs ul li.active{background-color:#2d2d2d}.tabs ul li.active:hover{background-color:#2d2d2d}';
-
-	document.getElementsByTagName('head')[0].appendChild(oldHeadStyle);
+	container.dataset.theme = 'old-gray';
 	_ls_set('aw_iamoldfag', true);
 }
 
@@ -148,7 +145,7 @@ if (_ls('aw_iamoldfag')) {
 	_oldHeadColor();
 	nyako.addEventListener('dblclick', function() {
 		_ls_rm('aw_iamoldfag');
-		oldHeadStyle.innerHTML = '';
+		delete container.dataset.theme;
 	});
 } else {
 	nyako.addEventListener('dblclick', _oldHeadColor);
@@ -161,7 +158,7 @@ if (_ls('aw_iamoldfag')) {
 
 var notiEl = _elem('.noti');
 
-function spawnNoti(text, id) {
+function notiSpawn(text, id) {
 	var notiClose = document.createElement('div'), notiContent = document.createElement('div'), ls_item = 'awnoti_' + id;
 	notiEl.dataset.noti = id;
 	notiEl.textContent = '';
@@ -205,7 +202,7 @@ function spawnNoti(text, id) {
 	});
 }
 
-function notiLSClear() {
+function notiClear() {
 	for (var a in localStorage) {
 		if (a.indexOf('awnoti') === 0) {
 			_ls_rm(a);
@@ -224,12 +221,11 @@ switch (location.hostname) {
 	case 'localhost':
 		api_shed = host + api_shed;
 		api_noti = host + api_noti;
-		break;
 }
 
 function loadInfo() {
 	if (self.fetch) {
-		window.fetch(api_shed + '?ts=' + Date.now()).then(function(response) {
+		window.fetch(api_shed, {cache: 'no-cache'}).then(function(response) {
 			if (response.status !== 200) {
 				streamShed.style.display = 'none';
 				return;
@@ -271,14 +267,14 @@ function loadInfo() {
 				streamShed.innerHTML = '<tbody><tr><td colspan="2"><em>Время местное.</em></td></tr>' + tableBody + '</tbody>';
 			});
 		});
-		window.fetch(api_noti+'?ts='+Date.now()).then(function(response) {
+		window.fetch(api_noti, {cache: 'no-cache'}).then(function(response) {
 			if (response.status !== 200) {
 				notiEl.style.display = 'none';
 				return;
 			}
 			response.json().then(function(data) {
-				if (data[0] != null) {
-					spawnNoti(data[0], data[1]);
+				if (data[0] !== null) {
+					notiSpawn(data[0], data[1]);
 				} else {
 					notiEl.textContent = '';
 				}

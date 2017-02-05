@@ -12,8 +12,7 @@
 	font-size: 18px;
 	cursor: pointer;
 
-	//@include transition(.3s);
-	@include user-select(none);
+	user-select: none;
 	@include opacity;
 
 	&:hover {
@@ -28,7 +27,7 @@
 
 		&:last-of-type {
 			margin-top: 5px;
-			font-size: 0.8em;
+			font-size: .8em;
 		}
 	}
 }

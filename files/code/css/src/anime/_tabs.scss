@@ -5,7 +5,7 @@
 	ul {
 		height: $tabcelheight;
 		font-size: 0;
-		@include user-select(none);
+		user-select: none;
 
 		li {
 			display: inline-block;

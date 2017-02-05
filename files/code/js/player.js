@@ -4,10 +4,19 @@
 	* Некоторые функции для устранения повторов
 */
 
-function _elem(querySelector) {return document.querySelector(querySelector)}
-function _ls(ls_item) {return localStorage.getItem(ls_item)}
-function _ls_rm(ls_item) {return localStorage.removeItem(ls_item)}
-function _ls_set(ls_item, ls_item_var) {return localStorage.setItem(ls_item, ls_item_var)}
+function _elem(qS) { return document.querySelector(qS) }
+function _ls(ls_item) { return localStorage.getItem(ls_item) }
+function _ls_rm(ls_item) { return localStorage.removeItem(ls_item) }
+function _ls_set(ls_item, ls_item_var) { return localStorage.setItem(ls_item, ls_item_var) }
+function _extLink(link, text) { return '<a href="' + _xss(link) + '" target="_blank" rel="nofollow noopener">' + _xss(text) + '</a>' }
+
+/*
+	* Проверка на фрейм
+*/
+
+if (window.self == window.top) {
+	document.body.innerHTML = '<p class="noframe"><a href="/radio">\u00af\u005c\u005f\u0028\u30c4\u0029\u005f\u002f\u00af</a></p>';
+}
 
 /*
 	* Проверка работы хранилища данных
@@ -183,14 +192,14 @@ ctrl_vol.addEventListener('input', function() {
 });
 
 ctrl_vol.addEventListener('change', function() {
-	if (lsTest() == true) { _ls_set('ppaw_plvolume', this.value) }
+	if (lsTest()) { _ls_set('ppaw_plvolume', this.value) }
 });
 
 /*
 	* Если плеер открыт с мобильного - происходит небольшая кастомизация.
 */
 
-if (isMobile.any == true && ctrl_ctrl.classList.contains('mobile') == false) {
+if (isMobile.any && !ctrl_ctrl.classList.contains('mobile')) {
 	ctrl_ctrl.classList.add('mobile');
 }
 
@@ -209,20 +218,16 @@ var mr24info = 'https://' + mr24url + '/users/' + stream_port + '/status.json',
 
 function loadInfo() {
 	if (self.fetch) {
-		window.fetch(mr24info + '?from=aw_player&ts=' + Date.now()).then(function(response){
+		window.fetch(mr24info, {cache: 'no-cache'}).then(function(response) {
 			if (response.status !== 200) {
-				console.log('Ошибка сервера радио!')
+				console.log('Ошибка сервера радио!');
 				return;
 			}
 			response.json().then(function(data) {
 				if (data['online'] != 0) {
-						var data_song = data['song'],
-						data_last_song = data['songs'],
-						data_next_song = data['nextsongs'],
-						data_dj = data['djname'],
-						//data_dj = 'rj major & rj banzan';
-						//data_listeners = 10000, // loel debuh
-						data_listeners = data['listeners'];
+						var data_song = data['song'],	data_last_song = data['songs'],	data_next_song = data['nextsongs'],	data_dj = data['djname'],	data_listeners = data['listeners'];
+
+						//var data_dj = 'rj major & rj banzan', data_listeners = 10000, // loel debuh
 
 						// console.log(data_last_song.length);
 						// console.log(data_last_song[9][1]);
@@ -238,25 +243,21 @@ function loadInfo() {
 						srch_vk.setAttribute('href', 'https://vk.com/audio?q=' + encodeURIComponent(data_song));
 						srch_google.setAttribute('href', 'https://google.com/#q=' + encodeURIComponent(data_song));
 
-						dj_elem.textContent = data_dj;
-						switch (data_dj) {
-							case 'Auto-DJ':
-								song_elem.setAttribute('title', 'Играющий сейчас трек. Далее: \u00AB'+data_next_song+'\u00BB');
-								dj_elem.setAttribute('title', 'Вещает автодиджей');
-								dj_elem.textContent = 'Asian Wave Radio';
-								break;
-							default:
-								dj_elem.setAttribute('title', 'Кто-то вещает, ничего себе!');
-								song_elem.setAttribute('title', 'Играющий сейчас трек');
+						if (data_dj == 'Auto-DJ') {
+							song_elem.setAttribute('title', 'Играющий сейчас трек. Далее: \u00AB'+data_next_song+'\u00BB');
+							dj_elem.setAttribute('title', 'Вещает автодиджей');
+							dj_elem.textContent = 'Asian Wave Radio';
+						} else {
+							dj_elem.setAttribute('title', 'Кто-то вещает, ничего себе!');
+							song_elem.setAttribute('title', 'Играющий сейчас трек');
+							dj_elem.textContent = data_dj;
 						}
 
 						listeners_elem.textContent = data_listeners;
-						switch (data_listeners) {
-							case 0:
-								listeners_elem.setAttribute('title', 'В данный момент радио никто не слушает \u003a\u0028');
-								break;
-							default:
-								listeners_elem.setAttribute('title', 'Сейчас радио слушает ' + declOfNum(data_listeners, [slsh+'к', slsh+'ка', slsh+'к']));
+						if (data_listeners == 0) {
+							listeners_elem.setAttribute('title', 'В данный момент радио никто не слушает \u003a\u0028');
+						} else {
+							listeners_elem.setAttribute('title', 'Сейчас радио слушает ' + declOfNum(data_listeners, [slsh+'к', slsh+'ка', slsh+'к']));
 						}
 					}	else {
 						song_elem.textContent = 'Радио оффлайн';
@@ -270,7 +271,7 @@ function loadInfo() {
 			});
 		});
 	} else {
-		song_elem.innerHTML = 'Для работы плеера необходим <a href="https://vk.com/badbrowser.php" target="_blank" rel="nofollow noopener">современный браузер</a>.';
+		song_elem.innerHTML = 'Для работы плеера необходим ' + _extLink('https://vk.com/badbrowser.php', 'современный браузер') + '.';
 		if (!container.classList.contains('offline')) {
 			container.classList.add('offline');
 		}

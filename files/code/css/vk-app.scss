@@ -13,7 +13,7 @@ body, html {
 
 $pagewidth: 860px;
 
-@import 'src/vk-app/special';
+//@import 'src/vk-app/special';
 
 body {
 	background-image: url('/files/img/bckg.png');
@@ -54,10 +54,10 @@ body {
 	& {
 		@include flexbox(auto, auto, center, auto);
 		background-color: $primecolor;
-		box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+		box-shadow: 0 5px 20px rgba(0, 0, 0, .5);
 		margin: 50px 0 55px 0;
 		height: 50px;
-		@include user-select(none);
+		user-select: none;
 	}
 
 	.container {
@@ -78,7 +78,7 @@ body {
 		background-repeat: no-repeat;
 		background-size: 80%;
 		border-radius: 99px;
-		box-shadow: 0 5px 10px rgba(0,0,0,0.5);
+		box-shadow: 0 5px 10px rgba(0, 0, 0, .5);
     margin: 0 18px 0 20px;
 	}
 
@@ -109,26 +109,4 @@ body {
 			opacity: .9;
 		}
 	}
-
-	// .order-box {
-	// 	$obbckgcolor: #d4d4d4;
-	// 	display: none;
-	// 	position: absolute;
-	// 	width: 650px;	height: 40px;
-	// 	background-color: $obbckgcolor;
-	// 	top: 110px;	right: 25px;
-	// 	text-decoration: none;
-	//
-	// 	@include transition(.3s);
-	// 	@include user-select(none);
-	//
-	// 	&:hover {
-	// 		background-color: darken($obbckgcolor, 5%);
-	// 	}
-	//
-	// 	p {
-	// 		font-size: 19px;
-	// 		color: #000;
-	// 	}
-	// }
 }

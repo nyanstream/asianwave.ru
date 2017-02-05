@@ -8,23 +8,24 @@ html, body, .container {
 }
 
 .container {
+	$link-color: darken($primecolor, 15%);
 	font-family: Roboto, Arial, sans-serif;
 
 	main {
 		a {
 			text-decoration: none;
-			color: $primecolor;
-			border-bottom: 1px dashed $primecolor;
+			color: $link-color;
+			border-bottom: 1px dashed $link-color;
 
 			@include transition(.3s);
 
 			&:visited {
-				color: $primecolor;
+				color: $link-color;
 			}
 
 			&:hover {
-				color: darken($primecolor, 10%);
-				border-bottom: 1px solid darken($primecolor, 10%);
+				color: darken($link-color, 10%);
+				border-bottom: 1px solid darken($link-color, 10%);
 			}
 		}
 	}

@@ -1,11 +1,11 @@
 @import 'src/mixins'; // миксины
+@import 'src/vars'; // переменные
 
 @include reset;
 
-@import 'src/main/events/newyear-2016';
+//@import 'src/main/events/newyear-2016';
 
 $pagewidth: 960px;
-$primecolor: #FF305E;
 
 @import 'src/main/scrollbar';
 
@@ -49,7 +49,7 @@ footer {
 
 	p {
 		padding: 0 5px;
-		color: rgba(128, 128, 128, 0.5);
+		color: rgba(128, 128, 128, .5);
 	}
 }
 

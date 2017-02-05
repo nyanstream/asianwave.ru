@@ -2,10 +2,10 @@
 	& {
 		@include flexbox(auto, auto, center, auto);
 		background-color: $primecolor;
-		box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+		box-shadow: 0 5px 20px rgba(0, 0, 0, .5);
 		margin: 50px 0 55px 0;
 		height: 50px;
-		@include user-select(none);
+		user-select: none;
 	}
 
 	.container {
@@ -26,7 +26,7 @@
 		background-repeat: no-repeat;
 		background-size: 80%;
 		border-radius: 99px;
-		box-shadow: 0 5px 10px rgba(0,0,0,0.5);
+		box-shadow: 0 5px 10px rgba(0, 0, 0, .5);
     margin-right: 25px;
 	}
 
