@@ -47,7 +47,8 @@ function declOfNum(number, titles) {
 	* Установка порта радио, дефолтной громкости (на уровне 40%) и URL для сайта хостинга радио (разбито просто потому что)
 */
 
-const stream_port = 7934, stream_srv = 1;
+var scriptData = document.currentScript.dataset;
+const stream_port = scriptData.port, stream_srv = scriptData.server;
 
 var stream_vol,	stream_vol_def = 40,
 		mr24url_1 = 'myra', mr24url_2 = 'dio24.c', mr24url_3 = 'om',
@@ -59,11 +60,11 @@ var stream_vol,	stream_vol_def = 40,
 */
 
 if (lsTest() == true) {
-	if (_ls('ppaw_plvolume') == null) {
-		_ls_set('ppaw_plvolume', stream_vol_def);
+	if (_ls('aw_player_volume') == null) {
+		_ls_set('aw_player_volume', stream_vol_def);
 		steram_vol = stream_vol_def;
 	} else {
-		steram_vol = _ls('ppaw_plvolume');
+		steram_vol = _ls('aw_player_volume');
 	}
 } else {
 	steram_vol = stream_vol_def;
@@ -125,10 +126,10 @@ function st_playpause() {
 if (lsTest() == true) {
 	var autostphr = 'Автостартовать плеер при загрузке:\u0020';
 
-	switch (_ls('ppaw_autostart')) {
+	switch (_ls('aw_player_autostart')) {
 		case 'null':
 		default:
-			_ls_set('ppaw_autostart', 0);
+			_ls_set('aw_player_autostart', 0);
 			break;
 		case '0':
 			ctrl_autostart.setAttribute('label', autostphr + '\u2716');
@@ -140,14 +141,14 @@ if (lsTest() == true) {
 	}
 
 	function st_autostart() { // just for future dev // опция автостарта плеера для огнелиса
-		switch (_ls('ppaw_autostart')) {
+		switch (_ls('aw_player_autostart')) {
 			case '0':
-				_ls_set('ppaw_autostart', 1);
+				_ls_set('aw_player_autostart', 1);
 				ctrl_autostart.setAttribute('label', autostphr + '\u2713');
 				break;
 			case '1':
 			default:
-				_ls_set('ppaw_autostart', 0);
+				_ls_set('aw_player_autostart', 0);
 				ctrl_autostart.setAttribute('label', autostphr + '\u2716');
 				break;
 		}
@@ -192,7 +193,7 @@ ctrl_vol.addEventListener('input', function() {
 });
 
 ctrl_vol.addEventListener('change', function() {
-	if (lsTest()) { _ls_set('ppaw_plvolume', this.value) }
+	if (lsTest()) { _ls_set('aw_player_plvolume', this.value) }
 });
 
 /*
@@ -241,7 +242,7 @@ function loadInfo() {
 						song_elem.textContent = data_song;
 
 						srch_vk.setAttribute('href', 'https://vk.com/audio?q=' + encodeURIComponent(data_song));
-						srch_google.setAttribute('href', 'https://google.com/#q=' + encodeURIComponent(data_song));
+						srch_google.setAttribute('href', 'https://encrypted.google.com//#q=' + encodeURIComponent(data_song));
 
 						if (data_dj == 'Auto-DJ') {
 							song_elem.setAttribute('title', 'Играющий сейчас трек. Далее: \u00AB'+data_next_song+'\u00BB');

@@ -24,10 +24,10 @@
 	 */
 
 	function unicodeString($str, $encoding=null) {
-	if (is_null($encoding)) $encoding = ini_get('mbstring.internal_encoding');
-		return preg_replace_callback('/\\\\u([0-9a-fA-F]{4})/u', function($match) use ($encoding) {
-			return mb_convert_encoding(pack('H*', $match[1]), $encoding, 'UTF-16BE');
-		}, $str);
+		if (is_null($encoding)) $encoding = ini_get('mbstring.internal_encoding');
+			return preg_replace_callback('/\\\\u([0-9a-fA-F]{4})/u', function($match) use ($encoding) {
+				return mb_convert_encoding(pack('H*', $match[1]), $encoding, 'UTF-16BE');
+			}, $str);
 	}
 
 	/*
@@ -58,7 +58,7 @@
 		});
 
 		if ($newar[2] != null) {
-			file_put_contents(dirname(__FILE__) . '/' . $shed, json_encode($shed_data));
+			file_put_contents(dirname(__FILE__) . '/' . $shed, json_encode($shed_data, JSON_UNESCAPED_UNICODE));
 		}
 		//file_put_contents(dirname(__FILE__) . '/' . $shed_arch, json_encode($shed_data));
 	}
@@ -73,7 +73,7 @@
 		usort($shed_data, function($a, $b){
 			return ($a[0] - $b[0]);
 		});
-		file_put_contents(dirname(__FILE__) . '/' . $shed, json_encode($shed_data));
+		file_put_contents(dirname(__FILE__) . '/' . $shed, json_encode($shed_data, JSON_UNESCAPED_UNICODE));
 	}
 
 	/*
@@ -91,7 +91,7 @@
 		usort($shed_data, function($a, $b){
 			return ($a[0] - $b[0]);
 		});
-		file_put_contents(dirname(__FILE__) . '/' . $shed, json_encode($shed_data));
+		file_put_contents(dirname(__FILE__) . '/' . $shed, json_encode($shed_data, JSON_UNESCAPED_UNICODE));
 	}
 
 	//echo count($shed_data);
@@ -126,7 +126,7 @@
 			$noti_data = [json_decode('"'.$noti_text.'"'), time()];
 		}
 
-		file_put_contents(dirname(__FILE__) . '/' . $noti, json_encode($noti_data));
+		file_put_contents(dirname(__FILE__) . '/' . $noti, json_encode($noti_data, JSON_UNESCAPED_UNICODE));
 	}
 ?>
 <!DOCTYPE HTML>

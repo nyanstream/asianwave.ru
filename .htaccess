@@ -32,13 +32,14 @@ RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI}
 
 	Header set Content-Security-Policy "default-src 'self'; \
 		connect-src 'self' mc.yandex.ru myradio24.com; \
-		child-src 'self' asianwaveru.chatovod.ru chatovod.ru vk.com *.youtube-nocookie.com; \
-		frame-ancestors 'self' vk.com; \
-		style-src 'self' 'unsafe-inline' *.googleapis.com; \
-		font-src 'self' *.gstatic.com; \
-		img-src 'self' data: vk.com www.google-analytics.com mc.yandex.ru i.imgur.com; \
-		media-src 'self' *.myradio24.com; \
-		script-src 'self' 'unsafe-inline' www.google-analytics.com mc.yandex.ru vk.com cdn.jsdelivr.net; \
+		child-src 'self' https://asianwaveru.chatovod.ru https://chatovod.ru https://vk.com https://*.youtube-nocookie.com; \
+		frame-ancestors 'self' https://vk.com; \
+		style-src 'self' 'unsafe-inline' https://*.googleapis.com https://*.jwpcdn.com; \
+		font-src 'self' https://*.gstatic.com https://*.jwpcdn.com; \
+		img-src 'self' data: https://www.google-analytics.com https://mc.yandex.ru https://i.imgur.com https://pp.userapi.com https://jwpltx.com; \
+		media-src 'self' https://*.myradio24.com; \
+		script-src 'self' 'unsafe-inline' https://www.google-analytics.com https://mc.yandex.ru https://vk.com https://content.jwplatform.com https://*.jwpcdn.com https://*.jwpsrv.com/; \
+		object-src 'self' https://*.jwpcdn.com; \
 		plugin-types application/x-shockwave-flash"
 </IfModule>
 

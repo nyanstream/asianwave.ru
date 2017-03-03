@@ -1,5 +1,4 @@
-@import 'src/mixins'; // миксины
-@import 'src/vars'; // переменные
+@import 'src/mixins', 'src/vars';
 
 @include reset;
 

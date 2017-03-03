@@ -1,43 +1,22 @@
 <?php
-	date_default_timezone_set("Europe/Moscow");
+	date_default_timezone_set('Europe/Moscow');
 	$start = microtime(true);
 
-	//$eientei = "http://video.eientei.org/backend/streams/running";
-	//$cg = "http://api.cybergame.tv/w/streams.php?channel=asianwave";
-	$mr24 = "https://myradio24.com/users/7934/status.json";
-	$file = "api.json";
+	$mr24 = file_get_contents('https://myradio24.com/users/7934/status.json');
+	$vk = file_get_contents('https://api.vk.com/method/wall.get?owner_id=-120842574&count=5&offset=1&extended=1');
 
-	if(@filemtime($file) < time() - 10) {
-		//$eientei_info = json_decode(@file_get_contents($eientei));*/
-		//$cg_info = json_decode(@file_get_contents($cg));
-		$mr24_info = json_decode(@file_get_contents($mr24));
+	$file = 'api.json';
+	$vkfile = 'vk-info.json';
 
-		//$fcount = count($eientei_info);
-
-		/*if ($eientei === false) {
-			$stream_online = 0;
-		} else {
-			for ($i = 0; $i <= $fcount; $i++) {
-				if ($eientei_info[$i]->name = "AsianWave"){
-					//$stream_online = $eientei_info[1]->name;
-					$stream_online = 1;
-				}
-			}
-		}*/
-
-		/*if ($cg === false) {
-			$stream_stat = null;
-		} else {
-			$stream_online = $cg_info->online;
-			$stream_viewers = $cg_info->viewers;
-		}*/
+	if(filemtime($file) < time() - 10) {
+		$mr24_info = json_decode($mr24);
 
 		if ($mr24 === false) {
 			$radio_stat = null;
 		} else {
 			$radio_online = strval($mr24_info->online);
 			$radio_rj = $mr24_info->djname;
-			for ($i = 0; $i <= ((count($mr24_info->songs) - 1) / 2 - 1); $i++) {$radio_prevs[$i] = $mr24_info->songs[$i];}
+			for ($i = 0; $i <= ((count($mr24_info->songs) - 1) / 2 - 1); $i++) { $radio_prevs[$i] = $mr24_info->songs[$i]; }
 			$radio_listeners = strval($mr24_info->listeners);
 		}
 
@@ -60,13 +39,45 @@
 			'radio' => $radio_stat,
 			'stream' => $stream_stat];
 
-		file_put_contents(dirname(__FILE__) . '/' . $file, json_encode($json_data));
+		file_put_contents(dirname(__FILE__) . '/' . $file, json_encode($json_data, JSON_UNESCAPED_UNICODE));
 	}
+	
+	if(filemtime($vkfile) < time() - 10) {
+		$vkAPI = json_decode($vk)->response;
 
-	/*if ($_GET["d"] !== null) {
-		header('Content-type: application/json');
-		date_default_timezone_set("Europe/Moscow");
-		$json_datas = array('msk_time' => date("H", time()) . ':' . date("i", time()), 'sanic' => (microtime(true) - $start));
-		echo json_encode($json_datas);
-	}*/
+		$vkAPI_Group = $vkAPI->groups[0];
+		$vkAPI_Wall = $vkAPI->wall;
+
+		$vkGroup = [
+			'id' => $vkAPI_Group->screen_name,
+			'gid' => $vkAPI_Group->gid,
+			'pic' => $vkAPI_Group->photo_medium
+		];
+
+		for ($i = 1; $i < count($vkAPI_Wall); $i++) {
+			$vkWall[$i-1] = [
+				'id' => $vkAPI_Wall[$i]->id,
+				'time' => $vkAPI_Wall[$i]->date,
+				'type' => $vkAPI_Wall[$i]->post_type,
+				'ad' => $vkAPI_Wall[$i]->marked_as_ads,
+				'text' => $vkAPI_Wall[$i]->text
+			];
+
+			if ($vkAPI_Wall[$i]->attachment->photo->src) {
+				$vkWall[$i-1] += [
+					'photo' => [
+						'small' => $vkAPI_Wall[$i]->attachment->photo->src,
+						'big' => $vkAPI_Wall[$i]->attachment->photo->src_big
+					]
+				];
+			};
+		};
+
+		$vkInfo = [
+			'com' => $vkGroup,
+			'posts' => $vkWall
+		];
+
+		file_put_contents(dirname(__FILE__) . '/' . $vkfile, json_encode($vkInfo, JSON_UNESCAPED_UNICODE));
+	}
 ?>

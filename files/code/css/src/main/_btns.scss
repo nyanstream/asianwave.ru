@@ -1,3 +1,8 @@
+// main: ../../main.scss
+
+$btnpadding: 35px;
+$btnwidth: 300px;
+
 .btns {
 	user-select: none;
 
@@ -7,7 +12,7 @@
 		margin: 0 $btnpadding 0 $btnpadding;
 
 		background-repeat: no-repeat, no-repeat;
-		background-color: #fff;
+		background-color: rgba(255, 255, 255, 0.9);
 		background-position: bottom 20px center, center center;
 		background-size: 70%, 100%;
 
@@ -21,24 +26,23 @@
 	}
 
 	/*
-		* @TODO
-		* Расширить список рестайловых переменных
+		* @TODO Расширить список рестайловых переменных
 	*/
 
 	@if (variable-exists(btns-restyle) == false) {
-		@each $afon in anime, radio {
+		@each $afon in radio, anime {
 			.container a[href*='#{$afon}'] {
-				background-image: url('../../img/#{$afon}-btn.png'), url('../../img/#{$afon}-fon.png');
+				background-image: url('#{$imgpath}/#{$afon}-btn.png'), url('#{$imgpath}/#{$afon}-bckg.png');
 			}
 			.container a[href*='#{$afon}']:hover {
-				background-image: url('../../img/hover-btn.png'), url('../../img/#{$afon}-fon.png');
+				background-image: url('../../img/hover-btn.png'), url('#{$imgpath}/#{$afon}-bckg.png');
 			}
 		}
 	}
 } // .btns
 
 .css-preload {
-	background-image: url('../../img/hover-btn.png');
+	background-image: url('#{$imgpath}/hover-btn.png');
 	width: 1px; height: 1px;
 	background-size: 0 0;
 }

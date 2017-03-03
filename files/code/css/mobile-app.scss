@@ -1,10 +1,8 @@
-@import 'src/mixins';
-@import 'fonts/style';
+@import 'src/mixins', 'src/vars', 'fonts/style';
 
 @include reset;
 
 $font-size: 16px;
-$prime-color: #ff305e;
 
 html, body, main {
 	width: 100%;
@@ -22,7 +20,7 @@ main {
 }
 
 header {
-	background-color: $prime-color;
+	background-color: $primecolor;
 	color: #fff;
 	height: 2em;
 
@@ -38,7 +36,7 @@ header {
 
 nav {
 	ul {
-		$sel-color: #dcdcdc;
+		$sel-color: $top-panel--color;
 		font-size: 0;
 
 		li {

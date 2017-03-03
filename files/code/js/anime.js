@@ -1,7 +1,5 @@
 'use strict';
 
-console.info('Используйте эту консоль с осторожностью!');
-
 function _elem(qS) { return document.querySelector(qS) }
 function _elems(qS) { return document.querySelectorAll(qS) }
 function _ls(ls_item) { return localStorage.getItem(ls_item) }
@@ -11,14 +9,50 @@ function _xss(value) { return value.toString().replace(/</g, '&lt;').replace(/>/
 function _extLink(link, text) { return '<a href="' + _xss(link) + '" target="_blank" rel="nofollow noopener">' + _xss(text) + '</a>' }
 
 /*
+ * Детектор параметров
+ * Найдено здесь: https://stackoverflow.com/a/979996
+ */
+
+// if (location.search) {
+// 	var params = {}, parts, nv;
+// 	parts = location.search.substring(1).split('&');
+// 	for (var i = 0; i < parts.length; i++) {
+// 		nv = parts[i].split('=');
+// 		if (!nv[0]) continue;
+// 		params[nv[0]] = nv[1] || true;
+// 	}
+// }
+
+/*
+ * Плеер
+ */
+
+jwplayer.key = 'o0p/ORr8/SsRBOLLUAMYJizVpQMS/ZRQhf53Qw==';
+
+var playerID = 'jw-player', player = jwplayer(playerID);
+var jwSetup = {
+	'file': 'rtmp://' + document.currentScript.dataset.rtmp,
+	//'image': '/files/img/anime-offline.png',
+	'width': '100%', 'height': '100%',
+	// 'rtmp': {
+	// 	'bufferlength': 10
+	// },
+	'skin': 'roundster',
+	'autostart': true,
+	//'controls': false,
+	'displaytitle': false,
+	'displaydescription': false,
+	'abouttext': 'Asian Wave',
+	'aboutlink': '/'
+};
+
+/*
  * Детект хрома
-*/
+ */
 
-var isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor),
-		isOpera = /OPR\//.test(navigator.userAgent),
-		chrExtBtn = _elem('.right-panel [href*="--chrome"]');
+var isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor), isOpera = /OPR\//.test(navigator.userAgent), chrExtBtn = _elem('.right-panel [href*="--chrome"]');
 
-if (!isChrome) { chrExtBtn.style.display = 'none' }
+if (!isChrome) chrExtBtn.style.display = 'none';
 if (isOpera) {
 	chrExtBtn.querySelector('.icon').classList.remove('icon-chrome');
 	chrExtBtn.querySelector('.icon').classList.add('icon-opera');
@@ -28,18 +62,20 @@ if (isOpera) {
 
 /*
  * Детект поддержки флеша
-*/
+ */
 
 var hasFlash = navigator.mimeTypes['application/x-shockwave-flash'], playerElem = _elem('.player');
 
-if (!hasFlash || !hasFlash.enabledPlugin) {
+if (hasFlash || hasFlash.enabledPlugin) {
+	player.setup(jwSetup);
+} else {
 	playerElem.classList.add('noflash');
 	//clearInterval(aw_timer);
 }
 
 /*
  * Тест включения локального хранилища
-*/
+ */
 
 function lsTest() {
 	var ls_test = 'test';
@@ -53,66 +89,37 @@ function lsTest() {
 }
 
 /*
- * Скрипт создания табов (модифицированный, теперь без cсылок)
- * СпиЖЖено отсюда http://www.vikaskbh.com/flat-ui-simple-html-tabs-without-jquery-or-any-other-library/
-*/
+ * Скрипт создания табов (модифицированный)
+ * Найдено здесь: https://goo.gl/lsSkEe
+ */
 
 function makeTabs(selector) {
-	var tab_lists_anchors = document.querySelectorAll(selector + ' li'), divs = _elem(selector).querySelectorAll('div[id*="tab_"]');
-	for (var i = 0; i < tab_lists_anchors.length; i++) {
-		if (tab_lists_anchors[i].classList.contains('active')) {
-			divs[i].style.display = 'block';
-		}
+	var tabAnchors = _elems(selector + ' li'), tabs = _elems(selector + ' section');
+
+	for (var i = 0; i < tabAnchors.length; i++) {
+		if (tabAnchors[i].classList.contains('active')) tabs[i].style.display = 'block';
 	}
 
-	for (var i = 0; i < tab_lists_anchors.length; i++) {
-			tab_lists_anchors[i].addEventListener('click', function(e) {
+	for (var i = 0; i < tabAnchors.length; i++) {
+		tabAnchors[i].addEventListener('click', function(e) {
+			var clickedAnchor = e.target || e.srcElement;
+			clickedAnchor.classList.add('active');
 
-			for (var i = 0; i < divs.length; i++) {
-				divs[i].style.display = 'none';
+			for (var i = 0; i < tabs.length; i++) {
+				if (tabs[i].dataset.tab === clickedAnchor.dataset.tab) {
+					tabs[i].style.display = 'block';
+				} else {
+					tabs[i].style.display = 'none';
+					tabAnchors[i].classList.remove('active');
+				}
 			}
-			for (var i = 0; i < tab_lists_anchors.length; i++) {
-				tab_lists_anchors[i].classList.remove('active');
-			}
-
-			var clicked_tab = e.target || e.srcElement;
-
-			clicked_tab.classList.add('active');
-			var div_to_show = '#tab_' + clicked_tab.dataset.tab;
-
-			_elem(div_to_show).style.display = 'block';
 		});
 	}
 }
 
 /*
- * Инициация табов
-*/
-
-window.addEventListener('load', function() {
-	makeTabs('.tabs');
-});
-
-/*
- * Виджет ВК
-*/
-
-var VK, tabsUl = _elem('.tabs ul'), tabsLi = tabsUl.querySelectorAll('li[data-tab]'), wheight = document.querySelector('.tabs').clientHeight - tabsUl.clientHeight;
-
-if (wheight > 1200) {	wheight = 1200 }
-
-if (VK) {
-	VK.Widgets.Group('vk_group', {mode: 2, width: "400", height: wheight, color3: '628CC5'}, 120842574);
-} else {
-	for (var f = 0; f < tabsLi.length; f++) {
-		tabsLi[f].style.width = '50%';
-	}
-	tabsLi[2].style.display = 'none';
-}
-
-/*
  * Скрытие табов
-*/
+ */
 
 var closeTabsCtr = _elem('.closeTabs'), mainCont = _elem('.anime'), ctc_text = 'боковую панель';
 
@@ -120,23 +127,24 @@ function closeTabs() {
 	if (!mainCont.classList.contains('notabs')) {
 		mainCont.classList.add('notabs');
 		this.textContent = '\u003C';
-		this.setAttribute('title', 'Открыть ' + ctc_text)
+		this.setAttribute('title', 'Открыть ' + ctc_text);
 	} else {
 		mainCont.classList.remove('notabs');
 		this.textContent = '\u00D7';
-		this.setAttribute('title', 'Скрыть ' + ctc_text)
+		this.setAttribute('title', 'Скрыть ' + ctc_text);
 	}
 }
 
 closeTabsCtr.addEventListener('click', closeTabs);
 
 /*
- * Старый цвет шапки (NY Special)
-*/
+ * Старый цвет шапки
+ */
 
-var container = _elem('.container'), nyako = _elem('.top-panel .brand img');
+var container = _elem('.container'), nyako = _elem('.top-panel .brand img'), metacolor = _elem('meta[name="theme-color"]');
 
 function _oldHeadColor() {
+	metacolor.setAttribute('content', '#464646');
 	container.dataset.theme = 'old-gray';
 	_ls_set('aw_iamoldfag', true);
 }
@@ -152,15 +160,53 @@ if (_ls('aw_iamoldfag')) {
 }
 
 /*
+ * Расписание
+ * @TODO пофиксить проблему нового года
+ */
+
+var streamShed = _elem('.shedule');
+
+function parseShedule(data) {
+	var tableBody = '', tableBodyT = '', nowTime = Math.round(new Date().getTime()/1000), sdata = '', sdataT = '';
+
+	for (var i = 1; i < data.length - 1; i++) {
+		var newShedData = moment.unix(data[i][0]).format('D MMMM') + '<br>' + moment.unix(data[i][0]).format('HH:mm') + ' &ndash; ' + moment.unix(data[i][1]).format('HH:mm') + '</td>', nazvaniue = '';
+
+		if (data[i][3]) {
+			nazvaniue = _extLink(data[i][3], data[i][2]);
+		} else {
+			nazvaniue = _xss(data[i][2]);
+		}
+
+		if (data[i][0] < nowTime && data[i][1] > nowTime) {
+			sdata = '<tr class="air--current"><td>' + newShedData + '<td><b>Сейчас (ещё ' + moment.unix(data[i][1]).toNow(true) + '):</b><br>' + nazvaniue + '</td></tr>';
+		} else if (data[i][1] > nowTime + (data[i-1][1] - data[i-1][0]) && data[i][1] < nowTime + (data[i][1] - data[i-1][0])) {
+			sdata = '<tr class="air--next"><td>' + newShedData + '<td><b>Далее через ' + moment.unix(data[i][0]).toNow(true) + ':</b><br>' + nazvaniue + '</td></tr>';
+		} else if ((moment.unix(data[i][0]).dayOfYear() - moment.unix(nowTime).dayOfYear()) < -1) {
+			//sdata = '<tr class="air--finished air--tooOld"><td>' + newShedData + '<td>' + nazvaniue + '</td></tr>';
+			sdata = '';
+		} else if (data[i][0] < nowTime) {
+			sdata = '<tr class="air--finished"><td>' + newShedData + '<td>' + nazvaniue + '</td></tr>';
+		} else if (moment.unix(data[i][0]).dayOfYear() > moment.unix(nowTime).dayOfYear()) {
+			sdata = '<tr class="air--notToday"><td>' + newShedData + '<td>' + nazvaniue + '</td></tr>';
+		} else {
+			sdata = '<tr><td>' + newShedData + '<td>' + nazvaniue + '</td></tr>';
+		}
+
+		tableBody += sdata;
+	}
+
+	streamShed.innerHTML = '<tbody><tr><td colspan="2"><em>Время местное.</em></td></tr>' + tableBody + '</tbody>';
+}
+
+/*
  * Уведомления
- * @TODO переписать, чтобы вместо каждый раз создаваемого айтема в сторадже был один айтем с массивом айдишников
-*/
+ */
 
 var notiEl = _elem('.noti');
 
 function notiSpawn(text, id) {
-	var notiClose = document.createElement('div'), notiContent = document.createElement('div'), ls_item = 'awnoti_' + id;
-	notiEl.dataset.noti = id;
+	var notiClose = document.createElement('div'), notiContent = document.createElement('div'), notiItems = [];
 	notiEl.textContent = '';
 
 	notiClose.classList.add('noti-close');
@@ -190,14 +236,16 @@ function notiSpawn(text, id) {
 		notiUndisable.classList.add('noti-undis');
 		notiUndisable.textContent = 'Внимание! У вас отключено хранение данных, поэтому скрытие оповещения запомиинаться не будет.';
 		notiEl.appendChild(notiUndisable);
-	}
-
-	if (notiEl.dataset.noti && !_ls(ls_item)) {
-		notiEl.style.display = 'block';
+	} else {
+		if (_ls('aw_noti')) notiItems = JSON.parse(_ls('aw_noti'));
+		if (notiItems.indexOf(id) === -1) {
+			notiEl.style.display = 'block';
+		} else notiEl.style.display = 'none';
 	}
 
 	notiClose.addEventListener('click', function() {
-		_ls_set(ls_item, true);
+		notiItems[notiItems.length] = id;
+		_ls_set('aw_noti', JSON.stringify(notiItems));
 		notiEl.style.display = 'none';
 	});
 }
@@ -211,63 +259,64 @@ function notiClear() {
 }
 
 /*
- * Запросы к API
-*/
+ * Виджет ВК
+ */
 
-var host = 'https://asianwave.ru', api_shed = '/api/streams-shed.json', api_noti = '/api/noti.json', streamShed = _elem('.shedule');
+var vkNews = _elem('.vk-news');
+
+function parseVK(data) {
+	var newsHeader = document.createElement('div'), newsPosts = document.createElement('div'), newsBodyPhoto = '';
+
+	newsHeader.classList.add('news-header');
+	newsHeader.innerHTML = _extLink('https://vk.com/' + data['com']['id'], 'Сообщество Asian Wave в VK');
+
+	newsPosts.classList.add('news-posts');
+	for (var dc = 0; dc < data['posts'].length; dc++) {
+		if (data['posts'][dc]['photo']) {
+			newsBodyPhoto = '<a href="' + data['posts'][dc]['photo']['big'] + '" class="n-pic-link" target="_blank" rel="nofollow noopener"><img src="' + data['posts'][dc]['photo']['small'] + '" alt=""></a>';
+		} else newsBodyPhoto = '';
+		newsPosts.innerHTML += '<div class="post-meta"><a href="https://vk.com/wall-' + data['com']['gid'] + '_' + data['posts'][dc]['id'] + '" target="_blank" rel="nofollow noopener">' + moment.unix(data['posts'][dc]['time']).format('D MMMM YYYY в HH:mm') + '</div>'
+		//newsPosts.innerHTML += '<div class="post-body"><p>' + data['posts'][dc]['text'] + '</p>' + newsBodyPhoto + '</div>';
+		newsPosts.innerHTML += '<div class="post-body"><p>' + newsBodyPhoto + data['posts'][dc]['text'] + '</p>' + '</div>';
+	}
+
+	vkNews.innerHTML = '';
+	vkNews.appendChild(newsHeader);
+	vkNews.appendChild(newsPosts);
+}
+
+/*
+ * Запросы к API
+ */
+
+var API = {
+	'shedule': '/api/streams-shed.json',
+	'noti': '/api/noti.json',
+	'vk': '/api/vk-info.json'
+}, API_keys = Object.keys(API);
+
+var fetchHeaders = {cache: 'no-store'};
 
 switch (location.hostname) {
 	case '127.0.0.1':
 	case 'localhost':
-		api_shed = host + api_shed;
-		api_noti = host + api_noti;
+		for (var i = 0; i < API_keys.length; i++) {
+			API[API_keys[i]] = 'https://asianwave.ru' + API[API_keys[i]]
+		}
 }
 
 function loadInfo() {
 	if (self.fetch) {
-		window.fetch(api_shed, {cache: 'no-cache'}).then(function(response) {
+		fetch(API.shedule, fetchHeaders).then(function(response) {
 			if (response.status !== 200) {
 				streamShed.style.display = 'none';
 				return;
 			}
 			response.json().then(function(data) {
-				var tableBody = '', tableBodyT = '', shedData = data, nowTime = Math.round(new Date().getTime()/1000), sdata = '', sdataT = '';
-
-				for (var i = 1; i < shedData.length - 1; i++) {
-					var newShedData = moment.unix(shedData[i][0]).format('D MMMM') + '<br>' + moment.unix(shedData[i][0]).format('HH:mm') + ' &ndash; ' + moment.unix(shedData[i][1]).format('HH:mm') + '</td>', nazvaniue = '';
-
-					if (shedData[i][3]) {
-						nazvaniue = _extLink(shedData[i][3], shedData[i][2]);
-					} else {
-						nazvaniue = _xss(shedData[i][2]);
-					}
-
-					/*
-					 * @TODO Пофиксить проблему Нового года
-					*/
-
-					if (shedData[i][0] < nowTime && shedData[i][1] > nowTime) {
-						sdata = '<tr class="air--current"><td>' + newShedData + '<td><b>Сейчас (ещё ' + moment.unix(shedData[i][1]).toNow(true) + '):</b><br>' + nazvaniue + '</td></tr>';
-					} else if (shedData[i][1] > nowTime + (shedData[i-1][1] - shedData[i-1][0]) && shedData[i][1] < nowTime + (shedData[i][1] - shedData[i-1][0])) {
-						sdata = '<tr class="air--next"><td>' + newShedData + '<td><b>Далее через ' + moment.unix(shedData[i][0]).toNow(true) + ':</b><br>' + nazvaniue + '</td></tr>';
-					} else if ((moment.unix(shedData[i][0]).dayOfYear() - moment.unix(nowTime).dayOfYear()) < -1) {
-						//sdata = '<tr class="air--finished air--tooOld"><td>' + newShedData + '<td>' + nazvaniue + '</td></tr>';
-						sdata = '';
-					} else if (shedData[i][0] < nowTime) {
-						sdata = '<tr class="air--finished"><td>' + newShedData + '<td>' + nazvaniue + '</td></tr>';
-					} else if (moment.unix(shedData[i][0]).dayOfYear() > moment.unix(nowTime).dayOfYear()) {
-						sdata = '<tr class="air--notToday"><td>' + newShedData + '<td>' + nazvaniue + '</td></tr>';
-					} else {
-						sdata = '<tr><td>' + newShedData + '<td>' + nazvaniue + '</td></tr>';
-					}
-
-					tableBody += sdata;
-				}
-
-				streamShed.innerHTML = '<tbody><tr><td colspan="2"><em>Время местное.</em></td></tr>' + tableBody + '</tbody>';
+				parseShedule(data);
 			});
 		});
-		window.fetch(api_noti, {cache: 'no-cache'}).then(function(response) {
+		fetch(API.noti, fetchHeaders).then(function(response) {
 			if (response.status !== 200) {
 				notiEl.style.display = 'none';
 				return;
@@ -280,11 +329,24 @@ function loadInfo() {
 				}
 			});
 		});
+		fetch(API.vk, fetchHeaders).then(function(response) {
+			response.json().then(function(data) {
+				parseVK(data);
+			});
+		});
 	} else {
 		streamShed.innerHTML = '<tbody><tr><td>Ваш браузер устарел.</td></tr></tbody>';
 		clearInterval(aw_timer);
 	}
 }
 
-document.addEventListener('DOMContentLoaded', loadInfo);
-var aw_timer = setInterval(loadInfo, 60000);
+/*
+ * Инициации
+ */
+
+document.addEventListener('DOMContentLoaded', function() {
+	loadInfo();
+	var aw_timer = setInterval(loadInfo, 5000);
+
+	makeTabs('.tabs');
+});

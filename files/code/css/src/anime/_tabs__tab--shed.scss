@@ -1,4 +1,6 @@
-#tab_shed {
+// main: _tabs.scss
+
+&[data-tab="shed"] {
 	$ggl_t_top: 50px;
 	$ggl_t_bot: 28px;
 

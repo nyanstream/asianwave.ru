@@ -94,3 +94,15 @@
     content: $icon-opera;
   }
 }
+.icon-fullscreen {
+	font-size: 1.5em;
+  &:before {
+    content: $icon-fullscreen;
+  }
+}
+.icon-fullscreen-exit {
+	font-size: 1.5em;
+  &:before {
+    content: $icon-fullscreen-exit;
+  }
+}

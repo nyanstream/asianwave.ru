@@ -1,3 +1,5 @@
+// main: ../*
+
 .top-panel {
 	@include flexbox(auto, center, center, auto);
 	position: relative;
@@ -51,6 +53,8 @@
 		width: auto !important; height: auto;
 		font-size: 18px;
 		padding: 2px 0;
+		user-select: none;
+		cursor: default;
 
 		.rp-elem {
 			display: inline-block;

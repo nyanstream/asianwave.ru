@@ -1,6 +1,4 @@
-@import 'src/mixins'; // миксины
-@import 'src/vars'; // переменные
-@import 'fonts/style'; // иконочные шрифты
+@import 'src/mixins', 'src/vars', 'fonts/style';
 
 @import 'src/every';
 
@@ -52,12 +50,9 @@ $pagewidth: 1000px;
 }
 
 /* Стилизация "встраиваемых" элементов */
-@import 'src/radio/embeds';
-
-/* Блок с выводом последних треков */
-@import 'src/radio/songs-box';
-
-/* Блок заказа треков */
-@import 'src/radio/order-box';
+@import
+	'src/radio/embeds', // Стилизация "встраиваемых" элементов
+	'src/radio/songs-box', // Блок с выводом последних треков
+	'src/radio/order-box'; // Блок заказа треков
 
 @import 'src/radio/mediaq';

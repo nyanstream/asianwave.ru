@@ -1,14 +1,16 @@
-@import 'src/mixins'; // миксины
-@import 'src/vars'; // переменные
-@import 'fonts/style'; // иконочные шрифты
+@import
+	'src/mixins',
+	'src/vars',
+	'fonts/style';
 
 @import 'src/every';
 
 $pagewidth: 1000px;
 
-@import 'src/topbar';
-
-@import 'src/anime/themes';
+@import
+	'src/scrollbar',
+	'src/topbar',
+	'src/anime/themes';
 
 //@import 'src/anime/special';
 
@@ -30,9 +32,9 @@ $pagewidth: 1000px;
 		position: relative;
 		overflow: hidden;
 
-		& > * {
-			width: 100%;
-			height: 100%;
+		iframe, embed, video, div.jwplayer {
+			width: 100% !important;
+			height: 100% !important;
 			border: 0;
 			z-index: 1;
 		}
@@ -67,10 +69,8 @@ $pagewidth: 1000px;
 	}
 }
 
-/* Стилизация плеера и находящихся в нём элементов */
-@import 'src/anime/player';
-
-/* Стилизация вкладок */
-@import 'src/anime/tabs';
+@import
+	'src/anime/player', // Стилизация плеера и находящихся в нём элементов
+	'src/anime/tabs'; // src/anime/tabs
 
 @import 'src/anime/mediaq';

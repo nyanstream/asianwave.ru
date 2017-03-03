@@ -1,15 +1,18 @@
+// main: ../../anime.scss
+
 .tabs {
-	$tabcolor: $top-panel--color;
-	$tabcelheight: 25px;
+	$tabColor: $top-panel--color;
+	$tabBorderColor: darken($tabColor, 3%);
+	$tabCelHeight: 25px;
 
 	ul {
-		height: $tabcelheight;
+		height: $tabCelHeight;
 		font-size: 0;
 		user-select: none;
 
 		li {
 			display: inline-block;
-			background-color: $tabcolor;
+			background-color: $tabColor;
 			//width: 50%;
 			width: calc(100% / 3);
 			height: 100%;
@@ -20,8 +23,8 @@
 			list-style: none;
 			cursor: pointer;
 
-			border-left: .5px solid darken($tabcolor, 3%);
-			border-right: .5px solid darken($tabcolor, 3%);
+			border-left: .5px solid $tabBorderColor;
+			border-right: .5px solid $tabBorderColor;
 
 			&:first-child {
 				border-left: 0;
@@ -32,38 +35,26 @@
 			}
 
 			&:hover {
-				background-color: darken($tabcolor, 5%);
+				background-color: darken($tabColor, 5%);
 			}
 
 			&.active {
-				background-color: darken($tabcolor, 10%);
+				background-color: darken($tabColor, 10%);
 
 				&:hover {
-					background-color: darken($tabcolor, 10%);
+					background-color: darken($tabColor, 10%);
 				}
 			}
 		}
 	}
 
-	[id*='tab_'] {
+	section {
 		display: none;
 		width: 100%;
-		height: calc(100% - #{$tabcelheight});
+		height: calc(100% - #{$tabCelHeight});
 		overflow: hidden;
-	}
 
-	@import 'tabs__shed';
-
-	#tab_news {
-		#vk_group {
-			height: 100% !important;
-			//width: 100% !important;
-			margin: 0 auto;
-			iframe {
-				height: 100% !important;
-				//width: 100% !important;
-			}
-		}
+		@import 'tabs__tab--shed', 'tabs__tab--news';
 	}
 
 	noscript {

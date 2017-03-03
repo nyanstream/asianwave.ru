@@ -1,3 +1,5 @@
+// main: ../../main.scss
+
 .top-panel {
 	& {
 		@include flexbox(auto, auto, center, auto);
@@ -21,7 +23,7 @@
 	.logo {
 		width: 120px; height: 120px;
 		background-color: $primecolor;
-		background-image: url('../../img/logo.png');
+		background-image: url('#{$imgpath}/logo.png');
 		background-position: center center;
 		background-repeat: no-repeat;
 		background-size: 80%;

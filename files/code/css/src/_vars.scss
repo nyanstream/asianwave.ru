@@ -1,14 +1,16 @@
-
-/* Верхняя панель */
-//$top-panel--color: #464646;
-$top-panel--height: 40px;
-$top-panel--brandheight: 20px;
-
-/* Стандартный размер шрифта */
-$fontsize: 16px;
+$donotdelete: '';
 
 /* Главный цвет */
 //$primecolor: #FF305E;
 $primecolor: rgb(251, 169, 173);
 
+/* Верхняя панель в разделах */
+$top-panel--height: 40px;
+$top-panel--brandheight: 20px;
 $top-panel--color: darken($primecolor, 5%);
+
+/* Стандартный размер шрифта */
+$fontsize: 16px;
+
+/* Папка с пикчами */
+$imgpath: '/files/img';

@@ -4,19 +4,19 @@
 
 @include reset;
 
-body, html {
-	width: 100%; height: 100%;
-
-	overflow-x: hidden;
-	font-size: 0;
-}
-
 $pagewidth: 860px;
 
 //@import 'src/vk-app/special';
 
 body {
-	background-image: url('/files/img/bckg.png');
+	@at-root html, & {
+		width: 100%; height: 100%;
+
+		overflow-x: hidden;
+		font-size: 0;
+	}
+
+	background-image: url('#{$imgpath}/bckg.png');
 	background-position: bottom center;
 	background-repeat: no-repeat;
 	background-size: 130%;
@@ -73,7 +73,7 @@ body {
 	.logo {
 		width: 120px; height: 120px;
 		background-color: $primecolor;
-		background-image: url('/files/img/logo.png');
+		background-image: url('#{$imgpath}/logo.png');
 		background-position: center center;
 		background-repeat: no-repeat;
 		background-size: 80%;

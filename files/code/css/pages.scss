@@ -20,7 +20,7 @@ body {
 	background-size: 100%;
 }
 
-.top-panel, .btns {
+.top-panel, .page {
 	width: 100%;
 	text-align: center;
 }
@@ -33,7 +33,7 @@ body {
 
 @import
 	'src/main/top-panel',
-	'src/main/btns';
+	'src/pages/page';
 
 footer {
 	text-align: center;
@@ -45,16 +45,6 @@ footer {
 		padding: 0 5px;
 		color: rgba(128, 128, 128, .5);
 	}
-
-	a {
-		color: rgba(128, 128, 128, .5);
-		@include transition(.3s);
-		text-decoration: none;
-
-		&:hover {
-			color: rgba(128, 128, 128, .8);
-		}
-	}
 }
 
-@import 'src/main/mediaq';
+@import 'src/pages/mediaq';
