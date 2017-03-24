@@ -28,8 +28,9 @@
 			"type": "image/png"
 		}
 	],
-	"start_url": "/apps/mobile/",
+	"scope": "/apps/mobile/",
+	"start_url": "/apps/mobile/?start",
 	"display": "standalone",
 	"orientation": "portrait",
-	"theme_color": "#ff305e"
+	"theme_color": "#FBA9AD"
 }

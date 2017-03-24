@@ -39,5 +39,10 @@
 		letter-spacing: 2px;
 		font-size: 25px;
 		color: #fff;
+
+		a {
+			text-decoration: none;
+			color: inherit;
+		}
 	}
 } // .top-panel

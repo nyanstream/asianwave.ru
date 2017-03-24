@@ -11,6 +11,18 @@
 	// 	background-size: cover;
 	// }
 
+	//iframe, embed, video, div.jwplayer, div.videojs {
+	& > .jwplayer {
+		width: 100% !important;
+		height: 100% !important;
+		border: 0;
+		z-index: 1;
+
+		&.jw-flag-aspect-mode {
+    	height: 100% !important;
+		}
+	}
+
 	.jwplayer {
 		[role="timer"], .jw-controlbar-center-group { display: none; }
 

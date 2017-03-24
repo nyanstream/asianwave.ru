@@ -33,18 +33,6 @@ body {
 
 @import
 	'src/main/top-panel',
-	'src/pages/page';
-
-footer {
-	text-align: center;
-	font-size: 16px;
-	margin: 25px 0;
-	cursor: default;
-
-	p {
-		padding: 0 5px;
-		color: rgba(128, 128, 128, .5);
-	}
-}
-
-@import 'src/pages/mediaq';
+	'src/pages/page',
+	'src/main/footer',
+	'src/pages/mediaq';

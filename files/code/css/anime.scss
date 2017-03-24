@@ -31,13 +31,6 @@ $pagewidth: 1000px;
 		width: calc(100% - #{$tabswidth + $resizecontrol});
 		position: relative;
 		overflow: hidden;
-
-		iframe, embed, video, div.jwplayer {
-			width: 100% !important;
-			height: 100% !important;
-			border: 0;
-			z-index: 1;
-		}
 	}
 
 	.tabs {

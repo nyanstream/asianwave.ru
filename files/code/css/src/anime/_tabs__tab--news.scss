@@ -4,44 +4,49 @@
 	font-size: 14px;
 	overflow-y: scroll;
 
-	.news {
+	.vk-news {
 		&-header {
 			text-align: center;
 			padding: 10px 0;
 			border-bottom: 1px solid #e4e4e4;
 		}
 
-		&-posts {
-			padding: 5px;
+		.vk-post {
+			border-top: 1px solid #ccc;
+			padding: 5px 5px 0;
+			clear: both;
 
-			.post {
-				&-meta {
-					margin: 10px 0;
+			&-meta {
+				margin: 5px 0 10px;
+			}
 
-					&:first-child {
-						margin-top: 5px;
+			&.is-copy {
+				display: none;
+			}
+
+			&-body {
+				//display: flex;
+				padding-bottom: 5px;
+
+				a {
+					&[href$=".jpg"] {
+						border-bottom: 0;
+					}
+
+					img {
+						width: 85px;
+						float: left;
+						margin: 5px 10px 10px 0;
 					}
 				}
 
-				&-body {
-					border-bottom: 1px solid #ccc;
-					padding-bottom: 5px;
-
-					.n-pic-link {
-						border-bottom: 0;
-
-						img {
-							width: 85px;
-							float: left;
-							margin: 5px 10px 5px 0;
-						}
-					}
-
-					&:last-child {
-						border-bottom: 0;
-						padding-bottom: 0;
-					}
+				p {
+					clear: none;
 				}
+			}
+
+			&:first-child {
+				border-top: 0;
 			}
 		}
 	}

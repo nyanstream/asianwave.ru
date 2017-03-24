@@ -1,73 +1,73 @@
 // main: ../../radio.scss
 
-@media screen and (max-width: #{$pagewidth - 1px}) {
-	.radio {
-		width: 100%;
-		padding-bottom: 20px;
-
-		.custom-width {
-			display: block;
-			text-align: center;
-
-			& > * {
-				width: 100% !important;
-			}
-
-			.chat-box {
-				padding: 0;
-			}
-
-			.widgets-box {
-				margin-top: 10px;
-				padding-right: 0;
-
-				& > * {
-					display: inline-block;
-					vertical-align: top;
-					margin: 0 5px;
-				}
-			}
-		}
-	}
-
-	.embed {
-		&.chat {
-			height: 450px;
-		}
-
-		&#vk_group.text-place {
-			margin-bottom: 15px;
-		}
-	}
-
-	.songs-box {
-		margin-top: 0 !important;
-		// width: 49% !important;
-	}
-
-	.order-box {
-		margin-bottom: 10px;
+@media screen and (max-width: #{$pageWidth - 1px}) {
+	.radio, footer div {
+		width: calc(100% - 20px);
 	}
 }
 
-@media screen and (max-width: 719px) {
-	body {
-		overflow-x: auto;
-	}
+@media screen and (max-width: 699px) {
+	.radio {
+		flex-direction: column;
 
-	// .embed {
-	// 	&#vk_group {
-	// 		width: 100% !important;
-	// 	}
-	// }
+		.content {
+			padding: 0 5px 5px;
+			order: 2;
+		}
 
-	.songs-box {
-		margin-top: 10px !important;
-	}
+		aside {
+			order: 1;
+			width: 100%;
+			padding: 0 5px;
+			margin: 0 auto;
 
-	.embed {
-		&#vk_group.text-place {
-			margin-bottom: 5px;
+			.noti {
+				&-content {
+					text-align: center;
+				}
+			}
+
+			.player {
+				$elemHeight: 70px;
+				flex-direction: column;
+				font-size: 1.5em;
+
+				& > * {
+					height: $elemHeight;
+					margin: 0 auto;
+				}
+
+				&-controls {
+					[data-ctrl='playpause'] {
+						width: $elemHeight;
+
+						.icon {
+							font-size: 3.5em;
+						}
+					}
+				}
+
+				&-change {
+					width: 100%;
+					margin-left: 0;
+					margin-top: 10px;
+
+					button {
+						width: 30%;
+						height: #{$elemHeight / 2}
+					}
+				}
+			}
+
+			.radio-state {
+				width: 100%;
+
+				.current {
+					width: 100%;
+				}
+			}
+
+			.songs-box { display: none }
 		}
 	}
 }

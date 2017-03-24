@@ -22,6 +22,16 @@
 	<link rel="shortcut icon" href="/files/img/favicon.ico">
 	<meta name="theme-color" content="#FBA9AD">
 
+	<link rel="dns-prefetch" href="//google-analytics.com">
+	<link rel="dns-prefetch" href="//fonts.gstatic.com">
+	<link rel="dns-prefetch" href="//mc.yandex.ru">
+	<link rel="dns-prefetch" href="//st1.chatovod.ru">
+	<link rel="dns-prefetch" href="//counter.yadro.ru">
+	<link rel="dns-prefetch" href="//images.weserv.nl">
+	<link rel="dns-prefetch" href="//ssl.p.jwpcdn.com">
+	<link rel="dns-prefetch" href="//assets-jpcust.jwpsrv.com">
+	<link rel="dns-prefetch" href="//jwpltx.com">
+
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
 	<link rel="stylesheet" href="/files/code/css/anime.min.css">
@@ -35,24 +45,24 @@
 		<header class="top-panel">
 			<div class="brand">
 				<img src="/files/img/logo.png" alt="logo">
-				<a href="/" class="text">Asian Wave / Anime</a>
+				<a href="/" class="text" rel="home">Asian Wave / Anime</a>
 			</div>
-			<div class="right-panel">
-				<a style="margin-right: 5px;" class="rp-elem" href="/app--chrome" target="_blank" title="Расширение для Chrome"><i class="icon icon-chrome"></i></a>
-				<a class="rp-elem" href="https://vk.com/topic-120842574_34298486" target="_blank" rel="nofollow noopener" title="Реквест аниме">&#43;</a>
-				<a class="rp-elem" href="http://www.donationalerts.ru/r/asianwave" target="_blank" rel="nofollow noopener" title="Поддержать проект">&#8381;</a>
-				<div style="margin-left: 5px;" class="rp-elem closeTabs" title="Скрыть боковую панель">&times;</div>
-			</div>
+			<ul class="right">
+				<li style="margin-right: 5px;">
+					<a href="/app--chrome" target="_blank" title="Расширение для Chrome"><i class="icon icon-chrome"></i></a>
+				</li><li>
+					<a href="https://vk.com/topic-120842574_34298486" target="_blank" rel="nofollow noopener" title="Реквест аниме">&#43;</a>
+				</li><li>
+					<a href="http://www.donationalerts.ru/r/asianwave" target="_blank" rel="nofollow noopener" title="Поддержать проект">&#8381;</a>
+				</li><li style="margin-left: 5px;">
+					<span class="no-link closeTabs" title="Скрыть боковую панель">&times;</span>
+				</li>
+			</ul>
 		</header>
 		<main class="anime">
 			<div class="player">
-				<!-- <embed src="/files/anime-assets/yukkuplayer.swf" type="application/x-shockwave-flash" flashvars="videoUrl=rtmp://video.eientei.org/live/AsianWave&amp;buffer=1&amp;idleImageUrl=/files/anime-assets/spinner.gif" quality="best" scale="noscale" wmode="transparent" menu="false" pluginspage="https://get.adobe.com/ru/flashplayer/" allowFullScreen="true"> -->
 				<div id="jw-player"></div>
 				<div class="noti"></div>
-				<!-- <div class="super-ctrls">
-					<button data-jw="play"><i class="icon icon-play" aria-hidden="true"></i></button>
-					<button data-jw="fullscreen"><i class="icon icon-fullscreen" aria-hidden="true"></i></button>
-				</div> -->
 				<div class="warning"><div>
 					<p>Кажется, Ваш браузер не поддерживает Flash! (ну или он у Вас просто выключен).</p>
 					<p style="margin-top: 1em;">Воспользуйтесь для просмотра любым плеером, который поддерживает RTMP</p>
@@ -85,10 +95,11 @@
 			</div>
 		</main>
 	</div>
-	<script src="/files/anime-assets/jw/jwplayer.js" defer></script>
-	<script src="/files/code/js/libs/moment/moment.min.js" defer></script>
-	<script src="/files/code/js/libs/moment/moment-ru.min.js" defer></script>
+	<script src="https://content.jwplatform.com/libraries/9QBfQupy.js" defer></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment.min.js" defer></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/locale/ru.js" defer></script>
+	<script src="/files/code/js/kamina.min.js" defer></script>
 	<script src="/files/code/js/anime.min.js" data-rtmp="video.eientei.org/live/AsianWave" defer></script>
-	<script src="/files/code/js/bbiswu.min.js" defer></script>
+	<script src="/files/code/js/bbiswu.min.js" async></script>
 	<noscript><img src="https://mc.yandex.ru/watch/38037540" style="position:absolute; left:-9999px;" alt=""></noscript>
 </body></html>

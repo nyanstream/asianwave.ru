@@ -2,7 +2,9 @@ $donotdelete: '';
 
 /* Главный цвет */
 //$primecolor: #FF305E;
-$primecolor: rgb(251, 169, 173);
+$primeColor: rgb(251, 169, 173);
+
+$primecolor: $primeColor;
 
 /* Верхняя панель в разделах */
 $top-panel--height: 40px;

@@ -8,7 +8,15 @@
 	$file = 'api.json';
 	$vkfile = 'vk-info.json';
 
-	if(filemtime($file) < time() - 10) {
+	$imgProxy = array('https://' => 'https://images.weserv.nl/?url=ssl:');
+	
+	$radioPoints = [
+		['jp', 7934],
+		['ru', 9759],
+		['kp', 3799],
+	];
+
+	if (filemtime($file) < time() - 10) {
 		$mr24_info = json_decode($mr24);
 
 		if ($mr24 === false) {
@@ -28,6 +36,7 @@
 				'next' => $mr24_info->nextsongs[0],
 				'prev' => $radio_prevs],
 			'listeners' => $radio_listeners];
+
 		/*$stream_stat = [
 			'online' => $stream_online,
 			'viewers' => $stream_viewers];*/
@@ -37,12 +46,12 @@
 			'docs' => 'docs.txt',
 			'timestamp' => time(),
 			'radio' => $radio_stat,
-			'stream' => $stream_stat];
+			'anime' => $stream_stat];
 
 		file_put_contents(dirname(__FILE__) . '/' . $file, json_encode($json_data, JSON_UNESCAPED_UNICODE));
 	}
 	
-	if(filemtime($vkfile) < time() - 10) {
+	if (filemtime($vkfile) < time() - 10) {
 		$vkAPI = json_decode($vk)->response;
 
 		$vkAPI_Group = $vkAPI->groups[0];
@@ -66,7 +75,7 @@
 			if ($vkAPI_Wall[$i]->attachment->photo->src) {
 				$vkWall[$i-1] += [
 					'photo' => [
-						'small' => $vkAPI_Wall[$i]->attachment->photo->src,
+						'small' => strtr($vkAPI_Wall[$i]->attachment->photo->src, $imgProxy),
 						'big' => $vkAPI_Wall[$i]->attachment->photo->src_big
 					]
 				];

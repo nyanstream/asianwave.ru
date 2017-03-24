@@ -1,92 +1,70 @@
 'use strict';
 
-function _elem(qS) { return document.querySelector(qS) }
-function _elems(qS) { return document.querySelectorAll(qS) }
-function _ls(ls_item) { return localStorage.getItem(ls_item) }
-function _ls_rm(ls_item) { return localStorage.removeItem(ls_item) }
-function _ls_set(ls_item, ls_item_var) { return localStorage.setItem(ls_item, ls_item_var) }
-function _xss(value) { return value.toString().replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/'/g, '&#39;').replace(/"/g, '&#34;') }
-function _extLink(link, text) { return '<a href="' + _xss(link) + '" target="_blank" rel="nofollow noopener">' + _xss(text) + '</a>' }
-
-/*
- * Детектор параметров
- * Найдено здесь: https://stackoverflow.com/a/979996
- */
-
-// if (location.search) {
-// 	var params = {}, parts, nv;
-// 	parts = location.search.substring(1).split('&');
-// 	for (var i = 0; i < parts.length; i++) {
-// 		nv = parts[i].split('=');
-// 		if (!nv[0]) continue;
-// 		params[nv[0]] = nv[1] || true;
-// 	}
-// }
-
 /*
  * Плеер
  */
 
-jwplayer.key = 'o0p/ORr8/SsRBOLLUAMYJizVpQMS/ZRQhf53Qw==';
-
-var playerID = 'jw-player', player = jwplayer(playerID);
-var jwSetup = {
-	'file': 'rtmp://' + document.currentScript.dataset.rtmp,
-	//'image': '/files/img/anime-offline.png',
-	'width': '100%', 'height': '100%',
-	// 'rtmp': {
-	// 	'bufferlength': 10
-	// },
-	'skin': 'roundster',
-	'autostart': true,
-	//'controls': false,
-	'displaytitle': false,
-	'displaydescription': false,
-	'abouttext': 'Asian Wave',
-	'aboutlink': '/'
-};
+var
+	playerID = 'jw-player',
+	player = jwplayer(playerID),
+	jwSetup = {
+		'file': 'rtmp://' + document.currentScript.dataset.rtmp,
+		//'image': '/files/img/anime-offline.png',
+		'width': '100%', 'height': '100%',
+		// 'rtmp': {
+		// 	'bufferlength': 10
+		// },
+		'skin': 'roundster',
+		'autostart': true,
+		//'controls': false,
+		'displaytitle': false,
+		'displaydescription': false,
+		'abouttext': 'Asian Wave',
+		'aboutlink': '/',
+		'ga': {
+			'label': 'animePlayer'
+		}
+	};
 
 /*
  * Детект хрома
  */
 
-var isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor), isOpera = /OPR\//.test(navigator.userAgent), chrExtBtn = _elem('.right-panel [href*="--chrome"]');
+;(function() {
+ 	var
+ 	chrExtBtn = $make.qs('.right li a[href*="--chrome"]'),
+ 	isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor),
+ 	isOpera = /OPR\//.test(navigator.userAgent)
 
-if (!isChrome) chrExtBtn.style.display = 'none';
-if (isOpera) {
-	chrExtBtn.querySelector('.icon').classList.remove('icon-chrome');
-	chrExtBtn.querySelector('.icon').classList.add('icon-opera');
-	chrExtBtn.setAttribute('href', '/app--opera');
-	chrExtBtn.setAttribute('title', 'Раширение для Opera');
-}
+ 	if (chrExtBtn) { // на случай, если опять забуду, что поменял класс элемента
+ 		if (!isChrome) chrExtBtn.style.display = 'none';
+ 		if (isOpera) {
+ 			var icon = chrExtBtn.querySelector('.icon')
+
+ 			icon.classList.remove('icon-chrome')
+ 			icon.classList.add('icon-opera')
+ 			chrExtBtn.setAttribute('href', '/app--opera')
+ 			chrExtBtn.setAttribute('title', 'Раширение для Opera')
+ 		}
+ 	}
+})()
 
 /*
  * Детект поддержки флеша
  */
 
-var hasFlash = navigator.mimeTypes['application/x-shockwave-flash'], playerElem = _elem('.player');
+;(function() {
+	var
+		hasFlash = navigator.mimeTypes['application/x-shockwave-flash'],
+		playerElem = $make.qs('.player');
 
-if (hasFlash || hasFlash.enabledPlugin) {
-	player.setup(jwSetup);
-} else {
-	playerElem.classList.add('noflash');
-	//clearInterval(aw_timer);
-}
-
-/*
- * Тест включения локального хранилища
- */
-
-function lsTest() {
-	var ls_test = 'test';
-	try {
-		_ls_set(ls_test, ls_test);
-		_ls_rm(ls_test);
-		return true;
-	} catch(e) {
-		return false;
+	if (hasFlash) {
+		//jwplayer.key = 'o0p/ORr8/SsRBOLLUAMYJizVpQMS/ZRQhf53Qw==';
+		player.setup(jwSetup);
+	} else {
+		playerElem.classList.add('noflash');
 	}
-}
+})();
 
 /*
  * Скрипт создания табов (модифицированный)
@@ -94,13 +72,13 @@ function lsTest() {
  */
 
 function makeTabs(selector) {
-	var tabAnchors = _elems(selector + ' li'), tabs = _elems(selector + ' section');
+	var
+		tabAnchors = $make.qs(selector + ' li', ['a']),
+		tabs = $make.qs(selector + ' section', ['a']);
 
 	for (var i = 0; i < tabAnchors.length; i++) {
 		if (tabAnchors[i].classList.contains('active')) tabs[i].style.display = 'block';
-	}
 
-	for (var i = 0; i < tabAnchors.length; i++) {
 		tabAnchors[i].addEventListener('click', function(e) {
 			var clickedAnchor = e.target || e.srcElement;
 			clickedAnchor.classList.add('active');
@@ -113,69 +91,82 @@ function makeTabs(selector) {
 					tabAnchors[i].classList.remove('active');
 				}
 			}
-		});
+		})
 	}
 }
 
 /*
  * Скрытие табов
  */
+(function () {
+	var
+		closeTabsCtr = $make.qs('.closeTabs'),
+		mainCont = $make.qs('.anime'),
+		ctc_text = 'боковую панель';
 
-var closeTabsCtr = _elem('.closeTabs'), mainCont = _elem('.anime'), ctc_text = 'боковую панель';
-
-function closeTabs() {
-	if (!mainCont.classList.contains('notabs')) {
-		mainCont.classList.add('notabs');
-		this.textContent = '\u003C';
-		this.setAttribute('title', 'Открыть ' + ctc_text);
-	} else {
-		mainCont.classList.remove('notabs');
-		this.textContent = '\u00D7';
-		this.setAttribute('title', 'Скрыть ' + ctc_text);
+	function closeTabs() {
+		if (!mainCont.classList.contains('notabs')) {
+			mainCont.classList.add('notabs');
+			this.textContent = '\u003C';
+			this.setAttribute('title', 'Открыть ' + ctc_text);
+		} else {
+			mainCont.classList.remove('notabs');
+			this.textContent = '\u00D7';
+			this.setAttribute('title', 'Скрыть ' + ctc_text);
+		}
 	}
-}
 
-closeTabsCtr.addEventListener('click', closeTabs);
+	closeTabsCtr.addEventListener('click', closeTabs);
+})();
 
 /*
  * Старый цвет шапки
  */
 
-var container = _elem('.container'), nyako = _elem('.top-panel .brand img'), metacolor = _elem('meta[name="theme-color"]');
+;(function() {
+	var
+		container = $make.qs('.container'),
+		nyako = $make.qs('.top-panel .brand img'),
+		metacolor = $make.qs('meta[name="theme-color"]');
 
-function _oldHeadColor() {
-	metacolor.setAttribute('content', '#464646');
-	container.dataset.theme = 'old-gray';
-	_ls_set('aw_iamoldfag', true);
-}
+	function _oldHeadColor() {
+		metacolor.setAttribute('content', '#464646');
+		container.dataset.theme = 'old-gray';
+		$ls.set('aw_iamoldfag', true);
+	}
 
-if (_ls('aw_iamoldfag')) {
-	_oldHeadColor();
-	nyako.addEventListener('dblclick', function() {
-		_ls_rm('aw_iamoldfag');
-		delete container.dataset.theme;
-	});
-} else {
-	nyako.addEventListener('dblclick', _oldHeadColor);
-}
+	if ($ls.get('aw_iamoldfag')) {
+		_oldHeadColor();
+		nyako.addEventListener('dblclick', function() {
+			$ls.rm('aw_iamoldfag');
+			delete container.dataset.theme;
+		});
+	} else {
+		nyako.addEventListener('dblclick', _oldHeadColor);
+	}
+})();
 
 /*
  * Расписание
  * @TODO пофиксить проблему нового года
  */
 
-var streamShed = _elem('.shedule');
-
 function parseShedule(data) {
-	var tableBody = '', tableBodyT = '', nowTime = Math.round(new Date().getTime()/1000), sdata = '', sdataT = '';
+	var
+		streamShed = $make.qs('.shedule'),
+		tableBody = '', tableBodyT = '',
+		nowTime = Math.round(new Date().getTime()/1000),
+		sdata = '', sdataT = '';
 
 	for (var i = 1; i < data.length - 1; i++) {
-		var newShedData = moment.unix(data[i][0]).format('D MMMM') + '<br>' + moment.unix(data[i][0]).format('HH:mm') + ' &ndash; ' + moment.unix(data[i][1]).format('HH:mm') + '</td>', nazvaniue = '';
+		var
+			newShedData = moment.unix(data[i][0]).format('D MMMM') + '<br>' + moment.unix(data[i][0]).format('HH:mm') + ' &ndash; ' + moment.unix(data[i][1]).format('HH:mm') + '</td>',
+			nazvaniue = '';
 
 		if (data[i][3]) {
-			nazvaniue = _extLink(data[i][3], data[i][2]);
+			nazvaniue = $make.link(data[i][3], data[i][2], ['e', 'html']);
 		} else {
-			nazvaniue = _xss(data[i][2]);
+			nazvaniue = $make.xss(data[i][2]);
 		}
 
 		if (data[i][0] < nowTime && data[i][1] > nowTime) {
@@ -203,18 +194,16 @@ function parseShedule(data) {
  * Уведомления
  */
 
-var notiEl = _elem('.noti');
-
 function notiSpawn(text, id) {
-	var notiClose = document.createElement('div'), notiContent = document.createElement('div'), notiItems = [];
+	var
+		notiEl = $make.qs('.noti'),
+		notiClose = $make.elem('div', '\u00D7', 'noti-close'),
+		notiContent = $make.elem('div', text, 'noti-content'),
+		notiItems = [];
+
 	notiEl.textContent = '';
 
-	notiClose.classList.add('noti-close');
 	notiClose.setAttribute('title', 'Скрыть оповещение');
-	notiClose.textContent = '\u00D7';
-
-	notiContent.classList.add('noti-content');
-	notiContent.innerHTML = text;
 
 	if (notiContent.querySelector('a[href]')) {
 		var notiLinks = notiContent.querySelectorAll('a[href]');
@@ -230,60 +219,87 @@ function notiSpawn(text, id) {
 	notiEl.appendChild(notiClose);
 	notiEl.appendChild(notiContent);
 
-	if (!lsTest()) {
-		var notiUndisable = document.createElement('div');
-
-		notiUndisable.classList.add('noti-undis');
-		notiUndisable.textContent = 'Внимание! У вас отключено хранение данных, поэтому скрытие оповещения запомиинаться не будет.';
+	if (!$ls.test()) {
+		var notiUndisable = $make.elem('div', 'Внимание! У вас отключено хранение данных, поэтому скрытие оповещения запомиинаться не будет.', 'noti-undis');
 		notiEl.appendChild(notiUndisable);
 	} else {
-		if (_ls('aw_noti')) notiItems = JSON.parse(_ls('aw_noti'));
-		if (notiItems.indexOf(id) === -1) {
+		if ($ls.get('aw_noti')) notiItems = JSON.parse($ls.get('aw_noti'));
+		if (notiItems.indexOf(id) === -1)
 			notiEl.style.display = 'block';
-		} else notiEl.style.display = 'none';
+			else notiEl.style.display = 'none';
 	}
 
 	notiClose.addEventListener('click', function() {
 		notiItems[notiItems.length] = id;
-		_ls_set('aw_noti', JSON.stringify(notiItems));
+		$ls.set('aw_noti', JSON.stringify(notiItems));
 		notiEl.style.display = 'none';
 	});
 }
 
-function notiClear() {
-	for (var a in localStorage) {
-		if (a.indexOf('awnoti') === 0) {
-			_ls_rm(a);
-		}
-	}
-}
-
 /*
  * Виджет ВК
+ * @TODO переписать этот говнокод
  */
 
-var vkNews = _elem('.vk-news');
-
 function parseVK(data) {
-	var newsHeader = document.createElement('div'), newsPosts = document.createElement('div'), newsBodyPhoto = '';
+  var
+	 	vkNews = $make.qs('.vk-news'),
+	 	newsHeader = $make.elem('div', $make.link('https://vk.com/' + data['com']['id'], 'Сообщество Asian Wave в VK', ['e', 'html']), 'vk-news-header'),
+	 	newsBody = $make.elem('div', '', 'news-posts')
 
-	newsHeader.classList.add('news-header');
-	newsHeader.innerHTML = _extLink('https://vk.com/' + data['com']['id'], 'Сообщество Asian Wave в VK');
+  vkNews.textContent = ''
 
-	newsPosts.classList.add('news-posts');
-	for (var dc = 0; dc < data['posts'].length; dc++) {
-		if (data['posts'][dc]['photo']) {
-			newsBodyPhoto = '<a href="' + data['posts'][dc]['photo']['big'] + '" class="n-pic-link" target="_blank" rel="nofollow noopener"><img src="' + data['posts'][dc]['photo']['small'] + '" alt=""></a>';
-		} else newsBodyPhoto = '';
-		newsPosts.innerHTML += '<div class="post-meta"><a href="https://vk.com/wall-' + data['com']['gid'] + '_' + data['posts'][dc]['id'] + '" target="_blank" rel="nofollow noopener">' + moment.unix(data['posts'][dc]['time']).format('D MMMM YYYY в HH:mm') + '</div>'
-		//newsPosts.innerHTML += '<div class="post-body"><p>' + data['posts'][dc]['text'] + '</p>' + newsBodyPhoto + '</div>';
-		newsPosts.innerHTML += '<div class="post-body"><p>' + newsBodyPhoto + data['posts'][dc]['text'] + '</p>' + '</div>';
-	}
+  // if (data === 'fail') {
+	//  	vkNews.classList.add('api-err')
+	//  	vkNews.appendChild($make.elem('p', 'API сайта недоступно.'))
+	//  	return
+  // } else {
+	//  	if (vkNews.classList.contains('api-err')) vkNews.classList.remove('api-err')
+  // }
 
-	vkNews.innerHTML = '';
-	vkNews.appendChild(newsHeader);
-	vkNews.appendChild(newsPosts);
-}
+  for (var dc = 0; dc < data['posts'].length; dc++) {
+		var postImgLink = '', isCopy = '', postLinkS = ''
+
+	 	if (data['posts'][dc]['photo']) {
+	 		var postImg = $make.elem('img')
+
+	 		postImg.setAttribute('src', data['posts'][dc]['photo']['small'])
+	 		postImg.setAttribute('alt', '')
+
+	 		postImgLink = $make.link(data['posts'][dc]['photo']['big'], postImg.outerHTML, ['e', 'html'])
+	 	}
+
+	 	if (data['posts'][dc]['type'] === 'copy') isCopy = ' is-copy';
+
+		var
+			postText = data['posts'][dc]['text'],
+			pLR = new RegExp(/\[club(.*?)\]/),
+			postLinkR = postText.match(new RegExp(pLR, 'g'))
+
+			if (postLinkR) {
+				for (var i = 0; i < postLinkR.length; i++) {
+					postLinkS = postLinkR[i].split('|');
+					postText = postText.replace(pLR, $make.link('https://vk.com/' + postLinkS[0].replace(/\[/g, ''), postLinkS[1].replace(/]/g, ''), ['e', 'html']))
+				}
+			}
+
+	 	vkNews.textContent = ''
+
+	 	var
+	 		vkPost = $make.elem('div', '', 'vk-post' + isCopy),
+	 		vkPostMetaLink = $make.link('https://vk.com/wall-' + data['com']['gid'] + '_' + data['posts'][dc]['id'], moment.unix(data['posts'][dc]['time']).format('D MMMM YYYY в HH:mm'), ['e', 'html']),
+	 		vkPostMeta = $make.elem('div', vkPostMetaLink, 'vk-post-meta'),
+	 		vkPostBody = $make.elem('div', postImgLink + '<p>' + postText + '</p>', 'vk-post-body')
+
+	 	vkPost.appendChild(vkPostMeta)
+	 	vkPost.appendChild(vkPostBody)
+
+	 	newsBody.innerHTML += vkPost.outerHTML;
+  }
+
+  vkNews.appendChild(newsHeader)
+  vkNews.appendChild(newsBody)
+ }
 
 /*
  * Запросы к API
@@ -295,38 +311,24 @@ var API = {
 	'vk': '/api/vk-info.json'
 }, API_keys = Object.keys(API);
 
-var fetchHeaders = {cache: 'no-store'};
-
-switch (location.hostname) {
-	case '127.0.0.1':
-	case 'localhost':
-		for (var i = 0; i < API_keys.length; i++) {
-			API[API_keys[i]] = 'https://asianwave.ru' + API[API_keys[i]]
-		}
+if ($check.debug()) {
+	for (var i = 0; i < API_keys.length; i++) {
+		API[API_keys[i]] = 'https://asianwave.ru' + API[API_keys[i]]
+	}
 }
 
 function loadInfo() {
+	var fetchHeaders = {cache: 'no-store'};
+
 	if (self.fetch) {
 		fetch(API.shedule, fetchHeaders).then(function(response) {
-			if (response.status !== 200) {
-				streamShed.style.display = 'none';
-				return;
-			}
 			response.json().then(function(data) {
 				parseShedule(data);
 			});
 		});
 		fetch(API.noti, fetchHeaders).then(function(response) {
-			if (response.status !== 200) {
-				notiEl.style.display = 'none';
-				return;
-			}
 			response.json().then(function(data) {
-				if (data[0] !== null) {
-					notiSpawn(data[0], data[1]);
-				} else {
-					notiEl.textContent = '';
-				}
+				notiSpawn(data[0], data[1]);
 			});
 		});
 		fetch(API.vk, fetchHeaders).then(function(response) {
@@ -346,7 +348,7 @@ function loadInfo() {
 
 document.addEventListener('DOMContentLoaded', function() {
 	loadInfo();
-	var aw_timer = setInterval(loadInfo, 5000);
+	var aw_timer = setInterval(loadInfo, 30000);
 
 	makeTabs('.tabs');
 });

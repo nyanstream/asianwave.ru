@@ -237,7 +237,7 @@
 	<form class="noti-action" action="?succ" method="post"><fieldset>
 		<legend>Работа с оповещениями</legend>
 		<p>
-			<?php if (isset($noti_cnt[0])) { echo '<samp>Текущее оповещение: <q>' . $noti_cnt[0] . '</q></samp>'; }  ?>
+			<?php if (isset($noti_cnt[0])) { echo '<samp>Текущее оповещение: <q>' . htmlspecialchars($noti_cnt[0]) . '</q></samp>'; }  ?>
 		</p>
 		<p>
 			<label for="noti_text">Текст:</label>
@@ -245,7 +245,7 @@
 		</p>
 		<details>
 			<summary>Памятка по разметке</summary>
-			<p class="protip">Для стилизации текста можно использовать <kbd>&lt;b&gt;<b>жирный шрифт</b>&lt;/b&gt;</kbd> и <kbd>&lt;i&gt;<i>курсив</i>&lt;/i&gt;</kbd>. Делить на абзацы можно с помощью <kbd>&lt;br&gt;</kbd>.<br>Ссылки должны быть вида <kbd>&lt;a href="https://..."&gt;текст&lt;/a&gt;</kbd>. В случае локальных ссылок сделует использовать <kbd>&lt;a href="/pisos"&gt;&lt;текст&lt;/a&gt;</kbd>.</p>
+			<p class="protip">Для стилизации текста можно использовать <kbd>&lt;b&gt;<b>жирный шрифт</b>&lt;/b&gt;</kbd> и <kbd>&lt;i&gt;<i>курсив</i>&lt;/i&gt;</kbd>, деление на абзацы с помощью <kbd>&lt;br&gt;</kbd>.<br>Ссылки должны быть вида <kbd>&lt;a href="https://..."&gt;текст&lt;/a&gt;</kbd>. В случае локальных ссылок сделует использовать <kbd>&lt;a href="/pisos"&gt;&lt;текст&lt;/a&gt;</kbd>.</p>
 		</details>
 		<p>
 			<label for="noti_remove">Удалить последнее оповещение?</label>
@@ -261,8 +261,8 @@
 		<p>Последнее обновление оповещения: <span class="notiTS"></span></p>
 		<p>Точное московское время (на момент загрузки страницы): <?php echo date('Y-m-d H:i:s', time()) ?></p>
 	</footer>
-	<script src="/files/code/js/libs/moment/moment.min.js"></script>
-	<script src="/files/code/js/libs/moment/moment-ru.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/locale/ru.js"></script>
 	<script type="text/javascript">
 		'use strict';
 

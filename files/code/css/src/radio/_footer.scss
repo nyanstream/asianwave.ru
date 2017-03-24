@@ -1,0 +1,29 @@
+// main: ../../radio.scss
+
+footer {
+	border-top: 1px solid rgba(0, 0, 0, .1);
+
+	div {
+		width: $pageWidth;
+		padding: 10px 5px;
+		margin: 0 auto;
+	}
+
+	text-align: center;
+	font-size: $fontSize;
+
+	p {
+		padding: 0 5px;
+		color: rgba(128, 128, 128, .5);
+	}
+
+	a {
+		color: rgba(128, 128, 128, .5);
+		@include transition(.3s);
+		text-decoration: none;
+
+		&:hover {
+			color: rgba(128, 128, 128, .8);
+		}
+	}
+}

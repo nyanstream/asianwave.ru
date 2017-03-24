@@ -1,58 +1,192 @@
-@import 'src/mixins', 'src/vars', 'fonts/style';
+@import
+	'src/mixins',
+	'src/vars',
+	'src/scrollbar',
+	'fonts/style';
 
 @import 'src/every';
 
 body {
-	background-position: center center;
-	background-repeat: no-repeat;
-	background-size: cover;
+	background-color: #f4f4f4;
 }
 
-$pagewidth: 1000px;
+:root {
+	--volume: 50%;
+}
+
+// @TODO придумать более "изящный" способ кастомизации
+
+.page-element {
+	background-color: #fff;
+	box-shadow: 2px 2px 1px rgba(0, 0, 0, .1);
+	border-radius: 2px;
+}
+
+$pageWidth: 1200px;
+$fontSize: 16px;
 
 @import 'src/topbar';
 
 .radio {
-	//width: $pagewidth;
-	width: 100%;
-	margin: 0 auto;
-	margin-top: 10px;
-	padding: 0 10px 30px;
+	@include flexbox(auto, center, auto, auto);
+	width: $pageWidth;
+	margin: 10px auto;
+	font-size: 0;
 
-	.full-width {
-		width: 100%;
+	& > * {
+		// display: inline-block;
+		// vertical-align: top;
+		font-size: $fontSize;
 	}
 
-	.custom-width {
-		@include flexbox(auto, space-around, flex-start, auto);
+	$sideWidth: 320px;
 
-		.chat-box {
-			width: 100%;
-			padding: 0 20px 0 10px;
-		}
+	.content {
+		width: 100%;
+		order: 1;
+	}
 
-		.widgets-box {
-			width: 370px;
-			padding: 0 20px 0 0;
+	aside {
+		width: $sideWidth;
+		order: 2;
+	}
 
-			.text-place {
-				background-color: #fff;
-				padding: 5px;
-				box-shadow: 0 0 15px rgba(0, 0, 0, .5);
-			}
+	&.error {
+		& > * { display: none }
+		.error-box { display: block }
+	}
 
-			// & > * {
-			// 	display: inline-block;
-			// 	vertical-align: top;
-			// }
+	.error-box {
+		@extend .page-element;
+		display: none;
+		width: 100%;
+		padding: 10px;
+		text-align: center;
+
+		p {
+			margin: 5px 0;
 		}
 	}
 }
 
-/* Стилизация "встраиваемых" элементов */
-@import
-	'src/radio/embeds', // Стилизация "встраиваемых" элементов
-	'src/radio/songs-box', // Блок с выводом последних треков
-	'src/radio/order-box'; // Блок заказа треков
+.content {
+	.chat {
+		@extend .page-element;
+		padding: 5px;
 
-@import 'src/radio/mediaq';
+		iframe {
+			width: 100%;
+			height: 450px;
+			border: 0;
+		}
+	}
+
+	@import 'src/radio/content__vk-news';
+}
+
+aside {
+	$sideBckgColor: #ccc;
+	padding-left: 15px;
+
+	.side-content {
+		//background-color: $sideBckgColor;
+		margin-bottom: 10px; // @TODO совместить маргины
+
+		&:empty {
+			display: none;
+		}
+	}
+
+	button {
+		background-color: transparent;
+		border: 0;
+		cursor: pointer;
+	}
+
+	@import
+		'src/radio/aside__noti',
+		'src/radio/aside__player',
+		'src/radio/aside__radio-state';
+
+	.radio-live {
+		@include flexbox(row, center, auto, auto);
+		text-align: center;
+
+		.curr-rj {
+			@extend .page-element;
+			width: 100%;
+			font-size: .9em;
+			padding: 5px;
+
+			p {
+				&:first-child {
+					font-size: 1.1em;
+				}
+
+				&:last-child {
+					font-style: italic;
+				}
+			}
+		}
+
+		.curr-lstn {
+			@include flexbox(auto, center, center, auto);
+			@extend .page-element;
+			width: 40px;
+			margin-left: 10px;
+
+			user-select: none;
+			cursor: help;
+		}
+	}
+
+	.songs-box {
+		font-size: .9em;
+		@extend .page-element;
+		padding: 0;
+
+		table {
+			width: 100%;
+			padding: 5px;
+
+			caption {
+				margin-top: 5px;
+				font-size: 1.1em;
+			}
+
+			tr {
+				td {
+					padding: 2px;
+					vertical-align: middle;
+				}
+
+				td:nth-child(odd){
+					font-weight: bold;
+					text-align: center;
+				}
+
+				td:nth-child(even){
+					padding-left: 5px;;
+				}
+			}
+		}
+
+		.msk-time-note {
+			border-top: 1px solid rgba(0, 0, 0, .1);
+			padding: 5px 2.5px;
+			font-size: .9em;
+			text-align: center;
+
+			user-select: none;
+			cursor: default;
+		}
+	}
+}
+
+menu[type="context"] {
+	display: none;
+}
+
+@import
+	'src/radio/footer',
+	'src/radio/mediaq';

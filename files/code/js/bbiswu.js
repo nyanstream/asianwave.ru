@@ -13,7 +13,7 @@
     a.async = 1;
     a.src = g;
     m.parentNode.insertBefore(a, m)
-})(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga'), ga('create', 'UA-79528573-1', 'auto'), ga('send', 'pageview');
+})(window, document, 'script', 'https://google-analytics.com/analytics.js', 'ga'), ga('create', 'UA-79528573-1', 'auto'), ga('send', 'pageview');
 
 /*
  * Yandex Metrika

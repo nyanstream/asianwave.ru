@@ -22,61 +22,89 @@
 	<link rel="shortcut icon" href="/files/img/favicon.ico">
 	<meta name="theme-color" content="#FBA9AD">
 
+	<link rel="dns-prefetch" href="//google-analytics.com">
+	<link rel="dns-prefetch" href="//fonts.gstatic.com">
+	<link rel="dns-prefetch" href="//mc.yandex.ru">
+	<link rel="dns-prefetch" href="//st1.chatovod.ru">
+	<link rel="dns-prefetch" href="//counter.yadro.ru">
+	<link rel="dns-prefetch" href="//images.weserv.nl">
+	<link rel="dns-prefetch" href="//myradio24.com">
+	<link rel="dns-prefetch" href="//listen1.myradio24.com">
+
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/balloon-css/0.4.0/balloon.min.css">
 	<link rel="stylesheet" href="/files/code/css/radio.min.css">
 	<noscript><style>
-		.embed {
-			display: none !important;
-		}
-
-		.songs-box {
-			min-width: 350px !important;
-		}
+		.radio, .error-box { display: block !important }
+		.radio > * { display: none }
 	</style></noscript>
 </head><body>
 	<div class="container">
 		<header class="top-panel">
 			<div class="brand">
 				<img src="/files/img/logo.png" alt="logo">
-				<a href="/" class="text">Asian Wave / Radio</a>
+				<a href="/" class="text" rel="home">Asian Wave / Radio</a>
 			</div>
-			<div class="right-panel">
-				<a style="margin-right: 5px;" class="rp-elem" href="/app--chrome" target="_blank" title="Расширение для Chrome"><i class="icon icon-chrome"></i></a>
-				<a class="rp-elem" href="https://vk.com/topic-120842574_33906364" target="_blank"  rel="nofollow noopener" title="Реквест музыки">&#43;</a>
-				<a class="rp-elem" href="http://www.donationalerts.ru/r/asianwave" target="_blank"  rel="nofollow noopener" title="Поддержать проект">&#8381;</a>
-			</div>
+			<ul class="right">
+				<li style="margin-right: 5px;">
+					<a href="/app--chrome" target="_blank" title="Расширение для Chrome"><i class="icon icon-chrome"></i></a>
+				</li><li>
+					<a href="https://vk.com/topic-120842574_33906364" target="_blank" rel="nofollow noopener" title="Реквест музыки">&#43;</a>
+				</li><li>
+					<a href="http://www.donationalerts.ru/r/asianwave" target="_blank" rel="nofollow noopener" title="Поддержать проект">&#8381;</a>
+				</li>
+			</ul>
 		</header>
 		<main class="radio">
-			<div class="full-width">
-				<iframe class="embed player" src="/apps/player/"></iframe>
+			<div class="error-box">
+				<noscript>
+					<p>В вашем браузере отключен JavaScript!</p>
+					<p>В связи с этим функционал сайта для Вас сейчас недоступен, к сожалению :(</p>
+					<p><br>Включите JS сами или воспользуйтесь <a href="https://yandex.ru/support/common/browsers-settings/browsers-java-js-settings.xml" target="_blank" rel="nofollow noopener">данной инструкцией</a>, пожалуйста.</p>
+					<p>У нас круто, и это определённо будет стоить затрачанных усилий.</p>
+					<p><br>Спасибо! :3</p>
+				</noscript>
 			</div>
-			<div class="custom-width">
-				<div class="chat-box">
-					<iframe class="embed chat" src="https://asianwaveru.chatovod.ru"></iframe>
-					<a class="order-box" href="javascript:void(0);" target="_blank" rel="nofollow noopener">
-						<p>Сейчас идёт эфир! Хотите заказать музыку?</p>
-						<p>В очереди: <span class="queue"></span></p>
-					</a>
+			<div class="content">
+				<div class="chat">
+					<iframe src="https://asianwaveru.chatovod.ru"></iframe>
 				</div>
-				<div class="widgets-box">
-					<div class="embed" id="vk_group"></div>
-					<div class="songs-box text-place">
-						<table class="songs"></table>
-						<noscript>
-							<p>Да у Вас JavaScript в браузере отключен!</p>
-							<p>Большая часть функционала сайта для Вас сейчас недоступна, к сожалению :(</p>
-							<p>Надо ли Вам это?</p>
-							<p>Включите JS сами или воспользуйтесь <a href="https://yandex.ru/support/common/browsers-settings/browsers-java-js-settings.xml" target="_blank" rel="nofollow noopener">данной инструкцией</a>, пожалуйста.</p>
-							<p>Спасибо! :3</p>
-						</noscript>
+				<div class="vk-news"></div>
+			</div>
+			<aside>
+				<div class="side-content noti"></div>
+				<div class="side-content player">
+					<div class="player-controls" contextmenu="autostart">
+						<button data-ctrl="playpause"><i class="icon icon-play"></i></button>
+						<input data-ctrl="volume" type="range" step="0.1" min="0" max="100">
+					</div>
+					<div class="player-change">
+						<button data-point="jp"></button>
+						<button data-point="ru"></button>
+						<button data-point="kr"></button>
 					</div>
 				</div>
-			</div>
+				<div class="side-content radio-state"></div>
+				<div class="side-content radio-live"></div>
+				<!-- <div class="side-content shedule"></div> -->
+				<div class="side-content songs-box"></div>
+			</aside>
 		</main>
+		<footer>
+			<div>
+				<p><a href="/" rel="home">Asian Wave</a> &ndash; мультимедийный портал для поклонников азиатской культуры всех жанров и типов.</p>
+				<p>&#9829; 2016 &ndash; 2017 &middot; <a href="/terms" target="_blank">Правила</a></p>
+		</div>
+		</footer>
 	</div>
-	<script src="https://vk.com/js/api/openapi.js" defer></script>
+	<menu type="context" id="autostart">
+		<menuitem></menuitem>
+	</menu>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment.min.js" defer></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/locale/ru.js" defer></script>
+	<script src="/files/code/js/kamina.min.js" defer></script>
 	<script src="/files/code/js/radio.min.js" defer></script>
-	<script src="/files/code/js/bbiswu.min.js" defer></script>
+	<script src="/files/code/js/bbiswu.min.js" async></script>
 	<noscript><img src="https://mc.yandex.ru/watch/38037540" style="position:absolute; left:-9999px;" alt=""></noscript>
 </body></html>
