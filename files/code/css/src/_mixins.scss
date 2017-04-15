@@ -17,17 +17,20 @@
 	@if $align-content != auto { align-content: $align-content }
 }
 
-@mixin selection($color) {
+@mixin selection($bckgColor, $textColor) {
 	::-webkit-selection {
-		background-color: $color;
+		background-color: $bckgColor;
+		@if $textColor { color: $textColor }
 	}
 
 	::-moz-selection {
-		background-color: $color;
+		background-color: $bckgColor;
+		@if $textColor { color: $textColor }
 	}
 
 	::selection {
-		background-color: $color;
+		background-color: $bckgColor;
+		@if $textColor { color: $textColor }
 	}
 }
 

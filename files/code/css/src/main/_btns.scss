@@ -14,7 +14,10 @@ $btnwidth: 300px;
 		background-repeat: no-repeat, no-repeat;
 		background-color: rgba(255, 255, 255, 0.9);
 		background-position: bottom 20px center, center center;
-		background-size: 70%, 100%;
+
+		&, &.disabled:hover {
+			background-size: 70%, 100%;
+		}
 
 		box-shadow: 0 5px 20px rgba(0, 0, 0, .5);
 		@include transition(.3s);
@@ -22,6 +25,10 @@ $btnwidth: 300px;
 		&:hover {
 			background-size: 70%, 105%;
 			//box-shadow: 5px 10px 20px rgba(0, 0, 0, .5);
+		}
+
+		&.disabled {
+			@include filter(grayscale(100%));
 		}
 	}
 
@@ -32,17 +39,19 @@ $btnwidth: 300px;
 	@if (variable-exists(btns-restyle) == false) {
 		@each $afon in radio, anime {
 			.container a[href*='#{$afon}'] {
-				background-image: url('#{$imgpath}/#{$afon}-btn.png'), url('#{$imgpath}/#{$afon}-bckg.png');
-			}
-			.container a[href*='#{$afon}']:hover {
-				background-image: url('../../img/hover-btn.png'), url('#{$imgpath}/#{$afon}-bckg.png');
+				&, &.disabled:hover {
+				background-image: url('#{$imgpath}/main/#{$afon}-btn.png'), url('#{$imgpath}/main/#{$afon}-bckg.png');}
+
+				&:hover {
+					background-image: url('#{$imgpath}/main/hover-btn.png'), url('#{$imgpath}/main/#{$afon}-bckg.png');
+				}
 			}
 		}
 	}
 } // .btns
 
 .css-preload {
-	background-image: url('#{$imgpath}/hover-btn.png');
+	background-image: url('#{$imgpath}/main/hover-btn.png');
 	width: 1px; height: 1px;
 	background-size: 0 0;
 }

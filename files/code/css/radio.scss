@@ -1,13 +1,9 @@
-@import
-	'src/mixins',
-	'src/vars',
-	'src/scrollbar',
-	'fonts/style';
-
 @import 'src/every';
 
 body {
 	background-color: #f4f4f4;
+	background-image: url('#{$imgpath}/radio-bckg.png');
+	background-position: top center;
 }
 
 :root {
@@ -106,7 +102,8 @@ aside {
 	@import
 		'src/radio/aside__noti',
 		'src/radio/aside__player',
-		'src/radio/aside__radio-state';
+		'src/radio/aside__radio-state',
+		'src/radio/aside__shed';
 
 	.radio-live {
 		@include flexbox(row, center, auto, auto);
@@ -160,26 +157,27 @@ aside {
 					vertical-align: middle;
 				}
 
-				td:nth-child(odd){
+				td:nth-child(odd) {
+					max-width: 100px;
 					font-weight: bold;
 					text-align: center;
 				}
 
-				td:nth-child(even){
+				td:nth-child(even) {
 					padding-left: 5px;;
 				}
 			}
 		}
+	}
 
-		.msk-time-note {
-			border-top: 1px solid rgba(0, 0, 0, .1);
-			padding: 5px 2.5px;
-			font-size: .9em;
-			text-align: center;
+	.aside-note {
+		border-top: 1px solid rgba(0, 0, 0, .1);
+		padding: 5px 2.5px;
+		font-size: .9em;
+		text-align: center;
 
-			user-select: none;
-			cursor: default;
-		}
+		user-select: none;
+		cursor: default;
 	}
 }
 

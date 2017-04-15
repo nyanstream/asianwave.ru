@@ -112,11 +112,11 @@ var $ls = {
 	test: function() {
 		var test = 'ls_test';
 		try {
-			this.set(test, test);
-			this.rm(test);
-			return true;
+			this.set(test, test)
+			this.rm(test)
+			return true
 		} catch(e) {
-			return false;
+			return false
 		}
 	}
 }

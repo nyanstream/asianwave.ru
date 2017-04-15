@@ -1,7 +1,14 @@
+@import
+	'mixins',
+	'vars';
+
 @include reset;
+@include selection(darken($primecolor, 5%), #fff);
+
+@import 'scrollbar';
 
 html, body, .container {
-	width: 100%;	height: 100%;
+	width: 100%;
 
 	overflow-x: hidden;
 	font-size: 0;

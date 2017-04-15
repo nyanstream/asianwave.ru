@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 /*
  * Плеер
@@ -24,7 +24,7 @@ var
 		'ga': {
 			'label': 'animePlayer'
 		}
-	};
+	}
 
 /*
  * Детект хрома
@@ -32,9 +32,9 @@ var
 
 ;(function() {
  	var
- 	chrExtBtn = $make.qs('.right li a[href*="--chrome"]'),
- 	isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor),
- 	isOpera = /OPR\//.test(navigator.userAgent)
+	 	chrExtBtn = $make.qs('.right li a[href*="--chrome"]'),
+	 	isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor),
+	 	isOpera = /OPR\//.test(navigator.userAgent)
 
  	if (chrExtBtn) { // на случай, если опять забуду, что поменял класс элемента
  		if (!isChrome) chrExtBtn.style.display = 'none';
@@ -64,31 +64,31 @@ var
 	} else {
 		playerElem.classList.add('noflash');
 	}
-})();
+})()
 
 /*
  * Скрипт создания табов (модифицированный)
  * Найдено здесь: https://goo.gl/lsSkEe
  */
 
-function makeTabs(selector) {
+$make.tabs = function(selector) {
 	var
-		tabAnchors = $make.qs(selector + ' li', ['a']),
-		tabs = $make.qs(selector + ' section', ['a']);
+		tabAnchors = this.qs(selector + ' li', ['a']),
+		tabs = this.qs(selector + ' section', ['a'])
 
 	for (var i = 0; i < tabAnchors.length; i++) {
-		if (tabAnchors[i].classList.contains('active')) tabs[i].style.display = 'block';
+		if (tabAnchors[i].classList.contains('active')) tabs[i].style.display = 'block'
 
 		tabAnchors[i].addEventListener('click', function(e) {
 			var clickedAnchor = e.target || e.srcElement;
-			clickedAnchor.classList.add('active');
+			clickedAnchor.classList.add('active')
 
 			for (var i = 0; i < tabs.length; i++) {
 				if (tabs[i].dataset.tab === clickedAnchor.dataset.tab) {
-					tabs[i].style.display = 'block';
+					tabs[i].style.display = 'block'
 				} else {
 					tabs[i].style.display = 'none';
-					tabAnchors[i].classList.remove('active');
+					tabAnchors[i].classList.remove('active')
 				}
 			}
 		})
@@ -98,7 +98,7 @@ function makeTabs(selector) {
 /*
  * Скрытие табов
  */
-(function () {
+;(function () {
 	var
 		closeTabsCtr = $make.qs('.closeTabs'),
 		mainCont = $make.qs('.anime'),
@@ -117,7 +117,7 @@ function makeTabs(selector) {
 	}
 
 	closeTabsCtr.addEventListener('click', closeTabs);
-})();
+})()
 
 /*
  * Старый цвет шапки
@@ -126,7 +126,7 @@ function makeTabs(selector) {
 ;(function() {
 	var
 		container = $make.qs('.container'),
-		nyako = $make.qs('.top-panel .brand img'),
+		nyako = $make.qs('.top-panel .logo'),
 		metacolor = $make.qs('meta[name="theme-color"]');
 
 	function _oldHeadColor() {
@@ -144,7 +144,7 @@ function makeTabs(selector) {
 	} else {
 		nyako.addEventListener('dblclick', _oldHeadColor);
 	}
-})();
+})()
 
 /*
  * Расписание
@@ -154,9 +154,8 @@ function makeTabs(selector) {
 function parseShedule(data) {
 	var
 		streamShed = $make.qs('.shedule'),
-		tableBody = '', tableBodyT = '',
-		nowTime = Math.round(new Date().getTime()/1000),
-		sdata = '', sdataT = '';
+		tableBody = '', sdata = '',
+		nowTime = Math.round(new Date().getTime()/1000)
 
 	for (var i = 1; i < data.length - 1; i++) {
 		var
@@ -170,24 +169,24 @@ function parseShedule(data) {
 		}
 
 		if (data[i][0] < nowTime && data[i][1] > nowTime) {
-			sdata = '<tr class="air--current"><td>' + newShedData + '<td><b>Сейчас (ещё ' + moment.unix(data[i][1]).toNow(true) + '):</b><br>' + nazvaniue + '</td></tr>';
+			sdata = $make.elem('tr', '<td>' + newShedData + '<td><b>Сейчас (ещё ' + moment.unix(data[i][1]).toNow(true) + '):</b><br>' + nazvaniue + '</td>', 'air--current', ['html'])
 		} else if (data[i][1] > nowTime + (data[i-1][1] - data[i-1][0]) && data[i][1] < nowTime + (data[i][1] - data[i-1][0])) {
-			sdata = '<tr class="air--next"><td>' + newShedData + '<td><b>Далее через ' + moment.unix(data[i][0]).toNow(true) + ':</b><br>' + nazvaniue + '</td></tr>';
+			sdata = $make.elem('tr', '<td>' + newShedData + '<td><b>Далее через ' + moment.unix(data[i][0]).toNow(true) + ':</b><br>' + nazvaniue + '</td>', 'air--next', ['html'])
 		} else if ((moment.unix(data[i][0]).dayOfYear() - moment.unix(nowTime).dayOfYear()) < -1) {
-			//sdata = '<tr class="air--finished air--tooOld"><td>' + newShedData + '<td>' + nazvaniue + '</td></tr>';
-			sdata = '';
+			sdata = ''; // позавчерашие эфиры и старше
 		} else if (data[i][0] < nowTime) {
-			sdata = '<tr class="air--finished"><td>' + newShedData + '<td>' + nazvaniue + '</td></tr>';
+			sdata = $make.elem('tr', '<td>' + newShedData + '<td>' + nazvaniue + '</td></tr>', 'air--finished', ['html'])
 		} else if (moment.unix(data[i][0]).dayOfYear() > moment.unix(nowTime).dayOfYear()) {
-			sdata = '<tr class="air--notToday"><td>' + newShedData + '<td>' + nazvaniue + '</td></tr>';
+			sdata = $make.elem('tr', '<td>' + newShedData + '<td>' + nazvaniue + '</td></tr>', 'air--notToday', ['html'])
 		} else {
-			sdata = '<tr><td>' + newShedData + '<td>' + nazvaniue + '</td></tr>';
+			sdata = $make.elem('tr', '<td>' + newShedData + '<td>' + nazvaniue + '</td>', '', ['html'])
 		}
 
 		tableBody += sdata;
 	}
 
-	streamShed.innerHTML = '<tbody><tr><td colspan="2"><em>Время местное.</em></td></tr>' + tableBody + '</tbody>';
+	if (tableBody) streamShed.innerHTML = '<tbody><tr><td colspan="2"><em>Время местное.</em></td></tr>' + tableBody + '</tbody>'
+	else return
 }
 
 /*
@@ -199,40 +198,42 @@ function notiSpawn(text, id) {
 		notiEl = $make.qs('.noti'),
 		notiClose = $make.elem('div', '\u00D7', 'noti-close'),
 		notiContent = $make.elem('div', text, 'noti-content'),
-		notiItems = [];
+		notiItems = []
 
-	notiEl.textContent = '';
+	notiEl.textContent = ''
 
-	notiClose.setAttribute('title', 'Скрыть оповещение');
+	if (text === null || id === null) return false
+
+	notiClose.setAttribute('title', 'Скрыть оповещение')
 
 	if (notiContent.querySelector('a[href]')) {
-		var notiLinks = notiContent.querySelectorAll('a[href]');
+		var notiLinks = notiContent.querySelectorAll('a[href]')
 
-		for (var i = 0; i < notiLinks.length; i++) {
-			notiLinks[i].setAttribute('target', '_blank');
+		for (var i = 0; i < notiLinks.length; i++) {ог
+			notiLinks[i].setAttribute('target', '_blank')
 			if (notiLinks[i].getAttribute('href').indexOf('http') === 0) {
-				notiLinks[i].setAttribute('rel', 'nofollow noopener');
+				notiLinks[i].setAttribute('rel', 'nofollow noopener')
 			}
 		}
 	}
 
-	notiEl.appendChild(notiClose);
-	notiEl.appendChild(notiContent);
+	notiEl.appendChild(notiClose)
+	notiEl.appendChild(notiContent)
 
 	if (!$ls.test()) {
-		var notiUndisable = $make.elem('div', 'Внимание! У вас отключено хранение данных, поэтому скрытие оповещения запомиинаться не будет.', 'noti-undis');
-		notiEl.appendChild(notiUndisable);
+		var notiUndisable = $make.elem('div', 'Внимание! У вас отключено хранение данных, поэтому скрытие оповещения запомиинаться не будет.', 'noti-undis')
+		notiEl.appendChild(notiUndisable)
 	} else {
-		if ($ls.get('aw_noti')) notiItems = JSON.parse($ls.get('aw_noti'));
+		if ($ls.get('aw_noti')) notiItems = JSON.parse($ls.get('aw_noti'))
 		if (notiItems.indexOf(id) === -1)
-			notiEl.style.display = 'block';
-			else notiEl.style.display = 'none';
+			notiEl.style.display = 'block'
+			else notiEl.style.display = 'none'
 	}
 
 	notiClose.addEventListener('click', function() {
-		notiItems[notiItems.length] = id;
-		$ls.set('aw_noti', JSON.stringify(notiItems));
-		notiEl.style.display = 'none';
+		notiItems[notiItems.length] = id
+		$ls.set('aw_noti', JSON.stringify(notiItems))
+		notiEl.style.display = 'none'
 	});
 }
 
@@ -273,7 +274,7 @@ function parseVK(data) {
 
 		var
 			postText = data['posts'][dc]['text'],
-			pLR = new RegExp(/\[club(.*?)\]/),
+			pLR = new RegExp(/\[(.*?)\]/),
 			postLinkR = postText.match(new RegExp(pLR, 'g'))
 
 			if (postLinkR) {
@@ -309,29 +310,30 @@ var API = {
 	'shedule': '/api/streams-shed.json',
 	'noti': '/api/noti.json',
 	'vk': '/api/vk-info.json'
-}, API_keys = Object.keys(API);
+}
 
 if ($check.debug()) {
+	var API_keys = Object.keys(API)
 	for (var i = 0; i < API_keys.length; i++) {
 		API[API_keys[i]] = 'https://asianwave.ru' + API[API_keys[i]]
 	}
 }
 
 function loadInfo() {
-	var fetchHeaders = {cache: 'no-store'};
+	var fetchOptions = { cache: 'no-store' }
 
 	if (self.fetch) {
-		fetch(API.shedule, fetchHeaders).then(function(response) {
+		fetch(API.shedule + '?t=' + Date.now(), fetchOptions).then(function(response) {
 			response.json().then(function(data) {
 				parseShedule(data);
 			});
 		});
-		fetch(API.noti, fetchHeaders).then(function(response) {
+		fetch(API.noti + '?t=' + Date.now(), fetchOptions).then(function(response) {
 			response.json().then(function(data) {
 				notiSpawn(data[0], data[1]);
 			});
 		});
-		fetch(API.vk, fetchHeaders).then(function(response) {
+		fetch(API.vk + '?t=' + Date.now(), fetchOptions).then(function(response) {
 			response.json().then(function(data) {
 				parseVK(data);
 			});
@@ -350,5 +352,5 @@ document.addEventListener('DOMContentLoaded', function() {
 	loadInfo();
 	var aw_timer = setInterval(loadInfo, 30000);
 
-	makeTabs('.tabs');
+	$make.tabs('.tabs');
 });

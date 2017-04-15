@@ -1,4 +1,4 @@
-Просмотренные фильмы на ночных трансляциях:
+﻿Просмотренные фильмы на ночных трансляциях:
 
 == 2017 год ==
 Трилогия "The Lord of the Rings" (28 - 30 января)
@@ -7,3 +7,4 @@
 "Warcraft" (4 марта)
 "My Honor Was Loyalty" (12 марта)
 "Moonlight" и "Gayniggers from Outer Space" (19 марта)
+"The Pianist" и "Пыль" (4 Апреля)

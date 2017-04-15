@@ -3,12 +3,11 @@ $donotdelete: '';
 /* Главный цвет */
 //$primecolor: #FF305E;
 $primeColor: rgb(251, 169, 173);
-
 $primecolor: $primeColor;
 
 /* Верхняя панель в разделах */
 $top-panel--height: 40px;
-$top-panel--brandheight: 20px;
+$top-panel--brandHeight: 20px;
 $top-panel--color: darken($primecolor, 5%);
 
 /* Стандартный размер шрифта */

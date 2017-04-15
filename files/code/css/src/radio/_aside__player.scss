@@ -73,6 +73,16 @@
 				}
 			}
 		}
+
+		&.on-mobile {
+			[data-ctrl='playpause'] {
+				border-right: 0;
+			}
+
+			[data-ctrl='volume'] {
+				display: none;
+			}
+		}
 	}
 
 	&-change {

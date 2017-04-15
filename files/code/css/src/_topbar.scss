@@ -14,18 +14,24 @@
 		user-select: none;
 		white-space: nowrap;
 		cursor: default;
-		font-size: 0;
-		margin-left: 15px;
 
 		& > * {
 			display: inline-block;
 			vertical-align: middle;
 		}
 
-		img {
-			height: $top-panel--brandheight;
-			//image-rendering: pixelated;
+		.logo {
+			$top-panel--logo-height: $top-panel--brandHeight + 5px;
+
+			display: inline-block;
+			width: $top-panel--logo-height;
+			height: $top-panel--logo-height;
 			margin-right: 5px;
+
+			background-image: url('/files/img/logo.png');
+			background-position: center center;
+			background-repeat: no-repeat;
+			background-size: contain;
 		}
 
 		.text {
@@ -35,7 +41,7 @@
 			font-family: Tahoma, Geneva, Arial, sans-serif;
 			font-weight: bold;
 			letter-spacing: 2px;
-			font-size: $top-panel--brandheight;
+			font-size: $top-panel--brandHeight;
 			color: #fff;
 
 			&:hover {

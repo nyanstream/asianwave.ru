@@ -1,6 +1,9 @@
-@import 'src/mixins', 'src/vars';
+@import
+	'src/mixins',
+	'src/vars';
 
 @include reset;
+@include selection(darken($primecolor, 5%), #fff);
 
 body {
 	@at-root html, & {

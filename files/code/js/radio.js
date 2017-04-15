@@ -1,6 +1,25 @@
 'use strict'
 
 /*
+ * Дополнение к камине
+ */
+
+$make.balloon = function(elem, text, pos) {
+	//var to = this.qs(elem).dataset
+	var to = elem.dataset
+
+	if (!to || isMobile.any) return false;
+
+	if (text)
+		to.balloon = text
+		else to.balloon = ''
+
+	if (pos)
+		to.balloonPos = pos
+		else to.balloonPos = 'up'
+}
+
+/*
  * Функция для проверки клиента на совместимость с сайтом (лол)
  * addClass() вместо classList.add() для всякого говна вроде старых IE
  * (инвалиды тоже люди, чо)
@@ -37,9 +56,9 @@
 
 ;(function() {
 	var
-	chrExtBtn = $make.qs('.right li a[href*="--chrome"]'),
-	isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor),
-	isOpera = /OPR\//.test(navigator.userAgent)
+		chrExtBtn = $make.qs('.right li a[href*="--chrome"]'),
+		isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor),
+		isOpera = /OPR\//.test(navigator.userAgent)
 
 	if (chrExtBtn) { // на случай, если опять забуду, что поменял класс элемента
 		if (!isChrome) chrExtBtn.style.display = 'none';
@@ -61,15 +80,15 @@
 
 var points = {
 	'jp': {
-		'name': 'Япония',
+		'name': 'Japan',
 		'port': 7934,
 		'srv': 1
 	}, 'ru': {
-		'name': 'Россия',
+		'name': 'Russia',
 		'port': 9759,
 		'srv': 1
 	}, 'kr': {
-		'name': 'Корея',
+		'name': 'Korea',
 		'port': 3799,
 		'srv': 1
 	}
@@ -77,24 +96,16 @@ var points = {
 
 var $currentPoint = {
 	port: function() {
-		if ($ls.get('aw_radioPoint'))
-			return points[$ls.get('aw_radioPoint')].port
-			else return points['jp'].port
+		return $ls.get('aw_radioPoint') ? points[$ls.get('aw_radioPoint')].port : points['jp'].port
 	},
 	name: function() {
-		if ($ls.get('aw_radioPoint'))
-			return points[$ls.get('aw_radioPoint')].name
-			else return points['jp'].name
+		return $ls.get('aw_radioPoint') ? points[$ls.get('aw_radioPoint')].name : points['jp'].name
 	},
 	srv: function() {
-		if ($ls.get('aw_radioPoint'))
-			return points[$ls.get('aw_radioPoint')].srv
-			else return points['jp'].srv
+		return $ls.get('aw_radioPoint') ? points[$ls.get('aw_radioPoint')].srv : points['jp'].srv
 	},
 	key: function () {
-		if ($ls.get('aw_radioPoint'))
-			return $ls.get('aw_radioPoint')
-			else return 'jp'
+		return $ls.get('aw_radioPoint') || 'jp'
 	}
 }
 
@@ -103,14 +114,16 @@ var $currentPoint = {
  * @TODO расхардкодить сервер
  */
 
-var radioSrv = {
-	'srv': 'https://listen',
-	'dom': '.myradio24.com/'
+var dmns = {
+	'aw': 'asianwave.ru',
+	'mr': document.currentScript.dataset.radioServer
 }
 
 var
-	radio = new Audio(radioSrv.srv + $currentPoint.srv() + radioSrv.dom + $currentPoint.port()),
-	radioVol = $ls.get('aw_radioVolume') ? $ls.get('aw_radioVolume') : 20;
+	radio = new Audio('https://listen' + $currentPoint.srv() + '.' + dmns.mr + '/' + $currentPoint.port()),
+	radioVol = $ls.get('aw_radioVolume') || 20
+
+radio.preload = 'none'
 
 /*
  * Инициация плеера и методов управления им
@@ -126,7 +139,7 @@ var $ctrl = {
 	changePoint: function(point) {
 		$ls.set('aw_radioOnPause', radio.paused)
 		//radio.src = radioServer + points[point].port
-		radio.src = radioSrv.srv + points[point].srv + radioSrv.dom + points[point].port
+		radio.src = 'https://listen' + points[point].srv + '.' + dmns.mr + '/' + points[point].port
 		radio.load()
 		if ($ls.get('aw_radioOnPause') === 'false') {
 			radio.play();
@@ -201,9 +214,9 @@ radioCtrl_vol.addEventListener('change', function() {
 
 ;(function() {
 	var
-	asMenu = $make.qs('menu[type="context"]#autostart menuitem'),
-	asLSItem = 'aw_radioAutostart',
-	autostphr = 'Запускать плеер при загрузке страницы: '
+		asMenu = $make.qs('menu[type="context"]#autostart menuitem'),
+		asLSItem = 'aw_radioAutostart',
+		autostphr = 'Запускать плеер при загрузке страницы: '
 
 	switch ($ls.get(asLSItem)) {
 		case 'null':
@@ -250,8 +263,7 @@ var $parse = {
 
 		notiEl.textContent = ''
 
-		if (text === null || id === null)
-			return false
+		if (text === null || id === null) return false
 
 		if (notiContent.querySelector('a[href]')) {
 			var notiLinks = notiContent.querySelectorAll('a[href]')
@@ -278,6 +290,46 @@ var $parse = {
 			$ls.set('aw_noti', JSON.stringify(notiItems))
 			notiEl.style.display = 'none'
 		});
+	},
+	shedule: function(data) {
+		var
+			streamShed = $make.qs('.shedule'),
+			tableBody = '', sdata = '',
+			nowTime = Math.round(new Date().getTime()/1000)
+
+		streamShed.textContent = ''
+		if (data === 'fail') return;
+
+		for (var i = 1; i < data.length - 1; i++) {
+			var
+				newShedData = moment.unix(data[i][0]).format('D MMMM') + '<br>' + moment.unix(data[i][0]).format('HH:mm') + ' &ndash; ' + moment.unix(data[i][1]).format('HH:mm') + '</td>',
+				nazvaniue = ''
+
+			if (data[i][3]) {
+				nazvaniue = $make.link(data[i][3], data[i][2], ['e', 'html']);
+			} else {
+				nazvaniue = $make.xss(data[i][2]);
+			}
+
+			if (data[i][0] < nowTime && data[i][1] > nowTime) {
+				sdata = $make.elem('tr', '<td>' + newShedData + '<td><b>Сейчас (ещё ' + moment.unix(data[i][1]).toNow(true) + '):</b><br>' + nazvaniue + '</td>', 'air--current', ['html'])
+			} else if (data[i][1] > nowTime + (data[i-1][1] - data[i-1][0]) && data[i][1] < nowTime + (data[i][1] - data[i-1][0])) {
+				sdata = $make.elem('tr', '<td>' + newShedData + '<td><b>Далее через ' + moment.unix(data[i][0]).toNow(true) + ':</b><br>' + nazvaniue + '</td>', 'air--next', ['html'])
+			} else if ((moment.unix(data[i][0]).dayOfYear() - moment.unix(nowTime).dayOfYear()) < -1) {
+				sdata = ''
+			} else if (data[i][0] < nowTime) {
+				sdata = ''
+			} else if (moment.unix(data[i][0]).dayOfYear() > moment.unix(nowTime).dayOfYear()) {
+				sdata = $make.elem('tr', '<td>' + newShedData + '<td>' + nazvaniue + '</td></tr>', 'air--notToday', ['html'])
+			} else {
+				sdata = $make.elem('tr', '<td>' + newShedData + '<td>' + nazvaniue + '</td>', '', ['html'])
+			}
+
+			tableBody += sdata;
+		}
+
+		if (tableBody) streamShed.innerHTML = $make.elem('table', '<caption>Расписание прямых эфиров:</caption><tbody>' + tableBody + '</tbody>', '', ['html']) + $make.elem('div', 'Время местное', 'aside-note', ['html'])
+		else return
 	},
 	vk: function(data) {
 		var
@@ -310,7 +362,7 @@ var $parse = {
 
 			var
 				postText = data['posts'][dc]['text'],
-				pLR = new RegExp(/\[club(.*?)\]/),
+				pLR = new RegExp(/\[(.*?)\]/),
 				postLinkR = postText.match(new RegExp(pLR, 'g'))
 
 			if (postLinkR) {
@@ -354,9 +406,9 @@ var $parse = {
 			return
 		}
 
-		var
-			current = data['song'],
-			lastSongs = data['songs'].reverse()
+		var	current = data['song']
+
+		/* Блок с выводом текущего трека */
 
 		var
 			currentSplit = current.split(' - '),
@@ -365,36 +417,37 @@ var $parse = {
 
 		if (!currentS) currentS = '';
 
-		stateBoxBody = $make.elem('div', '<p title="' + $make.xss(currentS) + '">' + $make.xss(currentS) + '</p><p title="' + $make.xss(currentA) + '">' + $make.xss(currentA) + '</p>', 'current')
+		stateBoxBody = $make.elem('div', '<p title="Трек: ' + $make.xss(currentS) + '">' + $make.xss(currentS) + '</p><p title="Автор: ' + $make.xss(currentA) + '">' + $make.xss(currentA) + '</p>', 'current')
 
-		stateBoxBody.dataset.balloon = 'Трек в эфире'
-		stateBoxBody.dataset.balloonPos = 'down'
+		$make.balloon(stateBoxBody, 'Трек в эфире', 'down')
+
+		/* Блок с выводом состояния прямого эфира (в остальных случаях скрыт) */
 
 		var
 			currRJ = $make.elem('div', '<p>Ведущий в эфире:</p><p>' + $make.xss(data['djname']) + '</p>', 'curr-rj'),
 			currLstn = $make.elem('div', $make.xss(data['listeners']), 'curr-lstn')
 
-		currLstn.dataset.balloon = 'Количество слушателей'
-		currLstn.dataset.balloonPos = 'left'
+		$make.balloon(currLstn, 'Количество слушателей', 'left')
 
 		if (data['djname'] !== 'Auto-DJ') {
 			liveBox.appendChild(currRJ)
 			liveBox.appendChild(currLstn)
 		}
 
-		// data['listeners']
+		/* Блоки со ссылками на текущий трек и на загрузку "плейлиста" */
 
 		var
 			srchVK = $make.link('https://vk.com/audio?q=' + encodeURIComponent(current), '<i class="icon icon-vk"></i>', ['e']),
-			srchGo = $make.link('https://encrypted.google.com/#q=' + encodeURIComponent(current), '<i class="icon icon-google"></i>', ['e'])
+			srchGo = $make.link('https://encrypted.google.com/#newwindow=1&q=' + encodeURIComponent(current), '<i class="icon icon-google"></i>', ['e'])
 
 		srchVK.setAttribute('title', 'Поиск трека в VK')
 		srchGo.setAttribute('title', 'Поиск трека в Google')
 
-		linksBoxBody = $make.elem('div', srchVK.outerHTML + srchGo.outerHTML, 'search')
+		linksBoxBody = $make.elem('div', '', 'search')
+		linksBoxBody.appendChild(srchVK)
+		linksBoxBody.appendChild(srchGo)
 
-		linksBoxBody.dataset.balloon = 'Поиск трека';
-		linksBoxBody.dataset.balloonPos = 'left';
+		$make.balloon(linksBoxBody, 'Поиск трека', 'left')
 
 		var plLink = $make.link('', '<i class="icon icon-music"></i>')
 
@@ -403,14 +456,17 @@ var $parse = {
 
 		plBoxBody = $make.elem('div', plLink.outerHTML, 'dlm3u')
 
-		plBoxBody.dataset.balloon = 'Слушать во внешнем плеере'
-		plBoxBody.dataset.balloonPos = 'left'
+		$make.balloon(plBoxBody, 'Слушать во внешнем плеере', 'left')
 
-		var colvoofsongs = lastSongs.length
+		/* Блок с выводом недавних треков */
 
-		if (colvoofsongs >= 10) colvoofsongs = (lastSongs.length - 1) / 2
+		var
+			lastSongs = data['songs'].reverse(),
+			numOfSongs = lastSongs.length
 
-		for (var i = 0; i < colvoofsongs; i++) {
+		if (numOfSongs >= 10) numOfSongs = (lastSongs.length - 1) / 2;
+
+		for (var i = 0; i < numOfSongs; i++) {
 			songsTableBody += '<tr><td>' + $make.xss(lastSongs[i][0]) + '</td><td>' + $make.xss(lastSongs[i][1].replace(' - ', ' – ')) + '</td></tr>'
 		}
 
@@ -418,7 +474,7 @@ var $parse = {
 		stateBox.appendChild(linksBoxBody)
 		stateBox.appendChild(plBoxBody)
 
-		songsBox.innerHTML = $make.elem('table', '<caption>Ранее в эфире:</caption><tbody>' + songsTableBody + '</tbody>', '', ['html']) + $make.elem('div', 'Время московское', 'msk-time-note', ['html'])
+		songsBox.innerHTML = $make.elem('table', '<caption>Ранее в эфире:</caption><tbody>' + songsTableBody + '</tbody>', '', ['html']) + $make.elem('div', 'Время московское', 'aside-note', ['html'])
 	}
 }
 
@@ -427,14 +483,15 @@ var $parse = {
  */
 
 var API = {
-	//'shed': '/api/radio-shed.json',
+	'shed': '/api/radio-shed.json',
 	'noti': '/api/noti.json',
 	'vk': '/api/vk-info.json'
-}, API_keys = Object.keys(API)
+}
 
 if ($check.debug()) {
+	var API_keys = Object.keys(API)
 	for (var i = 0; i < API_keys.length; i++) {
-		API[API_keys[i]] = 'https://asianwave.ru' + API[API_keys[i]]
+		API[API_keys[i]] = 'https://' + dmns.aw + API[API_keys[i]]
 	}
 }
 
@@ -447,11 +504,11 @@ if ($check.debug()) {
  * .full() - если необходимо запросить всё вместе
  */
 
-var fetchHeaders = {cache: 'no-store'};
+var	fetchOptions = { cache: 'no-store' }
 
 var $loadInfo = {
 	state: function() {
-		fetch('https://myradio24.com/users/' + $currentPoint.port() + '/status.json', fetchHeaders).then(function(response) {
+		fetch('https://' + dmns.mr + '/users/' + $currentPoint.port() + '/status.json?t=' + Date.now(), fetchOptions).then(function(response) {
 			response.json().then(function(data) {
 				$parse.mr24(data)
 			})
@@ -459,9 +516,17 @@ var $loadInfo = {
 			$parse.mr24('fail')
 		})
 	},
-	shed: function() {},
+	shed: function() {
+		fetch(API.shed + '?t=' + Date.now(), fetchOptions).then(function(response) {
+			response.json().then(function(data) {
+				$parse.shedule(data)
+			})
+		}).catch(function(error) {
+			$parse.shedule('fail')
+		})
+	},
 	vk: function() {
-		fetch(API.vk, fetchHeaders).then(function(response) {
+		fetch(API.vk + '?t=' + Date.now(), fetchOptions).then(function(response) {
 			response.json().then(function(data) {
 				$parse.vk(data);
 			})
@@ -470,7 +535,7 @@ var $loadInfo = {
 		})
 	},
 	noti: function() {
-		fetch(API.noti, fetchHeaders).then(function(response) {
+		fetch(API.noti + '?t=' + Date.now(), fetchOptions).then(function(response) {
 			response.json().then(function(data) {
 				$parse.noti(data[0], data[1]);
 			})
@@ -494,24 +559,30 @@ var $loadInfo = {
  */
 
 document.addEventListener('DOMContentLoaded', function() {
-	/*if ($check.get('vk-app'))
-		$make.qs('header').style.display = 'none'
-		$make.qs('footer').style.display = 'none'; */
+	var	getPoint = $check.get('point')
+	if (getPoint && Object.keys(points).indexOf(getPoint) > -1) $ctrl.changePoint(getPoint);
 
-	// pointButton[0].parentElement.dataset.balloon = 'Список потоков'
-	// pointButton[0].parentElement.dataset.balloonPos = 'down'
+	//$make.balloon(pointButton[0].parentElement, 'Список потоков', 'down')
+	//if (isMobile.any) radioCtrl_pp.parentElement.classList.add('on-mobile')
 
 	for (var i = 0; i < pointButton.length; i++) {
 		var
 			data = pointButton[i].dataset,
 			pointData = points[data.point]
 
-		if (data.custom)
-			pointButton[i].textContent = data.custom
-			else pointButton[i].textContent = data.point;
+		/*
+		 * Свистелка для кастомного текста переключателя поинта
+		 * пример: data-point-custom='ua;Ukraine'
+		 */
 
-		pointButton[i].dataset.balloon = '\u00AB' + pointData.name + '\u00BB'
-		pointButton[i].dataset.balloonPos = 'down'
+		if (!data.pointCustom) {
+			pointButton[i].textContent = data.point
+			$make.balloon(pointButton[i], '\u00AB' + pointData.name + '\u00BB', 'down')
+		} else {
+			var dataCus = data.pointCustom.split(';')
+			pointButton[i].textContent = dataCus[0]
+			if (dataCus[1]) $make.balloon(pointButton[i], '\u00AB' + dataCus[1] + '\u00BB', 'down')
+		}
 
 		if (data.point === $currentPoint.key())
 			pointButton[i].classList.add('active');

@@ -1,6 +1,9 @@
-@import 'src/mixins', 'src/vars';
+@import
+	'src/mixins',
+	'src/vars';
 
 @include reset;
+@include selection(darken($primecolor, 5%), #fff);
 
 $pagewidth: 960px;
 
@@ -14,7 +17,7 @@ body {
 		font-size: 0;
 	}
 
-	background-image: url('#{$imgpath}/bckg.png');
+	background-image: url('#{$imgpath}/main/bckg.png');
 	background-position: bottom center;
 	background-repeat: no-repeat;
 	background-size: 100%;

@@ -1,8 +1,9 @@
-@import 'src/mixins','src/vars', 'fonts/style';
+@import
+	'src/mixins',
+	'src/vars';
 
 @include reset;
-
-//@include selection(#8400a5);
+@include selection(darken($primecolor, 5%), #fff);
 
 .player-container {
 	@include flexbox(auto, space-between, auto, auto);

@@ -1,4 +1,6 @@
-@import 'src/mixins', 'src/vars', 'fonts/style';
+@import
+	'src/mixins',
+	'src/vars';
 
 @include reset;
 

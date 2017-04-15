@@ -1,14 +1,8 @@
-@import
-	'src/mixins',
-	'src/vars',
-	'fonts/style';
-
 @import 'src/every';
 
 $pagewidth: 1000px;
 
 @import
-	'src/scrollbar',
 	'src/topbar',
 	'src/anime/themes';
 
@@ -16,7 +10,7 @@ $pagewidth: 1000px;
 
 .anime {
 	width: 100%;
-	height: calc(100% - #{$top-panel--height});
+	height: calc(100vh - #{$top-panel--height});
 
 	& > * {
 		display: inline-block;
