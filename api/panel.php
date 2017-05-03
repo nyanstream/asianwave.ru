@@ -1,11 +1,13 @@
 <?php
 	header('Content-type: text/html');
-	date_default_timezone_set("Europe/Moscow");
+	date_default_timezone_set('Europe/Moscow');
 
 	/* @TODO
 	 * сделать экранирование символа "\" (пока что значение просто не срабатывает, если он есть)
 	 * запихнуть удаление последнего элемента расписания в пункт создания (как с нотификациями)
 	 */
+	 
+	include 'topsec/vars.php';
 
 	/*
 	 * Определение файла с расписанием
@@ -31,7 +33,7 @@
 				return mb_convert_encoding(pack('H*', $match[1]), $encoding, 'UTF-16BE');
 			}, $str);
 	}
-	
+
 	/*
 	 * Функция для сортировки эфиров
 	 */
@@ -40,23 +42,23 @@
 		usort($f_what, function($a, $b) { return ($a[0] - $b[0]); });
 		return $f_what;
 	}
-	
+
 	/*
 	 * Функция для добавления эфира в расписание
 	 */
-	
+
 	function addShedData($f_file, $f_where, $f_what) {
 		$f_where[count($f_where)] = $f_what;
 		$f_where = shedSort($f_where);
 		if ($f_what[2] != null) { file_put_contents(dirname(__FILE__) . '/' . $f_file, json_encode($f_where, JSON_UNESCAPED_UNICODE)); }
 	}
-	
+
 	/*
-	 * Функция для добавления эфира в расписание
+	 * Функция для удаления последнего эфира из расписания
 	 */
 
 	function rmShedData($f_file, $f_where) {
-		if (count($f_where) > 2) {
+		if (count($f_where) > 1) {
 			unset($f_where[count($f_where) - 2]);
 			sort($f_where);
 			$f_where = shedSort($f_where);
@@ -97,17 +99,15 @@
 	 * Удаление (пред)последнего элемента расписания
 	 */
 
-	if (isset($_POST['last_clear'])) {
-		rmShedData($anime_shed, $shedAnime);
-	}
+	if (isset($_POST['last_clear'])) { rmShedData($anime_shed, $shedAnime); }
 
 	/*
 	 * Удаление элементов расписания с просроченным таймштампом
 	 * (плюс счётчик этих элементов, нужен для вывода на страницу)
 	 */
 
-	if (isset($_POST['expired_clear']) && count($shedAnime) > 2) {
-		for ($e = 1; $e <= (count($shedAnime) - 2); $e++) {
+	if (isset($_POST['expired_clear']) && count($shedAnime) > 1) {
+		for ($e = 0; $e <= (count($shedAnime) - 2); $e++) {
 			if ($shedAnime[$e][1] < time()) { unset($shedAnime[$e]); }
 		}
 		sort($shedAnime);
@@ -117,7 +117,7 @@
 
 	//echo count($shedAnime);
 
-	for ($e = 1; $e <= (count($shedAnime) - 2); $e++) {
+	for ($e = 0; $e <= (count($shedAnime) - 2); $e++) {
 		if ($shedAnime[$e][1] < time()) { ++$expr_count; }
 	}
 
@@ -196,7 +196,7 @@
 		<p>
 			<label for="time_end">Продолжительность (в минутах):</label>
 			<input type="number" name="duration" min="1" placeholder="60">
-			<br><i class="ocheMaliyText">Не обязательно, только если время отлично от часа.</i>
+			<br><i class="ocheMaliyText">Необязательно, только если время отлично от часа.</i>
 		</p>
 		<p>
 			<label for="elname">Название:</label>
@@ -219,7 +219,7 @@
 	<form class="last-clear" action="?succ" method="post"><fieldset>
 		<legend>Удалить последний эфир из расписания</legend>
 		<p>
-			<?php echo '<samp>'; if ($shedAnime[count($shedAnime)-2][0] !== 0) { echo 'Название: <q>' . $shedAnime[count($shedAnime)-2][2] . '</q>. Начало ' . date('Y-m-d в H:i', $shedAnime[count($shedAnime)-2][0]) . '; конец ' . date('Y-m-d в H:i', $shedAnime[count($shedAnime)-2][1]); } else { echo 'Очистка не требуется'; } echo '.</samp>' ?>
+			<?php echo '<samp>'; if ($shedAnime[count($shedAnime)-2][0]) { echo 'Название: <q>' . $shedAnime[count($shedAnime)-2][2] . '</q>. Начало ' . date('Y-m-d в H:i', $shedAnime[count($shedAnime)-2][0]) . '; конец ' . date('Y-m-d в H:i', $shedAnime[count($shedAnime)-2][1]); } else { echo 'Очистка не требуется'; } echo '.</samp>' ?>
 		</p>
 		<p>
 			<label for="last_chear_confr">Вы точно этого хотите?</label>
@@ -242,7 +242,7 @@
 	<form class="expired-clear" action="?succ" method="post"><fieldset>
 		<legend>Удалить "просроченные" эфиры из расписания</legend>
 		<p>
-			<?php echo '<samp>Просроченных эфиров'; if ($shedAnime[1][1] > time() && $expr_count = 1) { echo ' нет</samp>'; } else { echo ': ' . $expr_count . '</samp>'; } ?>
+			<?php echo '<samp>Просроченных эфиров'; if ($shedAnime[0][1] > time() && $expr_count = 1) { echo ' нет</samp>'; } else { echo ': ' . $expr_count . '</samp>'; } ?>
 		</p>
 		<p>
 			<label for="expire_chear_confr">Вы точно этого хотите?</label>
@@ -251,6 +251,13 @@
 		<p style="margin-top: 15px;">
 			<input type="submit" value="Удалить" name="expired_clear">
 		</p>
+	</fieldset></form>
+	<hr>
+	<form class="vk-get-api-code" action="?succ" method="post"><fieldset>
+		<legend>Обновление токена доступа ВК</legend>
+			<p>
+				<a href="<?php echo $APIep['vk_au'] . '?client_id=' . $vkData['id'] . '&display=page&redirect_uri=https://' . $_SERVER['SERVER_NAME'] . '/api/api-backend-vk.php&scope=video,offline&response_type=code&state=vk-get-code'; ?>" target="_blank" rel="nofollow noopener">Просто нажми сюда.</a>
+			</p>
 	</fieldset></form>
 	<hr>
 	<form class="noti-action" action="?succ" method="post"><fieldset>
@@ -264,7 +271,7 @@
 		</p>
 		<details>
 			<summary>Памятка по разметке</summary>
-			<p class="protip">Для стилизации текста можно использовать <kbd>&lt;b&gt;<b>жирный шрифт</b>&lt;/b&gt;</kbd> и <kbd>&lt;i&gt;<i>курсив</i>&lt;/i&gt;</kbd>, деление на абзацы с помощью <kbd>&lt;br&gt;</kbd>.<br>Ссылки должны быть вида <kbd>&lt;a href="https://..."&gt;текст&lt;/a&gt;</kbd>. В случае локальных ссылок сделует использовать <kbd>&lt;a href="/pisos"&gt;&lt;текст&lt;/a&gt;</kbd>.</p>
+			<p class="protip">Для стилизации текста можно использовать <kbd>&lt;b&gt;<b>жирный шрифт</b>&lt;/b&gt;</kbd> и <kbd>&lt;i&gt;<i>курсив</i>&lt;/i&gt;</kbd>, деление на абзацы с помощью <kbd>&lt;br&gt;</kbd>.<br>Ссылки должны быть вида <kbd>&lt;a href="https://..."&gt;текст&lt;/a&gt;</kbd>. В случае локальных ссылок следует использовать <kbd>&lt;a href="/pisos"&gt;&lt;текст&lt;/a&gt;</kbd>.</p>
 		</details>
 		<p>
 			<label for="noti_remove">Удалить последнее оповещение?</label>
@@ -296,10 +303,10 @@
 
 		;(function lastClVeevod() {
 			let
-				lTimeS = '<?php echo $shedAnime[count($shedAnime)-2][0]; ?>',
+				lTimeS = <?php echo $shedAnime[count($shedAnime)-2][0] ? $shedAnime[count($shedAnime)-2][0] : 0; ?>,
 				lInputs = _elems('.last-clear input')
 
-			if (lTimeS = 0) {
+			if (lTimeS == <?php echo $shedAnime[count($shedAnime)-1][0]; ?>) {
 				for (let i = 0; i < lInputs.length; i++) {
 					lInputs[i].setAttribute('disabled', '');
 				}
@@ -308,7 +315,7 @@
 
 		;(function exprCheck() {
 			let
-				air_exp = <?php if ($shedAnime[1][1] > time() && $expr_count = 1) { echo 'false'; } else { echo 'true'; } ?>,
+				air_exp = <?php if ($expr_count > 0) { echo 'true'; } else { echo 'false'; } ?>,
 				exprFInputs = _elems('.expired-clear input')
 
 			if (!air_exp) {

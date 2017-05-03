@@ -1,0 +1,12 @@
+<FilesMatch "\.(json)$">
+	<IfModule mod_headers.c>
+		Header set Access-Control-Allow-Origin *
+	</IfModule>
+</FilesMatch>
+
+<files panel.php>
+	AuthType Basic
+	AuthName "Туда ли ты зашёл?"
+	AuthUserFile /home/www/id1581/data/etc/edits.passwd
+	Require valid-user
+</files>

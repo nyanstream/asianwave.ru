@@ -1,10 +1,10 @@
-@import 'src/every';
+@import
+	'src/vars',
+	'src/mixins';
 
 $pagewidth: 1000px;
 
-@import
-	'src/topbar',
-	'src/anime/themes';
+@import 'src/anime/themes';
 
 //@import 'src/anime/special';
 

@@ -1,6 +1,4 @@
-@import
-	'mixins',
-	'vars';
+// main: ../aw-every.scss
 
 @include reset;
 @include selection(darken($primecolor, 5%), #fff);

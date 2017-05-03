@@ -13,27 +13,42 @@
 	<meta property="og:url" content="https://asianwave.ru/anime">
 	<meta property="og:site_name" content="Asian Wave / Anime">
 	<meta property="og:image" content="/files/img/share.png">
+
 	<meta name="twitter:card" content="summary_large_image">
 	<meta name="twitter:description" content="Мультимедийный портал для поклонников азиатской культуры всех жанров и типов.">
 	<meta name="twitter:title" content="Asian Wave / Anime">
 	<meta name="twitter:image" content="/files/img/share.png">
 
+	<script type="application/ld+json">
+		{
+			"@context": "https://schema.org",
+			"@type": "WebSite",
+			"url": "https://asianwave.ru",
+			"name": "Asian Wave",
+			"description": "Мультимедийный портал для поклонников азиатской культуры всех жанров и типов"
+		}
+ </script>
+
 	<link rel="canonical" href="https://asianwave.ru/anime">
-	<link rel="shortcut icon" href="/files/img/favicon.ico">
-	<meta name="theme-color" content="#FBA9AD">
+	<link rel="shortcut icon" href="/files/img/favicon.png">
+	<link rel="manifest" href="/.webmanifest">
+	<link rel="sitemap" href="/sitemap.php">
 
 	<link rel="dns-prefetch" href="//google-analytics.com">
+	<link rel="dns-prefetch" href="//ssl.google-analytics.com">
 	<link rel="dns-prefetch" href="//fonts.gstatic.com">
 	<link rel="dns-prefetch" href="//mc.yandex.ru">
 	<link rel="dns-prefetch" href="//st1.chatovod.ru">
 	<link rel="dns-prefetch" href="//counter.yadro.ru">
 	<link rel="dns-prefetch" href="//images.weserv.nl">
-	<link rel="dns-prefetch" href="//ssl.p.jwpcdn.com">
-	<link rel="dns-prefetch" href="//assets-jpcust.jwpsrv.com">
-	<link rel="dns-prefetch" href="//jwpltx.com">
+	<link rel="dns-prefetch" href="//vk.com">
+	<link rel="dns-prefetch" href="//pp.userapi.com">
+	<link rel="dns-prefetch" href="//top-fwz1.mail.ru">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
+	<link rel="stylesheet" href="/files/code/css/aw-fonts.min.css">
+	<link rel="stylesheet" href="/files/code/css/aw-every.min.css">
 	<link rel="stylesheet" href="/files/code/css/anime.min.css">
 	<noscript><style>
 		.tabs ul, .tabs [id*='tab_'], .closeTabs, .player .stats {
@@ -44,7 +59,7 @@
 	<div class="container">
 		<header class="top-panel">
 			<div class="brand">
-				<img src="/files/img/logo.png" alt="logo">
+				<div class="logo"></div>
 				<a href="/" class="text" rel="home">Asian Wave / Anime</a>
 			</div>
 			<ul class="right">
@@ -61,14 +76,16 @@
 		</header>
 		<main class="anime">
 			<div class="player">
-				<div id="jw-player"></div>
+				<div class="vk-player"></div>
 				<div class="noti"></div>
-				<div class="warning"><div>
-					<p>Кажется, Ваш браузер не поддерживает Flash! (ну или он у Вас просто выключен).</p>
-					<p style="margin-top: 1em;">Воспользуйтесь для просмотра любым плеером, который поддерживает RTMP</p>
-					<p>(например, VLC):</p>
-					<p><kbd>rtmp://<wbr>video.eientei.org<wbr>/live/AsianWave</kbd></p>
-				</div></div>
+				<div class="warnings">
+					<div class="api">
+						<p>С нашим API возникла какая-то ошибка!</p>
+						<p><br>Попробуйте дважды кликнуть на наш логотип в шапке сайта для перезагрузки. Скорее всего, всё уже починилось само.</p>
+						<p style="font-size: .8em"><br>(но если нет, то начните возмущаться в чате или <a href="https://vk.me/asianwaveru" target="_blank" rel="nofollow noopener">напишите сюда</a>, мы постараемся отреагировать как можно быстрее)</p>
+						<p style="font-size: .7em"><br>(a ещё можно попробовать <a href="?b">нажать сюда</a>)</p>
+					</div>
+			</div>
 			</div>
 			<div class="tabs">
 				<ul>
@@ -95,11 +112,11 @@
 			</div>
 		</main>
 	</div>
-	<script src="https://content.jwplatform.com/libraries/9QBfQupy.js" defer></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment.min.js" defer></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/locale/ru.js" defer></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/fetch/2.0.3/fetch.min.js" defer></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js" defer></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/locale/ru.js" defer></script>
 	<script src="/files/code/js/kamina.min.js" defer></script>
-	<script src="/files/code/js/anime.min.js" data-rtmp="video.eientei.org/live/AsianWave" defer></script>
+	<script src="/files/code/js/anime.min.js" data-backup-path="/files/other/" data-backup-hash="abcd" defer></script>
 	<script src="/files/code/js/bbiswu.min.js" async></script>
 	<noscript><img src="https://mc.yandex.ru/watch/38037540" style="position:absolute; left:-9999px;" alt=""></noscript>
 </body></html>

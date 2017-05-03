@@ -1,0 +1,47 @@
+<!DOCTYPE HTML>
+<html><head>
+	<meta charset="utf-8">
+	<title>Asian Wave / Anime Backup Player</title>
+	<link rel="shortcut icon" href="img/favicon.png">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="robots" content="noindex, nofollow">
+	<style>
+		html, body, embed, .player, .warning { width: 100%; height: 100%; }
+		html, body {
+			margin: 0; padding: 0;
+			overflow: hidden;
+		}
+		body {
+			background-color: #000;
+			background-image: url('../img/anime-offline.png');
+			background-repeat: no-repeat;
+			background-position: left bottom;
+			background-size: cover;
+		}
+		.warning {
+			display: none;
+			background-color: #fff;
+			align-items: center;
+			justify-content: center;
+		}
+		.warning p { text-align: center; font-size: 1.1em; padding: 0 5px; }
+	</style>
+</head><body>
+	<embed src="yukkuplayer.swf" type="application/x-shockwave-flash" flashvars="videoUrl=rtmp://video.eientei.org/live/AsianWave&buffer=1&idleImageUrl=spinner.gif" quality="best" scale="noscale" browserzoom="noscale" wmode="transparent" menu="false" allowfullscreen="true"></embed>
+	<div class="warning"><div>
+		<p>Кажется, Ваш браузер не поддерживает Flash! (ну или он у Вас просто выключен).</p>
+		<p>Воспользуйтесь для просмотра любым плеером, который поддерживает RTMP (например, VLC):</p>
+		<p><kbd>rtmp://<wbr>video.eientei.org<wbr>/live/AsianWave</kbd></p>
+	</div>
+	<script src="../code/js/kamina.min.js"></script>
+	<script>
+		;(function() {
+			let hasFlash = navigator.mimeTypes['application/x-shockwave-flash']
+
+			if (!hasFlash) {
+				$make.qs('embed').style.display = 'none'
+				$make.qs('.warning').style.display = 'flex'
+			}
+		})()
+	</script>
+</body></html>

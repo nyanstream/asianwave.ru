@@ -11,80 +11,84 @@
 	// 	background-size: cover;
 	// }
 
-	//iframe, embed, video, div.jwplayer, div.videojs {
-	& > .jwplayer {
-		width: 100% !important;
-		height: 100% !important;
-		border: 0;
-		z-index: 1;
+	& > *:nth-child(1) {
+		width: 100%; height: 100%;
 
-		&.jw-flag-aspect-mode {
-    	height: 100% !important;
+		iframe {
+			width: 100%; height: 100%;
+			border: 0;
 		}
 	}
 
-	.jwplayer {
-		[role="timer"], .jw-controlbar-center-group { display: none; }
+	/*@at-root .player {
+		& > .jwplayer {
+			width: 100% !important;
+			height: 100% !important;
+			border: 0;
+			z-index: 1;
 
-		.jw-controlbar {
-			width: 150px !important;
-			opacity: .8;
-		}
-
-		&:not(.jw-state-playing):not(.jw-flag-flash-blocked) .jw-preview {
-			display: block !important;
-			background-image: url('#{$imgpath}/anime-offline.png');
-			background-repeat: no-repeat;
-			background-position: left bottom;
-			background-size: cover;
-		}
-
-		&:not(.jw-flag-user-inactive) {
-			.jw-controlbar {
-				display: flex !important;
-				justify-content: center;
+			&.jw-flag-aspect-mode {
+	    	height: 100% !important;
 			}
 		}
 
-		.jw-rightclick {
-			display: none !important;
-		}
+		.jwplayer {
+			.jw-controlbar {
+				width: 150px !important;
+				opacity: .8;
+			}
 
-		*[class*="ads"] {
-			display: none;
+			&:not(.jw-state-playing):not(.jw-flag-flash-blocked) .jw-preview {
+				display: block !important;
+				background-image: url('#{$imgpath}/anime-offline.png');
+				background-repeat: no-repeat;
+				background-position: left bottom;
+				background-size: cover;
+			}
+
+			&:not(.jw-flag-user-inactive) {
+				.jw-controlbar {
+					display: flex !important;
+					justify-content: center;
+				}
+			}
+
+			.jw-rightclick, *[class*="ads"], .jw-icon-rewind,	[role="timer"], .jw-controlbar-center-group {
+				display: none !important;
+			}
 		}
-	}
+	}*/
 
 	$p--offset: 10px;
 
 	@import 'player__noti';
 
-	// .super-ctrls {
-	// 	position: absolute;
-	// 	@include flexbox(auto, center, center, auto);
-	// 	background-color: rgba(0, 0, 0, .5);
-	//
-	// 	width: 100%; height: 130px;
-	// 	bottom: 0; z-index: 2;
-	//
-	// 	user-select: none;
-	// 	cursor: default;
-	//
-	// 	button {
-	// 		background-color: transparent;
-	// 		@include transition(.3s);
-	// 		vertical-align: middle;
-	// 		border: 0;
-	// 		padding: 5px;
-	// 		font-size: 40px;
-	// 		color: #fff;
-	//
-	// 		&:hover {
-	// 			cursor: pointer;
-	// 			opacity: .7;
-	// 		}
-	// 	}
-	// }
+	/*.super-ctrls {
+		position: absolute;
+		@include flexbox(auto, center, center, auto);
+		background-color: rgba(0, 0, 0, .5);
 
-	@import 'player--noflash';
+		width: 100%; height: 130px;
+		bottom: 0; z-index: 2;
+
+		user-select: none;
+		cursor: default;
+
+		button {
+			background-color: transparent;
+			@include transition(.3s);
+			vertical-align: middle;
+			border: 0;
+			padding: 5px;
+			font-size: 40px;
+			color: #fff;
+
+			&:hover {
+				cursor: pointer;
+				opacity: .7;
+			}
+		}
+	}*/
+
+	@import 'player--error';
 }

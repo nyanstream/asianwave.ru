@@ -78,15 +78,16 @@ var $check = {
 	get: function(value) {
 		var
 			loc = location.search,
-			params = {}, parts = '', nv = ''
+			parts = '', nv = '', params = []
 
-		if (loc)
-			parts = location.search.substring(1).split('&');
-			for (var i = 0; i < parts.length; i++) {
-				nv = parts[i].split('=')
-				if (!nv[0]) continue;
-				params[nv[0]] = nv[1] || true;
-			}
+		if (loc) {
+			parts = loc.substring(1).split('&')
+			parts.forEach(function(part) {
+				nv = part.split('=')
+				if (!nv[0]) return
+				params[nv[0]] = nv[1] || true
+			})
+		}
 
 		if (params[value])
 			return params[value]
@@ -110,7 +111,7 @@ var $ls = {
 		localStorage.removeItem(item); return
 	},
 	test: function() {
-		var test = 'ls_test';
+		var test = 'ls_test'
 		try {
 			this.set(test, test)
 			this.rm(test)

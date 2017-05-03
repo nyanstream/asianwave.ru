@@ -6,7 +6,7 @@
 	padding: 0;
 
 	& > * {
-		@include flexbox(column, center, auto, auto);
+		display: inline-block;
 		@extend .page-element;
 		height: $elemHeight;
 	}
@@ -23,8 +23,11 @@
 		}
 	}
 
+	$srchW: 40px;	$dlplW: 35px;
+
 	.current {
-		width: 210px;
+		@include flexbox(column, center, auto, auto);
+		width: calc(100% - #{$srchW + $dlplW});
 		text-align: center;
 
 		p {
@@ -46,7 +49,7 @@
 	}
 
 	.search {
-		width: 40px;
+		width: $srchW;
 		margin-left: 10px;
 
 		a {
@@ -59,7 +62,7 @@
 	}
 
 	.dlm3u {
-		width: 35px;
+		width: $dlplW;
 		margin-left: 10px;
 
 		a {

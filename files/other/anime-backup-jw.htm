@@ -1,0 +1,88 @@
+<!DOCTYPE HTML>
+<html><head>
+	<meta charset="utf-8">
+	<title>Asian Wave / Anime Backup Player</title>
+	<link rel="shortcut icon" href="img/favicon.png">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="robots" content="noindex, nofollow">
+	<style>
+		html, body, .player, .warning { width: 100%; height: 100%; }
+		html, body {
+			margin: 0; padding: 0;
+			overflow: hidden;
+		}
+		.player > .jwplayer {
+			width: 100% !important;
+			height: 100% !important;
+			border: 0;
+			z-index: 1;
+		}
+		.player > .jwplayer.jw-flag-aspect-mode {
+			height: 100% !important;
+		}
+		.player .jwplayer .jw-controlbar {
+			width: 150px !important;
+			opacity: .8;
+		}
+		.player .jwplayer:not(.jw-state-playing):not(.jw-flag-flash-blocked) .jw-preview {
+			display: block !important;
+			background-image: url('../img/anime-offline.png');
+			background-repeat: no-repeat;
+			background-position: left bottom;
+			background-size: cover;
+		}
+		.player .jwplayer:not(.jw-flag-user-inactive) .jw-controlbar {
+			display: flex !important;
+			justify-content: center;
+		}
+		.player .jwplayer .jw-rightclick,.player .jwplayer *[class*="ads"],.player .jwplayer .jw-icon-rewind,.player .jwplayer [role="timer"],.player .jwplayer .jw-controlbar-center-group {
+			display: none !important;
+		}
+		.warning {
+			display: none;
+			background-color: #fff;
+			align-items: center;
+			justify-content: center;
+		}
+		.warning p { text-align: center; font-size: 1.1em; padding: 0 5px; }
+	</style>
+</head><body>
+	<div class="player"><div id="jw-player"></div></div>
+	<div class="warning"><div>
+		<p>Кажется, Ваш браузер не поддерживает Flash! (ну или он у Вас просто выключен).</p>
+		<p>Воспользуйтесь для просмотра любым плеером, который поддерживает RTMP (например, VLC):</p>
+		<p><kbd>rtmp://<wbr>video.eientei.org<wbr>/live/AsianWave</kbd></p>
+	</div>
+	<script src="https://content.jwplatform.com/libraries/9QBfQupy.js"></script>
+	<script src="../code/js/kamina.min.js"></script>
+	<script>
+	let
+		playerID = 'jw-player',
+		player = jwplayer(playerID),
+		jwSetup = {
+			'file': 'rtmp://video.eientei.org/live/AsianWave',
+			'width': '100%', 'height': '100%',
+			// 'rtmp': { 'bufferlength': 10 },
+			'skin': 'roundster',
+			'autostart': true,
+			//'controls': false,
+			'displaytitle': false,
+			'displaydescription': false,
+			'abouttext': 'Asian Wave',
+			'aboutlink': '/'
+		}
+
+		;(function() {
+			let
+				hasFlash = navigator.mimeTypes['application/x-shockwave-flash'],
+				playerElem = $make.qs('.player')
+
+			if (hasFlash) {
+				player.setup(jwSetup)
+			} else {
+				playerElem.style.display = 'none'
+				$make.qs('.warning').style.display = 'flex'
+			}
+		})()
+	</script>
+</body></html>

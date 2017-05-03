@@ -11,6 +11,11 @@
 			border-bottom: 1px solid #e4e4e4;
 		}
 
+		&.api-err {
+			padding: 10px;
+			text-align: center;
+		}
+
 		.vk-post {
 			border-top: 1px solid #ccc;
 			padding: 5px 5px 0;

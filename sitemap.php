@@ -1,6 +1,6 @@
 <?php
 	header('Content-type: application/xml');
-	date_default_timezone_set("Europe/Moscow");
+	date_default_timezone_set('Europe/Moscow');
 
 	$url = 'https://' . $_SERVER['SERVER_NAME'];
 	$content = ['index', 'terms', 'radio', 'anime'];

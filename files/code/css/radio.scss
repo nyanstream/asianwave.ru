@@ -1,4 +1,6 @@
-@import 'src/every';
+@import
+	'src/vars',
+	'src/mixins';
 
 body {
 	background-color: #f4f4f4;
@@ -20,8 +22,6 @@ body {
 
 $pageWidth: 1200px;
 $fontSize: 16px;
-
-@import 'src/topbar';
 
 .radio {
 	@include flexbox(auto, center, auto, auto);
