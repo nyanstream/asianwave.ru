@@ -1,0 +1,72 @@
+// main: ../../radio.scss
+
+.radio-state {
+	@include flexbox(auto, center, center, auto);
+	$elemHeight: 50px;
+	padding: 0;
+
+	& > * {
+		display: inline-block;
+		height: $elemHeight;
+	}
+
+	a {
+		@include flexbox(auto, center, center, auto);
+		border-bottom: 0;
+		font-size: 1.1em;
+		text-align: center;
+		color: darken($primeColor, 10%);
+
+		&:hover {
+			border-bottom: 0;
+			background-color: #f9f9f9;
+		}
+	}
+
+	$srchW: 40px;	$dlplW: 35px;
+
+	.current {
+		@include flexbox(column, center, auto, auto);
+		width: calc(100% - #{$srchW + $dlplW});
+		text-align: center;
+
+		p {
+			margin: 0 auto;
+			width: 95%;
+			white-space: nowrap;
+			text-overflow: ellipsis;
+			overflow: hidden;
+			cursor: help;
+
+			&:first-child {
+				font-weight: 500;
+			}
+
+			&:last-child {
+				font-style: italic;
+			}
+		}
+	}
+
+	.search {
+		width: $srchW;
+		margin-left: 10px;
+
+		a {
+			height: 50%;
+
+			&:first-child {
+				border-bottom: 1px solid rgba(0, 0, 0, .1);
+			}
+		}
+	}
+
+	.dlm3u {
+		width: $dlplW;
+		margin-left: 10px;
+
+		a {
+			height: 100%;
+		}
+	}
+}

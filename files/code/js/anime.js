@@ -1,26 +1,35 @@
 'use strict'
 
 /*
+ * Домены
+ */
+
+var domain = {
+	'aw': 'asianwave.ru',
+	'vk': 'vk.com'
+}
+
+/*
  * Детект хрома
  */
 
-;(function() {
- 	var
-	 	chrExtBtn = $make.qs('.right li a[href*="--chrome"]'),
-	 	isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor),
-	 	isOpera = /OPR\//.test(navigator.userAgent)
+;(() => {
+	let
+		chrExtBtn = $make.qs('.right li a[href*="--chrome"]'),
+		isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor),
+		isOpera = /OPR\//.test(navigator.userAgent)
 
- 	if (chrExtBtn) { // на случай, если опять забуду, что поменял класс элемента
- 		if (!isChrome) chrExtBtn.style.display = 'none';
- 		if (isOpera) {
- 			var icon = chrExtBtn.querySelector('.icon')
+	if (chrExtBtn) { // на случай, если опять забуду, что поменял класс элемента
+		if (!isChrome) chrExtBtn.style.display = 'none';
+		if (isOpera) {
+			let icon = chrExtBtn.firstChild
 
- 			icon.classList.remove('icon-chrome')
- 			icon.classList.add('icon-opera')
- 			chrExtBtn.setAttribute('href', '/app--opera')
- 			chrExtBtn.setAttribute('title', 'Раширение для Opera')
- 		}
- 	}
+			icon.classList.remove('icon-chrome')
+			icon.classList.add('icon-opera')
+			chrExtBtn.setAttribute('href', '/app--opera')
+			chrExtBtn.setAttribute('title', getString('ext_opera'))
+		}
+	}
 })()
 
 /*
@@ -29,18 +38,18 @@
  */
 
 $make.tabs = function(selector) {
-	var
+	let
 		tabAnchors = this.qs(selector + ' li', ['a']),
 		tabs = this.qs(selector + ' section', ['a'])
 
-	for (var i = 0; i < tabAnchors.length; i++) {
-		if (tabAnchors[i].classList.contains('active')) tabs[i].style.display = 'block'
+	tabAnchors.forEach((tabAnchor, i) => {
+		if (tabAnchor.classList.contains('active')) tabs[i].style.display = 'block'
 
-		tabAnchors[i].addEventListener('click', function(e) {
-			var clickedAnchor = e.target || e.srcElement
+		tabAnchor.addEventListener('click', (e) => {
+			let clickedAnchor = e.target || e.srcElement
 			clickedAnchor.classList.add('active')
 
-			for (var i = 0; i < tabs.length; i++) {
+			for (let i = 0; i < tabs.length; i++) {
 				if (tabs[i].dataset.tab == clickedAnchor.dataset.tab) {
 					tabs[i].style.display = 'block'
 				} else {
@@ -49,20 +58,20 @@ $make.tabs = function(selector) {
 				}
 			}
 		})
-	}
+	})
 }
 
 /*
  * Скрытие табов
  */
 
-;(function () {
-	var
+;(() => {
+	let
 		closeTabsCtr = $make.qs('.closeTabs'),
 		mainCont = $make.qs('.anime'),
 		ctc_text = 'боковую панель'
 
-	function closeTabs() {
+	closeTabsCtr.addEventListener('click', function() {
 		if (!mainCont.classList.contains('notabs')) {
 			mainCont.classList.add('notabs')
 			this.textContent = '\u003C'
@@ -72,17 +81,15 @@ $make.tabs = function(selector) {
 			this.textContent = '\u00D7'
 			this.setAttribute('title', 'Скрыть ' + ctc_text)
 		}
-	}
-
-	closeTabsCtr.addEventListener('click', closeTabs);
+	})
 })()
 
 /*
  * Старый цвет шапки
  */
 
-;(function() {
-	var
+;(() => {
+	let
 		container = $make.qs('.container'),
 		chatTab = $make.qs('li[data-tab="chat"]')/*,
 		metacolor = $make.qs('meta[name="theme-color"]')*/
@@ -95,7 +102,7 @@ $make.tabs = function(selector) {
 
 	if ($ls.get('aw_iamoldfag')) {
 		oldHeadColor()
-		chatTab.addEventListener('dblclick', function() {
+		chatTab.addEventListener('dblclick', () => {
 			$ls.rm('aw_iamoldfag')
 			delete container.dataset.theme
 		})
@@ -112,37 +119,33 @@ $make.tabs = function(selector) {
 var scriptData = document.currentScript.dataset
 
 var $parse = {
-	shedule: function(data) {
+	schedule: (data) => {
 		/*
 		 * @TODO пофиксить проблему нового года
- 		 * @TODO добавить время обновления
 		 */
 
-		var
-			streamShed = $make.qs('.shedule'),
-			tableBody = ''
+		let
+			streamsсhed = $make.qs('.schedule'),
+			tableBody = '', td = ''
 
-		var
+		let
 			dayToday = moment().dayOfYear(),
 			unixNow = moment().unix()
 
-		streamShed.textContent = ''
+		streamsсhed.textContent = ''
 
-		if (data == 'fail') {
-			streamShed.appendChild($make.elem('tr', '<td>API сайта недоступно</td>'))
-			return
-		}
+		if (data == 'fail') { streamsсhed.appendChild($make.elem('tr', `<td>${getString('err_api')}</td>`)); return }
 
-		var nextAirs = data.filter(function(e) { return e[0] > unixNow })
+		let nextAirs = data.filter((e) => e[0] > unixNow)
 
-		data.forEach(function(item) {
+		data.forEach((item) => {
 			if (item[0] == data[data.length - 1][0]) return; // пропуск последнего элемента с пасхалкой
 
-			var
-				newShedData = moment.unix(item[0]).format('D MMMM') + '<br>' + moment.unix(item[0]).format('HH:mm') + ' &ndash; ' + moment.unix(item[1]).format('HH:mm') + '</td>',
+			let
+				newsсhedData = `${moment.unix(item[0]).format('D MMMM')}<br>${moment.unix(item[0]).format('HH:mm')} &ndash; ${moment.unix(item[1]).format('HH:mm')}</td>`,
 				nazvaniue = ''
 
-			var
+			let
 				dayOfS = moment.unix(item[0]).dayOfYear(),
 				dayofE = moment.unix(item[1]).dayOfYear()
 
@@ -153,24 +156,24 @@ var $parse = {
 			if ((dayOfS - dayToday) < -1) {
 				return
 			} else if (item[0] < unixNow && unixNow < item[1]) {
-				tableBody += $make.elem('tr', '<td>' + newShedData + '<td><b>Сейчас (ещё ' + moment.unix(item[1]).toNow(true) + '):</b><br>' + nazvaniue + '</td>', 'air--current', ['html'])
+				tableBody += $make.elem('tr', `<td>${newsсhedData}<td><b>Сейчас (ещё ${ moment.unix(item[1]).toNow(true)}):</b><br>${nazvaniue}</td>`, 'air--current', ['html'])
 			} else if (item[0] > unixNow && item[0] == nextAirs[0][0]) {
-				tableBody += $make.elem('tr', '<td>' + newShedData + '<td><b>Далее через ' + moment.unix(item[0]).toNow(true) + ':</b><br>' + nazvaniue + '</td>', 'air--next', ['html'])
+				tableBody += $make.elem('tr', `<td>${newsсhedData}<td><b>Далее через ${moment.unix(item[0]).toNow(true)}:</b><br>${nazvaniue}</td>`, 'air--next', ['html'])
 			} else if (item[0] < unixNow) {
-				tableBody += $make.elem('tr', '<td>' + newShedData + '<td>' + nazvaniue + '</td></tr>', 'air--finished', ['html'])
+				tableBody += $make.elem('tr', `<td>${newsсhedData}<td>${nazvaniue}</td></tr>`, 'air--finished', ['html'])
 			} else if (dayOfS > dayToday) {
-				tableBody += $make.elem('tr', '<td>' + newShedData + '<td>' + nazvaniue + '</td></tr>', 'air--notToday', ['html'])
+				tableBody += $make.elem('tr', `<td>${newsсhedData}<td>${nazvaniue}</td></tr>`, 'air--notToday', ['html'])
 			} else {
-				tableBody += $make.elem('tr', '<td>' + newShedData + '<td>' + nazvaniue + '</td>', '', ['html'])
+				tableBody += $make.elem('tr', `<td>${newsсhedData}<td>${nazvaniue}</td>`, '', ['html'])
 			}
 		})
 
 		if (tableBody)
-			streamShed.innerHTML = '<tbody><tr><td colspan="2"><em>Время местное.</em></td></tr>' + tableBody + '</tbody>'
+			streamsсhed.appendChild($make.elem('tbody', `<tr><td colspan="2">${getString('latest_update')}: ${moment().format('D MMMM, HH:mm:ss')}<br></td></tr>${tableBody}`))
 			else return
 	},
-	vk_news: function(data) {
-		var
+	vk_news: (data) => {
+		let
 		 	vkNews = $make.qs('.vk-news'),
 		 	newsBody = $make.elem('div', '', 'news-posts')
 
@@ -185,15 +188,17 @@ var $parse = {
 				vkNews.classList.remove('api-err')
 	  }
 
-		var newsHeader = $make.elem('div', $make.link('https://vk.com/' + data['com']['url'], 'Сообщество Asian Wave в VK', ['e', 'html']), 'vk-news-header')
+		let newsHeader = $make.elem('div', $make.link(`https://${domain.vk}/${data['com']['url']}`, getString('vk_com'), ['e', 'html']), 'vk-news-header')
 
-		data['posts'].forEach(function(post) {
-			var
+		data['posts'].forEach((post) => {
+			if (post['pin'] == 1) return;
+
+			let
 				postImgLink = '', isCopy = '', postLinkS = '',
 				postImg = post['pic']
 
 			if (postImg) {
-				var postImgElem = $make.elem('img')
+				let postImgElem = $make.elem('img')
 
 				postImgElem.setAttribute('src', postImg['small'])
 				postImgElem.setAttribute('alt', '')
@@ -203,27 +208,30 @@ var $parse = {
 					else postImgLink = $make.link(postImg['small'], postImgElem.outerHTML, ['e', 'html'])
 			}
 
-		 	if (post['type'] == 'copy') isCopy = ' is-repost';
-
-			var
+			let
 				postText = post['text'].replace(/\n/g, '<br>'),
-				pLR = new RegExp(/\[(.*?)\]/),
+				pLR = /\[(.*?)\]/,
 				postLinkR = postText.match(new RegExp(pLR, 'g'))
 
-				if (postLinkR) {
-					postLinkR.forEach(function(link) {
-						postLinkS = link.split('|')
-						postText = postText.replace(pLR, $make.link('https://vk.com/' + postLinkS[0].replace(/\[/g, ''), postLinkS[1].replace(/]/g, ''), ['e', 'html']))
-					})
-				}
+			if (postLinkR) {
+				postLinkR.forEach((link) => {
+					postLinkS = link.split('|')
+					postText = postText.replace(pLR, $make.link(`https://${domain.vk}/${postLinkS[0].replace(/\[/g, '')}`, postLinkS[1].replace(/]/g, ''), ['e', 'html']))
+				})
+			}
 
-		 	vkNews.textContent = ''
+			let
+				vkPostMetaLink = $make.link(`https://${domain.vk}/wall-${data['com']['id']}_${post['id']}`, moment.unix(post['time']).format('D MMMM YYYY в HH:mm'), ['e', 'html'])
 
-		 	var
-		 		vkPost = $make.elem('div', '', 'vk-post' + isCopy),
-		 		vkPostMetaLink = $make.link('https://vk.com/wall-' + data['com']['id'] + '_' + post['id'], moment.unix(post['time']).format('D MMMM YYYY в HH:mm'), ['e', 'html']),
-		 		vkPostMeta = $make.elem('div', vkPostMetaLink, 'vk-post-meta'),
-		 		vkPostBody = $make.elem('div', postImgLink + '<p>' + postText + '</p>', 'vk-post-body')
+			if (post['type'] == 'copy') {
+				isCopy = ' is-repost'
+				vkPostMetaLink += ` <span title="${getString('vk_repost')}">\u2935</a>`
+			}
+
+			let
+				vkPost = $make.elem('div', '', 'vk-post' + isCopy),
+				vkPostMeta = $make.elem('div', vkPostMetaLink, 'vk-post-meta'),
+				vkPostBody = $make.elem('div', `${postImgLink}<p>${postText}</p>`, 'vk-post-body')
 
 		 	vkPost.appendChild(vkPostMeta)
 		 	vkPost.appendChild(vkPostBody)
@@ -234,23 +242,31 @@ var $parse = {
 	  vkNews.appendChild(newsHeader)
 	  vkNews.appendChild(newsBody)
 	},
-	vk_stream: function(data) {
-		var
+	vk_stream: (data) => {
+		let
 			player = $make.qs('.player'),
 			playerElem = player.querySelector('.vk-player'),
 			vkPlayer = $make.elem('iframe')
+
+		let
+			backupURL = $check.get('b'),
+			backupDef = scriptData.backupBydefault
+
+		if (backupDef == '') backupDef = !0
 
 		if (player.dataset.error == 'api')
 			delete player.dataset.error;
 
 		vkPlayer.setAttribute('allowfullscreen', '')
 
-		if ($check.get('b')) {
-			var
+		playerElem.textContent = ''
+
+		if (backupURL || backupDef) {
+			let
 				srcLnk = scriptData.backupPath + 'anime-backup',
 				backupHash = scriptData.backupHash ? scriptData.backupHash : ''
 
-			if ($check.get('b') == 'jw') srcLnk = srcLnk + '-jw'
+			if (backupURL == 'jw' || backupDef == 'jw') srcLnk = srcLnk + '-jw'
 			if (backupHash) backupHash = '?' + backupHash
 
 			vkPlayer.setAttribute('src', srcLnk + '.htm' + backupHash)
@@ -258,36 +274,33 @@ var $parse = {
 			return
 		}
 
-		playerElem.textContent = ''
-
-		if (data == 'fail' || !data['url']) {
-			player.dataset.error = 'api'
-			return
-		}
+		if (data == 'fail' || !data['url']) { player.dataset.error = 'api'; return }
 
 		vkPlayer.setAttribute('src', data['url'])
 		playerElem.appendChild(vkPlayer)
 	},
-	noti: function(text, id) {
-		if (text == null || id == null) return;
+	noti: (data) => {
+		let notiEl = $make.qs('.noti')
 
-		var
-			notiEl = $make.qs('.noti'),
+		if (data == 'fail' || data[0] == null) { notiEl.style.display = 'none'; return }
+
+		let text = data[0], id = data[1]
+
+		let
 			notiClose = $make.elem('div', '\u00D7', 'noti-close'),
 			notiContent = $make.elem('div', text, 'noti-content'),
 			notiItems = []
 
 		notiEl.textContent = ''
 
-		notiClose.setAttribute('title', 'Скрыть оповещение')
+		notiClose.setAttribute('title', getString('noti_close'))
 
 		if (notiContent.querySelector('a[href]')) {
-			var notiLinks = notiContent.querySelectorAll('a[href]')
+			let notiLinks = notiContent.querySelectorAll('a[href]')
 
-			notiLinks.forEach(function(link) {
+			notiLinks.forEach((link) => {
 				link.setAttribute('target', '_blank')
-				if (link.getAttribute('href').indexOf('http') == 0)
-					link.setAttribute('rel', 'nofollow noopener')
+				if (link.getAttribute('href').indexOf('http') == 0) link.setAttribute('rel', 'nofollow noopener')
 			})
 		}
 
@@ -295,7 +308,7 @@ var $parse = {
 		notiEl.appendChild(notiContent)
 
 		if (!$ls.test()) {
-			var notiUndisable = $make.elem('div', 'Внимание! У вас отключено хранение данных, поэтому скрытие оповещения запомиинаться не будет.', 'noti-undis')
+			let notiUndisable = $make.elem('div', getString('noti_ls_err'), 'noti-undis')
 			notiEl.appendChild(notiUndisable)
 		} else {
 			if ($ls.get('aw_noti')) notiItems = JSON.parse($ls.get('aw_noti'))
@@ -304,7 +317,7 @@ var $parse = {
 				else notiEl.style.display = 'none'
 		}
 
-		notiClose.addEventListener('click', function() {
+		notiClose.addEventListener('click', () => {
 			notiItems[notiItems.length] = id
 			$ls.set('aw_noti', JSON.stringify(notiItems))
 			notiEl.style.display = 'none'
@@ -317,59 +330,47 @@ var $parse = {
  */
 
 var API = {
-	'shedule': '/api/streams-shed.json',
+	'schedule': '/api/anime-sched.json',
 	'noti': '/api/noti.json',
 	'vk_news': '/api/vk-info.json',
 	'vk_stream': '/api/vk-stream.json'
 }
 
 if ($check.debug()) {
-	var API_keys = Object.keys(API)
-	API_keys.forEach(function(key) { API[key] = 'https://asianwave.ru' + API[key] })
+	let API_keys = Object.keys(API)
+	API_keys.forEach((key) => { API[key] = 'https://' + domain.aw + API[key] })
 }
 
-var fetchOptions = { cache: 'no-store' }
+function doFetch(url, handler, ifFail) {
+	let fetchOptions = { cache: 'no-store' }
+
+	if (!ifFail) ifFail = 'fail';
+
+	fetch(`${url}?t=${Date.now()}`, fetchOptions).then((response) => {
+		response.json().then((data) => {
+			handler(data)
+		})
+	}).catch((error) => {
+		handler(ifFail)
+	})
+}
 
 var $loadInfo = {
-	shed: function() {
-		fetch(API.shedule + '?t=' + Date.now(), fetchOptions).then(function(response) {
-			response.json().then(function(data) {
-				$parse.shedule(data)
-			})
-		}).catch(function(error) {
-			$parse.shedule('fail')
-		})
+	sсhed: () => {
+		doFetch(API.schedule, $parse.schedule)
 	},
-	noti: function() {
-		fetch(API.noti + '?t=' + Date.now(), fetchOptions).then(function(response) {
-			response.json().then(function(data) {
-				$parse.noti(data[0], data[1])
-			})
-		}).catch(function(error) {
-			$parse.noti(null, null)
-		})
+	noti: () => {
+		doFetch(API.noti, $parse.noti)
 	},
-	vk_news: function() {
-		fetch(API.vk_news + '?t=' + Date.now(), fetchOptions).then(function(response) {
-			response.json().then(function(data) {
-				$parse.vk_news(data)
-			})
-		}).catch(function(error) {
-			$parse.vk_news('fail')
-		})
+	vk_news: () => {
+		doFetch(API.vk_news, $parse.vk_news)
 	},
-	vk_stream: function() {
-		fetch(API.vk_stream + '?t=' + Date.now()).then(function(response) {
-			response.json().then(function(data) {
-				$parse.vk_stream(data)
-			})
-		}).catch(function(error) {
-			$parse.vk_stream('fail')
-		})
+	vk_stream: () => {
+		doFetch(API.vk_stream, $parse.vk_stream)
 	},
 	full: function() {
 		var thisKeys = Object.keys(this)
-		for (var i = 0; i < thisKeys.length - 1; i++) this[thisKeys[i]]()
+		for (let i = 0; i < thisKeys.length - 1; i++) this[thisKeys[i]]()
 	}
 }
 
@@ -377,24 +378,24 @@ var $loadInfo = {
  * Инициации
  */
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', () => {
 	$loadInfo.full()
 
-	var
+	let
 		tabs = $make.qs('.tabs'),
-		tabShed = tabs.querySelector('section[data-tab="shed"]'),
+		tabSсhed = tabs.querySelector('section[data-tab="sched"]'),
 		tabNews = tabs.querySelector('section[data-tab="news"]')
 
-	var aw_timer = setInterval(function() {
-			$loadInfo.noti()
-			if (tabShed.style.display == 'block') $loadInfo.shed()
-			if (tabNews.style.display == 'block') $loadInfo.vk_news()
-		}, 5000)
+	//$parse.noti('Нам исполняется 1 год. В честь этого мы проводим три дня марафонов на <a href="/anime">/anime</a>. Не пропусти!', 10001)
 
-	var aw_logo = $make.qs('.top-panel .logo')
-	aw_logo.addEventListener('dblclick', function() {
-		$loadInfo.vk_stream()
-	})
+	let aw_timer = setInterval(() => {
+		$loadInfo.noti()
+		if (!isMobile.any || tabSсhed.style.display == 'block') $loadInfo.sсhed()
+		if (!isMobile.any || tabNews.style.display == 'block') $loadInfo.vk_news()
+	}, 10000)
+
+	let aw_logo = $make.qs('.top-panel .logo')
+	aw_logo.addEventListener('dblclick', () => { $loadInfo.vk_stream() })
 
 	$make.tabs('.tabs')
 });

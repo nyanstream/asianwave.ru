@@ -1,4 +1,5 @@
-*.min.*
-*.psd
+﻿node_modules
+package-lock.json
+files/js/
+files/css/
 files/img/sm/
-files/img/radio-bckgs/

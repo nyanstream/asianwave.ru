@@ -40,21 +40,33 @@
 		}
 		.warning {
 			display: none;
+			font-family: Roboto, Arial, sans-serif;
 			background-color: #fff;
 			align-items: center;
 			justify-content: center;
 		}
-		.warning p { text-align: center; font-size: 1.1em; padding: 0 5px; }
+		.warning p {
+			text-align: center;
+			font-size: 1.1em;
+			padding: 0 5px;
+		}
+		.warning kbd {
+			display: inline-block;
+			background-color: #797979;
+			color: #fff;
+			padding: 2.5px 5px;
+			border-radius: 5px;
+		}
 	</style>
 </head><body>
 	<div class="player"><div id="jw-player"></div></div>
 	<div class="warning"><div>
-		<p>Кажется, Ваш браузер не поддерживает Flash! (ну или он у Вас просто выключен).</p>
+		<p>Кажется, Ваш браузер не поддерживает <a href="https://get.adobe.com/ru/flashplayer/" target="_blank" rel="nofollow noopener">Flash</a>! (ну или он у Вас просто выключен).</p>
 		<p>Воспользуйтесь для просмотра любым плеером, который поддерживает RTMP (например, VLC):</p>
 		<p><kbd>rtmp://<wbr>video.eientei.org<wbr>/live/AsianWave</kbd></p>
 	</div>
 	<script src="https://content.jwplatform.com/libraries/9QBfQupy.js"></script>
-	<script src="../code/js/kamina.min.js"></script>
+	<script src="../js/kamina.min.js"></script>
 	<script>
 	let
 		playerID = 'jw-player',

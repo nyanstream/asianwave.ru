@@ -1,0 +1,41 @@
+// main: _tabs.scss
+
+&[data-tab="sched"] {
+	$ggl_t_top: 50px;
+	$ggl_t_bot: 28px;
+
+	overflow-y: auto;
+
+	table {
+		font-size: 14px;
+		width: 100%;
+
+		tr {
+			&.air {
+				&--finished {
+					opacity: .4;
+				}
+				&--current {
+					background-color: #feff44;
+				}
+				&--next {
+					background-color: #d8d8d8;
+				}
+				&--notToday {
+					opacity: .6;
+				}
+			}
+
+			td {
+				padding: 5px;
+
+				b { font-weight: 500 }
+
+				&:nth-child(1) {
+					text-align: center;
+					width: 100px;
+				}
+			}
+		}
+	}
+}

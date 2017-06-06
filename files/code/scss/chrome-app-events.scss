@@ -1,0 +1,55 @@
+@import
+	'src/vars',
+	'src/mixins';
+
+.about-this { content: 'Пока ничего нет' }
+
+/*.player {
+	.playpause {
+		color: $primecolor;
+
+		&:hover {
+			color: darken($primecolor, 15%);
+		}
+	}
+
+	.volume {
+		&::-webkit-slider-runnable-track {
+			border: 3px solid darken($primecolor, 5%);
+		}
+
+		&::-webkit-slider-thumb {
+			background-color: darken($primecolor, 5%);
+
+			&:hover {
+				background-color: darken($primecolor, 10%);
+			}
+
+			&:active {
+				background-color: darken($primecolor, 15%);
+			}
+		}
+	}
+}
+
+a {
+	color: $primecolor;
+
+	&:visited {
+		color: $primecolor;
+	}
+
+	&:hover {
+		color: darken($primecolor, 15%);
+	}
+}
+
+.section {
+	a {
+		border-bottom: 0.5px dashed $primecolor;
+
+		&:hover {
+			border-bottom: 0.5px solid darken($primecolor, 15%);
+		}
+	}
+} */

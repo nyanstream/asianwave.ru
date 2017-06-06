@@ -1,7 +1,8 @@
 'use strict'
 
 /*
- * kamina.js framework for the ezzy work
+ * kamina.js
+ * syntactic sugar for your soul
  * cojam.ru, 2017
  */
 
@@ -33,7 +34,7 @@ var $make = {
 			elem.innerHTML = this.xss(content)
 			else elem.innerHTML = content
 
-		if (cls) elem.classList.add(cls)
+		if (cls) elem.setAttribute('class', cls)
 
 		if (options.indexOf('html') > -1)
 			return elem.outerHTML

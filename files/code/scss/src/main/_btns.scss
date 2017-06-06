@@ -1,0 +1,57 @@
+// main: ../../main.scss
+
+$btnpadding: 35px;
+$btnwidth: 300px;
+
+.btns {
+	user-select: none;
+
+	.container > a {
+		display: inline-block;
+		width: $btnwidth; height: 500px;
+		margin: 0 $btnpadding 0 $btnpadding;
+
+		background-repeat: no-repeat, no-repeat;
+		background-color: rgba(#fff, .9);
+		background-position: bottom 20px center, center center;
+
+		&, &.disabled:hover {
+			background-size: 70%, 100%;
+		}
+
+		box-shadow: var(--shadow);
+		@include transition(.3s);
+
+		&:hover {
+			background-size: 70%, 105%;
+			//box-shadow: 5px 10px 20px rgba(0, 0, 0, .5);
+		}
+
+		&.disabled {
+			@include filter(grayscale(100%));
+		}
+	}
+
+	/*
+	 * @TODO Расширить список рестайловых переменных
+	 */
+
+	@if (variable-exists(btns-restyle) == false) {
+		@each $afon in radio, anime {
+			.container a[href*='#{$afon}'] {
+				&, &.disabled:hover {
+				background-image: url('#{$imgpath}/main/#{$afon}-btn.png'), url('#{$imgpath}/main/#{$afon}-bckg.png');}
+
+				&:hover {
+					background-image: url('#{$imgpath}/main/hover-btn.png'), url('#{$imgpath}/main/#{$afon}-bckg.png');
+				}
+			}
+		}
+	}
+} // .btns
+
+.css-preload {
+	background-image: url('#{$imgpath}/main/hover-btn.png');
+	width: 1px; height: 1px;
+	background-size: 0 0;
+}

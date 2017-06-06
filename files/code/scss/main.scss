@@ -1,0 +1,46 @@
+@import
+	'src/mixins',
+	'src/vars';
+
+:root {
+	--prime-color: $primeColor;
+	--shadow: 0 5px 20px rgba(0, 0, 0, .5);
+}
+
+@include reset;
+@include selection(darken($primeColor, 5%), #fff);
+
+$pagewidth: 960px;
+
+@import 'src/scrollbar';
+
+body {
+	@at-root html, & {
+		width: 100%; height: 100%;
+
+		overflow-x: hidden;
+		font-size: 0;
+	}
+
+	background-image: url('#{$imgpath}/main/bckg.png');
+	background-position: bottom center;
+	background-repeat: no-repeat;
+	background-size: 100%;
+}
+
+.top-panel, .btns {
+	width: 100%;
+	text-align: center;
+}
+
+.container {
+	width: $pagewidth;
+	font-family: Roboto, Arial, sans-serif;
+	margin: 0 auto;
+}
+
+@import
+	'src/main/top-panel',
+	'src/main/btns',
+	'src/main/footer',
+	'src/main/mediaq';

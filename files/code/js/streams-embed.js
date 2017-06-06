@@ -1,77 +1,101 @@
 'use strict'
 
+moment.tz.setDefault('Europe/Moscow')
+
 var dmns = {
 	'aw': 'asianwave.ru',
 	'mr': 'myradio24.com'
 }
 
 var API = {
-	'shedule': '/api/streams-shed.json',
-	//'noti': '/api/noti.json',
+	'schedule': '/api/anime-sched.json',
+	'noti': '/api/noti.json',
 	//'vk_news': '/api/vk-info.json',
 	//'vk_stream': '/api/vk-stream.json'
 }
 
-if ($check.debug()) {
-	var API_keys = Object.keys(API)
-	API_keys.forEach(function(key) { API[key] = 'https://' + dmns.aw + API[key] })
-}
+Object.keys(API).forEach((key) => { API[key] = 'https://' + dmns.aw + API[key] })
 
 var
 	fetchOptions = { cache: 'no-store' },
 	dataCont = $make.qs('.data')
 
 var $embed = {
-	shed: function() {
-		fetch(API.shedule + '?t=' + Date.now(), fetchOptions).then(function(response) {
-			response.json().then(function(data) {
-				var
-					momentT = moment().tz('Europe/Moscow'),
-					dayToday = momentT.dayOfYear(),
-					dayTodayFull = momentT.format('D MMMM (dddd)'),
-					unixNow = momentT.unix()
+	sched: () => {
+		fetch(`${API.schedule}?t=${Date.now()}`, fetchOptions).then((response) => {
+			response.json().then((data) => {
+				let
+					dayToday = moment().format('DDD YY'),
+					dayTodayFull = moment().format('D MMMM (dddd)'),
+					unixNow = moment().unix()
 
+				dataCont.textContent = ''
 				dataCont.appendChild($make.elem('p', dayTodayFull))
 
-				data.forEach(function(item) {
-					var
-						timeS = moment.unix(item[0]).tz('Europe/Moscow'),
-						dayOfS = timeS.dayOfYear(),
-						timeE = moment.unix(item[1]).tz('Europe/Moscow')
+				data.forEach((item) => {
+					let
+						timeS = moment.unix(item[0]),
+						dayOfS = timeS.format('DDD YY'),
+						timeE = moment.unix(item[1])
 
-					var newShedData = timeS.format('HH:mm') + ' &ndash; ' + timeE.format('HH:mm') + ': ' + item[2]
-
-					if (dayOfS == dayToday) dataCont.appendChild($make.elem('p', newShedData))
+						if (dayOfS == dayToday) dataCont.appendChild($make.elem('p', `<span class="sched--time">${timeS.format('HH:mm')} &ndash; ${timeE.format('HH:mm')}:</span> <span class="sched--title">${item[2]}</span>`))
 				})
 			})
 		})
 	},
-	song: function() {
-		var point = 7934
+	sched_next: () =>  {
+		fetch(`${API.schedule}?t=${Date.now()}`, fetchOptions).then((response) =>  {
+			response.json().then((data) => {
+				let nextAirs = data.filter((e) => e[0] > moment().unix())
+
+				if (nextAirs.length == 0) return;
+
+				dataCont.textContent = ''
+				dataCont.appendChild($make.elem('p', `Сейчас будет:<br>${moment.unix(nextAirs[0][0]).format('HH:mm')} &ndash; ${nextAirs[0][2]}` ))
+			})
+		})
+	},
+	song: () => {
+		let point = 7934
 
 		//if ($check.get('song') == '') point = 7934
 
-		fetch('https://' + dmns.mr + '/users/' + point + '/status.json?t=' + Date.now(), fetchOptions).then(function(response) {
-			response.json().then(function(data) {
+		fetch(`https://${dmns.mr}/users/${point}/status.json?t=${Date.now()}`, fetchOptions).then((response) => {
+			response.json().then((data) => {
 				dataCont.textContent = ''
 				dataCont.appendChild($make.elem('p', data['song'].replace(' - ', ' &ndash; ')))
 			})
 		})
+	},
+	time: () => {
+		dataCont.textContent = `Время сейчас: ${moment().format('HH:mm:ss')}`
 	}
 }
 
-;(function () {
-	if ($check.get('shed')) {
-		dataCont.classList.add('shed')
-		$embed.shed()
+;(() => {
+	let
+		methods = ['shed', 'next', 'song'],
+		updTime = 5000
+
+	if ($check.get('updtime')) updTime = parseFloat($check.get('updtime') + '000');
+
+	if ($check.get('sched')) {
+		dataCont.classList.add('sched')
+		$embed.sched()
+		setInterval(() => { $embed.sched() }, updTime)
+	}
+	if ($check.get('sched_next')) {
+		dataCont.classList.add('sched-next')
+		$embed.sched_next()
+		setInterval(() => { $embed.sched_next() }, updTime)
 	}
 	if ($check.get('song')) {
 		dataCont.classList.add('song')
 		$embed.song()
-		setInterval(function() { $embed.song() }, 5000)
+		setInterval(() => { $embed.song() }, updTime)
 	}
 	if ($check.get('time')) {
 		dataCont.classList.add('time')
-		setInterval(function() { dataCont.textContent = 'Время сейчас: ' + moment().format('HH:mm:ss') }, 100)
+		setInterval(() => { $embed.time() }, 100)
 	}
 })()

@@ -1,0 +1,113 @@
+@import
+	'src/mixins',
+	'src/vars';
+
+@include reset;
+@include selection(darken($primeColor, 5%), #fff);
+
+$pagewidth: 860px;
+
+//@import 'src/vk-app/special';
+
+body {
+	@at-root html, & {
+		width: 100%; height: 100%;
+
+		overflow-x: hidden;
+		font-size: 0;
+	}
+
+	background-image: url('#{$imgpath}/main/bckg.png');
+	background-position: bottom center;
+	background-repeat: no-repeat;
+	background-size: 130%;
+}
+
+.top-panel, .vk-app {
+	width: 100%;
+	text-align: center;
+}
+
+.container {
+	width: $pagewidth;
+	margin: 0 auto;
+}
+
+.noframe {
+	text-align: center;
+	font-size: 40px;
+
+	a {
+		text-decoration: none;
+		color: #000;
+
+		&:visited {
+			color: #000;
+		}
+
+		&:hover {
+			color: red;
+		}
+	}
+}
+
+.top-panel {
+	& {
+		@include flexbox(auto, auto, center, auto);
+		background-color: $primeColor;
+		box-shadow: 0 5px 20px rgba(0, 0, 0, .5);
+		margin: 50px 0 55px 0;
+		height: 50px;
+		user-select: none;
+	}
+
+	.container {
+		text-align: left;
+	}
+
+	.container > * {
+		display: inline-block;
+		vertical-align: middle;
+		cursor: default;
+	}
+
+	.logo {
+		width: 120px; height: 120px;
+		background-color: $primeColor;
+		background-image: url('#{$imgpath}/logo.png');
+		background-position: center center;
+		background-repeat: no-repeat;
+		background-size: 60%;
+		border-radius: 99px;
+		box-shadow: 0 5px 10px rgba(0, 0, 0, .5);
+    margin: 0 18px 0 20px;
+	}
+
+	.brand {
+		text-transform: uppercase;
+		font-family: Tahoma, Geneva, Arial, sans-serif;
+		font-weight: 600;
+		letter-spacing: 2px;
+		font-size: 25px;
+		color: #fff;
+	}
+
+	@import 'src/vk-app/top-panel__right';
+} // .top-panel
+
+.vk-app {
+	iframe {
+		width: 100%;
+		padding: 0 25px;
+		border: 0;
+
+		&.player {
+			height: 40px;
+		}
+
+		&.chat {
+			height: 390px;
+			opacity: .9;
+		}
+	}
+}

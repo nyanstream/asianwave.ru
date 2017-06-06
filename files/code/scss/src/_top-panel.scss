@@ -1,0 +1,92 @@
+// main: ../aw-every.scss
+
+.top-panel {
+	@include flexbox(auto, center, center, auto);
+	position: relative;
+	width: 100%;
+	height: $top-panel--height;
+	background-color: $top-panel--color;
+	overflow: hidden;
+
+	a {
+		text-decoration: none;
+	}
+
+	.brand {
+		user-select: none;
+		white-space: nowrap;
+		cursor: default;
+
+		& > * {
+			display: inline-block;
+			vertical-align: middle;
+		}
+
+		.logo {
+			$top-panel--logo-height: $top-panel--brandHeight + 5px;
+
+			display: inline-block;
+			width: $top-panel--logo-height;
+			height: $top-panel--logo-height;
+			margin-right: 5px;
+
+			background-image: url('#{$imgpath}/logo.png');
+			background-position: center center;
+			background-repeat: no-repeat;
+			background-size: contain;
+		}
+
+		.text {
+			@include transition(.5s);
+
+			text-transform: uppercase;
+			font-family: Tahoma, Geneva, Arial, sans-serif;
+			font-weight: 600;
+			letter-spacing: 2px;
+			font-size: $top-panel--brandHeight;
+			color: #fff;
+
+			&:hover {
+				//opacity: .85;
+				text-shadow: 1px 1px 2px #ccc;
+			}
+		}
+	}
+
+	.right {
+		position: absolute;
+		top: 5px; right: 5px;
+		font-size: 18px;
+		padding: 2px 0;
+		user-select: none;
+		cursor: default;
+
+		li {
+			display: inline;
+			list-style: none;
+
+			a, .no-link {
+				display: inline-block;
+				background-color: lighten($top-panel--color, 10%);
+				border-radius: 5px;
+				padding: 2.5px 10px;
+				opacity: .7;
+				color: #fff;
+				cursor: pointer;
+				@include transition(.3s);
+
+				&:hover {
+					opacity: 1;
+				}
+			}
+		}
+	}
+}
+
+@media screen and (max-width: 649px) {
+	.top-panel {
+		.right {
+			display: none;
+		}
+	}
+}

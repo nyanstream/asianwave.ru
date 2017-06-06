@@ -1,0 +1,46 @@
+// main: _player.scss
+
+.noti {
+	display: none;
+	position: absolute;
+
+	width: auto; height: auto;
+	max-width: 385px; max-height: calc(100% - 100px);
+
+	top: $p--offset; left: $p--offset;
+	background-color: rgba(223, 226, 233, .8);
+	padding: 5px 10px 10px 1.2em; z-index: 2;
+	font-size: 20px;
+	cursor: default;
+
+	user-select: none;
+	@include transition(.5s);
+
+	// &:hover {
+	// 	background-color: rgba(255, 255, 255, .85);
+	// }
+
+	&-close {
+		display: inline-block;
+		position: relative;
+		cursor: pointer;
+		left: -.8em;
+
+		@include transition(.3s);
+
+		&:hover {
+			color: $primeColor;
+		}
+	}
+
+	&-content {
+		margin-top: -1.2em;
+		line-height: 1.3em;
+		overflow-y: auto;
+	}
+
+	&-undis {
+		font-size: .7em;
+		margin-top: 5px;
+	}
+}

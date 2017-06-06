@@ -1,0 +1,38 @@
+// main: ../../pages.scss
+
+@media screen and (max-width: #{$pagewidth - 1px}) {
+	//:root { --font-size: 20px; }
+
+	.container {
+		width: 100%;
+		padding: 0 10px;
+	}
+
+	.top-panel {
+		.container {
+			text-align: center;
+		}
+
+		.logo {
+			margin-right: 0;
+		}
+
+		.brand {
+			display: none;
+		}
+	}
+
+	.page {
+		padding: 0 1em;
+
+		.container {
+			padding: .1em 1em 1em;
+
+			& > section h1 {
+				text-align: center;
+			}
+
+			a[href^='#'] { display: none; }
+		}
+	}
+}
