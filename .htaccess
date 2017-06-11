@@ -32,7 +32,7 @@ RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI}
 
 Header set Content-Security-Policy "default-src 'self'; \
  connect-src 'self' mc.yandex.ru myradio24.com; \
- child-src 'self' https://chatovod.ru https://asianwaveru.chatovod.ru https://*.vk.com https://vk.com https://*.youtube-nocookie.com; \
+ child-src 'self' https://chatovod.ru https://asianwaveru.chatovod.ru https://*.vk.com https://vk.com https://*.youtube-nocookie.com https://player.twitch.tv; \
  frame-ancestors 'self' https://vk.com; \
  style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com https://*.jwpcdn.com; \
  font-src 'self' https://fonts.gstatic.com https://*.jwpcdn.com; \

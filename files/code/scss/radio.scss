@@ -110,15 +110,22 @@ aside {
 		'src/radio/aside__sched';
 
 	.radio-live {
+		$lstnWidth: 35px;
+		$lstnMargin: 10px;
+
 		@include flexbox(row, center, auto, auto);
 		text-align: center;
 
 		.curr-rj {
-			width: 100%;
+			width: calc(100% - #{$lstnWidth + $lstnMargin});
 			font-size: .9em;
 			padding: 5px;
 
 			p {
+				white-space: nowrap;
+				text-overflow: ellipsis;
+				overflow: hidden;
+
 				&:first-child {
 					font-size: 1.1em;
 				}
@@ -131,8 +138,8 @@ aside {
 
 		.curr-lstn {
 			@include flexbox(auto, center, center, auto);
-			width: 40px;
-			margin-left: 10px;
+			width: $lstnWidth;
+			margin-left: $lstnMargin;
 
 			user-select: none;
 			cursor: help;

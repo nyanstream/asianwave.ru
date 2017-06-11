@@ -4,6 +4,12 @@
 	<title>Asian Wave / Anime Backup Player</title>
 	<link rel="shortcut icon" href="img/favicon.png">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link rel="dns-prefetch" href="//video.eientei.org">
+	<link rel="dns-prefetch" href="//ssl.p.jwpcdn.com">
+	<link rel="dns-prefetch" href="//assets-jpcust.jwpsrv.com">
+	<link rel="dns-prefetch" href="//jwpltx.com">
+
 	<meta name="robots" content="noindex, nofollow">
 	<style>
 		html, body, .player, .warning { width: 100%; height: 100%; }
@@ -28,7 +34,7 @@
 			display: block !important;
 			background-image: url('../img/anime-offline.png');
 			background-repeat: no-repeat;
-			background-position: left bottom;
+			background-position: center bottom;
 			background-size: cover;
 		}
 		.player .jwplayer:not(.jw-flag-user-inactive) .jw-controlbar {
@@ -64,37 +70,37 @@
 		<p>Кажется, Ваш браузер не поддерживает <a href="https://get.adobe.com/ru/flashplayer/" target="_blank" rel="nofollow noopener">Flash</a>! (ну или он у Вас просто выключен).</p>
 		<p>Воспользуйтесь для просмотра любым плеером, который поддерживает RTMP (например, VLC):</p>
 		<p><kbd>rtmp://<wbr>video.eientei.org<wbr>/live/AsianWave</kbd></p>
-	</div>
-	<script src="https://content.jwplatform.com/libraries/9QBfQupy.js"></script>
-	<script src="../js/kamina.min.js"></script>
+	</div></div>
+	<script src="https://content.jwplatform.com/libraries/9QBfQupy.js" defer></script>
+	<script src="../js/kamina.min.js" defer></script>
+	<script src="../js/special/flash.min.js" defer></script>
 	<script>
-	let
-		playerID = 'jw-player',
-		player = jwplayer(playerID),
-		jwSetup = {
-			'file': 'rtmp://video.eientei.org/live/AsianWave',
-			'width': '100%', 'height': '100%',
-			// 'rtmp': { 'bufferlength': 10 },
-			'skin': 'roundster',
-			'autostart': true,
-			//'controls': false,
-			'displaytitle': false,
-			'displaydescription': false,
-			'abouttext': 'Asian Wave',
-			'aboutlink': '/'
-		}
-
-		;(function() {
+		document.addEventListener('DOMContentLoaded', () => {
 			let
-				hasFlash = navigator.mimeTypes['application/x-shockwave-flash'],
-				playerElem = $make.qs('.player')
+				playerID = 'jw-player',
+				player = jwplayer(playerID),
+				playerElem = $make.qs('.player'),
+				stream = $check.get('url') ? $check.get('url') : 'video.eientei.org/live/AsianWave'
 
-			if (hasFlash) {
+			let jwSetup = {
+				'file': `rtmp://${stream}`,
+				'width': '100%', 'height': '100%',
+				// 'rtmp': { 'bufferlength': 10 },
+				'skin': 'roundster',
+				'autostart': true,
+				//'controls': false,
+				'displaytitle': false,
+				'displaydescription': false,
+				'abouttext': 'Asian Wave',
+				'aboutlink': '/'
+			}
+
+			if (hasFlash()) {
 				player.setup(jwSetup)
 			} else {
 				playerElem.style.display = 'none'
 				$make.qs('.warning').style.display = 'flex'
 			}
-		})()
+		})
 	</script>
 </body></html>

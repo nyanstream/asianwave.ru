@@ -8,9 +8,7 @@
 	background-color: $top-panel--color;
 	overflow: hidden;
 
-	a {
-		text-decoration: none;
-	}
+	a { text-decoration: none }
 
 	.brand {
 		user-select: none;
@@ -40,7 +38,7 @@
 			@include transition(.5s);
 
 			text-transform: uppercase;
-			font-family: Tahoma, Geneva, Arial, sans-serif;
+			font-family: Tahoma, Geneva, Roboto, Arial, sans-serif;
 			font-weight: 600;
 			letter-spacing: 2px;
 			font-size: $top-panel--brandHeight;
@@ -67,7 +65,7 @@
 
 			a, .no-link {
 				display: inline-block;
-				background-color: lighten($top-panel--color, 10%);
+				box-shadow: inset 0 0 0 20px rgba(0, 0, 0, .1);
 				border-radius: 5px;
 				padding: 2.5px 10px;
 				opacity: .7;
@@ -79,6 +77,8 @@
 					opacity: 1;
 				}
 			}
+
+			&.li--offset { margin-right: 5px }
 		}
 	}
 }

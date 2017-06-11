@@ -381,9 +381,7 @@ var $parse = {
 		liveBox.textContent = ''
 		songsBox.textContent = ''
 
-		if (data == 'fail') {
-			liveBox.appendChild($make.elem('p', getString('err_api_radio'), 'radio--pe')); return
-		}
+		if (data == 'fail') { liveBox.appendChild($make.elem('p', getString('err_api_radio'), 'radio--pe')); return }
 
 		let	current = data['song']
 
@@ -394,9 +392,10 @@ var $parse = {
 			currentA = currentSplit[0],
 			currentS = currentSplit[1]
 
+		if (!current) currentA = '\u00af\u005c\u005f\u0028\u30c4\u0029\u005f\u002f\u00af';
 		if (!currentS) currentS = '';
 
-		stateBoxBody = $make.elem('div', `<p title="${getString('song_current_track')}: ${$make.xss(currentS)}">${$make.xss(currentS)}</p><p title="${getString('song_current_artist')}: '${$make.xss(currentA)}">${$make.xss(currentA)}</p>`, 'current radio--pe')
+		stateBoxBody = $make.elem('div', `<p title="${getString('song_current_track')}: ${$make.xss(currentS)}">${$make.xss(currentS)}</p><p title="${getString('song_current_artist')}: ${$make.xss(currentA)}">${$make.xss(currentA)}</p>`, 'current radio--pe')
 
 		$make.balloon(stateBoxBody, getString('song_current'), 'down')
 
@@ -404,7 +403,7 @@ var $parse = {
 
 		let
 			currRJ = $make.elem('div', `<p>${getString('rj_current')}:</p><p>${$make.xss(data['djname'])}</p>`, 'curr-rj radio--pe'),
-			currLstn = $make.elem('div', $make.xss(data['listeners']), 'curr-lstn radio--pe')
+			currLstn = $make.elem('div', `<div>${$make.xss(data['listeners'])}</div>`, 'curr-lstn radio--pe')
 
 		$make.balloon(currLstn, getString('listeners_current'), 'left')
 
@@ -456,7 +455,7 @@ var $parse = {
 		stateBox.appendChild(linksBoxBody)
 		stateBox.appendChild(plBoxBody)
 
-		songsBox.innerHTML = $make.elem('table', `<caption>${getString('past_songs')}:</caption><tbody>${songsTableBody}</tbody>`, '', ['html']) + $make.elem('div', getString('msk_time_note'), 'aside-note', ['html'])
+		songsBox.innerHTML = $make.elem('table', `<caption>${getString('prev_songs')}:</caption><tbody>${songsTableBody}</tbody>`, '', ['html']) + $make.elem('div', getString('msk_time_note'), 'aside-note', ['html'])
 	},
 	noti: (data) => {
 		let notiEl = $make.qs('.noti')

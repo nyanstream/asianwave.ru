@@ -1,21 +1,23 @@
-::-webkit-scrollbar {
-  width: 10px;
-}
+// maim: ../aw-every.scss
 
-::-webkit-scrollbar-button {
-  background-color: darken($primeColor, 30%);
-	height: 5px;
-}
-
-::-webkit-scrollbar-track-piece {
-  background-color: darken($primeColor, 20%);
-}
-
-::-webkit-scrollbar-thumb {
-	background-color: $primeColor;
-	@include transition(.3s);
-
-	&:hover {
-		background-color: lighten($primeColor, 5%);
-	}
-}
+// ::-webkit-scrollbar {
+//   width: 10px;
+// }
+//
+// ::-webkit-scrollbar-button {
+//   background-color: darken($primeColor, 20%);
+// 	height: 10px;
+// }
+//
+// ::-webkit-scrollbar-track-piece {
+//   background-color: darken($primeColor, 5%);
+// }
+//
+// ::-webkit-scrollbar-thumb {
+// 	background-color: $primeColor;
+// 	@include transition(.3s);
+//
+// 	&:hover {
+// 		background-color: lighten($primeColor, 5%);
+// 	}
+// }

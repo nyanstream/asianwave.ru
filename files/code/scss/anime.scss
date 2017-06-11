@@ -37,22 +37,9 @@ $pagewidth: 1000px;
 		}
 	}
 
-	&.notabs {
-		// overflow-y: hidden;
-		//
-		// .player, .chat {
-		// 	@include transition(1s);
-		// }
-
-		.player {
-			width: 100%;
-		}
-
-		.tabs {
-			display: none;
-			// position: fixed;
-			// right: -$tabswidth;
-		}
+	&.no-tabs {
+		.player {	width: 100%; }
+		.tabs { display: none; }
 	}
 }
 

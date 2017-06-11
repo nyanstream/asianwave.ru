@@ -4,43 +4,38 @@ let
 	gulp =      require('gulp'),
 	rename =    require('gulp-rename'),
 	watch =     require('gulp-watch'),
+	plumber =   require('gulp-plumber'),
 	composer =  require('gulp-uglify/composer'),
 	uglifyjs =  require('uglify-es'),
-	sass =      require('gulp-sass'),
-	pump =      require('pump')
+	sass =      require('gulp-sass')
 
 let minify = composer(uglifyjs, console)
 
 let paths = {
-	'js': 'files/js/',
-	'js_dev': 'files/code/js/**/*.js',
-	'css': 'files/css/',
-	'scss_dev': 'files/code/scss/**/*.scss'
+	'js': {
+		'dev': 'files/code/js/**/*.js',
+		'prod': 'files/js/'
+	},
+	'css': {
+		'dev': 'files/code/scss/**/*.scss',
+		'prod': 'files/css/'
+	}
 }
 
-gulp.task('minify-js', (cb) => {
-  pump([
-    gulp.src(paths.js_dev),
-		watch(paths.js_dev),
-    minify({}),
-    rename({suffix: '.min'}),
-    gulp.dest(paths.js)
-  ], cb)
-})
+gulp.task('minify-js', () => gulp.src(paths.js.dev)
+	.pipe(plumber())
+	.pipe(watch(paths.js.dev))
+	.pipe(minify({}))
+	.pipe(rename({suffix: '.min'}))
+	.pipe(gulp.dest(paths.js.prod))
+)
 
-gulp.task('scss', (cb) => {
-  pump([
-    gulp.src(paths.scss_dev),
-		watch(paths.scss_dev),
-    sass({outputStyle: 'compressed'}).on('error', sass.logError),
-    rename({suffix: '.min'}),
-    gulp.dest(paths.css)
-  ], cb)
-})
-
-gulp.task('watch', () => {
-	//gulp.watch(paths.js_dev, ['minify-js'])
-	//gulp.watch(paths.scss_dev, ['scss'])
-})
+gulp.task('scss', () => gulp.src(paths.css.dev)
+	.pipe(plumber())
+	.pipe(watch(paths.css.dev))
+	.pipe(sass({outputStyle: 'compressed'}))
+	.pipe(rename({suffix: '.min'}))
+	.pipe(gulp.dest(paths.css.prod))
+)
 
 gulp.task('default', ['minify-js', 'scss'])

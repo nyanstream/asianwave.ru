@@ -59,7 +59,7 @@ a[href*='?cat=vip'], .chatLinkImage { display: none !important }
 			.chatLinkGold, .chatLinkProfile, .chatLinkMore { display: none }
 
 			a.chatLinkSmiles {
-				background: transparent url('https://asianwave.ru/files/img/sm/zephir.png') no-repeat 0 0;
+				background: transparent url('../img/sm/zephir.png') no-repeat 0 0;
 			}
 		}
 	}
@@ -84,7 +84,7 @@ a[href*='?cat=vip'], .chatLinkImage { display: none !important }
 	&Message {
 		&ToMe .chatToUser { color: #fff !important }
 		span:not([class*='User']) { color: #000 !important }
-		.chatUserFrom span[style] { color: #ff0000 !important }
+		.chatUserFrom span[style] { color: darken($primeColor, 30%)!important }
 	}
 
 	&Main {
@@ -108,6 +108,8 @@ a[href*='?cat=vip'], .chatLinkImage { display: none !important }
 				&[class*='Photos'] { display: none }
 			}
 		}
+
+		&From { font-weight: 500 }
 	}
 
 	&UserFrom,

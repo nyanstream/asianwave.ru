@@ -68,18 +68,17 @@ $make.tabs = function(selector) {
 ;(() => {
 	let
 		closeTabsCtr = $make.qs('.closeTabs'),
-		mainCont = $make.qs('.anime'),
-		ctc_text = 'боковую панель'
+		mainCont = $make.qs('.anime').classList
 
 	closeTabsCtr.addEventListener('click', function() {
-		if (!mainCont.classList.contains('notabs')) {
-			mainCont.classList.add('notabs')
+		if (!mainCont.contains('no-tabs')) {
+			mainCont.add('no-tabs')
 			this.textContent = '\u003C'
-			this.setAttribute('title', 'Открыть ' + ctc_text)
+			this.setAttribute('title', getString('tabs_show'))
 		} else {
-			mainCont.classList.remove('notabs')
+			mainCont.remove('no-tabs')
 			this.textContent = '\u00D7'
-			this.setAttribute('title', 'Скрыть ' + ctc_text)
+			this.setAttribute('title', getString('tabs_hide'))
 		}
 	})
 })()
@@ -269,9 +268,8 @@ var $parse = {
 			if (backupURL == 'jw' || backupDef == 'jw') srcLnk = srcLnk + '-jw'
 			if (backupHash) backupHash = '?' + backupHash
 
-			vkPlayer.setAttribute('src', srcLnk + '.htm' + backupHash)
-			playerElem.appendChild(vkPlayer)
-			return
+			vkPlayer.setAttribute('src', `${srcLnk}.htm${backupHash}`)
+			playerElem.appendChild(vkPlayer);	return
 		}
 
 		if (data == 'fail' || !data['url']) { player.dataset.error = 'api'; return }
@@ -398,4 +396,4 @@ document.addEventListener('DOMContentLoaded', () => {
 	aw_logo.addEventListener('dblclick', () => { $loadInfo.vk_stream() })
 
 	$make.tabs('.tabs')
-});
+})
