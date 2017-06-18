@@ -251,7 +251,7 @@ function loadInfo() {
 			})
 		})
 	} else {
-		song_elem.innerHTML = 'Для работы плеера необходим ' + $make.link('https://vk.com/badbrowser.php', 'современный браузер', ['e', 'html']) + '.'
+		song_elem.innerHTML = 'Для работы плеера необходим ' + $create.link('https://vk.com/badbrowser.php', 'современный браузер', ['e', 'html']) + '.'
 		if (!container.classList.contains('offline')) {
 			container.classList.add('offline')
 		}

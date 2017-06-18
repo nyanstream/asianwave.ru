@@ -1,4 +1,4 @@
-<!DOCTYPE HTML>
+﻿<!DOCTYPE HTML>
 <html><head>
 	<meta charset="utf-8">
 	<title>Asian Wave / Anime Backup Player</title>
@@ -53,8 +53,7 @@
 	<script>
 		document.addEventListener('DOMContentLoaded', () => {
 			let
-				player = $make.qs('.player'),
-				embed = $make.elem('embed'),
+				embed = $create.elem('embed'),
 				stream = $check.get('url') ? $check.get('url') : 'video.eientei.org/live/AsianWave'
 
 			embed.setAttribute('src', 'yukkuplayer.swf')
@@ -69,7 +68,7 @@
 			embed.setAttribute('pluginspage', 'https://get.adobe.com/ru/flashplayer/')
 
 			if (hasFlash())
-				player.appendChild(embed)
+				$make.qs('.player').appendChild(embed)
 				else $make.qs('.warning').style.display = 'flex'
 		})
 	</script>

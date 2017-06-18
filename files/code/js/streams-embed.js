@@ -30,7 +30,7 @@ var $embed = {
 					unixNow = moment().unix()
 
 				dataCont.textContent = ''
-				dataCont.appendChild($make.elem('p', dayTodayFull))
+				dataCont.appendChild($create.elem('p', dayTodayFull))
 
 				data.forEach((item) => {
 					let
@@ -38,7 +38,7 @@ var $embed = {
 						dayOfS = timeS.format('DDD YY'),
 						timeE = moment.unix(item[1])
 
-						if (dayOfS == dayToday) dataCont.appendChild($make.elem('p', `<span class="sched--time">${timeS.format('HH:mm')} &ndash; ${timeE.format('HH:mm')}:</span> <span class="sched--title">${item[2]}</span>`))
+						if (dayOfS == dayToday) dataCont.appendChild($create.elem('p', `<span class="sched--time">${timeS.format('HH:mm')} &ndash; ${timeE.format('HH:mm')}:</span> <span class="sched--title">${item[2]}</span>`))
 				})
 			})
 		})
@@ -51,7 +51,7 @@ var $embed = {
 				if (nextAirs.length == 0) return;
 
 				dataCont.textContent = ''
-				dataCont.appendChild($make.elem('p', `Сейчас будет:<br>${moment.unix(nextAirs[0][0]).format('HH:mm')} &ndash; ${nextAirs[0][2]}` ))
+				dataCont.appendChild($create.elem('p', `Сейчас будет:<br>${moment.unix(nextAirs[0][0]).format('HH:mm')} &ndash; ${nextAirs[0][2]}` ))
 			})
 		})
 	},
@@ -63,7 +63,7 @@ var $embed = {
 		fetch(`https://${dmns.mr}/users/${point}/status.json?t=${Date.now()}`, fetchOptions).then((response) => {
 			response.json().then((data) => {
 				dataCont.textContent = ''
-				dataCont.appendChild($make.elem('p', data['song'].replace(' - ', ' &ndash; ')))
+				dataCont.appendChild($create.elem('p', data['song'].replace(' - ', ' &ndash; ')))
 			})
 		})
 	},

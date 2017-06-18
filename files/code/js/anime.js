@@ -49,7 +49,7 @@ $make.tabs = function(selector) {
 			let clickedAnchor = e.target || e.srcElement
 			clickedAnchor.classList.add('active')
 
-			for (let i = 0; i < tabs.length; i++) {
+			for (let i = 0, tabsLength = tabs.length; i < tabsLength; i++) {
 				if (tabs[i].dataset.tab == clickedAnchor.dataset.tab) {
 					tabs[i].style.display = 'block'
 				} else {
@@ -133,7 +133,7 @@ var $parse = {
 
 		streamsсhed.textContent = ''
 
-		if (data == 'fail') { streamsсhed.appendChild($make.elem('tr', `<td>${getString('err_api')}</td>`)); return }
+		if (data == 'fail') { streamsсhed.appendChild($create.elem('tr', `<td>${getString('err_api')}</td>`)); return }
 
 		let nextAirs = data.filter((e) => e[0] > unixNow)
 
@@ -149,45 +149,45 @@ var $parse = {
 				dayofE = moment.unix(item[1]).dayOfYear()
 
 			if (item[3])
-				nazvaniue = $make.link(item[3], item[2], ['e', 'html'])
-				else nazvaniue = $make.xss(item[2])
+				nazvaniue = $create.link(item[3], item[2], ['e', 'html'])
+				else nazvaniue = $make.safe(item[2])
 
 			if ((dayOfS - dayToday) < -1) {
 				return
 			} else if (item[0] < unixNow && unixNow < item[1]) {
-				tableBody += $make.elem('tr', `<td>${newsсhedData}<td><b>Сейчас (ещё ${ moment.unix(item[1]).toNow(true)}):</b><br>${nazvaniue}</td>`, 'air--current', ['html'])
+				tableBody += $create.elem('tr', `<td>${newsсhedData}<td><b>Сейчас (ещё ${ moment.unix(item[1]).toNow(true)}):</b><br>${nazvaniue}</td>`, 'air--current', ['html'])
 			} else if (item[0] > unixNow && item[0] == nextAirs[0][0]) {
-				tableBody += $make.elem('tr', `<td>${newsсhedData}<td><b>Далее через ${moment.unix(item[0]).toNow(true)}:</b><br>${nazvaniue}</td>`, 'air--next', ['html'])
+				tableBody += $create.elem('tr', `<td>${newsсhedData}<td><b>Далее через ${moment.unix(item[0]).toNow(true)}:</b><br>${nazvaniue}</td>`, 'air--next', ['html'])
 			} else if (item[0] < unixNow) {
-				tableBody += $make.elem('tr', `<td>${newsсhedData}<td>${nazvaniue}</td></tr>`, 'air--finished', ['html'])
+				tableBody += $create.elem('tr', `<td>${newsсhedData}<td>${nazvaniue}</td></tr>`, 'air--finished', ['html'])
 			} else if (dayOfS > dayToday) {
-				tableBody += $make.elem('tr', `<td>${newsсhedData}<td>${nazvaniue}</td></tr>`, 'air--notToday', ['html'])
+				tableBody += $create.elem('tr', `<td>${newsсhedData}<td>${nazvaniue}</td></tr>`, 'air--notToday', ['html'])
 			} else {
-				tableBody += $make.elem('tr', `<td>${newsсhedData}<td>${nazvaniue}</td>`, '', ['html'])
+				tableBody += $create.elem('tr', `<td>${newsсhedData}<td>${nazvaniue}</td>`, '', ['html'])
 			}
 		})
 
 		if (tableBody)
-			streamsсhed.appendChild($make.elem('tbody', `<tr><td colspan="2">${getString('latest_update')}: ${moment().format('D MMMM, HH:mm:ss')}<br></td></tr>${tableBody}`))
+			streamsсhed.appendChild($create.elem('tbody', `<tr><td colspan="2">${getString('latest_update')}: ${moment().format('D MMMM, HH:mm:ss')}<br></td></tr>${tableBody}`))
 			else return
 	},
 	vk_news: (data) => {
 		let
 		 	vkNews = $make.qs('.vk-news'),
-		 	newsBody = $make.elem('div', '', 'news-posts')
+		 	newsBody = $create.elem('div', '', 'news-posts')
 
 	  vkNews.textContent = ''
 
-	  if (data == 'fail') {
+	  if (data == 'fail' || !data.posts) {
 		 	vkNews.classList.add('api-err')
-		 	vkNews.appendChild($make.elem('p', 'API сайта недоступно.'))
+		 	vkNews.appendChild($create.elem('p', getString('err_api')))
 		 	return
 	  } else {
 		 	if (vkNews.classList.contains('api-err'))
 				vkNews.classList.remove('api-err')
 	  }
 
-		let newsHeader = $make.elem('div', $make.link(`https://${domain.vk}/${data['com']['url']}`, getString('vk_com'), ['e', 'html']), 'vk-news-header')
+		let newsHeader = $create.elem('div', $create.link(`https://${domain.vk}/${data['com']['url']}`, getString('vk_com'), ['e', 'html']), 'vk-news-header')
 
 		data['posts'].forEach((post) => {
 			if (post['pin'] == 1) return;
@@ -197,14 +197,14 @@ var $parse = {
 				postImg = post['pic']
 
 			if (postImg) {
-				let postImgElem = $make.elem('img')
+				let postImgElem = $create.elem('img')
 
 				postImgElem.setAttribute('src', postImg['small'])
 				postImgElem.setAttribute('alt', '')
 
 				if (postImg['big'])
-					postImgLink = $make.link(postImg['big'], postImgElem.outerHTML, ['e', 'html'])
-					else postImgLink = $make.link(postImg['small'], postImgElem.outerHTML, ['e', 'html'])
+					postImgLink = $create.link(postImg['big'], postImgElem.outerHTML, ['e', 'html'])
+					else postImgLink = $create.link(postImg['small'], postImgElem.outerHTML, ['e', 'html'])
 			}
 
 			let
@@ -215,12 +215,12 @@ var $parse = {
 			if (postLinkR) {
 				postLinkR.forEach((link) => {
 					postLinkS = link.split('|')
-					postText = postText.replace(pLR, $make.link(`https://${domain.vk}/${postLinkS[0].replace(/\[/g, '')}`, postLinkS[1].replace(/]/g, ''), ['e', 'html']))
+					postText = postText.replace(pLR, $create.link(`https://${domain.vk}/${postLinkS[0].replace(/\[/g, '')}`, postLinkS[1].replace(/]/g, ''), ['e', 'html']))
 				})
 			}
 
 			let
-				vkPostMetaLink = $make.link(`https://${domain.vk}/wall-${data['com']['id']}_${post['id']}`, moment.unix(post['time']).format('D MMMM YYYY в HH:mm'), ['e', 'html'])
+				vkPostMetaLink = $create.link(`https://${domain.vk}/wall-${data['com']['id']}_${post['id']}`, moment.unix(post['time']).format('D MMMM YYYY в HH:mm'), ['e', 'html'])
 
 			if (post['type'] == 'copy') {
 				isCopy = ' is-repost'
@@ -228,9 +228,9 @@ var $parse = {
 			}
 
 			let
-				vkPost = $make.elem('div', '', 'vk-post' + isCopy),
-				vkPostMeta = $make.elem('div', vkPostMetaLink, 'vk-post-meta'),
-				vkPostBody = $make.elem('div', `${postImgLink}<p>${postText}</p>`, 'vk-post-body')
+				vkPost = $create.elem('div', '', 'vk-post' + isCopy),
+				vkPostMeta = $create.elem('div', vkPostMetaLink, 'vk-post-meta'),
+				vkPostBody = $create.elem('div', `${postImgLink}<p>${postText}</p>`, 'vk-post-body')
 
 		 	vkPost.appendChild(vkPostMeta)
 		 	vkPost.appendChild(vkPostBody)
@@ -245,7 +245,7 @@ var $parse = {
 		let
 			player = $make.qs('.player'),
 			playerElem = player.querySelector('.vk-player'),
-			vkPlayer = $make.elem('iframe')
+			vkPlayer = $create.elem('iframe')
 
 		let
 			backupURL = $check.get('b'),
@@ -285,8 +285,8 @@ var $parse = {
 		let text = data[0], id = data[1]
 
 		let
-			notiClose = $make.elem('div', '\u00D7', 'noti-close'),
-			notiContent = $make.elem('div', text, 'noti-content'),
+			notiClose = $create.elem('div', '\u00D7', 'noti-close'),
+			notiContent = $create.elem('div', text, 'noti-content'),
 			notiItems = []
 
 		notiEl.textContent = ''
@@ -306,11 +306,11 @@ var $parse = {
 		notiEl.appendChild(notiContent)
 
 		if (!$ls.test()) {
-			let notiUndisable = $make.elem('div', getString('noti_ls_err'), 'noti-undis')
+			let notiUndisable = $create.elem('div', getString('noti_ls_err'), 'noti-undis')
 			notiEl.appendChild(notiUndisable)
 		} else {
 			if ($ls.get('aw_noti')) notiItems = JSON.parse($ls.get('aw_noti'))
-			if (notiItems.indexOf(id) == -1)
+			if (!notiItems.includes(id))
 				notiEl.style.display = 'block'
 				else notiEl.style.display = 'none'
 		}
@@ -334,9 +334,10 @@ var API = {
 	'vk_stream': '/api/vk-stream.json'
 }
 
-if ($check.debug()) {
-	let API_keys = Object.keys(API)
-	API_keys.forEach((key) => { API[key] = 'https://' + domain.aw + API[key] })
+switch (location.hostname) {
+	case '127.0.0.1':
+	case 'localhost':
+		for (let key in API) { if (API.hasOwnProperty(key)) API[key] = `https://${domain.aw}${API[key]}` }
 }
 
 function doFetch(url, handler, ifFail) {
@@ -367,8 +368,7 @@ var $loadInfo = {
 		doFetch(API.vk_stream, $parse.vk_stream)
 	},
 	full: function() {
-		var thisKeys = Object.keys(this)
-		for (let i = 0; i < thisKeys.length - 1; i++) this[thisKeys[i]]()
+		for (let key in this) { if (this.hasOwnProperty(key) && key != 'full') this[key]() }
 	}
 }
 

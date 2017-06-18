@@ -204,7 +204,7 @@ radioCtrl_vol.addEventListener('change', function() {
 			let clickedButt = e.target || e.srcElement;
 			clickedButt.classList.add('active');
 
-			for (let i = 0; i < pointButton.length; i++) {
+			for (let i = 0, pbLength = pointButton.length; i < pbLength; i++) {
 				if (clickedButt.dataset.point !== pointButton[i].dataset.point) {
 					pointButton[i].classList.remove('active');
 				}
@@ -279,24 +279,24 @@ var $parse = {
 				toNow = moment.unix(item[1]).toNow(true)
 
 			if (item[3])
-				nazvaniue = $make.link(item[3], item[2], ['e', 'html'])
-				else nazvaniue = $make.xss(item[2])
+				nazvaniue = $create.link(item[3], item[2], ['e', 'html'])
+				else nazvaniue = $make.safe(item[2])
 
 			if ((dayOfS - dayToday) < -1 || item[0] < unixNow) {
 				return
 			} else if (item[0] < unixNow && unixNow < item[1]) {
-				tableBody += $make.elem('tr', `<td>${newsсhedData}<td><b>Сейчас (ещё ${ moment.unix(item[1]).toNow(true)}):</b><br>${nazvaniue}</td>`, 'air--current', ['html'])
+				tableBody += $create.elem('tr', `<td>${newsсhedData}<td><b>Сейчас (ещё ${ moment.unix(item[1]).toNow(true)}):</b><br>${nazvaniue}</td>`, 'air--current', ['html'])
 			} else if (item[0] > unixNow && item[0] == nextAirs[0][0]) {
-				tableBody += $make.elem('tr', `<td>${newsсhedData}<td><b>Далее через ${moment.unix(item[0]).toNow(true)}:</b><br>${nazvaniue}</td>`, 'air--next', ['html'])
+				tableBody += $create.elem('tr', `<td>${newsсhedData}<td><b>Далее через ${moment.unix(item[0]).toNow(true)}:</b><br>${nazvaniue}</td>`, 'air--next', ['html'])
 			} else if (dayOfS > dayToday) {
-				tableBody += $make.elem('tr', `<td>${newsсhedData}<td>${nazvaniue}</td></tr>`, 'air--notToday', ['html'])
+				tableBody += $create.elem('tr', `<td>${newsсhedData}<td>${nazvaniue}</td></tr>`, 'air--notToday', ['html'])
 			} else {
-				tableBody += $make.elem('tr', `<td>${newsсhedData}<td>${nazvaniue}</td>`, '', ['html'])
+				tableBody += $create.elem('tr', `<td>${newsсhedData}<td>${nazvaniue}</td>`, '', ['html'])
 			}
 		})
 
 		if (tableBody)
-			streamsched.innerHTML = $make.elem('table', `${$make.elem('caption', getString('airs_schedule'), '', ['html'])}<tbody>${tableBody}</tbody>`, '', ['html']) + $make.elem('div', getString('local_time_note'), 'aside-note', ['html'])
+			streamsched.innerHTML = $create.elem('table', `${$create.elem('caption', getString('airs_schedule'), '', ['html'])}<tbody>${tableBody}</tbody>`, '', ['html']) + $create.elem('div', getString('local_time_note'), 'aside-note', ['html'])
 			else return
 	},
 	vk_news: (data) => {
@@ -304,10 +304,10 @@ var $parse = {
 			vkNews = $make.qs('.vk-news'),
 			newsBody = ''
 
-		if (data == 'fail') {
+		if (data == 'fail' || !data.posts) {
 			vkNews.classList.add('api-err')
 			vkNews.textContent = ''
-			vkNews.appendChild($make.elem('p', getString('err_api')))
+			vkNews.appendChild($create.elem('p', getString('err_api')))
 			return
 		} else {
 		 	if (vkNews.classList.contains('api-err'))
@@ -322,14 +322,14 @@ var $parse = {
 				postImg = post['pic']
 
 			if (postImg) {
-				var postImgElem = $make.elem('img')
+				var postImgElem = $create.elem('img')
 
 				postImgElem.setAttribute('src', postImg['small'])
 				postImgElem.setAttribute('alt', '')
 
 				if (postImg['big'])
-					postImgLink = $make.link(postImg['big'], postImgElem.outerHTML, ['e', 'html'])
-					else postImgLink = $make.link(postImg['small'], postImgElem.outerHTML, ['e', 'html'])
+					postImgLink = $create.link(postImg['big'], postImgElem.outerHTML, ['e', 'html'])
+					else postImgLink = $create.link(postImg['small'], postImgElem.outerHTML, ['e', 'html'])
 			}
 
 			var
@@ -340,12 +340,12 @@ var $parse = {
 			if (postLinkR) {
 				postLinkR.forEach((link) => {
 					postLinkS = link.split('|')
-					postText = postText.replace(pLR, $make.link(`https://${domain.vk}/${postLinkS[0].replace(/\[/g, '')}`, postLinkS[1].replace(/]/g, ''), ['e', 'html']))
+					postText = postText.replace(pLR, $create.link(`https://${domain.vk}/${postLinkS[0].replace(/\[/g, '')}`, postLinkS[1].replace(/]/g, ''), ['e', 'html']))
 				})
 			}
 
 			var
-				vkPostMetaLink = $make.link(`https://${domain.vk}/wall-${data['com']['id']}_${post['id']}`, moment.unix(post['time']).format('D MMMM YYYY в HH:mm'), ['e', 'html'])
+				vkPostMetaLink = $create.link(`https://${domain.vk}/wall-${data['com']['id']}_${post['id']}`, moment.unix(post['time']).format('D MMMM YYYY в HH:mm'), ['e', 'html'])
 
 			if (post['type'] == 'copy') {
 				isCopy = ' is-repost'
@@ -353,9 +353,9 @@ var $parse = {
 			}
 
 			var
-				vkPost = $make.elem('div', '', 'vk-post' + isCopy),
-				vkPostMeta = $make.elem('div', vkPostMetaLink, 'vk-post-meta'),
-				vkPostBody = $make.elem('div', `${postImgLink}<p>${postText}</p>`, 'vk-post-body')
+				vkPost = $create.elem('div', '', 'vk-post' + isCopy),
+				vkPostMeta = $create.elem('div', vkPostMetaLink, 'vk-post-meta'),
+				vkPostBody = $create.elem('div', `${postImgLink}<p>${postText}</p>`, 'vk-post-body')
 
 			vkPost.appendChild(vkPostMeta)
 			vkPost.appendChild(vkPostBody)
@@ -381,7 +381,7 @@ var $parse = {
 		liveBox.textContent = ''
 		songsBox.textContent = ''
 
-		if (data == 'fail') { liveBox.appendChild($make.elem('p', getString('err_api_radio'), 'radio--pe')); return }
+		if (data == 'fail') { liveBox.appendChild($create.elem('p', getString('err_api_radio'), 'radio--pe')); return }
 
 		let	current = data['song']
 
@@ -395,15 +395,15 @@ var $parse = {
 		if (!current) currentA = '\u00af\u005c\u005f\u0028\u30c4\u0029\u005f\u002f\u00af';
 		if (!currentS) currentS = '';
 
-		stateBoxBody = $make.elem('div', `<p title="${getString('song_current_track')}: ${$make.xss(currentS)}">${$make.xss(currentS)}</p><p title="${getString('song_current_artist')}: ${$make.xss(currentA)}">${$make.xss(currentA)}</p>`, 'current radio--pe')
+		stateBoxBody = $create.elem('div', `<p title="${getString('song_current_track')}: ${$make.safe(currentS)}">${$make.safe(currentS)}</p><p title="${getString('song_current_artist')}: ${$make.safe(currentA)}">${$make.safe(currentA)}</p>`, 'current radio--pe')
 
 		$make.balloon(stateBoxBody, getString('song_current'), 'down')
 
 		/* Блок с выводом состояния прямого эфира (в остальных случаях скрыт) */
 
 		let
-			currRJ = $make.elem('div', `<p>${getString('rj_current')}:</p><p>${$make.xss(data['djname'])}</p>`, 'curr-rj radio--pe'),
-			currLstn = $make.elem('div', `<div>${$make.xss(data['listeners'])}</div>`, 'curr-lstn radio--pe')
+			currRJ = $create.elem('div', `<p>${getString('rj_current')}:</p><p>${$make.safe(data['djname'])}</p>`, 'curr-rj radio--pe'),
+			currLstn = $create.elem('div', `<div>${$make.safe(data['listeners'])}</div>`, 'curr-lstn radio--pe')
 
 		$make.balloon(currLstn, getString('listeners_current'), 'left')
 
@@ -418,24 +418,24 @@ var $parse = {
 		/* Блоки со ссылками на текущий трек и на загрузку "плейлиста" */
 
 		let
-			srchVK = $make.link(`https://${domain.vk}/audio?q=${encodeURIComponent(current)}`, '<i class="icon icon-vk"></i>', ['e']),
-			srchGo = $make.link(`https://encrypted.google.com/#newwindow=1&q=${encodeURIComponent(current)}`, '<i class="icon icon-google"></i>', ['e'])
+			srchVK = $create.link(`https://${domain.vk}/audio?q=${encodeURIComponent(current)}`, '<i class="icon icon-vk"></i>', ['e']),
+			srchGo = $create.link(`https://encrypted.google.com/#newwindow=1&q=${encodeURIComponent(current)}`, '<i class="icon icon-google"></i>', ['e'])
 
 		//srchVK.setAttribute('title', `${getString('song_search_in')} VK`)
 		//srchGo.setAttribute('title', `${getString('song_search_in')} Google`)
 
-		linksBoxBody = $make.elem('div', '', 'search radio--pe')
+		linksBoxBody = $create.elem('div', '', 'search radio--pe')
 		linksBoxBody.appendChild(srchVK)
 		linksBoxBody.appendChild(srchGo)
 
 		$make.balloon(linksBoxBody, getString('song_search'), 'left')
 
-		let plLink = $make.link('', '<i class="icon icon-music"></i>')
+		let plLink = $create.link('', '<i class="icon icon-music"></i>')
 
 		plLink.setAttribute('href', `data:audio/x-mpegurl;charset=utf-8;base64,${window.btoa(radio.src + '\n')}`)
 		plLink.setAttribute('download', `Asian Wave ${$currentPoint.name()}.m3u`)
 
-		plBoxBody = $make.elem('div', plLink.outerHTML, 'dlm3u radio--pe')
+		plBoxBody = $create.elem('div', plLink.outerHTML, 'dlm3u radio--pe')
 
 		$make.balloon(plBoxBody, getString('playlist_dl'), 'left')
 
@@ -448,14 +448,14 @@ var $parse = {
 		if (numOfSongs >= 10) numOfSongs = (lastSongs.length - 1) / 2;
 
 		for (let i = 0; i < numOfSongs; i++) {
-			songsTableBody += `<tr><td>${$make.xss(lastSongs[i][0])}</td><td>${$make.xss(lastSongs[i][1].replace(' - ', ' – '))}</td></tr>`
+			songsTableBody += `<tr><td>${$make.safe(lastSongs[i][0])}</td><td>${$make.safe(lastSongs[i][1].replace(' - ', ' – '))}</td></tr>`
 		}
 
 		stateBox.appendChild(stateBoxBody)
 		stateBox.appendChild(linksBoxBody)
 		stateBox.appendChild(plBoxBody)
 
-		songsBox.innerHTML = $make.elem('table', `<caption>${getString('prev_songs')}:</caption><tbody>${songsTableBody}</tbody>`, '', ['html']) + $make.elem('div', getString('msk_time_note'), 'aside-note', ['html'])
+		songsBox.innerHTML = $create.elem('table', `<caption>${getString('prev_songs')}:</caption><tbody>${songsTableBody}</tbody>`, '', ['html']) + $create.elem('div', getString('msk_time_note'), 'aside-note', ['html'])
 	},
 	noti: (data) => {
 		let notiEl = $make.qs('.noti')
@@ -465,8 +465,8 @@ var $parse = {
 		let text = data[0], id = data[1]
 
 		let
-			notiClose = $make.elem('button', getString('close').toLowerCase(), 'noti-close'),
-			notiContent = $make.elem('div', `<p>${getString('noti')}:</p><p>${text}</p>`, 'noti-content'),
+			notiClose = $create.elem('button', getString('close').toLowerCase(), 'noti-close'),
+			notiContent = $create.elem('div', `<p>${getString('noti')}:</p><p>${text}</p>`, 'noti-content'),
 			notiItems = []
 
 		notiEl.textContent = ''
@@ -485,7 +485,7 @@ var $parse = {
 
 		if ($ls.get('aw_noti')) notiItems = JSON.parse($ls.get('aw_noti'))
 
-		if (notiItems.indexOf(id) == -1)
+		if (!notiItems.includes(id))
 			notiEl.style.display = 'block'
 			else notiEl.style.display = 'none'
 
@@ -507,9 +507,10 @@ var API = {
 	'vk_news': '/api/vk-info.json'
 }
 
-if ($check.debug()) {
-	let API_keys = Object.keys(API)
-	API_keys.forEach((key) => { API[key] = 'https://' + domain.aw + API[key] })
+switch (location.hostname) {
+	case '127.0.0.1':
+	case 'localhost':
+		for (let key in API) { if (API.hasOwnProperty(key)) API[key] = `https://${domain.aw}${API[key]}` }
 }
 
 function doFetch(url, handler, ifFail) {
@@ -540,8 +541,7 @@ var $loadInfo = {
 		doFetch(API.noti, $parse.noti)
 	},
 	full: function() {
-		let thisKeys = Object.keys(this)
-		for (let i = 0; i < thisKeys.length - 1; i++) this[thisKeys[i]]()
+		for (let key in this) { if (this.hasOwnProperty(key) && key != 'full') this[key]() }
 	}
 }
 
@@ -553,7 +553,7 @@ var $loadInfo = {
 
 document.addEventListener('DOMContentLoaded', () => {
 	let	getPoint = $check.get('point')
-	if (getPoint && Object.keys(points).indexOf(getPoint) > -1) { radio.toPoint(getPoint) }
+	if (getPoint && Object.keys(points).includes(getPoint)) { radio.toPoint(getPoint) }
 
 	//$make.balloon(pointButton[0].parentElement, 'Список потоков', 'down')
 	//if (isMobile.any) radioCtrl_pp.parentElement.classList.add('on-mobile')
