@@ -135,30 +135,30 @@ var $parse = {
 
 		if (data == 'fail') { streamsсhed.appendChild($create.elem('tr', `<td>${getString('err_api')}</td>`)); return }
 
-		let nextAirs = data.filter((e) => e[0] > unixNow)
+		let nextAirs = data.filter((e) => e['s'] > unixNow)
 
 		data.forEach((item) => {
-			if (item[0] == data[data.length - 1][0]) return; // пропуск последнего элемента с пасхалкой
+			if (item['secret']) return; // пропуск элемента с пасхалкой
 
 			let
-				newsсhedData = `${moment.unix(item[0]).format('D MMMM')}<br>${moment.unix(item[0]).format('HH:mm')} &ndash; ${moment.unix(item[1]).format('HH:mm')}</td>`,
+				newsсhedData = `${moment.unix(item['s']).format('D MMMM')}<br>${moment.unix(item['s']).format('HH:mm')} &ndash; ${moment.unix(item['e']).format('HH:mm')}</td>`,
 				nazvaniue = ''
 
 			let
-				dayOfS = moment.unix(item[0]).dayOfYear(),
-				dayofE = moment.unix(item[1]).dayOfYear()
+				dayOfS = moment.unix(item['s']).dayOfYear(),
+				dayofE = moment.unix(item['e']).dayOfYear()
 
-			if (item[3])
-				nazvaniue = $create.link(item[3], item[2], ['e', 'html'])
-				else nazvaniue = $make.safe(item[2])
+			if (item['link'])
+				nazvaniue = $create.link(item['link'], item['title'], ['e', 'html'])
+				else nazvaniue = $make.safe(item['title'])
 
 			if ((dayOfS - dayToday) < -1) {
 				return
-			} else if (item[0] < unixNow && unixNow < item[1]) {
-				tableBody += $create.elem('tr', `<td>${newsсhedData}<td><b>Сейчас (ещё ${ moment.unix(item[1]).toNow(true)}):</b><br>${nazvaniue}</td>`, 'air--current', ['html'])
-			} else if (item[0] > unixNow && item[0] == nextAirs[0][0]) {
-				tableBody += $create.elem('tr', `<td>${newsсhedData}<td><b>Далее через ${moment.unix(item[0]).toNow(true)}:</b><br>${nazvaniue}</td>`, 'air--next', ['html'])
-			} else if (item[0] < unixNow) {
+			} else if (item['s'] < unixNow && unixNow < item['e']) {
+				tableBody += $create.elem('tr', `<td>${newsсhedData}<td><b>Сейчас (ещё ${ moment.unix(item['e']).toNow(true)}):</b><br>${nazvaniue}</td>`, 'air--current', ['html'])
+			} else if (item['s'] > unixNow && item['s'] == nextAirs[0]['s']) {
+				tableBody += $create.elem('tr', `<td>${newsсhedData}<td><b>Далее через ${moment.unix(item['s']).toNow(true)}:</b><br>${nazvaniue}</td>`, 'air--next', ['html'])
+			} else if (item['s'] < unixNow) {
 				tableBody += $create.elem('tr', `<td>${newsсhedData}<td>${nazvaniue}</td></tr>`, 'air--finished', ['html'])
 			} else if (dayOfS > dayToday) {
 				tableBody += $create.elem('tr', `<td>${newsсhedData}<td>${nazvaniue}</td></tr>`, 'air--notToday', ['html'])
@@ -280,9 +280,16 @@ var $parse = {
 	noti: (data) => {
 		let notiEl = $make.qs('.noti')
 
-		if (data == 'fail' || data[0] == null) { notiEl.style.display = 'none'; return }
+		if (data == 'fail' || !data['enabled']) { notiEl.style.display = 'none'; return }
 
-		let text = data[0], id = data[1]
+		let
+			id = data['time'],
+			text = data['text'],
+			color = data['color']
+
+		if (color)
+			notiEl.style.backgroundColor = color
+			else notiEl.style.backgroundColor = null
 
 		let
 			notiClose = $create.elem('div', '\u00D7', 'noti-close'),

@@ -1,156 +1,189 @@
-<?php
-	header('Content-type: text/html');
+﻿<?php
 	date_default_timezone_set('Europe/Moscow');
+	include('topsec/vars.php');
 
-	/* @TODO
-	 * сделать экранирование символа "\" (пока что значение просто не срабатывает, если он есть)
-	 * запихнуть удаление последнего элемента расписания в пункт создания (как с нотификациями)
-	 */
-	 
-	include 'topsec/vars.php';
+	$file = [
+		'sched' => [
+			'anime' => 'anime-sched.json',
+			'radio' => 'radio-sched.json'
+		],
+		'noti' => 'noti.json'
+	];
 
-	/*
-	 * Определение файла с расписанием
-	 */
+	$schedAnime = file_get_contents($file['sched']['anime']);
+	$schedRadio = file_get_contents($file['sched']['radio']);
+	$noti       = file_get_contents($file['noti']);
 
-	$anime_sched = 'anime-sched.json';
-	$radio_sched = 'radio-sched.json';
-	$noti = 'noti.json';
-
-	$schedAnime = json_decode(@file_get_contents($anime_sched));
-	$schedRadio = json_decode(@file_get_contents($radio_sched));
-	$noti_cnt = json_decode(@file_get_contents($noti));
+	$schedAnime_data = json_decode($schedAnime, true);
+	$schedRadio_data = json_decode($schedRadio, true);
+	$noti_data       = json_decode($noti, true);
 
 	/*
-	 * Функция для преобразования юникода в читабельный вид (в основном для дебага)
-	 * стырена отсюда http://stackoverflow.com/a/6059008
+	 * Создаются временные массивы без "секретных эфиров"
+	 * Важно понимать: счётчик эфиров и последний эфир берутся именно из временного, а не из настоящего массива.
 	 */
 
-	function unicodeString($str, $encoding = null) {
-		if (is_null($encoding)) $encoding = ini_get('mbstring.internal_encoding');
-			return preg_replace_callback('/\\\\u([0-9a-fA-F]{4})/u', function($match) use ($encoding) {
-				return mb_convert_encoding(pack('H*', $match[1]), $encoding, 'UTF-16BE');
-			}, $str);
+	$schedAnime_data_tmp = [];
+	$schedRadio_data_tmp = [];
+
+	foreach ($schedAnime_data as &$item) {
+		if ($item['secret'] == true) { continue; }
+		$schedAnime_data_tmp[count($schedAnime_data_tmp)] = $item;
+	}
+
+	foreach ($schedRadio_data as &$item) {
+		if ($item['secret'] == true) { continue; }
+		$schedRadio_data_tmp[count($schedRadio_data_tmp)] = $item;
+	}
+
+	$schedAnime_count  = count($schedAnime_data_tmp);
+	$schedAnime_latest = $schedAnime_data_tmp[$schedAnime_count-1];
+
+	$schedRadio_count  = count($schedRadio_data_tmp);
+	$schedRadio_latest = $schedRadio_data_tmp[$schedRadio_count-1];
+
+	/*
+	 * Компановка нового элемента расписания
+	 */
+
+	function schedNew($_time, $_duration, $_title, $_link, $_is_secret) {
+		$time_start = strtotime($_time);
+		if ($_duration) {	$duration = $_duration * 60; } else { $duration = 3600;	}
+		$time_end = $time_start + $duration;
+
+		$title = addcslashes($_title, '"');
+		$link = addcslashes($_link, '"');
+
+		$new = [
+			's' => $time_start,	'e' => $time_end,
+			'title' => json_decode('"' . $title . '"')
+		];
+
+		if ($_link != null) {	$new['link'] = json_decode('"' . $link . '"');	}
+		if ($_is_secret == 'on') {	$new['secret'] = true;	}
+
+		return $new;
 	}
 
 	/*
-	 * Функция для сортировки эфиров
+	 * Сортировка расписания
 	 */
 
-	function shedSort($f_what) {
-		usort($f_what, function($a, $b) { return ($a[0] - $b[0]); });
-		return $f_what;
+	function shedSort($_what) {
+		usort($_what, function($a, $b) { return $a['s'] - $b['s']; });
+		return $_what;
 	}
 
 	/*
-	 * Функция для добавления эфира в расписание
+	 * Добавление элемента в расписание
 	 */
 
-	function addShedData($f_file, $f_where, $f_what) {
-		$f_where[count($f_where)] = $f_what;
-		$f_where = shedSort($f_where);
-		if ($f_what[2] != null) { file_put_contents(dirname(__FILE__) . '/' . $f_file, json_encode($f_where, JSON_UNESCAPED_UNICODE)); }
+	function addShedData($_file, $_where, $_what) {
+		$_where[count($_where)] = $_what;
+		$_where = shedSort($_where);
+		if ($_what['title'] != null) { file_put_contents(dirname(__FILE__) . '/' . $_file, json_encode($_where, JSON_UNESCAPED_UNICODE)); }
 	}
 
 	/*
-	 * Функция для удаления последнего эфира из расписания
+	 * Удаление элемента из расписания
 	 */
 
-	function rmShedData($f_file, $f_where) {
-		if (count($f_where) > 1) {
-			unset($f_where[count($f_where) - 2]);
-			sort($f_where);
-			$f_where = shedSort($f_where);
-			file_put_contents(dirname(__FILE__) . '/' . $f_file, json_encode($f_where, JSON_UNESCAPED_UNICODE));
-		} else return;		
+	function rmShedData($_file, $_where, $_item) {
+		$_where_tmp = [];
+		foreach($_where as $item) {
+			if ($_item == $item) { unset($item); continue; }
+			$_where_tmp[count($_where_tmp)] = $item;
+		}
+		$_where = shedSort($_where_tmp);
+		file_put_contents(dirname(__FILE__) . '/' . $_file, json_encode($_where, JSON_UNESCAPED_UNICODE));
 	}
-
-	/*
-	 * Добавление нового элемента в расписание
-	 * (и выполнение сортировки по времени старта)
-	 */
 
 	if (isset($_POST['add_air'])) {
-		$time_start = strtotime($_POST['time_start']);
-
-		if ($_POST['duration']) { $duration = $_POST['duration'] * 60; } else { $duration = 3600; }
-
-		if (($val = intval($duration)) && ($duration > 0)) { $time_end = $time_start + $duration; }
-		else { $time_end = $time_start + ($duration * -1); }
-
-		$name = addcslashes($_POST['airname'], '"');
-		$link = addcslashes($_POST['ellink'], '"');
-
-		$newar = [$time_start, $time_end, json_decode('"'.$name.'"')];
-		if ($_POST['ellink'] != null) { $newar[3] = json_decode('"'.$link.'"'); }
+		$newAir = schedNew(
+			$_POST['time_start'],
+			$_POST['duration'],
+			$_POST['air_name'],
+			$_POST['air_link'],
+			$_POST['air_is_secret']
+		);
 
 		switch ($_POST['where']) {
 			case 'radio':
-				addShedData($radio_sched, $schedRadio, $newar);
-				break;
+				addShedData($file['sched']['radio'], $schedRadio_data, $newAir); break;
 			case 'anime':
-			default:
-				addShedData($anime_sched, $schedAnime, $newar);
+				addShedData($file['sched']['anime'], $schedAnime_data, $newAir);
 		}
 	}
 
-	/*
-	 * Удаление (пред)последнего элемента расписания
-	 */
-
-	if (isset($_POST['last_clear'])) { rmShedData($anime_sched, $schedAnime); }
+	if (isset($_POST['rm_air'])) {
+		switch ($_POST['where']) {
+			case 'radio':
+				rmShedData($file['sched']['radio'], $schedRadio_data, $schedRadio_latest);	break;
+			case 'anime':
+				rmShedData($file['sched']['anime'], $schedAnime_data, $schedAnime_latest);
+		}
+	}
 
 	/*
 	 * Удаление элементов расписания с просроченным таймштампом
 	 * (плюс счётчик этих элементов, нужен для вывода на страницу)
 	 */
 
-	if (isset($_POST['expired_clear']) && count($schedAnime) > 1) {
-		for ($e = 0; $e <= (count($schedAnime) - 2); $e++) {
-			if ($schedAnime[$e][1] < time()) { unset($schedAnime[$e]); }
+	function countExprs($_where) {
+		$count = 0;
+		foreach ($_where as $item) { if ($item['e'] < time()) $count++; }
+		return $count;
+	}
+
+	function rmExprs($_file, $_where, $_time) {
+		$_where_tmp = [];
+		foreach ($_where as $item) {
+			if ($item['e'] < $_time) { unset($item); continue; }
+			$_where_tmp[count($_where_tmp)] = $item;
 		}
-		sort($schedAnime);
-		usort($schedAnime, function($a, $b){ return ($a[0] - $b[0]); });
-		file_put_contents(dirname(__FILE__) . '/' . $anime_sched, json_encode($schedAnime, JSON_UNESCAPED_UNICODE));
+		$_where = shedSort($_where_tmp);
+		file_put_contents(dirname(__FILE__) . '/' . $_file, json_encode($_where, JSON_UNESCAPED_UNICODE));
 	}
 
-	//echo count($schedAnime);
-
-	for ($e = 0; $e <= (count($schedAnime) - 2); $e++) {
-		if ($schedAnime[$e][1] < time()) { ++$expr_count; }
+	if (isset($_POST['expired_clear'])) {
+		rmExprs($file['sched']['anime'], $schedAnime_data, time());
+		rmExprs($file['sched']['radio'], $schedRadio_data, time());
 	}
-
-	/*
-	 * Форсированная сортировка по времени старта
-
-	if (isset($_POST['shed_force_sort'])) {
-		usort($schedAnime, function($a, $b) { return ($a[0] - $b[0]); });
-		file_put_contents(dirname(__FILE__) . '/' . $anime_sched, json_encode($schedAnime, JSON_UNESCAPED_UNICODE));
-	} */
 
 	/*
 	 * Манипулятор оповещений
 	 */
 
-	if (isset($_POST['noti_action'])) {
-		$noti_text = addcslashes($_POST['noti_text'], '"');
+	function notiNew($_text, $_color) {
+		$text = addcslashes($_text, '"');
 
-		if (isset($_POST['noti_remove'])) {	$noti_data = [null, null]; }
-		else { $noti_data = [json_decode('"'.$noti_text.'"'), time()]; }
+		$new = [
+			'enabled' => true,
+			'time' => time(),
+			'text' => json_decode('"' . $text . '"')
+		];
 
-		file_put_contents(dirname(__FILE__) . '/' . $noti, json_encode($noti_data, JSON_UNESCAPED_UNICODE));
+		if ($_color != '#ffffff') {	$new['color'] = json_decode('"' . $_color . '"');	}
+
+		return $new;
+	}
+
+	if (isset($_POST['noti'])) {
+		if (!isset($_POST['noti_rm'])) {
+			$noti_content = notiNew($_POST['noti_text'], $_POST['noti_color']);
+		}	else { $noti_content = ['enabled' => false]; }
+
+		file_put_contents(dirname(__FILE__) . '/' . $file['noti'], json_encode($noti_content, JSON_UNESCAPED_UNICODE));
 	}
 ?>
 <!DOCTYPE HTML>
 <html lang="ru"><head>
-	<?php if (isset($_GET["succ"])) : ?>
-		<?php echo '<script>document.location.href="'. $_SERVER['PHP_SELF'] .'"</script><noscript><meta refresh="0;'. $_SERVER['PHP_SELF'] .'"></noscript></head><body><p><a href="">Если редирект не произошёл, то нажми сюда.</a></p>'; ?>
-	<?php else: ?>
 	<meta charset="utf-8">
 	<title>Asian Wave / Control panel</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="shortcut icon" href="/files/img/favicon.png">
-	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
+	<meta id="viewport" content="width=device-width, initial-scale=1">
+<?php if (isset($_GET['action'])) echo '<script>document.location.href="'. $_SERVER['PHP_SELF'] .'"</script><noscript><meta refresh="0; '. $_SERVER['PHP_SELF'] .'"></noscript>'; ?>
+	<link rel="shortcut icon" href="https://asianwave.ru/files/img/favicon.png">
+	<link rel="stylesheet" href="https://asianwave.ru/files/css/aw-fonts.min.css">
 	<style>
 		body { font-family: Roboto, Arial, sans-serif }
 		input { margin: 0 5px }
@@ -176,87 +209,102 @@
 		.shed-force-sort { display: none }
 		details summary { cursor: pointer }
 		.maliyText { font-size: .9em }
-		.ocheMaliyText { font-size: .8em }
+		.omc { font-size: .8em }
 	</style>
-</head><body>
-	<form class="add-air" action="?succ" method="post"><fieldset>
+</head></body>
+	<form class="add-air" action="?action" method="post"><fieldset>
 		<legend>Добавление нового эфира</legend>
 		<p>
 			<label for="time_start">Время начала:</label>
 			<input required type="datetime-local" name="time_start" value="2016-05-06T00:00">
-			<br><i class="ocheMaliyText">Время должно быть московским.</i>
+			<br><i class="omc">Время должно быть московским.</i>
 		</p>
 		<p>
-			<label for="time_end">Продолжительность (в минутах):</label>
+			<label for="duration">Продолжительность (в минутах):</label>
 			<input type="number" name="duration" min="1" placeholder="60">
-			<br><i class="ocheMaliyText">Необязательно, только если время отлично от часа.</i>
+			<br><i class="omc">Необязательно, только если время отлично от часа.</i>
 		</p>
 		<p>
-			<label for="elname">Название:</label>
-			<input required type="text" name="airname" placeholder="напр. Binan Koukou Chikyuu Bouei-bu LOVE! (1-2)">
+			<label for="air_name">Название:</label>
+			<input required type="text" name="air_name" placeholder="напр. Binan Koukou Chikyuu Bouei-bu LOVE! (1-2)">
 		</p>
 		<p>
-			<label for="ellink">Ссылка:</label>
-			<input type="text" name="ellink" placeholder="напр. https://shikimori.org/animes/1639">
+			<label for="air_link">Ссылка:</label>
+			<input type="text" name="air_link" placeholder="напр. https://shikimori.org/animes/1639">
 		</p>
 		<p>
 			<label for="where">Куда добавлять эфир:</label>
-			<input name="where" type="radio" value="anime" checked> anime
-			<input name="where" type="radio" value="radio"> radio
+			<input required name="where" type="radio" value="anime" checked> anime
+			<input required name="where" type="radio" value="radio"> radio
 		</p>
-		<p style="margin-top: 25px;">
-			<input type="submit" value="Создать" name="add_air">
+		<p style="display: none">
+			<label for="air_is_secret">Эфир секретный?</label>
+			<input type="checkbox" name="air_is_secret">
+			<br><i class="omc">Не отображать эфир в расписании.</i>
+		</p>
+		<p style="margin-top: 25px">
+			<input type="submit" value="Добавить" name="add_air">
 			<label for="add_air"><i>Внимательно проверьте введённые данные!</i></label>
 		</p>
 	</fieldset></form>
-	<form class="last-clear" action="?succ" method="post"><fieldset>
+	<hr>
+	<form class="rm-air" action="?action" method="post"><fieldset>
 		<legend>Удалить последний эфир из расписания</legend>
 		<p>
-			<?php echo '<samp>'; if ($schedAnime[count($schedAnime)-2][0]) { echo 'Название: <q>' . $schedAnime[count($schedAnime)-2][2] . '</q>. Начало ' . date('Y-m-d в H:i', $schedAnime[count($schedAnime)-2][0]) . '; конец ' . date('Y-m-d в H:i', $schedAnime[count($schedAnime)-2][1]); } else { echo 'Очистка не требуется'; } echo '.</samp>' ?>
+			Последний эфир на /anime: <samp><?php
+				if ($schedAnime_count > 0) {
+					echo 'Название: <q>' . $schedAnime_latest['title'] . '</q>. Начало ' . date('Y-m-d в H:i', $schedAnime_latest['s']) . '; конец ' . date('Y-m-d в H:i', $schedAnime_latest['e']);
+				} else { echo 'Расписание пустое'; }
+			?></samp><br>
+			Последний эфир на /radio: <samp><?php
+				if ($schedRadio_count > 0) {
+					echo 'Название: <q>' . $schedRadio_latest['title'] . '</q>. Начало ' . date('Y-m-d в H:i', $schedAnime_latest['s']) . '; конец ' . date('Y-m-d в H:i', $schedRadio_latest['e']);
+				} else { echo 'Расписание пустое'; }
+			?></samp>
 		</p>
 		<p>
-			<label for="last_chear_confr">Вы точно этого хотите?</label>
-			<input required type="checkbox" name="last_chear_confr">
+			<label for="where">Откуда удалять?</label>
+			<input required name="where" type="radio" value="anime" checked> anime
+			<input required name="where" type="radio" value="radio"> radio
 		</p>
-		<p style="margin-top: 15px;">
-			<input type="submit" value="Удалить" name="last_clear">
-		</p>
-	</fieldset></form>
-	<form class="shed-force-sort" action="?succ" method="post"><fieldset>
-		<legend>Форсированная сортировка по времени старта</legend>
 		<p>
-			<label for="sf_confr">Вы точно этого хотите?</label>
-			<input required type="checkbox" name="sf_confr">
+			<label for="rm_air_cnf">Вы точно этого хотите?</label>
+			<input required type="checkbox" name="rm_air_cnf">
 		</p>
 		<p style="margin-top: 15px;">
-			<input type="submit" value="Отсортировать" name="shed_force_sort">
+			<input type="submit" value="Удалить" name="rm_air">
 		</p>
 	</fieldset></form>
-	<form class="expired-clear" action="?succ" method="post"><fieldset>
+	<hr>
+	<form class="expired-clear" action="?action" method="post"><fieldset>
 		<legend>Удалить "просроченные" эфиры из расписания</legend>
 		<p>
-			<?php echo '<samp>Просроченных эфиров'; if ($schedAnime[0][1] > time() && $expr_count = 1) { echo ' нет</samp>'; } else { echo ': ' . $expr_count . '</samp>'; } ?>
+			<samp class="count"></samp>
 		</p>
 		<p>
-			<label for="expire_chear_confr">Вы точно этого хотите?</label>
-			<input required type="checkbox" name="expire_chear_confr">
+			<label for="expire_chear_cnf">Вы точно этого хотите?</label>
+			<input required type="checkbox" name="expire_chear_cnf">
 		</p>
 		<p style="margin-top: 15px;">
 			<input type="submit" value="Удалить" name="expired_clear">
 		</p>
 	</fieldset></form>
 	<hr>
-	<form class="vk-get-api-code" action="?succ" method="post"><fieldset>
+	<fieldset>
 		<legend>Обновление токена доступа ВК</legend>
 			<p>
-				<a href="<?php echo $APIep['vk_au'] . '?client_id=' . $vkData['id'] . '&display=page&redirect_uri=https://' . $_SERVER['SERVER_NAME'] . '/api/api-backend-vk.php&scope=video,offline&response_type=code&state=vk-get-code'; ?>" target="_blank" rel="nofollow noopener">Просто нажми сюда.</a>
+				<a href="<?php echo $APIep['vk_au'] . '?client_id=' . $vkData['id'] . '&display=page&redirect_uri=https://' . $_SERVER['SERVER_NAME'] . '/api/api-backend-vk.php&scope=video,offline&response_type=code&state=vk-get-code'; ?>" target="_blank" rel="nofollow noopener">Просто нажми сюда</a>
 			</p>
-	</fieldset></form>
+	</fieldset>
 	<hr>
-	<form class="noti-action" action="?succ" method="post"><fieldset>
+	<form class="noti" action="?action" method="post"><fieldset>
 		<legend>Работа с оповещениями</legend>
 		<p class="maliyText">
-			<?php if (isset($noti_cnt[0])) { echo 'Текущее оповещение: <samp>' . htmlspecialchars($noti_cnt[0]) . '</samp>'; }  ?>
+			<?php
+				$_nColor = (isset($noti_data['color'])) ? $_nColor = ' style="background-color: ' . $noti_data['color'] . ';"': $_nColor = '';
+
+				if ($noti_data['enabled'] == true) echo 'Текущее оповещение: <samp' . $_nColor . '>' . htmlspecialchars($noti_data['text']) . '</samp>' . "\n";
+			?>
 		</p>
 		<p>
 			<label for="noti_text">Текст:</label>
@@ -267,95 +315,99 @@
 			<p style="margin: 5px 0 0 1em" class="maliyText">Для стилизации текста можно использовать <kbd>&lt;b&gt;<b>жирный шрифт</b>&lt;/b&gt;</kbd> и <kbd>&lt;i&gt;<i>курсив</i>&lt;/i&gt;</kbd>, деление на абзацы с помощью <kbd>&lt;br&gt;</kbd>.<br>Ссылки должны быть вида <kbd>&lt;a href="https://..."&gt;текст&lt;/a&gt;</kbd>. В случае локальных ссылок следует использовать <kbd>&lt;a href="/pisos"&gt;&lt;текст&lt;/a&gt;</kbd>.</p>
 		</details>
 		<p>
-			<label for="noti_remove">Удалить последнее оповещение?</label>
-			<input type="checkbox" name="noti_remove" <?php if (!isset($noti_cnt[0])) { echo ' disabled'; } ?>>
+			<label for="noti_color">Цвет фона:</label>
+			<input type="color" name="noti_color" value="#ffffff">
+		</p>
+		<p>
+			<label for="noti_rm">Удалить последнее оповещение?</label>
+			<input type="checkbox" name="noti_rm" <?php if ($noti_data['enabled'] == false) { echo ' disabled'; } ?>>
 		</p>
 		<p style="margin-top: 15px;">
-			<input type="submit" value="Создать" name="noti_action">
+			<input type="submit" value="Создать" name="noti">
 		</p>
 	</fieldset></form>
 	<footer>
-		<p>Asian Wave Control panel v0.4</p>
-		<p>Последнее обновление расписания /radio: <span class="shedRadioTS"></span></p>
-		<p>Последнее обновление расписания /anime: <span class="shedAnimeTS"></span></p>
-		<p>Последнее обновление оповещения: <span class="notiTS"></span></p>
-		<p>Точное московское время (на момент загрузки страницы): <?php echo date('Y-m-d H:i:s', time()); ?></p>
+		<p>Asian Wave Control panel v0.5</p>
+		<p>Последнее обновление расписания /radio: <span class="tsOfAnime"></span></p>
+		<p>Последнее обновление расписания /anime: <span class="tsOfRadio"></span></p>
+		<p>Последнее обновление оповещения: <span class="tsOfNoti"></span></p>
+		<p>Точное московское время (на момент загрузки страницы): <span title="Год-месяц-день час-минута-секунда"><?php echo date('Y-m-d H:i:s', time()); ?></span></p>
 	</footer>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/locale/ru.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.13/moment-timezone-with-data.min.js"></script>
-	<script src="/files/js/kamina.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js" defer></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/locale/ru.js" defer></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.13/moment-timezone-with-data.min.js" defer></script>
+	<script src="https://asianwave.ru/files/js/kamina.min.js" defer></script>
 	<script type="text/javascript">
 		'use strict'
 
-		moment.tz.setDefault('<?php echo date_default_timezone_get(); ?>')
+		document.addEventListener('DOMContentLoaded', () => {
+			moment.tz.setDefault('<?php echo date_default_timezone_get(); ?>')
+			$make.qs('form', ['a']).forEach((form) => { form.reset() })
 
-		;(function resetForms() {
-			let formsEls = $make.qs('form', ['a'])
-			for (let i = 0; i < formsEls.length; i++) {	formsEls[i].reset }
-		})();
+			;(() => {
+				let
+					needChangeTime = <?php echo ($schedAnime_count > 0) ? 'true' : 'false'; ?>,
+					newTime = <?php echo ($schedAnime_latest) ? $schedAnime_latest['e'] : 0; echo "\n" ?>
 
-		;(function lastClVeevod() {
-			let
-				lTimeS = <?php echo $schedAnime[count($schedAnime)-2][0] ? $schedAnime[count($schedAnime)-2][0] : 0; ?>,
-				lInputs = $make.qs('.last-clear input', ['a'])
+				if (needChangeTime) $make.qs('.add-air input[type*=datetime]').setAttribute('value', moment.unix(newTime).format('YYYY-MM-DDTHH:mm'))
+			})()
 
-			if (lTimeS == <?php echo $schedAnime[count($schedAnime)-1][0]; ?>) {
-				for (let i = 0; i < lInputs.length; i++) {
-					lInputs[i].setAttribute('disabled', '');
+			;(() => {
+				let emptySched = {
+					'anime': <?php echo ($schedAnime_count == 0) ? 'true' : 'false'; ?>,
+					'radio': <?php echo ($schedRadio_count == 0) ? 'true' : 'false'; echo "\n"; ?>
 				}
-			}
-		})();
 
-		;(function exprCheck() {
-			let
-				air_exp = <?php if ($expr_count > 0) { echo 'true'; } else { echo 'false'; } ?>,
-				exprFInputs = $make.qs('.expired-clear input', ['a'])
-
-			if (!air_exp) {
-				for (let i = 0; i < exprFInputs.length; i++) {
-					exprFInputs[i].setAttribute('disabled', '');
+				for (let key in emptySched) {
+					if (emptySched.hasOwnProperty(key) && emptySched[key]) {
+						$make.qs(`.rm-air input[type="radio"][value="${key}"]`).setAttribute('disabled', '')
+					}
 				}
-			}
-		})();
 
-		;(function toLocalTime() {
-			let
-				lastTS = <?php echo $schedAnime[count($schedAnime) - 2][1]; ?>,
-				inputsLT = $make.qs('input[type*=datetime]', ['a'])
+				if (emptySched['anime'] && emptySched['radio']) $make.qs('.rm-air input', ['a']).forEach((input) => { input.setAttribute('disabled', '') })
+			})()
 
-			for (let i = 0; i < inputsLT.length; i++) {
-				inputsLT[i].setAttribute('value', moment.unix(lastTS).format('YYYY-MM-DDTHH:mm'));
-			}
-		})();
-
-		;(function fileUpdate() {
-			let
-				shedRadioTS = '<?php echo @filemtime($radio_sched) ?>',
-				shedAnimeTS = '<?php echo @filemtime($anime_sched) ?>',
-				notiTS = '<?php echo @filemtime($noti) ?>'
-
-			$make.qs('.shedRadioTS').textContent = moment.unix(shedRadioTS).from()
-			$make.qs('.shedAnimeTS').textContent = moment.unix(shedAnimeTS).from()
-			$make.qs('.notiTS').textContent = moment.unix(notiTS).from()
-		})();
-
-		;(function notiDisable() {
-			let
-				notiCreateF = $make.qs('[name="noti_text"]'),
-				notiSubmitBtn = $make.qs('[name="noti_action"]')
-
-			document.querySelector('[name="noti_remove"]').addEventListener('change', function() {
-				if (this.checked) {
-					notiCreateF.setAttribute('disabled', '');
-					notiCreateF.value = '';
-					notiSubmitBtn.value = 'Удалить';
-				} else if (!this.checked && notiCreateF.hasAttribute('disabled')) {
-					notiCreateF.removeAttribute('disabled');
-					notiSubmitBtn.value = 'Создать';
+			;(() => {
+				let exprsSched = {
+					'anime': <?php echo countExprs($schedAnime_data_tmp) ?>,
+					'radio': <?php echo countExprs($schedRadio_data_tmp) . "\n"; ?>
 				}
-			});
-		})();
+
+				$make.qs('.expired-clear .count').innerHTML = `Всего просроченных эфиров: ${exprsSched['anime'] + exprsSched['radio']}; ${exprsSched['anime']} в /anime, ${exprsSched['radio']} в /radio.`
+
+				if (exprsSched['anime'] + exprsSched['radio'] == 0) $make.qs('.expired-clear input', ['a']).forEach((input) => { input.setAttribute('disabled', '') })
+			})()
+
+			;(() => {
+				let
+					notiCreateF = $make.qs('.noti input[type="text"]'),
+					notiCreateC = $make.qs('.noti input[type="color"]'),
+					notiSubmitBtn = $make.qs('.noti input[type="submit"]')
+
+				$make.qs('.noti input[type="checkbox"]').addEventListener('change', function() {
+					if (this.checked) {
+						notiCreateF.setAttribute('disabled', '')
+						notiCreateC.setAttribute('disabled', '')
+						notiCreateF.value = ''
+						notiSubmitBtn.value = 'Удалить'
+					} else if (!this.checked && notiCreateF.hasAttribute('disabled') && notiCreateC.hasAttribute('disabled')) {
+						notiCreateF.removeAttribute('disabled')
+						notiCreateC.removeAttribute('disabled', '')
+						notiSubmitBtn.value = 'Создать'
+					}
+				})
+			})()
+
+			;(() => {
+				let
+					tsOfRadio = <?php echo filemtime($file['sched']['radio']); ?>,
+					tsOfAnime = <?php echo filemtime($file['sched']['anime']); ?>,
+					tsOfNoti = <?php echo filemtime($file['noti']) . "\n"; ?>
+
+				$make.qs('footer .tsOfRadio').textContent = moment.unix(tsOfRadio).from()
+				$make.qs('footer .tsOfAnime').textContent = moment.unix(tsOfAnime).from()
+				$make.qs('footer .tsOfNoti').textContent = moment.unix(tsOfNoti).from()
+			})()
+		})
 	</script>
-	<?php endif; ?>
 </body></html>

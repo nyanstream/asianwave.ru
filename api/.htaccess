@@ -10,10 +10,3 @@
 	AuthUserFile /home/www/id1581/data/etc/edits.passwd
 	Require valid-user
 </files>
-
-<files panel-v2.php>
-	AuthType Basic
-	AuthName "Туда ли ты зашёл?"
-	AuthUserFile /home/www/id1581/data/etc/edits.passwd
-	Require valid-user
-</files>

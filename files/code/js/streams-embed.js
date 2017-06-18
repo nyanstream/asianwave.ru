@@ -2,7 +2,7 @@
 
 moment.tz.setDefault('Europe/Moscow')
 
-var dmns = {
+var domain = {
 	'aw': 'asianwave.ru',
 	'mr': 'myradio24.com'
 }
@@ -14,7 +14,7 @@ var API = {
 	//'vk_stream': '/api/vk-stream.json'
 }
 
-Object.keys(API).forEach((key) => { API[key] = 'https://' + dmns.aw + API[key] })
+for (let key in API) { if (API.hasOwnProperty(key)) API[key] = `https://${domain.aw}${API[key]}` }
 
 var
 	fetchOptions = { cache: 'no-store' },
@@ -32,13 +32,15 @@ var $embed = {
 				dataCont.textContent = ''
 				dataCont.appendChild($create.elem('p', dayTodayFull))
 
+				console.log(data)
+
 				data.forEach((item) => {
 					let
-						timeS = moment.unix(item[0]),
+						timeS = moment.unix(item['s']),
 						dayOfS = timeS.format('DDD YY'),
-						timeE = moment.unix(item[1])
+						timeE = moment.unix(item['e'])
 
-						if (dayOfS == dayToday) dataCont.appendChild($create.elem('p', `<span class="sched--time">${timeS.format('HH:mm')} &ndash; ${timeE.format('HH:mm')}:</span> <span class="sched--title">${item[2]}</span>`))
+						if (dayOfS == dayToday) dataCont.appendChild($create.elem('p', `<span class="sched--time">${timeS.format('HH:mm')} &ndash; ${timeE.format('HH:mm')}:</span> <span class="sched--title">${item['title']}</span>`))
 				})
 			})
 		})
@@ -46,12 +48,12 @@ var $embed = {
 	sched_next: () =>  {
 		fetch(`${API.schedule}?t=${Date.now()}`, fetchOptions).then((response) =>  {
 			response.json().then((data) => {
-				let nextAirs = data.filter((e) => e[0] > moment().unix())
+				let nextAirs = data.filter((e) => e['s'] > moment().unix())
 
 				if (nextAirs.length == 0) return;
 
 				dataCont.textContent = ''
-				dataCont.appendChild($create.elem('p', `Сейчас будет:<br>${moment.unix(nextAirs[0][0]).format('HH:mm')} &ndash; ${nextAirs[0][2]}` ))
+				dataCont.appendChild($create.elem('p', `Сейчас будет:<br>${moment.unix(nextAirs[0]['s']).format('HH:mm')} &ndash; ${nextAirs[0]['title']}` ))
 			})
 		})
 	},
@@ -60,7 +62,7 @@ var $embed = {
 
 		//if ($check.get('song') == '') point = 7934
 
-		fetch(`https://${dmns.mr}/users/${point}/status.json?t=${Date.now()}`, fetchOptions).then((response) => {
+		fetch(`https://${domain.mr}/users/${point}/status.json?t=${Date.now()}`, fetchOptions).then((response) => {
 			response.json().then((data) => {
 				dataCont.textContent = ''
 				dataCont.appendChild($create.elem('p', data['song'].replace(' - ', ' &ndash; ')))

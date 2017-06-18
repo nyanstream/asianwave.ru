@@ -8,7 +8,8 @@
 	max-width: 385px; max-height: calc(100% - 100px);
 
 	top: $p--offset; left: $p--offset;
-	background-color: rgba(223, 226, 233, .8);
+	background-color: rgba(223, 226, 233);
+	opacity: .8;
 	padding: 5px 10px 10px 1.2em; z-index: 2;
 	font-size: 20px;
 	cursor: default;
