@@ -1,7 +1,7 @@
 {
 	"name": "asianwave.ru",
 	"description": "Russian multimedia portal for Asian culture fans of all genres and types",
-	"version": "0.0.1",
+	"version": "2.0.0",
 	"author": "Cojam",
 	"repository": "bitbucket:ruLait/asianwave.ru",
 	"license": "UNLICENSED",
@@ -13,6 +13,7 @@
 		"gulp-bom": "^1.0.0",
 		"gulp-csso": "^3.0.0",
 		"gulp-plumber": "^1.1.0",
+		"gulp-pug": "^3.3.0",
 		"gulp-rename": "^1.2.2",
 		"gulp-sass": "^3.1.0",
 		"gulp-uglify": "^3.0.0",

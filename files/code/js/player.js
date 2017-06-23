@@ -11,9 +11,12 @@ if (window.self == window.top) { document.body.innerHTML = '<p class="noframe"><
 	* Взято здесь: https://gist.github.com/ivan1911/5327202#gistcomment-1669858
 */
 
-function declOfNum(number, titles) {
-	let titles, number = Math.abs(number), cases = [2, 0, 1, 1, 1, 2]
-	return number + ' ' + titles[(number%100>4 && number%100<20)? 2 : cases[(number%10<5)?number%10:5]]
+function declOfNum(num, titles) {
+	let
+		number = Math.abs(num),
+		cases = [2, 0, 1, 1, 1, 2]
+
+	return number + ' ' + titles[(number%100>4 && number%100<20) ? 2 : cases[(number%10<5)?number%10:5]]
 }
 
 /*

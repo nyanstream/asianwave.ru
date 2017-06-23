@@ -9,24 +9,36 @@ let
 	composer =  require('gulp-uglify/composer'),
 	uglifyjs =  require('uglify-es'),
 	sass =      require('gulp-sass'),
-	csso =      require('gulp-csso')//,
+	csso =      require('gulp-csso'),
+	pug =       require('gulp-pug')//,
 	//php =       require('gulp-connect-php')
 
 let minify = composer(uglifyjs, console)
 
 let paths = {
-	'js': {
-		'dev': 'files/code/js/**/*.js',
-		'prod': 'files/js/'
+	html: {
+		dev: ['pug/**/*.pug', '!pug/src/**/*.pug'],
+		prod: ''
 	},
-	'kamina': 'node_modules/kamina-js/dist/*.min.js',
-	'css': {
-		'dev': 'files/code/scss/**/*.scss',
-		'prod': 'files/css/'
+	js: {
+		dev: 'files/code/js/**/*.js',
+		prod: 'files/js/',
+		kamina: 'node_modules/kamina-js/dist/*.min.js',
+	},
+	css: {
+		dev: 'files/code/scss/**/*.scss',
+		prod: 'files/css/'
 	}
 }
 
-gulp.task('get-kamina', () => gulp.src(paths.kamina)
+gulp.task('pug', () => gulp.src(paths.html.dev)
+	.pipe(plumber())
+	//.pipe(watch(paths.html.dev))
+  .pipe(pug({}))
+	.pipe(gulp.dest(paths.html.prod))
+)
+
+gulp.task('get-kamina', () => gulp.src(paths.js.kamina)
 	.pipe(bom())
 	.pipe(gulp.dest(paths.js.prod))
 )
@@ -50,4 +62,4 @@ gulp.task('scss', () => gulp.src(paths.css.dev)
 	.pipe(gulp.dest(paths.css.prod))
 )
 
-gulp.task('default', ['get-kamina', 'minify-js', 'scss'])
+gulp.task('default', ['pug', 'get-kamina', 'minify-js', 'scss'])

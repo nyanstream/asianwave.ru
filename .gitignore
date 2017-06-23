@@ -2,4 +2,9 @@
 package-lock.json
 files/js/
 files/css/
+files/img/apps-pic/
+files/img/events/
 files/img/sm/
+/*.html
+!files/other/*.html
+apps/

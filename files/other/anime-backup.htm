@@ -16,11 +16,12 @@
 		}
 		body {
 			background-color: #000;
-			background-image: url('../img/anime-offline.png');
+			/*background-image: url('../img/anime-offline.png');*/
 			background-repeat: no-repeat;
 			background-position: center bottom;
 			background-size: cover;
 		}
+		.player:empty { display: none; }
 		.warning {
 			display: none;
 			font-family: Roboto, Arial, sans-serif;
@@ -54,15 +55,16 @@
 		document.addEventListener('DOMContentLoaded', () => {
 			let
 				embed = $create.elem('embed'),
-				stream = $check.get('url') ? $check.get('url') : 'video.eientei.org/live/AsianWave'
+				stream = $check.get('url') ? $check.get('url') : 'video.eientei.org/live/AsianWave',
+				debug = ($check.get('debug') == '1') ? '&debug=1' : ''
 
-			embed.setAttribute('src', 'yukkuplayer.swf')
+			embed.setAttribute('src', 'vgaplayer.swf')
 			embed.setAttribute('type', 'application/x-shockwave-flash')
-			embed.setAttribute('flashvars', `videoUrl=rtmp://${stream}&buffer=1&idleImageUrl=spinner.gif`)
+			embed.setAttribute('flashvars', `url=rtmp://${stream}${debug}&smoothing=1&fullscreen=1&imageUrl=../img/anime-offline.png&buttonBgColor=0&buttonHiBgColor=0`)
 			embed.setAttribute('quality', 'best')
 			embed.setAttribute('scale', 'noscale')
 			embed.setAttribute('browserzoom', 'noscale')
-			embed.setAttribute('wmode', 'transparent')
+			embed.setAttribute('wmode', 'direct')
 			embed.setAttribute('menu', false)
 			embed.setAttribute('allowfullscreen', true)
 			embed.setAttribute('pluginspage', 'https://get.adobe.com/ru/flashplayer/')

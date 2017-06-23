@@ -15,16 +15,17 @@ body {
 	@include flexbox(auto, center, center, auto);
 	background-color: #fff;
 	min-height: 300px;
+
+	@import 'src/links_style';
 }
 
 main {
+	display: none;
 	font-family: Roboto, Arial, sans-serif;
 	font-size: 24px;
 	letter-spacing: 1.2px;
 	padding: 10px;
 	color: #000;
-
-	@import 'src/links_style';
 }
 
 small {

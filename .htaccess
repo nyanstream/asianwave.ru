@@ -2,8 +2,8 @@
 
 # Errorpages
 Options All -Indexes
-ErrorDocument 404 /files/error-pages/404.htm
-ErrorDocument 403 /files/error-pages/403.htm
+ErrorDocument 404 /apps/error.html
+ErrorDocument 403 /apps/error.html
 
 # Configurations
 AddDefaultCharset utf-8
@@ -82,10 +82,7 @@ Redirect 301 /app--chrome https://chrome.google.com/webstore/detail/ecbegehkeefm
 Redirect 301 /app--opera https://addons.opera.com/ru/extensions/details/asian-wave/
 
 # разное
-
-# фикс адресов разделов
-Redirect 301 /anime/ /anime#urlWithS
-Redirect 301 /radio/ /radio#urlWithS
+Redirect 301 /video https://video.asianwave.ru
 
 # фикс для расширения
 Redirect 301 /files/code/css/chrome-app-events.min.css /files/css/chrome-app-events.min.css

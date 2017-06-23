@@ -35,9 +35,10 @@
 		$vkFile = 'vk-info.json';
 
 		if (filemtime($vkFile) < time() - 10) {
-			$vk = file_get_contents($APIep['vk'] . '/wall.get?owner_id=-' . $vkData['comID'] . '&count=6&extended=1&v=' . $vkData['api-version']);
-			//echo $APIep['vk'] . '/wall.get?owner_id=-' . $vkData['comID'] . '&count=6&extended=1&v=' . $vkData['api-version'];
-
+			$vk_vid_ac = file_get_contents('topsec/vk-token.txt');
+			$url = $APIep['vk'] . '/wall.get?owner_id=-' . $vkData['comID'] . '&count=6&extended=1&v=' . $vkData['api-version'] . '&access_token=' . $vk_vid_ac;
+			
+			$vk = file_get_contents($url);
 			if (!$vk) { return false; }
 
 			$vkAPI = json_decode($vk)->response;
@@ -51,36 +52,36 @@
 				'pic' => $vkAPI_Group->photo_100
 			];
 
-			for ($i = 0; $i < count($vkAPI_Wall); $i++) {
+			foreach ($vkAPI_Wall as $i=>&$post) {
 				$postType = 'post';
 				$postPin = 0;
 
-				if ($vkAPI_Wall[$i]->copy_history) { $postType = 'copy'; }
-				if ($vkAPI_Wall[$i]->is_pinned) { $postPin = 1; }
+				if ($post->copy_history) { $postType = 'copy'; }
+				if ($post->is_pinned) { $postPin = 1; }
 				
 				$vkWall[$i] = [
-					'id' => $vkAPI_Wall[$i]->id,
-					'time' => $vkAPI_Wall[$i]->date,
+					'id' => $post->id,
+					'time' => $post->date,
 					'type' => $postType,
 					'pin' => $postPin,
-					//'ad' => $vkAPI_Wall[$i]->marked_as_ads,
-					'text' => $vkAPI_Wall[$i]->text
+					//'ad' => $post->marked_as_ads,
+					'text' => $post->text
 				];
 
-				if ($vkAPI_Wall[$i]->attachments[0]->photo) {
+				if ($post->attachments[0]->photo) {
 					$vkWall[$i] += [
 						'pic' => [
-							'small' => strtr($vkAPI_Wall[$i]->attachments[0]->photo->photo_130, $imgProxy),
-							'big' => $vkAPI_Wall[$i]->attachments[0]->photo->photo_604
+							'small' => strtr($post->attachments[0]->photo->photo_130, $imgProxy),
+							'big' => $post->attachments[0]->photo->photo_604
 						]
 					];
 				}
 
-				if ($vkAPI_Wall[$i]->attachments[0]->video->photo_130) {
+				if ($post->attachments[0]->video->photo_130) {
 					$vkWall[$i] += [
 						'pic' => [
-							'small' => strtr($vkAPI_Wall[$i]->attachments[0]->video->photo_130, $imgProxy),
-							'big' => $vkAPI_Wall[$i]->attachments[0]->video->photo_640
+							'small' => strtr($post->attachments[0]->video->photo_130, $imgProxy),
+							'big' => $post->attachments[0]->video->photo_640
 						]
 					];
 				}

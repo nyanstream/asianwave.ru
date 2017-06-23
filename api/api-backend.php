@@ -9,17 +9,9 @@
 		$radioPoints = $GLOBALS['radioPoints'];
 
 		if (filemtime($file) < time() - 10) {
-			$radio_stat = [
-				'online' => '0',
-				'rj' => 'Auto-DJ',
-				'song' => [
-					'curr' => 'You are using an old version of the extension.',
-					'next' => 'You are using an old version of the extension.',
-					'prev' => []],
-				'listeners' => '0'];
-
-			for ($i = 0; $i < count($radioPoints); $i++) {
-				$mr24_cnt = file_get_contents($APIep['mr'] . '/' . $radioPoints[$i][2] . '/status.json');
+			//for ($i = 0; $i < count($radioPoints); $i++) {
+			foreach ($radioPoints as $i=>&$point) {
+				$mr24_cnt = file_get_contents($APIep['mr'] . '/' . $point[2] . '/status.json');
 
 				$mr24_info = json_decode($mr24_cnt);
 
@@ -41,7 +33,7 @@
 						//'prev' => $r_prevs*/], // пока не нужно
 					'listeners' => $r_listeners];
 
-				$r_json[$radioPoints[$i][0]] = $r_stat;
+				$r_json[$point[0]] = $r_stat;
 			}
 
 			/*$stream_stat = [
@@ -50,11 +42,10 @@
 			$stream_stat = null;
 
 			$json_data = [
-				'radio' => $radio_stat,
 				'radio-v2' => $r_json,
 				'anime' => $stream_stat,
 				'timestamp' => time()];
-
+				
 			file_put_contents(dirname(__FILE__) . '/api.json', json_encode($json_data, JSON_UNESCAPED_UNICODE));
 		}
 	}

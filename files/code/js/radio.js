@@ -92,18 +92,10 @@ var points = {
 }
 
 var $currentPoint = {
-	port: () => {
-		return $ls.get('aw_radioPoint') ? points[$ls.get('aw_radioPoint')].port : points['jp'].port
-	},
-	name: () => {
-		return $ls.get('aw_radioPoint') ? points[$ls.get('aw_radioPoint')].name : points['jp'].name
-	},
-	srv: () => {
-		return $ls.get('aw_radioPoint') ? points[$ls.get('aw_radioPoint')].srv : points['jp'].srv
-	},
-	key: () => {
-		return $ls.get('aw_radioPoint') || 'jp'
-	}
+	port: () => $ls.get('aw_radioPoint') ? points[$ls.get('aw_radioPoint')].port : points['jp'].port,
+	name: () => $ls.get('aw_radioPoint') ? points[$ls.get('aw_radioPoint')].name : points['jp'].name,
+	srv: () => $ls.get('aw_radioPoint') ? points[$ls.get('aw_radioPoint')].srv : points['jp'].srv,
+	key: () => $ls.get('aw_radioPoint') || 'jp'
 }
 
 /*
@@ -409,9 +401,13 @@ var $parse = {
 		//currRJ.classList.add('radio--pe')
 		//currLstn.classList.add('radio--pe')
 
-		if (data['djname'].toLowerCase() != 'auto-dj') {
-			liveBox.appendChild(currRJ)
-			liveBox.appendChild(currLstn)
+		switch (data['djname'].toLowerCase()) {
+			case '':
+			case 'auto-dj':
+				break
+			default:
+				liveBox.appendChild(currRJ)
+				liveBox.appendChild(currLstn)
 		}
 
 		/* Блоки со ссылками на текущий трек и на загрузку "плейлиста" */

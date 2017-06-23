@@ -1,0 +1,71 @@
+doctype html
+html(lang='ru')
+	head
+		include src/vars.pug
+		- var subTitle = 'Anime'
+
+		include src/metadata.pug
+
+		link(rel='canonical' href=`${url}/anime`)
+		link(rel='shortcut icon' href='/files/img/favicon.png')
+		link(rel='manifest' href='/.webmanifest')
+		link(rel='sitemap' href='/sitemap.php')
+
+		each URL in ['google-analytics.com', 'ssl.google-analytics.com', 'mc.yandex.ru', 'st1.chatovod.ru', 'counter.yadro.ru', 'images.weserv.nl', 'vk.com', 'pp.userapi.com', 'top-fwz1.mail.ru']
+			link(rel='dns-prefetch' href=`//${URL}`)
+
+		each CSS in ['aw-fonts.min.css', 'aw-every.min.css', 'anime.min.css']
+			link(rel='stylesheet' href=`/files/css/${CSS}?v=${projectVer}`)
+		noscript
+			style.
+				.tabs ul, .tabs [id*='tab_'], .closeTabs, .player .stats { display: none }
+	body
+		div.container
+			header.top-panel
+				div.brand
+					div.logo
+					a(href='/' class='text' rel='home') #{title} / #{subTitle}
+				ul.right
+					li.li--offset
+						a(href='/app--chrome' target='_blank' data-lang-title='ext_chrome')
+							i.icon.icon-chrome
+					li
+						a(href='https://vk.com/topic-120842574_34298486' target='_blank' rel='nofollow noopener' data-lang-title='request_anime') &#43;
+					li.li--offset
+						a(href='http://www.donationalerts.ru/r/asianwave' target='_blank' rel='nofollow noopener' data-lang-title='support') &#8381;
+					li
+						span.no-link.closeTabs(data-lang-title='tabs_hide') &times;
+			main.anime
+				div.player
+					div.vk-player
+					div.noti
+					div.warnings
+						div.api
+							p С нашим API возникла какая-то ошибка!
+							p <br>Попробуйте дважды кликнуть на наш логотип в шапке сайта для перезагрузки. Скорее всего, всё уже починилось само.
+							p(style='font-size: .8em') <br>(но если нет, то начните возмущаться в чате или #[a(href='https://vk.me/asianwaveru' target='_blank' rel='nofollow noopener') напишите сюда], мы постараемся отреагировать как можно быстрее)
+							p(style='font-size: .7em') <br>(a ещё можно попробовать #[a(href='?b') нажать сюда])</p>
+				aside.tabs
+					ul
+						li.active(data-lang='tab_chat' data-tab='chat') Чат
+						li(data-lang='tab_sched' data-tab='sched') Расписание
+						li(data-lang='tab_news' data-tab='news') Новости
+					section(data-tab='chat')
+						iframe(src='https://asianwaveru.chatovod.ru')
+					section(data-tab='sched')
+						table.schedule
+					section(data-tab='news')
+						div.vk-news
+					noscript
+						div
+							include src/nojs-text.pug
+
+		each lib in ['fetch/2.0.3/fetch.min.js', 'moment.js/2.18.1/moment.min.js', 'moment.js/2.18.1/locale/ru.js', 'ismobilejs/0.4.1/isMobile.min.js']
+			script(src=`https://cdnjs.cloudflare.com/ajax/libs/${lib}` defer)
+			
+		each JS in ['kamina.min.js', 'langs.min.js']
+			script(src=`/files/js/${JS}?v=${projectVer}` defer)
+
+		script(src=`/files/js/anime.min.js?v=${projectVer}` data-backup-path="/files/other/" data-backup-bydefault defer)
+
+		include src/bbiswu.pug
