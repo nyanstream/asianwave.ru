@@ -19,6 +19,10 @@ meta(name='twitter:image' content='/files/img/share.png')
 
 meta(name='telegram:channel' content='asianwave')
 
-script(type='application/ld+json') {"@context":"https://schema.org", "@type":"WebSite", "url":"#{url}", "name":"#{author}", "description": "#{description}"}
+script(type='application/ld+json') {"@context":"https://schema.org", "@type":"WebSite", "url":"#{url}", "name":"#{title}", "description": "#{description}"}
+
+link(rel='shortcut icon' href=`${urls.favicon}`)
+link(rel='manifest' href=`${urls.manifest}`)
+link(rel='sitemap' href=`${urls.sitemap}`)
 
 meta(name='viewport' content='width=device-width, initial-scale=1')

@@ -5,6 +5,6 @@ files/css/
 files/img/apps-pic/
 files/img/events/
 files/img/sm/
-/*.html
+*.html
 !files/other/*.html
 apps/

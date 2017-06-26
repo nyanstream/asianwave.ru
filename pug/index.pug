@@ -4,23 +4,12 @@ html(lang='ru')
 		include src/vars.pug
 		- var isIndexTmpl = true
 
-		meta(charset='utf-8')
-		title #{title}
-
 		include src/metadata.pug
 
 		each verif in [{s: 'google-site-verification', code: 'Y-zrQS3gEUB2vkcCPbvcU7dhogBFKa_BV-rP_i2x79c'}, {s: 'yandex-verification', code: '37a9e7933989cd01'}, {s: 'msvalidate.01', code: '6EB38FA17104F2614498E05CF14876B9'}, {s: 'wmail-verification', code: '4520e9ca3d1a58da4ded056030b5bc6e'}]
 			meta(name=`${verif.s}` content=`${verif.code}`)
 
-		//- meta(name='google-site-verification' content='Y-zrQS3gEUB2vkcCPbvcU7dhogBFKa_BV-rP_i2x79c')
-		//- meta(name='yandex-verification' content='37a9e7933989cd01')
-		//- meta(name='msvalidate.01' content='6EB38FA17104F2614498E05CF14876B9')
-		//- meta(name='wmail-verification' content='4520e9ca3d1a58da4ded056030b5bc6e')
-
 		link(rel='canonical' href=`${url}`)
-		link(rel='shortcut icon' href='/files/img/favicon.png')
-		link(rel='manifest' href='/.webmanifest')
-		link(rel='sitemap' href='/sitemap.php')
 
 		link(rel='prerender' href='/radio')
 		link(rel='prerender' href='/anime')

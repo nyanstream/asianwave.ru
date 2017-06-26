@@ -14,7 +14,7 @@ var domain = {
  * Дополнение к камине
  */
 
-$make.balloon = function(elem, text, pos) {
+$create.balloon = function(elem, text, pos) {
 	let to = elem.dataset
 
 	if (!to || isMobile.any) return false;
@@ -175,14 +175,14 @@ radio.volume = radioVol/100
  */
 
 document.documentElement.style.setProperty('--volume', radioVol + '%')
-radioCtrl_vol.addEventListener('input', function() {
-	radioVol = this.value
-	radio.volume = this.value/100
+radioCtrl_vol.addEventListener('input', (e) => {
+	radioVol = e.target.value
+	radio.volume = radioVol/100
 	document.documentElement.style.setProperty('--volume', radioVol + '%')
 });
 
-radioCtrl_vol.addEventListener('change', function() {
-	if ($ls.test()) $ls.set('aw_radioVolume', this.value)
+radioCtrl_vol.addEventListener('change', (e) => {
+	$ls.set('aw_radioVolume', e.target.value)
 })
 
 /*
@@ -191,7 +191,7 @@ radioCtrl_vol.addEventListener('change', function() {
  */
 
 ;(function() {
-	pointButton.forEach((button, i) => {
+	Array.from(pointButton).forEach((button, i) => {
 		button.addEventListener('click', (e) => {
 			let clickedButt = e.target || e.srcElement;
 			clickedButt.classList.add('active');
@@ -388,7 +388,7 @@ var $parse = {
 
 		stateBoxBody = $create.elem('div', `<p title="${getString('song_current_track')}: ${$make.safe(currentS)}">${$make.safe(currentS)}</p><p title="${getString('song_current_artist')}: ${$make.safe(currentA)}">${$make.safe(currentA)}</p>`, 'current radio--pe')
 
-		$make.balloon(stateBoxBody, getString('song_current'), 'down')
+		$create.balloon(stateBoxBody, getString('song_current'), 'down')
 
 		/* Блок с выводом состояния прямого эфира (в остальных случаях скрыт) */
 
@@ -396,7 +396,7 @@ var $parse = {
 			currRJ = $create.elem('div', `<p>${getString('rj_current')}:</p><p>${$make.safe(data['djname'])}</p>`, 'curr-rj radio--pe'),
 			currLstn = $create.elem('div', `<div>${$make.safe(data['listeners'])}</div>`, 'curr-lstn radio--pe')
 
-		$make.balloon(currLstn, getString('listeners_current'), 'left')
+		$create.balloon(currLstn, getString('listeners_current'), 'left')
 
 		//currRJ.classList.add('radio--pe')
 		//currLstn.classList.add('radio--pe')
@@ -423,7 +423,7 @@ var $parse = {
 		linksBoxBody.appendChild(srchVK)
 		linksBoxBody.appendChild(srchGo)
 
-		$make.balloon(linksBoxBody, getString('song_search'), 'left')
+		$create.balloon(linksBoxBody, getString('song_search'), 'left')
 
 		let plLink = $create.link('', '<i class="icon icon-music"></i>')
 
@@ -432,7 +432,7 @@ var $parse = {
 
 		plBoxBody = $create.elem('div', plLink.outerHTML, 'dlm3u radio--pe')
 
-		$make.balloon(plBoxBody, getString('playlist_dl'), 'left')
+		$create.balloon(plBoxBody, getString('playlist_dl'), 'left')
 
 		/* Блок с выводом недавних треков */
 
@@ -476,7 +476,7 @@ var $parse = {
 		if (notiContent.querySelector('a[href]')) {
 			let notiLinks = notiContent.querySelectorAll('a[href]')
 
-			notiLinks.forEach((link) => {
+			Array.from(notiLinks).forEach((link) => {
 				link.setAttribute('target', '_blank')
 				if (link.getAttribute('href').indexOf('http') == 0) link.setAttribute('rel', 'nofollow noopener')
 			})
@@ -504,6 +504,7 @@ var $parse = {
  */
 
 var API = {
+	'api': '/api/api.json',
 	'sched': '/api/radio-sched.json',
 	'noti': '/api/noti.json',
 	'vk_news': '/api/vk-info.json'
@@ -554,13 +555,28 @@ var $loadInfo = {
  */
 
 document.addEventListener('DOMContentLoaded', () => {
+	let pointButtons = Array.from(pointButton)
+
+	doFetch(API.api, (data) => {
+		let radio = data['radio-v2'], count = 0
+		for (let key in radio) {
+			if (radio.hasOwnProperty(key) && radio[key].online == 0) {
+				count++
+				pointButtons.forEach((pointBtn) => {
+					if (pointBtn.dataset.point == key) pointBtn.setAttribute('disabled', '')
+				})
+			}
+		}
+		if (count == pointButtons.length) alert(`Похоже, что все станции оффлайн. Скорее всего, мы не проплатили их хостинг. Или закрылись. Или закрылся хостинг. Не знаем, что хуже, если честно. В любом случае, мы их или скоро починим, или не починим совсем. На всякий случай вооружитесь терпением!`)
+	})
+
 	let	getPoint = $check.get('point')
 	if (getPoint && Object.keys(points).includes(getPoint)) { radio.toPoint(getPoint) }
 
-	//$make.balloon(pointButton[0].parentElement, 'Список потоков', 'down')
+	//$create.balloon(pointButton[0].parentElement, 'Список потоков', 'down')
 	//if (isMobile.any) radioCtrl_pp.parentElement.classList.add('on-mobile')
 
-	pointButton.forEach((pointBtn) => {
+	pointButtons.forEach((pointBtn) => {
 		let
 			data = pointBtn.dataset,
 			pointData = points[data.point]
@@ -572,18 +588,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
 		if (!data.pointCustom) {
 			pointBtn.textContent = data.point
-			$make.balloon(pointBtn, '\u00AB' + pointData.name + '\u00BB', 'down')
+			$create.balloon(pointBtn, '\u00AB' + pointData.name + '\u00BB', 'down')
 		} else {
 			let dataCus = data.pointCustom.split(';')
 			pointBtn.textContent = dataCus[0]
-			if (dataCus[1]) $make.balloon(pointBtn, '\u00AB' + dataCus[1] + '\u00BB', 'down')
+			if (dataCus[1]) $create.balloon(pointBtn, '\u00AB' + dataCus[1] + '\u00BB', 'down')
 		}
 
 		if (data.point == $currentPoint.key())
 			pointBtn.classList.add('active');
 
-		pointBtn.addEventListener('click', function() {
-			radio.toPoint(this.dataset.point)
+		pointBtn.addEventListener('click', (e) => {
+			if (!e.target.hasAttribute('disabled')) {
+				radio.toPoint(e.target.dataset.point)
+			}
 		})
 	})
 

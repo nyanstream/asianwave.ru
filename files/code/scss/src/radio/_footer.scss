@@ -1,19 +1,12 @@
 // main: ../../radio.scss
 
 footer {
-	//border-top: 1px solid rgba(0, 0, 0, .1);
-
-	div {
-		width: $pageWidth;
-		padding: 10px 5px;
-		margin: 0 auto;
-	}
-
 	text-align: center;
 	font-size: $fontSize;
 
 	p {
 		padding: 0 5px;
+		line-height: 1.5em;
 		color: rgba(128, 128, 128, .5);
 	}
 

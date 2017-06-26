@@ -1,8 +1,6 @@
 // main: ../../anime.scss
 
 .tabs {
-	$tabColor: $top-panel--color;
-	$tabBorderColor: darken($tabColor, 3%);
 	$tabCelHeight: 25px;
 
 	ul {
@@ -12,8 +10,7 @@
 
 		li {
 			display: inline-block;
-			background-color: $tabColor;
-			//width: 50%;
+			background-color: var(--top-panel-color);
 			width: calc(100% / 3);
 			height: 100%;
 			padding: 2px;
@@ -23,8 +20,9 @@
 			list-style: none;
 			cursor: pointer;
 
-			border-left: .5px solid $tabBorderColor;
-			border-right: .5px solid $tabBorderColor;
+			border-color: var(--tab-border-color);
+			border-left: .5px solid var(--tab-border-color);
+			border-right: .5px solid var(--tab-border-color);
 
 			&:first-child {
 				border-left: 0;
@@ -34,16 +32,12 @@
 				border-right: 0;
 			}
 
-			&:hover {
-				background-color: darken($tabColor, 5%);
+			&:not(.active):hover {
+				background-color: var(--tab-hover-color);
 			}
 
 			&.active {
-				background-color: darken($tabColor, 10%);
-
-				&:hover {
-					background-color: darken($tabColor, 10%);
-				}
+				background-color: var(--tab-active-color);
 			}
 		}
 	}

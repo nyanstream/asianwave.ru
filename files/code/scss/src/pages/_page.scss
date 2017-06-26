@@ -12,11 +12,11 @@
 		box-shadow: var(--shadow);
 		padding: .5em 1.5em 1.5em;
 
-		section {
+		section { // для вообще всех секций, тех что вложенны в другие в том числе
 			margin-top: .8em;
 		}
 
-		& > section {
+		& > section { // для "рутовых" секций
 			margin-top: 1em;
 		}
 
@@ -26,18 +26,24 @@
 
 			small {
 				font-size: .8em;
+				margin-left: .3em;
 			}
 		}
 
 		p {
-			margin: 0 1em;
+			margin: .5em 1em;
 		}
 
 		@import '../links_style';
 		a[href^="#"] { border-bottom: 0 !important }
 
 		ul, ol {
-			margin-left: 1.1em;
+			margin: 0 1em;
+		}
+
+		p, ul, ol {
+			&:first-of-type {	margin-top: 0 }
+			&:last-of-type { margin-bottom: 0 }
 		}
 
 		ul {

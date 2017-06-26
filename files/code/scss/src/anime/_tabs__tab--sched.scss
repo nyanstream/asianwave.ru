@@ -1,6 +1,6 @@
 // main: _tabs.scss
 
-&[data-tab="sched"] {
+&[data-tab='sched'] {
 	$ggl_t_top: 50px;
 	$ggl_t_bot: 28px;
 
@@ -19,7 +19,7 @@
 					background-color: #feff44;
 				}
 				&--next {
-					background-color: #d8d8d8;
+					background-color: #e7e7e7;
 				}
 				&--notToday {
 					opacity: .6;

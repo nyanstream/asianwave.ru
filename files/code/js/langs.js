@@ -168,7 +168,7 @@ function getString(string) {
 		elems = $make.qs('[data-lang]', ['a']),
 		elemsTitle = $make.qs('[data-lang-title]', ['a'])
 
-	if (elems) elems.forEach((elem) => { if (elem.dataset.langNo != '') elem.textContent = getString(elem.dataset.lang) })
+	if (elems) Array.from(elems).forEach((elem) => { if (elem.dataset.langNo != '') elem.textContent = getString(elem.dataset.lang) })
 
-	if (elemsTitle) elemsTitle.forEach((elem) => { if (elem.dataset.langNo != '') elem.setAttribute('title', getString(elem.dataset.langTitle)) })
+	if (elemsTitle) Array.from(elemsTitle).forEach((elem) => { if (elem.dataset.langNo != '') elem.setAttribute('title', getString(elem.dataset.langTitle)) })
 })()

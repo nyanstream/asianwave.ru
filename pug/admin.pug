@@ -1,0 +1,26 @@
+doctype html
+html(lang='ru')
+	head
+		include src/vars.pug
+		
+		meta(charset='utf-8')
+		title #{title} / Авторизация
+		
+		meta(name='viewport' content='width=device-width, initial-scale=1')
+		
+		link(rel='shortcut icon' href=`${urls.favicon}`)
+		meta(name='robots' content='noindex, follow')
+		
+		style input { width: 100%; margin-top: 3px }
+	body(style='display: flex; align-items: center; justify-content: center')
+		form(name='login' action='/api/admin.php' method='post')
+			div(style='text-align: center')
+				img(src=`${favicon}` alt='')
+			p
+				label(for='login') Имя пользователя или e-mail<br>
+					input(type='text' name='login' maxlength='42' autocomplete='off' required)
+			p
+				label(for='pass') Пароль<br>
+					input(type='password' name='pass' maxlength='42' autocomplete='off' required)
+			p
+				input(type='submit' name='auth' value='Войти')

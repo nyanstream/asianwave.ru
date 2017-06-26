@@ -37,16 +37,16 @@ var domain = {
  * Найдено здесь: https://goo.gl/lsSkEe
  */
 
-$make.tabs = function(selector) {
+$create.tabs = function(selector) {
 	let
-		tabAnchors = this.qs(selector + ' li', ['a']),
-		tabs = this.qs(selector + ' section', ['a'])
+		tabAnchors = $make.qs(selector + ' li', ['a']),
+		tabs = $make.qs(selector + ' section', ['a'])
 
-	tabAnchors.forEach((tabAnchor, i) => {
+	Array.from(tabAnchors).forEach((tabAnchor, i) => {
 		if (tabAnchor.classList.contains('active')) tabs[i].style.display = 'block'
 
 		tabAnchor.addEventListener('click', (e) => {
-			let clickedAnchor = e.target || e.srcElement
+			let clickedAnchor = e.target
 			clickedAnchor.classList.add('active')
 
 			for (let i = 0, tabsLength = tabs.length; i < tabsLength; i++) {
@@ -70,15 +70,17 @@ $make.tabs = function(selector) {
 		closeTabsCtr = $make.qs('.closeTabs'),
 		mainCont = $make.qs('.anime').classList
 
-	closeTabsCtr.addEventListener('click', function() {
+	closeTabsCtr.addEventListener('click', (e) => {
+		let _this = e.target
+
 		if (!mainCont.contains('no-tabs')) {
 			mainCont.add('no-tabs')
-			this.textContent = '\u003C'
-			this.setAttribute('title', getString('tabs_show'))
+			_this.textContent = '\u003C'
+			_this.setAttribute('title', getString('tabs_show'))
 		} else {
 			mainCont.remove('no-tabs')
-			this.textContent = '\u00D7'
-			this.setAttribute('title', getString('tabs_hide'))
+			_this.textContent = '\u00D7'
+			_this.setAttribute('title', getString('tabs_hide'))
 		}
 	})
 })()
@@ -89,25 +91,21 @@ $make.tabs = function(selector) {
 
 ;(() => {
 	let
-		container = $make.qs('.container'),
-		chatTab = $make.qs('li[data-tab="chat"]')/*,
-		metacolor = $make.qs('meta[name="theme-color"]')*/
+		root = document.documentElement.dataset,
+		chatTab = $make.qs('li[data-tab="chat"]')
 
-	function oldHeadColor() {
-		//metacolor.setAttribute('content', '#464646');
-		container.dataset.theme = 'old-gray'
-		$ls.set('aw_iamoldfag', true)
-	}
+	if ($ls.test() && $ls.get('aw_iamoldfag'))
+		root.theme = 'old-gray'
 
-	if ($ls.get('aw_iamoldfag')) {
-		oldHeadColor()
-		chatTab.addEventListener('dblclick', () => {
-			$ls.rm('aw_iamoldfag')
-			delete container.dataset.theme
-		})
-	} else {
-		chatTab.addEventListener('dblclick', oldHeadColor);
-	}
+	chatTab.addEventListener('dblclick', () => {
+		if (!root.theme) {
+			root.theme = 'old-gray'
+			if ($ls.test()) { $ls.set('aw_iamoldfag', '1') }
+		} else {
+			delete root.theme
+			if ($ls.test()) { $ls.rm('aw_iamoldfag') }
+		}
+	})
 })()
 
 /*
@@ -245,18 +243,20 @@ var $parse = {
 		let
 			player = $make.qs('.player'),
 			playerElem = player.querySelector('.vk-player'),
-			vkPlayer = $create.elem('iframe')
+			playerFrame = $create.elem('iframe'),
+			embedLink = data['url']
 
 		let
 			backupURL = $check.get('b'),
 			backupDef = scriptData.backupBydefault
 
-		if (backupDef == '') backupDef = !0
+		if (!backupURL) backupURL = false
+		if (backupDef == '') backupDef = true
 
 		if (player.dataset.error == 'api')
 			delete player.dataset.error;
 
-		vkPlayer.setAttribute('allowfullscreen', '')
+		playerFrame.setAttribute('allowfullscreen', '')
 
 		playerElem.textContent = ''
 
@@ -268,14 +268,13 @@ var $parse = {
 			if (backupURL == 'jw' || backupDef == 'jw') srcLnk = srcLnk + '-jw'
 			if (backupHash) backupHash = '?' + backupHash
 
-			vkPlayer.setAttribute('src', `${srcLnk}.htm${backupHash}`)
-			playerElem.appendChild(vkPlayer);	return
+			embedLink = `${srcLnk}.htm${backupHash}`
 		}
 
 		if (data == 'fail' || !data['url']) { player.dataset.error = 'api'; return }
 
-		vkPlayer.setAttribute('src', data['url'])
-		playerElem.appendChild(vkPlayer)
+		playerFrame.setAttribute('src', embedLink)
+		playerElem.appendChild(playerFrame)
 	},
 	noti: (data) => {
 		let notiEl = $make.qs('.noti')
@@ -303,7 +302,7 @@ var $parse = {
 		if (notiContent.querySelector('a[href]')) {
 			let notiLinks = notiContent.querySelectorAll('a[href]')
 
-			notiLinks.forEach((link) => {
+			Array.from(notiLinks).forEach((link) => {
 				link.setAttribute('target', '_blank')
 				if (link.getAttribute('href').indexOf('http') == 0) link.setAttribute('rel', 'nofollow noopener')
 			})
@@ -324,7 +323,7 @@ var $parse = {
 
 		notiClose.addEventListener('click', () => {
 			notiItems[notiItems.length] = id
-			$ls.set('aw_noti', JSON.stringify(notiItems))
+			if ($ls.test()) { $ls.set('aw_noti', JSON.stringify(notiItems)) }
 			notiEl.style.display = 'none'
 		})
 	}
@@ -402,5 +401,5 @@ document.addEventListener('DOMContentLoaded', () => {
 	let aw_logo = $make.qs('.top-panel .logo')
 	aw_logo.addEventListener('dblclick', () => { $loadInfo.vk_stream() })
 
-	$make.tabs('.tabs')
+	$create.tabs('.tabs')
 })

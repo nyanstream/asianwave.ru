@@ -5,7 +5,7 @@
 	position: relative;
 	width: 100%;
 	height: $top-panel--height;
-	background-color: $top-panel--color;
+	background-color: var(--top-panel-color);
 	overflow: hidden;
 
 	a { text-decoration: none }

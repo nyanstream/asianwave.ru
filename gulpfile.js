@@ -33,8 +33,9 @@ let paths = {
 
 gulp.task('pug', () => gulp.src(paths.html.dev)
 	.pipe(plumber())
-	//.pipe(watch(paths.html.dev))
+	.pipe(watch(paths.html.dev))
   .pipe(pug({}))
+	.pipe(bom())
 	.pipe(gulp.dest(paths.html.prod))
 )
 
