@@ -1,0 +1,16 @@
+doctype html
+html(lang='ru')
+	head
+		include ../src/vars.pug
+
+		meta(charset='utf-8')
+		title #{title} / Снежок!
+		link(rel='shortcut icon' href=`${urls.favicon}`)
+
+		meta(name='viewport' content='width=device-width, initial-scale=1')
+		meta(name='robots' content='noindex, nofollow')
+
+		style.
+			html, body { margin: 0; padding: 0; width: 100%; height: 100%; background-color: transparent; overflow: hidden }
+	body
+		script(src=`${paths.js}/special/snow.min.js?v=${projectVer}`)

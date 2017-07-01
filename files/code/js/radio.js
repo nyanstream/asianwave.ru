@@ -102,7 +102,7 @@ var $currentPoint = {
  * Инициация радивы
  */
 
-function getRadioSrc() { return `https://listen${$currentPoint.srv()}.${domain.mr}/${$currentPoint.port()}` }
+var getRadioSrc = () => `https://listen${$currentPoint.srv()}.${domain.mr}/${$currentPoint.port()}`
 
 var
 	radio = new Audio(getRadioSrc()),

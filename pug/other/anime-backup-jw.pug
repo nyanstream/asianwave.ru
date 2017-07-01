@@ -1,0 +1,106 @@
+doctype html
+html(lang='ru')
+	head
+		include ../src/vars.pug
+
+		meta(charset='utf-8')
+		title #{title} / Anime Backup Player
+		link(rel='shortcut icon" href="img/favicon.png')
+
+		meta(name='viewport' content='width=device-width, initial-scale=1')
+		meta(name='robots' content='noindex, nofollow')
+
+		each URL in ['video.eientei.org', 'ssl.p.jwpcdn.com', 'assets-jpcust.jwpsrv.com', 'jwpltx.com']
+			lin(rel='dns-prefetch' href=`//${URL}`)
+
+		style.
+			#jw-player,.warning,body,html{width:100%;height:100%}body,html{margin:0;padding:0;overflow:hidden}#jw-player:empty{display:none}#jw-player.jwplayer{width:100%!important;border:0;z-index:1}#jw-player.jwplayer,.jwplayer.jw-flag-aspect-mode{height:100%!important}.jwplayer .jw-controlbar{width:150px!important;opacity:.8}.jwplayer:not(.jw-state-playing):not(.jw-flag-flash-blocked) .jw-preview{display:block!important;background-image:url(../img/anime-offline.png);background-repeat:no-repeat;background-position:center bottom;background-size:cover}.jwplayer:not(.jw-flag-user-inactive) .jw-controlbar{display:flex!important;justify-content:center}.jwplayer .jw-controlbar-center-group,.jwplayer .jw-icon-rewind,.jwplayer .jw-rightclick,.jwplayer [class*=ads],.jwplayer [role=timer]{display:none!important}.warning{display:none;font-family:Roboto,Arial,sans-serif;background-color:#fff;align-items:center;justify-content:center}.warning p{text-align:center;font-size:1.1em;padding:0 5px}.warning kbd{display:inline-block;background-color:#797979;color:#fff;padding:2.5px 5px;border-radius:5px}
+			//- html, body, #jw-player, .warning { width: 100%; height: 100%; }
+			//- html, body {
+			//- 	margin: 0; padding: 0;
+			//- 	overflow: hidden;
+			//- }
+			//- #jw-player:empty { display: none; }
+			//- #jw-player.jwplayer {
+			//- 	width: 100% !important;
+			//- 	height: 100% !important;
+			//- 	border: 0;
+			//- 	z-index: 1;
+			//- }
+			//- .jwplayer.jw-flag-aspect-mode {
+			//- 	height: 100% !important;
+			//- }
+			//- .jwplayer .jw-controlbar {
+			//- 	width: 150px !important;
+			//- 	opacity: .8;
+			//- }
+			//- .jwplayer:not(.jw-state-playing):not(.jw-flag-flash-blocked) .jw-preview {
+			//- 	display: block !important;
+			//- 	background-image: url('../img/anime-offline.png');
+			//- 	background-repeat: no-repeat;
+			//- 	background-position: center bottom;
+			//- 	background-size: cover;
+			//- }
+			//- .jwplayer:not(.jw-flag-user-inactive) .jw-controlbar {
+			//- 	display: flex !important;
+			//- 	justify-content: center;
+			//- }
+			//- .jwplayer .jw-rightclick, .jwplayer *[class*="ads"], .jwplayer .jw-icon-rewind, .jwplayer [role="timer"], .jwplayer .jw-controlbar-center-group {
+			//- 	display: none !important;
+			//- }
+			//- .warning {
+			//- 	display: none;
+			//- 	font-family: Roboto, Arial, sans-serif;
+			//- 	background-color: #fff;
+			//- 	align-items: center;
+			//- 	justify-content: center;
+			//- }
+			//- .warning p {
+			//- 	text-align: center;
+			//- 	font-size: 1.1em;
+			//- 	padding: 0 5px;
+			//- }
+			//- .warning kbd {
+			//- 	display: inline-block;
+			//- 	background-color: #797979;
+			//- 	color: #fff;
+			//- 	padding: 2.5px 5px;
+			//- 	border-radius: 5px;
+			//- }
+	body
+		div.jwplayer#jw-player
+		div.warning
+			include ../src/noflash-text.pug
+
+		each JS in ['kamina.min.js', 'special/ms-edge-suck.min.js', 'special/flash.min.js']
+			script(src=`${paths.js}/${JS}?v=${projectVer}` defer)
+		
+		script(src='https://content.jwplatform.com/libraries/9QBfQupy.js' defer)
+
+		script.
+			document.addEventListener('DOMContentLoaded',()=>{let b=jwplayer('jw-player'),c=$make.qs('.player'),d=$check.get('url')?$check.get('url'):'video.eientei.org/live/AsianWave',e={file:`rtmp://${d}`,width:'100%',height:'100%',skin:'roundster',autostart:!0,displaytitle:!1,displaydescription:!1,abouttext:'Asian Wave',aboutlink:'/'};hasFlash()?b.setup(e):$make.qs('.warning').style.display='flex'});
+			//- https://jscompress.com
+			//- document.addEventListener('DOMContentLoaded', () => {
+			//- 	let
+			//- 		playerID = 'jw-player',
+			//- 		player = jwplayer(playerID),
+			//- 		playerElem = $make.qs('.player'),
+			//- 		stream = $check.get('url') ? $check.get('url') : 'video.eientei.org/live/AsianWave'
+			//- 
+			//- 	let jwSetup = {
+			//- 		'file': `rtmp://${stream}`,
+			//- 		'width': '100%', 'height': '100%',
+			//- 		// 'rtmp': { 'bufferlength': 10 },
+			//- 		'skin': 'roundster',
+			//- 		'autostart': true,
+			//- 		//'controls': false,
+			//- 		'displaytitle': false,
+			//- 		'displaydescription': false,
+			//- 		'abouttext': 'Asian Wave',
+			//- 		'aboutlink': '/'
+			//- 	}
+			//- 
+			//- 	if (hasFlash())
+			//- 		player.setup(jwSetup)
+			//- 		else $make.qs('.warning').style.display = 'flex'
+			//- })

@@ -18,7 +18,7 @@ html(lang='ru')
 			link(rel='dns-prefetch' href=`//${URL}`)
 
 		each CSS in ['aw-fonts.min.css', 'main.min.css']
-			link(rel='stylesheet' href=`/files/css/${CSS}?v=${projectVer}`)
+			link(rel='stylesheet' href=`${paths.css}/${CSS}?v=${projectVer}`)
 	body
 		header.top-panel
 			div.container

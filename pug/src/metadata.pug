@@ -1,21 +1,14 @@
 meta(charset='utf-8')
 title #{title}#{subTitle ? ' / ' + subTitle : ''}
 
-meta(name='description' content='')
+meta(name='description' content=`${description}`)
 meta(name='keywords' content='')
 
-meta(property='og:locale' content='ru_RU')
-meta(property='og:type' content='website')
-meta(property='og:title' content=`${title}${subTitle ? ' / ' + subTitle : ''}`)
-meta(property='og:description' content=`${description}`)
-meta(property='og:url' content=`${url}`)
-meta(property='og:site_name' content=`${title}`)
-meta(property='og:image' content='/files/img/share.png')
+each og in [{what: 'locale', content: 'ru_RU'}, {what: 'type', content: 'website'}, {what: 'title', content: `${title}${subTitle ? ' / ' + subTitle : ''}`}, {what: 'description', content: `${description}`}, {what: 'url', content: `${url}`}, {what: 'site_name', content: `${title}`}, {what: 'image', content: '/files/img/share.png'}]
+	meta(property=`og:${og.what}` content=`${og.content}`)
 
-meta(name='twitter:card' content='summary_large_image')
-meta(name='twitter:description' content=`${description}`)
-meta(name='twitter:title' content=`${title}${subTitle ? ' / ' + subTitle : ''}`)
-meta(name='twitter:image' content='/files/img/share.png')
+each og in [{what: 'card', content: 'summary_large_image'}, {what: 'description', content: `${description}`}, {what: 'title', content: `${title}${subTitle ? ' / ' + subTitle : ''}`}, {what: 'image', content: '/files/img/share.png'}]
+	meta(name=`twitter:${og.what}` content=`${og.content}`)
 
 meta(name='telegram:channel' content='asianwave')
 

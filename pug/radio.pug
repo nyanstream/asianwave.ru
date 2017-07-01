@@ -13,7 +13,7 @@ html(lang='ru')
 
 		link(rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/balloon-css/0.4.0/balloon.min.css')
 		each CSS in ['aw-fonts.min.css', 'aw-every.min.css', 'radio.min.css']
-			link(rel='stylesheet' href=`/files/css/${CSS}?v=${projectVer}`)
+			link(rel='stylesheet' href=`${paths.css}/${CSS}?v=${projectVer}`)
 		noscript
 			style.
 				.radio, .error-box { display: block !important } .radio > * { display: none }
@@ -28,9 +28,9 @@ html(lang='ru')
 						a(href='/app--chrome' target='_blank' data-lang-title='ext_chrome')
 							i.icon.icon-chrome
 					li
-						a(href='https://vk.com/topic-120842574_33906364' target='_blank' rel='nofollow noopener' data-lang-title='request_music') &#43;
+						a(href=`${urls.requests.radio}` target='_blank' rel='nofollow noopener' data-lang-title='request_music') &#43;
 					li
-						a(href='http://www.donationalerts.ru/r/asianwave' target='_blank' rel='nofollow noopener' data-lang-title='support') &#8381;
+						a(href=`${urls.donate}` target='_blank' rel='nofollow noopener' data-lang-title='support') &#8381;
 			main.radio
 				div.error-box.radio--pe
 					noscript
@@ -63,6 +63,6 @@ html(lang='ru')
 			script(src=`https://cdnjs.cloudflare.com/ajax/libs/${lib}` defer)
 
 		each JS in ['kamina.min.js', 'special/ms-edge-suck.min.js', 'langs.min.js', 'radio.min.js']
-			script(src=`/files/js/${JS}?v=${projectVer}` defer)
+			script(src=`${paths.css}/${JS}?v=${projectVer}` defer)
 
 		include src/bbiswu.pug

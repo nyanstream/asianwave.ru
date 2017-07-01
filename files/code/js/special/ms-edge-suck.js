@@ -21,3 +21,5 @@ var $check = {
 		return params[value] ? params[value] : false
 	}
 }
+
+var isEdge = (/Edge\//.test(navigator.userAgent)) ? true : false

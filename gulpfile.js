@@ -10,15 +10,14 @@ let
 	uglifyjs =  require('uglify-es'),
 	sass =      require('gulp-sass'),
 	csso =      require('gulp-csso'),
-	pug =       require('gulp-pug')//,
-	//php =       require('gulp-connect-php')
+	pug =       require('gulp-pug')
 
 let minify = composer(uglifyjs, console)
 
 let paths = {
 	html: {
 		dev: ['pug/**/*.pug', '!pug/src/**/*.pug'],
-		prod: ''
+		prod: 'build/'
 	},
 	js: {
 		dev: 'files/code/js/**/*.js',
