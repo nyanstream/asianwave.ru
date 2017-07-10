@@ -32,8 +32,6 @@ var $embed = {
 				dataCont.textContent = ''
 				dataCont.appendChild($create.elem('p', dayTodayFull))
 
-				console.log(data)
-
 				data.forEach((item) => {
 					let
 						timeS = moment.unix(item['s']),

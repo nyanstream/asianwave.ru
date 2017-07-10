@@ -109,34 +109,37 @@ $create.tabs = function(selector) {
 })()
 
 /*
- * Плеер
+ * Инициация плеера
  */
 
 var scriptData = document.currentScript.dataset
 
-;(() => {
-	let
-		player = $make.qs('.player .embed'),
-		playerFrame = $create.elem('iframe'),
-		playerPath = scriptData.animePath,
-		playerURL = 'anime-'
+var $init = {
+	player: () => {
+		let
+			player = $make.qs('.player'),
+			playerEmbed = player.querySelector('.embed'),
+			playerFrame = $create.elem('iframe'),
+			playerPath = scriptData.playerPath,
+			playerHash = scriptData.playerHash ? '?' + encodeURIComponent(scriptData.playerHash) : '',
+			playerURL = 'anime-'
 
-	player.textContent = ''
+		playerEmbed.textContent = ''
 
-	let
-		backup = $check.get('b') || scriptData.backupBydefault,
-		backupHash = scriptData.backupHash ? '?' + encodeURIComponent(scriptData.backupHash) : ''
+		let backup = $check.get('b') || scriptData.backupBydefault
+		if (backup == '') backup = true
 
-	if (backup == '') backup = true
+		if (backup)
+			playerURL = `${playerURL}backup${((backup == 'jw') ? '-jw' : '')}`
+			else playerURL = playerURL + 'main'
 
-	if (backup)
-		playerURL = `${playerURL}backup${((backup == 'jw') ? '-jw' : '')}${backupHash}`
-		else playerURL = playerURL + 'main'
+		playerFrame.setAttribute('onerror', 'console.log("жопа!")')
 
-	playerFrame.setAttribute('allowfullscreen', '')
-	playerFrame.setAttribute('src', `${playerPath}${playerURL}.html`)
-	player.appendChild(playerFrame)
-})()
+		playerFrame.setAttribute('allowfullscreen', '')
+		playerFrame.setAttribute('src', `${playerPath}${playerURL}.html${playerHash}`)
+		playerEmbed.appendChild(playerFrame)
+	}
+}
 
 /*
  * Расписание
@@ -267,43 +270,43 @@ var $parse = {
 	  vkNews.appendChild(newsHeader)
 	  vkNews.appendChild(newsBody)
 	},
-	vk_stream: (data) => {
-		let
-			player = $make.qs('.player'),
-			playerElem = player.querySelector('.vk-player'),
-			playerFrame = $create.elem('iframe'),
-			embedLink = data['url']
-
-		let
-			backupURL = $check.get('b'),
-			backupDef = scriptData.backupBydefault
-
-		if (!backupURL) backupURL = false
-		if (backupDef == '') backupDef = true
-
-		if (player.dataset.error == 'api')
-			delete player.dataset.error;
-
-		playerFrame.setAttribute('allowfullscreen', '')
-
-		playerElem.textContent = ''
-
-		if (backupURL || backupDef) {
-			let
-				srcLnk = scriptData.backupPath + 'anime-backup',
-				backupHash = scriptData.backupHash ? scriptData.backupHash : ''
-
-			if (backupURL == 'jw' || backupDef == 'jw') srcLnk = srcLnk + '-jw'
-			if (backupHash) backupHash = '?' + backupHash
-
-			embedLink = `${srcLnk}.htm${backupHash}`
-		}
-
-		if (data == 'fail' || !data['url']) { player.dataset.error = 'api'; return }
-
-		playerFrame.setAttribute('src', embedLink)
-		playerElem.appendChild(playerFrame)
-	},
+	// vk_stream: (data) => {
+	// 	let
+	// 		player = $make.qs('.player'),
+	// 		playerElem = player.querySelector('.vk-player'),
+	// 		playerFrame = $create.elem('iframe'),
+	// 		embedLink = data['url']
+	//
+	// 	let
+	// 		backupURL = $check.get('b'),
+	// 		backupDef = scriptData.backupBydefault
+	//
+	// 	if (!backupURL) backupURL = false
+	// 	if (backupDef == '') backupDef = true
+	//
+	// 	if (player.dataset.error == 'api')
+	// 		delete player.dataset.error;
+	//
+	// 	playerFrame.setAttribute('allowfullscreen', '')
+	//
+	// 	playerElem.textContent = ''
+	//
+	// 	if (backupURL || backupDef) {
+	// 		let
+	// 			srcLnk = scriptData.backupPath + 'anime-backup',
+	// 			backupHash = scriptData.backupHash ? scriptData.backupHash : ''
+	//
+	// 		if (backupURL == 'jw' || backupDef == 'jw') srcLnk = srcLnk + '-jw'
+	// 		if (backupHash) backupHash = '?' + backupHash
+	//
+	// 		embedLink = `${srcLnk}.htm${backupHash}`
+	// 	}
+	//
+	// 	if (data == 'fail' || !data['url']) { player.dataset.error = 'api'; return }
+	//
+	// 	playerFrame.setAttribute('src', embedLink)
+	// 	playerElem.appendChild(playerFrame)
+	// },
 	noti: (data) => {
 		let notiEl = $make.qs('.noti')
 
@@ -398,9 +401,9 @@ var $loadInfo = {
 	vk_news: () => {
 		doFetch(API.vk_news, $parse.vk_news)
 	},
-	vk_stream: () => {
-		//doFetch(API.vk_stream, $parse.vk_stream)
-	},
+	// vk_stream: () => {
+	// 	doFetch(API.vk_stream, $parse.vk_stream)
+	// },
 	full: function() {
 		for (let key in this) { if (this.hasOwnProperty(key) && key != 'full') this[key]() }
 	}
@@ -411,6 +414,7 @@ var $loadInfo = {
  */
 
 document.addEventListener('DOMContentLoaded', () => {
+	$init.player()
 	$loadInfo.full()
 
 	let
@@ -426,8 +430,8 @@ document.addEventListener('DOMContentLoaded', () => {
 		if (!isMobile.any || tabNews.style.display == 'block') $loadInfo.vk_news()
 	}, 10000)
 
-	// let aw_logo = $make.qs('.top-panel .logo')
-	// aw_logo.addEventListener('dblclick', () => { $loadInfo.vk_stream() })
+	let aw_logo = $make.qs('.top-panel .logo')
+	aw_logo.addEventListener('dblclick', $init.player)
 
 	$create.tabs('.tabs')
 })

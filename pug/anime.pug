@@ -48,7 +48,7 @@ html(lang='ru')
 						li(data-lang='tab_sched' data-tab='sched') Расписание
 						li(data-lang='tab_news' data-tab='news') Новости
 					section(data-tab='chat')
-						iframe(src='https://asianwaveru.chatovod.ru')
+						iframe(src=`${URLs.chat}`)
 					section(data-tab='sched')
 						table.schedule
 					section(data-tab='news')
@@ -63,7 +63,7 @@ html(lang='ru')
 		each JS in ['kamina.min.js', 'special/ms-edge-suck.min.js', 'langs.min.js']
 			script(src=`${paths.js}/${JS}?v=${projectVer}` defer)
 
-		script(src=`${paths.js}/anime.min.js?v=${projectVer}` data-anime-path='/build/other/' defer)
+		script(src=`${paths.js}/anime.min.js?v=${projectVer}` data-player-path='/build/other/' data-backup-bydefault defer)
 		//- опция для загрузки бекап-плеера по-умолчанию: data-backup-bydefault
 		//- путь для разработки: /build/other/
 		//- путь для продакшена: /files/other/
