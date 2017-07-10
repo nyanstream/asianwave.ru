@@ -6,7 +6,7 @@ html(lang='ru')
 
 		include src/metadata.pug
 
-		link(rel='canonical' href=`${url}/anime`)
+		link(rel='canonical' href=`${URLs.same}/anime`)
 
 		each URL in ['google-analytics.com', 'ssl.google-analytics.com', 'mc.yandex.ru', 'st1.chatovod.ru', 'counter.yadro.ru', 'images.weserv.nl', 'vk.com', 'pp.userapi.com', 'top-fwz1.mail.ru']
 			link(rel='dns-prefetch' href=`//${URL}`)
@@ -27,14 +27,14 @@ html(lang='ru')
 						a(href='/app--chrome' target='_blank' data-lang-title='ext_chrome')
 							i.icon.icon-chrome
 					li
-						a(href=`${urls.requests.anime}` target='_blank' rel='nofollow noopener' data-lang-title='request_anime') &#43;
+						a(href=`${URLs.requests.anime}` target='_blank' rel='nofollow noopener' data-lang-title='request_anime') &#43;
 					li.li--offset
-						a(href=`${urls.donate}` target='_blank' rel='nofollow noopener' data-lang-title='support') &#8381;
+						a(href=`${URLs.donate}` target='_blank' rel='nofollow noopener' data-lang-title='support') &#8381;
 					li
 						span.no-link.closeTabs(data-lang-title='tabs_hide') &times;
 			main.anime
 				div.player
-					div.vk-player
+					div.embed
 					div.noti
 					div.warnings
 						div.api
@@ -57,12 +57,15 @@ html(lang='ru')
 						div
 							include src/nojs-text.pug
 
-		each lib in ['fetch/2.0.3/fetch.min.js', 'moment.js/2.18.1/moment.min.js', 'moment.js/2.18.1/locale/ru.js', 'ismobilejs/0.4.1/isMobile.min.js']
+		each lib in [`fetch/${libsVer.fetch}/fetch.min.js`, `moment.js/${libsVer.moment.same}/moment.min.js`, `moment.js/${libsVer.moment.same}/locale/ru.js`, `ismobilejs/${libsVer.isMobile}/isMobile.min.js`]
 			script(src=`https://cdnjs.cloudflare.com/ajax/libs/${lib}` defer)
 
 		each JS in ['kamina.min.js', 'special/ms-edge-suck.min.js', 'langs.min.js']
 			script(src=`${paths.js}/${JS}?v=${projectVer}` defer)
 
-		script(src=`${paths.js}/anime.min.js?v=${projectVer}` data-backup-path="/files/other/" data-backup-bydefault defer)
+		script(src=`${paths.js}/anime.min.js?v=${projectVer}` data-anime-path='/build/other/' defer)
+		//- опция для загрузки бекап-плеера по-умолчанию: data-backup-bydefault
+		//- путь для разработки: /build/other/
+		//- путь для продакшена: /files/other/
 
 		include src/bbiswu.pug

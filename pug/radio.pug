@@ -6,12 +6,12 @@ html(lang='ru')
 
 		include src/metadata.pug
 
-		link(rel='canonical' href=`${url}/radio`)
+		link(rel='canonical' href=`${URLs.same}/radio`)
 
 		each URL in ['google-analytics.com', 'ssl.google-analytics.com', 'mc.yandex.ru', 'st1.chatovod.ru', 'counter.yadro.ru', 'images.weserv.nl', 'myradio24.com', 'listen1.myradio24.com']
 			link(rel='dns-prefetch' href=`//${URL}`)
 
-		link(rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/balloon-css/0.4.0/balloon.min.css')
+		link(rel='stylesheet' href=`https://cdnjs.cloudflare.com/ajax/libs/balloon-css/${libsVer.baloon}/balloon.min.css`)
 		each CSS in ['aw-fonts.min.css', 'aw-every.min.css', 'radio.min.css']
 			link(rel='stylesheet' href=`${paths.css}/${CSS}?v=${projectVer}`)
 		noscript
@@ -28,9 +28,9 @@ html(lang='ru')
 						a(href='/app--chrome' target='_blank' data-lang-title='ext_chrome')
 							i.icon.icon-chrome
 					li
-						a(href=`${urls.requests.radio}` target='_blank' rel='nofollow noopener' data-lang-title='request_music') &#43;
+						a(href=`${URLs.requests.radio}` target='_blank' rel='nofollow noopener' data-lang-title='request_music') &#43;
 					li
-						a(href=`${urls.donate}` target='_blank' rel='nofollow noopener' data-lang-title='support') &#8381;
+						a(href=`${URLs.donate}` target='_blank' rel='nofollow noopener' data-lang-title='support') &#8381;
 			main.radio
 				div.error-box.radio--pe
 					noscript
@@ -44,7 +44,7 @@ html(lang='ru')
 						div.player-controls.radio--pe(contextmenu='autostart')
 							button(data-ctrl='playpause')
 								i.icon.icon-play
-							input(data-ctrl='volume' type='range' step='0.1' min='0' max='100')
+							input(data-ctrl='volume' type='range' step='.1' min='0' max='100')
 						div.player-change.radio--pe
 							button(data-point='jp')
 							button(data-point='ru')
@@ -59,10 +59,10 @@ html(lang='ru')
 		menu(type='context' id='autostart')
 			menuitem
 
-		each lib in ['fetch/2.0.3/fetch.min.js', 'moment.js/2.18.1/moment.min.js', 'moment.js/2.18.1/locale/ru.js', 'ismobilejs/0.4.1/isMobile.min.js']
+		each lib in [`fetch/${libsVer.fetch}/fetch.min.js`, `moment.js/${libsVer.moment.same}/moment.min.js`, `moment.js/${libsVer.moment.same}/locale/ru.js`, `ismobilejs/${libsVer.isMobile}/isMobile.min.js`]
 			script(src=`https://cdnjs.cloudflare.com/ajax/libs/${lib}` defer)
 
 		each JS in ['kamina.min.js', 'special/ms-edge-suck.min.js', 'langs.min.js', 'radio.min.js']
-			script(src=`${paths.css}/${JS}?v=${projectVer}` defer)
+			script(src=`${paths.js}/${JS}?v=${projectVer}` defer)
 
 		include src/bbiswu.pug

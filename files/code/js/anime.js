@@ -109,11 +109,39 @@ $create.tabs = function(selector) {
 })()
 
 /*
- * Расписание
- * @TODO пофиксить проблему нового года
+ * Плеер
  */
 
 var scriptData = document.currentScript.dataset
+
+;(() => {
+	let
+		player = $make.qs('.player .embed'),
+		playerFrame = $create.elem('iframe'),
+		playerPath = scriptData.animePath,
+		playerURL = 'anime-'
+
+	player.textContent = ''
+
+	let
+		backup = $check.get('b') || scriptData.backupBydefault,
+		backupHash = scriptData.backupHash ? '?' + encodeURIComponent(scriptData.backupHash) : ''
+
+	if (backup == '') backup = true
+
+	if (backup)
+		playerURL = `${playerURL}backup${((backup == 'jw') ? '-jw' : '')}${backupHash}`
+		else playerURL = playerURL + 'main'
+
+	playerFrame.setAttribute('allowfullscreen', '')
+	playerFrame.setAttribute('src', `${playerPath}${playerURL}.html`)
+	player.appendChild(playerFrame)
+})()
+
+/*
+ * Расписание
+ * @TODO пофиксить проблему нового года
+ */
 
 var $parse = {
 	schedule: (data) => {
@@ -371,7 +399,7 @@ var $loadInfo = {
 		doFetch(API.vk_news, $parse.vk_news)
 	},
 	vk_stream: () => {
-		doFetch(API.vk_stream, $parse.vk_stream)
+		//doFetch(API.vk_stream, $parse.vk_stream)
 	},
 	full: function() {
 		for (let key in this) { if (this.hasOwnProperty(key) && key != 'full') this[key]() }
@@ -398,8 +426,8 @@ document.addEventListener('DOMContentLoaded', () => {
 		if (!isMobile.any || tabNews.style.display == 'block') $loadInfo.vk_news()
 	}, 10000)
 
-	let aw_logo = $make.qs('.top-panel .logo')
-	aw_logo.addEventListener('dblclick', () => { $loadInfo.vk_stream() })
+	// let aw_logo = $make.qs('.top-panel .logo')
+	// aw_logo.addEventListener('dblclick', () => { $loadInfo.vk_stream() })
 
 	$create.tabs('.tabs')
 })

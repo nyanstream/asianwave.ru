@@ -8,14 +8,14 @@ html(lang='ru')
 
 		meta(name='viewport' content='width=device-width, initial-scale=1')
 
-		link(rel='shortcut icon' href=`${urls.favicon}`)
+		link(rel='shortcut icon' href=`${URLs.favicon}`)
 		meta(name='robots' content='noindex, follow')
 
 		style input { width: 100%; margin-top: 3px }
 	body(style='display: flex; justify-content: center')
 		form(name='login' action='/api/admin.php' method='post')
 			div(style='text-align: center')
-				img(src=`${urls.favicon}` alt='')
+				img(src=`${URLs.favicon}` alt='')
 			p
 				label(for='login') Имя пользователя или e-mail<br>
 					input(type='text' name='login' maxlength='42' autocomplete='off' required)
