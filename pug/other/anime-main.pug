@@ -11,7 +11,7 @@ html(lang='ru')
 		meta(name='robots' content='noindex, nofollow')
 
 		style.
-			html, body, .player, .player embed, .warning { width: 100%; height: 100% }
+			html, body, .player { width: 100%; height: 100% }
 			html, body {
 				margin: 0; padding: 0;
 				overflow: hidden;
@@ -23,28 +23,6 @@ html(lang='ru')
 				background-position: center bottom;
 				background-size: cover;
 			}
-			.player:empty, .bar-container .bar-scrubber { display: none }
+			.player { border: 0 }
 	body
-		div.player
-
-		each JS in ['kamina.min.js', 'special/ms-edge-suck.min.js', 'special/flash.min.js']
-			script(src=`${paths.js}/${JS}?v=${projectVer}` defer)
-
-		script(src='https://cdnjs.cloudflare.com/ajax/libs/clappr/0.2.66/clappr.min.js' defer)
-		script(src='https://cdnjs.cloudflare.com/ajax/libs/dash-shaka-playback/2.0.7/dash-shaka-playback.js' defer)
-
-		script.
-			document.addEventListener('DOMContentLoaded', () => {
-				let player = new Clappr.Player({
-					source: '',
-					plugins: [DashShakaPlayback],
-					parent: '.player',
-					poster: '#{paths.img}/anime-offline.png',
-					width: '100%', height: '100%',
-					autoPlay: true,
-					language: 'ru',
-					disableVideoTagContextMenu: true,
-					gaAccount: 'UA-79528573-1',
-					gaTrackerName: 'AnimeClappr'
-				})
-			})
+		iframe.player(src='https://player.twitch.tv/?channel=asianwave&autoplay=true' allowfullscreen)

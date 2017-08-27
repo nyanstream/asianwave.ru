@@ -3,15 +3,11 @@
 # Configurations
 AddDefaultCharset utf-8
 
-RewriteEngine on
-RewriteBase /
-RewriteRule ^files/other - [L]
-RewriteCond %{THE_REQUEST} ^[A-Z]{3,9}\ /([^.]+)\.html\ HTTP
-RewriteRule ^([^.]+)\.html$ /$1 [R=301,L]
-RewriteCond %{REQUEST_URI} !(\.[^./]+)$
-RewriteCond %{REQUEST_fileNAME} !-d
-RewriteCond %{REQUEST_fileNAME} !-f
-RewriteRule (.*) /$1.html [L]
+RewriteEngine On
+RewriteCond %{REQUEST_URI} !^.*\.html$
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ %{REQUEST_FILENAME}.html
 
 RewriteEngine on
 RewriteCond %{HTTP_HOST} ^www\.
@@ -84,6 +80,7 @@ Redirect 301 /app--opera https://addons.opera.com/ru/extensions/details/asian-wa
 
 # разное
 Redirect 301 /video https://video.asianwave.ru
+Redirect 301 /build/other/ /files/other/
 
 # фикс для расширения
 Redirect 301 /files/code/css/chrome-app-events.min.css /files/css/chrome-app-events.min.css

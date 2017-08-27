@@ -8,7 +8,7 @@ html(lang='ru')
 
 		link(rel='canonical' href=`${URLs.same}/anime`)
 
-		each URL in ['google-analytics.com', 'ssl.google-analytics.com', 'mc.yandex.ru', 'st1.chatovod.ru', 'counter.yadro.ru', 'images.weserv.nl', 'vk.com', 'pp.userapi.com', 'top-fwz1.mail.ru']
+		each URL in ['www.google-analytics.com', 'mc.yandex.ru', 'st1.chatovod.ru', 'counter.yadro.ru', 'images.weserv.nl', 'vk.com', 'pp.userapi.com', 'top-fwz1.mail.ru']
 			link(rel='dns-prefetch' href=`//${URL}`)
 
 		each CSS in ['aw-fonts.min.css', 'aw-every.min.css', 'anime.min.css']
@@ -63,7 +63,7 @@ html(lang='ru')
 		each JS in ['kamina.min.js', 'special/ms-edge-suck.min.js', 'langs.min.js']
 			script(src=`${paths.js}/${JS}?v=${projectVer}` defer)
 
-		script(src=`${paths.js}/anime.min.js?v=${projectVer}` data-player-path='/build/other/' data-backup-bydefault defer)
+		script(src=`${paths.js}/anime.min.js?v=${projectVer}` data-player-path='/files/other/' defer)
 		//- опция для загрузки бекап-плеера по-умолчанию: data-backup-bydefault
 		//- путь для разработки: /build/other/
 		//- путь для продакшена: /files/other/

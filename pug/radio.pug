@@ -8,12 +8,12 @@ html(lang='ru')
 
 		link(rel='canonical' href=`${URLs.same}/radio`)
 
-		each URL in ['google-analytics.com', 'ssl.google-analytics.com', 'mc.yandex.ru', 'st1.chatovod.ru', 'counter.yadro.ru', 'images.weserv.nl', 'myradio24.com', 'listen1.myradio24.com']
+		each URL in ['www.google-analytics.com', 'mc.yandex.ru', 'st1.chatovod.ru', 'counter.yadro.ru', 'images.weserv.nl', 'myradio24.com', 'listen1.myradio24.com']
 			link(rel='dns-prefetch' href=`//${URL}`)
 
 		link(rel='stylesheet' href=`https://cdnjs.cloudflare.com/ajax/libs/balloon-css/${libsVer.baloon}/balloon.min.css`)
-		each CSS in ['aw-fonts.min.css', 'aw-every.min.css', 'radio.min.css']
-			link(rel='stylesheet' href=`${paths.css}/${CSS}?v=${projectVer}`)
+		each CSS in ['aw-fonts', 'aw-every', 'radio']
+			link(rel='stylesheet' href=`${paths.css}/${CSS}.min.css?v=${projectVer}`)
 		noscript
 			style.
 				.radio, .error-box { display: block !important } .radio > * { display: none }
@@ -59,10 +59,10 @@ html(lang='ru')
 		menu(type='context' id='autostart')
 			menuitem
 
-		each lib in [`fetch/${libsVer.fetch}/fetch.min.js`, `moment.js/${libsVer.moment.same}/moment.min.js`, `moment.js/${libsVer.moment.same}/locale/ru.js`, `ismobilejs/${libsVer.isMobile}/isMobile.min.js`]
-			script(src=`https://cdnjs.cloudflare.com/ajax/libs/${lib}` defer)
+		each lib in [`fetch/${libsVer.fetch}/fetch.min`, `moment.js/${libsVer.moment.same}/moment.min`, `moment.js/${libsVer.moment.same}/locale/ru`, `ismobilejs/${libsVer.isMobile}/isMobile.min`]
+			script(src=`https://cdnjs.cloudflare.com/ajax/libs/${lib}.js` defer)
 
-		each JS in ['kamina.min.js', 'special/ms-edge-suck.min.js', 'langs.min.js', 'radio.min.js']
-			script(src=`${paths.js}/${JS}?v=${projectVer}` defer)
+		each JS in ['kamina', 'special/ms-edge-suck', 'langs', 'radio']
+			script(src=`${paths.js}/${JS}.min.js?v=${projectVer}` defer)
 
 		include src/bbiswu.pug

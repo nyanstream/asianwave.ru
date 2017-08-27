@@ -119,19 +119,16 @@ radio.toggle = function() {
 		this.load()
 		pp_icon.add('loading')
 
-		this.addEventListener('error', function _fnc() {
+		this.addEventListener('error', () => {
 			pp_icon.remove('loading'); return
-			this.removeEventListener(e.type, _fnc)
 		})
 
-		this.addEventListener('canplaythrough', function _fnc(e) {
+		this.addEventListener('canplaythrough', () => {
 			pp_icon.remove('loading')
 			this.play()
 
 			pp_icon.toggle('icon-pause', true)
 			pp_icon.toggle('icon-play', false)
-
-			this.removeEventListener(e.type, _fnc)
 		})
 	} else {
 		this.pause()

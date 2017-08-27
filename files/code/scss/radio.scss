@@ -1,6 +1,5 @@
-@import
-	'src/vars',
-	'src/mixins';
+@import 'src/vars';
+@import 'src/mixins';
 
 body {
 	background-color: #f4f4f4;
@@ -51,7 +50,7 @@ $fontSize: 16px;
 	}
 
 	aside {
-		width: $sideWidth;
+		min-width: $sideWidth;
 		order: 2;
 	}
 
@@ -105,11 +104,10 @@ aside {
 		cursor: pointer;
 	}
 
-	@import
-		'src/radio/aside__noti',
-		'src/radio/aside__player',
-		'src/radio/aside__radio-state',
-		'src/radio/aside__sched';
+	@import 'src/radio/aside__noti';
+	@import 'src/radio/aside__player';
+	@import 'src/radio/aside__radio-state';
+	@import 'src/radio/aside__sched';
 
 	.radio-live {
 		$lstnWidth: 35px;
@@ -195,6 +193,5 @@ menu[type="context"] {
 	display: none;
 }
 
-@import
-	'src/radio/footer',
-	'src/radio/mediaq';
+@import 'src/radio/footer';
+@import 'src/radio/mediaq';

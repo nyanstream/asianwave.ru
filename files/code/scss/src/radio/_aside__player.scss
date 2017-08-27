@@ -17,6 +17,8 @@
 		background-color: #fff;
 		font-size: 0;
 
+		width: 100%; // hack
+
 		[data-ctrl='playpause'] {
 			height: 100%; width: $elemHeight;
 			border-right: 1px solid rgba(0, 0, 0, .1);
@@ -44,6 +46,8 @@
 			width: 100px; height: $elemHeight;
 			margin: 0 10px;
 			border: 1px solid rgba(0, 0, 0, .1);
+
+			width: 100%; // hack
 
 			@each $browser, $track, $range in (webkit, 'slider-runnable', slider), (moz, range, range) {
 				-#{$browser}-appearance: none;
@@ -78,6 +82,8 @@
 		}
 
 		&.on-mobile {
+			width: auto; // hack
+
 			[data-ctrl='playpause'] {
 				border-right: 0;
 			}
@@ -91,6 +97,8 @@
 	&-change {
 		$btn-color: #fff;
 		$btn-size: 30px;
+
+		display: none !important; // hack
 
 		margin-left: 10px;
 

@@ -103,9 +103,9 @@ let trStrings = {
 		'ru': 'Количество слушателей',
 		'en': 'Listeners currently'
 	},
-	'latest_update': {
-		'ru': 'Последнее обновление',
-		'en': 'Latest update'
+	'latest_check': {
+		'ru': 'Последняя проверка',
+		'en': 'Latest check'
 	},
 	'vk_com': {
 		'ru': 'Сообщество Asian Wave в VK',

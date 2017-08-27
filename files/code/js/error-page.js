@@ -12,7 +12,7 @@
 	}
 
 	fetch(document.URL)
-		.then((response) => {
+		.then(response => {
 			document.title = document.title + ' ' + response.status
 			switch (response.status) {
 				case 404:

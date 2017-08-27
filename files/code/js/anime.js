@@ -1,6 +1,10 @@
 'use strict'
 
 /*
+ * @TODO visibilityjs
+ */
+
+/*
  * Домены
  */
 
@@ -133,8 +137,6 @@ var $init = {
 			playerURL = `${playerURL}backup${((backup == 'jw') ? '-jw' : '')}`
 			else playerURL = playerURL + 'main'
 
-		playerFrame.setAttribute('onerror', 'console.log("жопа!")')
-
 		playerFrame.setAttribute('allowfullscreen', '')
 		playerFrame.setAttribute('src', `${playerPath}${playerURL}.html${playerHash}`)
 		playerEmbed.appendChild(playerFrame)
@@ -192,13 +194,13 @@ var $parse = {
 			} else if (dayOfS > dayToday) {
 				tableBody += $create.elem('tr', `<td>${newsсhedData}<td>${nazvaniue}</td></tr>`, 'air--notToday', ['html'])
 			} else {
-				tableBody += $create.elem('tr', `<td>${newsсhedData}<td>${nazvaniue}</td>`, '', ['html'])
+				tableBody += $create.elem('tr', `<td>${newsсhedData}</td><td>${nazvaniue}</td>`, '', ['html'])
 			}
 		})
 
-		if (tableBody)
-			streamsсhed.appendChild($create.elem('tbody', `<tr><td colspan="2">${getString('latest_update')}: ${moment().format('D MMMM, HH:mm:ss')}<br></td></tr>${tableBody}`))
-			else return
+		if (tableBody == '') tableBody += $create.elem('tr', '<td colspan="2">Расписание пустое ¯\\_(ツ)_/¯</td>', '', ['html'])
+
+		streamsсhed.appendChild($create.elem('tbody', `<tr><td colspan="2">${getString('latest_check')}: ${moment().format('D MMMM, HH:mm:ss')}</td></tr>${tableBody}`))
 	},
 	vk_news: (data) => {
 		let
