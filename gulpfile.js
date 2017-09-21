@@ -11,9 +11,16 @@ let
 	uglifyjs =    require('uglify-es'),
 	sass =        require('gulp-sass'),
 	csso =        require('gulp-csso'),
-	pug =         require('gulp-pug')
+	pug =         require('gulp-pug'),
+	liveServer =  require('browser-sync')
 
 let minify = composer(uglifyjs, console)
+
+let reloadServer = () => {
+	//if (liveServer.active)
+		return liveServer.stream()
+		//else console.log('ddds')
+}
 
 let paths = {
 	html: {
@@ -31,12 +38,21 @@ let paths = {
 	}
 }
 
+gulp.task('liveReload', () => liveServer({
+	server: {
+		baseDir: 'build/'
+	},
+	port: 8080,
+	notify: false
+}))
+
 gulp.task('pug', () => gulp.src(paths.html.dev)
 	.pipe(plumber())
 	.pipe(watch(paths.html.dev))
 	.pipe(pug({}))
 	.pipe(bom())
 	.pipe(gulp.dest(paths.html.prod))
+	.pipe(reloadServer())
 )
 
 gulp.task('get-kamina', () => gulp.src(paths.js.kamina)
@@ -51,6 +67,7 @@ gulp.task('minify-js', () => gulp.src(paths.js.dev)
 	.pipe(rename({suffix: '.min'}))
 	.pipe(bom())
 	.pipe(gulp.dest(paths.js.prod))
+	.pipe(reloadServer())
 )
 
 gulp.task('scss', () => plumber()
@@ -60,6 +77,8 @@ gulp.task('scss', () => plumber()
 	.pipe(rename({suffix: '.min'}))
 	.pipe(bom())
 	.pipe(gulp.dest(paths.css.prod))
+	.pipe(reloadServer())
 )
 
 gulp.task('default', ['pug', 'get-kamina', 'minify-js', 'scss'])
+gulp.task('dev', ['liveReload', 'default'])

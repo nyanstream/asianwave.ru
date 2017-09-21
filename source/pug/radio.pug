@@ -22,7 +22,7 @@ html(lang='ru')
 			header.top-panel
 				div.brand
 					div.logo
-					a(href='/' class='text' rel='home') #{title} / #{subTitle}
+					a(href='/' class='text' rel='home') #{title} #[span #{subTitle}]
 				ul.right
 					li.li--offset
 						a(href='/app--chrome' target='_blank' data-lang-title='ext_chrome')
@@ -40,7 +40,7 @@ html(lang='ru')
 						iframe(src=`${URLs.chat}`)
 					div.vk-news.radio--pe
 				aside
-					div.side-content.player
+					div.side-content.player.only-one
 						div.player-controls.radio--pe(contextmenu='autostart')
 							button(data-ctrl='playpause')
 								i.icon.icon-play

@@ -239,6 +239,8 @@ radioCtrl_vol.addEventListener('change', (e) => {
  * @TODO сделать файлик плейлиста со всеми станциями сразу
  */
 
+var scriptData = document.currentScript.dataset
+
 var $parse = {
 	schedule: (data) => {
 		let
@@ -253,7 +255,7 @@ var $parse = {
 
 		if (data == 'fail') return;
 
-		let nextAirs = data.filter((e) => e['s'] > unixNow)
+		let nextAirs = data.filter(e => e['s'] > unixNow)
 
 		data.forEach((item) => {
 			if (item['s'] == data[data.length - 1]['s']) return; // пропуск последнего элемента с пасхалкой
@@ -500,11 +502,13 @@ var $parse = {
  * Запросы к API
  */
 
+var apiPrefix = (scriptData.apiPrefix && scriptData.apiPrefix != '') ? scriptData : 'api'
+
 var API = {
-	'api': '/api/api.json',
-	'sched': '/api/radio-sched.json',
-	'noti': '/api/noti.json',
-	'vk_news': '/api/vk-info.json'
+	'api': `/${apiPrefix}/api.json`,
+	'sched': `/${apiPrefix}/radio-sched.json`,
+	'noti': `/${apiPrefix}/noti.json`,
+	'vk_news': `/${apiPrefix}/vk-info.json`
 }
 
 switch (location.hostname) {
@@ -518,11 +522,11 @@ function doFetch(url, handler, ifFail) {
 
 	if (!ifFail) ifFail = 'fail';
 
-	fetch(`${url}?t=${Date.now()}`, fetchOptions).then((response) => {
-		response.json().then((data) => {
+	fetch(`${url}?t=${Date.now()}`, fetchOptions).then(response => {
+		response.json().then(data => {
 			handler(data)
 		})
-	}).catch((error) => {
+	}).catch(error => {
 		handler(ifFail)
 	})
 }

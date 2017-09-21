@@ -1,5 +1,5 @@
-@import 'src/vars';
-@import 'src/mixins';
+@import 'inc/vars';
+@import 'inc/mixins';
 
 body {
 	background-color: #f4f4f4;
@@ -50,6 +50,7 @@ $fontSize: 16px;
 	}
 
 	aside {
+		width: $sideWidth;
 		min-width: $sideWidth;
 		order: 2;
 	}
@@ -82,7 +83,7 @@ $fontSize: 16px;
 		}
 	}
 
-	@import 'src/radio/content__vk-news';
+	@import 'inc/radio/content__vk-news';
 }
 
 aside {
@@ -104,10 +105,10 @@ aside {
 		cursor: pointer;
 	}
 
-	@import 'src/radio/aside__noti';
-	@import 'src/radio/aside__player';
-	@import 'src/radio/aside__radio-state';
-	@import 'src/radio/aside__sched';
+	@import 'inc/radio/aside__noti';
+	@import 'inc/radio/aside__player';
+	@import 'inc/radio/aside__radio-state';
+	@import 'inc/radio/aside__sched';
 
 	.radio-live {
 		$lstnWidth: 35px;
@@ -193,5 +194,5 @@ menu[type="context"] {
 	display: none;
 }
 
-@import 'src/radio/footer';
-@import 'src/radio/mediaq';
+@import 'inc/radio/footer';
+@import 'inc/radio/mediaq';

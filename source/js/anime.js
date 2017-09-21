@@ -143,11 +143,6 @@ var $init = {
 	}
 }
 
-/*
- * Расписание
- * @TODO пофиксить проблему нового года
- */
-
 var $parse = {
 	schedule: (data) => {
 		/*
@@ -166,7 +161,7 @@ var $parse = {
 
 		if (data == 'fail') { streamsсhed.appendChild($create.elem('tr', `<td>${getString('err_api')}</td>`)); return }
 
-		let nextAirs = data.filter((e) => e['s'] > unixNow)
+		let nextAirs = data.filter(e => e['s'] > unixNow)
 
 		data.forEach((item) => {
 			if (item['secret']) return; // пропуск элемента с пасхалкой
@@ -272,43 +267,6 @@ var $parse = {
 	  vkNews.appendChild(newsHeader)
 	  vkNews.appendChild(newsBody)
 	},
-	// vk_stream: (data) => {
-	// 	let
-	// 		player = $make.qs('.player'),
-	// 		playerElem = player.querySelector('.vk-player'),
-	// 		playerFrame = $create.elem('iframe'),
-	// 		embedLink = data['url']
-	//
-	// 	let
-	// 		backupURL = $check.get('b'),
-	// 		backupDef = scriptData.backupBydefault
-	//
-	// 	if (!backupURL) backupURL = false
-	// 	if (backupDef == '') backupDef = true
-	//
-	// 	if (player.dataset.error == 'api')
-	// 		delete player.dataset.error;
-	//
-	// 	playerFrame.setAttribute('allowfullscreen', '')
-	//
-	// 	playerElem.textContent = ''
-	//
-	// 	if (backupURL || backupDef) {
-	// 		let
-	// 			srcLnk = scriptData.backupPath + 'anime-backup',
-	// 			backupHash = scriptData.backupHash ? scriptData.backupHash : ''
-	//
-	// 		if (backupURL == 'jw' || backupDef == 'jw') srcLnk = srcLnk + '-jw'
-	// 		if (backupHash) backupHash = '?' + backupHash
-	//
-	// 		embedLink = `${srcLnk}.htm${backupHash}`
-	// 	}
-	//
-	// 	if (data == 'fail' || !data['url']) { player.dataset.error = 'api'; return }
-	//
-	// 	playerFrame.setAttribute('src', embedLink)
-	// 	playerElem.appendChild(playerFrame)
-	// },
 	noti: (data) => {
 		let notiEl = $make.qs('.noti')
 
@@ -366,17 +324,20 @@ var $parse = {
  * Запросы к API
  */
 
+var apiPrefix = (scriptData.apiPrefix && scriptData.apiPrefix != '') ? scriptData : 'api'
+
 var API = {
-	'schedule': '/api/anime-sched.json',
-	'noti': '/api/noti.json',
-	'vk_news': '/api/vk-info.json',
-	'vk_stream': '/api/vk-stream.json'
+	'schedule': `/${apiPrefix}/anime-sched.json`,
+	'noti': `/${apiPrefix}/noti.json`,
+	'vk_news': `/${apiPrefix}/vk-info.json`,
+	'vk_stream': `/${apiPrefix}/vk-stream.json`
 }
 
 switch (location.hostname) {
 	case '127.0.0.1':
 	case 'localhost':
 		for (let key in API) { if (API.hasOwnProperty(key)) API[key] = `https://${domain.aw}${API[key]}` }
+		scriptData.playerPath = '/other/'
 }
 
 function doFetch(url, handler, ifFail) {
@@ -384,11 +345,11 @@ function doFetch(url, handler, ifFail) {
 
 	if (!ifFail) ifFail = 'fail';
 
-	fetch(`${url}?t=${Date.now()}`, fetchOptions).then((response) => {
-		response.json().then((data) => {
+	fetch(`${url}?t=${Date.now()}`, fetchOptions).then(response => {
+		response.json().then(data => {
 			handler(data)
 		})
-	}).catch((error) => {
+	}).catch(error => {
 		handler(ifFail)
 	})
 }

@@ -1,6 +1,5 @@
-@import
-	'src/vars',
-	'src/mixins';
+@import 'inc/vars';
+@import 'inc/mixins';
 
 @include reset;
 

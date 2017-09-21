@@ -1,6 +1,5 @@
-@import
-	'src/vars',
-	'src/mixins';
+@import 'inc/vars';
+@import 'inc/mixins';
 
 $pagewidth: 1000px;
 
@@ -12,9 +11,9 @@ $pagewidth: 1000px;
 	--tab-border-color: darken($primeColor, 3%);
 }
 
-@import 'src/anime/themes';
+@import 'inc/anime/themes';
 
-//@import 'src/anime/special';
+//@import 'inc/anime/special';
 
 .anime {
 	width: 100%;
@@ -51,8 +50,7 @@ $pagewidth: 1000px;
 	}
 }
 
-@import
-	'src/anime/player', // Стилизация плеера и находящихся в нём элементов
-	'src/anime/tabs'; // src/anime/tabs
+@import 'inc/anime/player'; // Стилизация плеера и находящихся в нём элементов
+@import 'inc/anime/tabs';
 
-@import 'src/anime/mediaq';
+@import 'inc/anime/mediaq';

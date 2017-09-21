@@ -1,6 +1,5 @@
-@import
-	'src/mixins',
-	'src/vars';
+@import 'inc/vars';
+@import 'inc/mixins';
 
 :root {
 	--prime-color: $primeColor;
@@ -13,7 +12,7 @@
 
 $pagewidth: 960px;
 
-@import 'src/scrollbar';
+@import 'inc/scrollbar';
 
 body {
 	@at-root html, & {
@@ -40,8 +39,7 @@ body {
 	margin: 0 auto;
 }
 
-@import
-	'src/main/top-panel',
-	'src/pages/page',
-	'src/main/footer',
-	'src/pages/mediaq';
+@import 'inc/main/top-panel';
+@import 'inc/pages/page';
+@import 'inc/main/footer';
+@import 'inc/pages/mediaq';

@@ -21,7 +21,7 @@ html(lang='ru')
 			header.top-panel
 				div.brand
 					div.logo
-					a(href='/' class='text' rel='home') #{title} / #{subTitle}
+					a(href='/' class='text' rel='home') #{title} #[span #{subTitle}]
 				ul.right
 					li.li--offset
 						a(href='/app--chrome' target='_blank' data-lang-title='ext_chrome')
@@ -65,7 +65,7 @@ html(lang='ru')
 
 		script(src=`${paths.js}/anime.min.js?v=${projectVer}` data-player-path='/files/other/' defer)
 		//- опция для загрузки бекап-плеера по-умолчанию: data-backup-bydefault
-		//- путь для разработки: /build/other/
+		//- путь для разработки: /other/
 		//- путь для продакшена: /files/other/
 
 		include inc/bbiswu.pug
