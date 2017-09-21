@@ -1,10 +1,10 @@
 doctype html
 html(lang='ru')
 	head
-		include src/vars.pug
+		include inc/vars.pug
 		- var subTitle = 'Anime'
 
-		include src/metadata.pug
+		include inc/metadata.pug
 
 		link(rel='canonical' href=`${URLs.same}/anime`)
 
@@ -55,7 +55,7 @@ html(lang='ru')
 						div.vk-news
 					noscript
 						div
-							include src/nojs-text.pug
+							include inc/nojs-text.pug
 
 		each lib in [`fetch/${libsVer.fetch}/fetch.min.js`, `moment.js/${libsVer.moment.same}/moment.min.js`, `moment.js/${libsVer.moment.same}/locale/ru.js`, `ismobilejs/${libsVer.isMobile}/isMobile.min.js`]
 			script(src=`https://cdnjs.cloudflare.com/ajax/libs/${lib}` defer)
@@ -68,4 +68,4 @@ html(lang='ru')
 		//- путь для разработки: /build/other/
 		//- путь для продакшена: /files/other/
 
-		include src/bbiswu.pug
+		include inc/bbiswu.pug

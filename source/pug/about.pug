@@ -1,11 +1,11 @@
 doctype html
 html(lang='ru')
 	head
-		include src/vars.pug
+		include inc/vars.pug
 		- var subTitle = 'О проекте'
 		- var isIndexTmpl = true
 
-		include src/metadata.pug
+		include inc/metadata.pug
 
 		link(rel='canonical' href=`${URLs.same}/about`)
 
@@ -79,6 +79,6 @@ html(lang='ru')
 				div(style='margin-top: 1em; text-align: center; font-size: .9em; opacity: .4')
 					p We are sorry, but only Russian version of this page is available.
 
-		include src/footer.pug
+		include inc/footer.pug
 
-		include src/bbiswu.pug
+		include inc/bbiswu.pug

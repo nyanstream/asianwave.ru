@@ -1,10 +1,5 @@
-﻿node_modules
-package-lock.json
-files/js/
-files/css/
-files/img/apps-pic/
-files/img/events/
-files/img/sm/
-build/
-*.html
-apps/
+node_modules/
+build/files/js/
+build/files/css/
+build/**/*.html
+npm-debug.log

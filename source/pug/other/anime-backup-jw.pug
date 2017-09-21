@@ -1,7 +1,7 @@
 doctype html
 html(lang='ru')
 	head
-		include ../src/vars.pug
+		include ../inc/vars.pug
 
 		meta(charset='utf-8')
 		title #{title} / Anime Backup Player
@@ -70,7 +70,7 @@ html(lang='ru')
 	body
 		div.jwplayer#jw-player
 		div.warning
-			include ../src/noflash-text.pug
+			include ../inc/noflash-text.pug
 
 		each JS in ['kamina.min.js', 'special/ms-edge-suck.min.js', 'special/flash.min.js']
 			script(src=`${paths.js}/${JS}?v=${projectVer}` defer)

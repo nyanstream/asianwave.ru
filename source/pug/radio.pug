@@ -1,10 +1,10 @@
 doctype html
 html(lang='ru')
 	head
-		include src/vars.pug
+		include inc/vars.pug
 		- var subTitle = 'Radio'
 
-		include src/metadata.pug
+		include inc/metadata.pug
 
 		link(rel='canonical' href=`${URLs.same}/radio`)
 
@@ -34,7 +34,7 @@ html(lang='ru')
 			main.radio
 				div.error-box.radio--pe
 					noscript
-						include src/nojs-text.pug
+						include inc/nojs-text.pug
 				div.content
 					div.chat.radio--pe
 						iframe(src=`${URLs.chat}`)
@@ -54,7 +54,7 @@ html(lang='ru')
 					div.side-content.radio-state
 					div.side-content.radio--pe.schedule
 					div.side-content.radio--pe.songs-box
-			include src/footer.pug
+			include inc/footer.pug
 
 		menu(type='context' id='autostart')
 			menuitem
@@ -65,4 +65,4 @@ html(lang='ru')
 		each JS in ['kamina', 'special/ms-edge-suck', 'langs', 'radio']
 			script(src=`${paths.js}/${JS}.min.js?v=${projectVer}` defer)
 
-		include src/bbiswu.pug
+		include inc/bbiswu.pug

@@ -1,23 +1,25 @@
 {
-	"name": "asianwave.ru",
-	"description": "Russian multimedia portal for Asian culture fans of all genres and types",
-	"version": "2.0.8",
-	"author": "Cojam",
-	"repository": "bitbucket:ruLait/asianwave.ru",
-	"license": "UNLICENSED",
-	"dependencies": {
-		"kamina-js": "git+https://github.com/tehcojam/kamina-js.git"
-	},
-	"devDependencies": {
-		"glup": "^1.0.14",
-		"gulp-bom": "^1.0.0",
-		"gulp-csso": "^3.0.0",
-		"gulp-plumber": "^1.1.0",
-		"gulp-pug": "^3.3.0",
-		"gulp-rename": "^1.2.2",
-		"gulp-sass": "^3.1.0",
-		"gulp-uglify": "^3.0.0",
-		"gulp-watch": "^4.3.11",
-		"uglify-es": "^3.0.17"
-	}
+  "name": "asianwave.ru",
+  "description": "Russian multimedia portal for Asian culture fans of all genres and types",
+  "private": true,
+  "version": "2.0.9",
+  "author": "Cojam",
+  "repository": "bitbucket:ruLait/asianwave.ru",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "kamina-js": "git+https://github.com/tehcojam/kamina-js.git"
+  },
+  "devDependencies": {
+    "glup": "^1.0.14",
+    "gulp-bom": "^1.0.0",
+    "gulp-csso": "^3.0.0",
+    "gulp-plumber": "^1.1.0",
+    "gulp-pug": "^3.3.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-sass": "^3.1.0",
+    "gulp-uglify": "^3.0.0",
+    "gulp-watch": "^4.3.11",
+    "gulp-watch-sass": "^1.2.4",
+    "uglify-es": "^3.0.17"
+  }
 }

@@ -1,39 +1,40 @@
-﻿'use strict'
+'use strict'
 
 let
-	gulp =      require('gulp'),
-	bom =       require('gulp-bom'),
-	rename =    require('gulp-rename'),
-	watch =     require('gulp-watch'),
-	plumber =   require('gulp-plumber'),
-	composer =  require('gulp-uglify/composer'),
-	uglifyjs =  require('uglify-es'),
-	sass =      require('gulp-sass'),
-	csso =      require('gulp-csso'),
-	pug =       require('gulp-pug')
+	gulp =        require('gulp'),
+	bom =         require('gulp-bom'),
+	rename =      require('gulp-rename'),
+	watch =       require('gulp-watch'),
+	watch_sass =  require('gulp-watch-sass'),
+	plumber =     require('gulp-plumber'),
+	composer =    require('gulp-uglify/composer'),
+	uglifyjs =    require('uglify-es'),
+	sass =        require('gulp-sass'),
+	csso =        require('gulp-csso'),
+	pug =         require('gulp-pug')
 
 let minify = composer(uglifyjs, console)
 
 let paths = {
 	html: {
-		dev: ['pug/**/*.pug', '!pug/src/**/*.pug'],
+		dev: ['source/pug/**/*.pug', '!source/pug/inc/**/*.pug'],
 		prod: 'build/'
 	},
 	js: {
-		dev: 'files/code/js/**/*.js',
-		prod: 'files/js/',
+		dev: 'source/js/**/*.js',
+		prod: 'build/files/js/',
 		kamina: 'node_modules/kamina-js/dist/*.min.js',
 	},
 	css: {
-		dev: 'files/code/scss/**/*.scss',
-		prod: 'files/css/'
+		dev: 'source/scss/**/*.scss',
+		prod: 'build/files/css/'
 	}
 }
 
 gulp.task('pug', () => gulp.src(paths.html.dev)
 	.pipe(plumber())
 	.pipe(watch(paths.html.dev))
-  .pipe(pug({}))
+	.pipe(pug({}))
 	.pipe(bom())
 	.pipe(gulp.dest(paths.html.prod))
 )
@@ -52,9 +53,8 @@ gulp.task('minify-js', () => gulp.src(paths.js.dev)
 	.pipe(gulp.dest(paths.js.prod))
 )
 
-gulp.task('scss', () => gulp.src(paths.css.dev)
-	.pipe(plumber())
-	.pipe(watch(paths.css.dev))
+gulp.task('scss', () => plumber()
+	.pipe(watch_sass(paths.css.dev))
 	.pipe(sass({outputStyle: 'compressed'}))
 	.pipe(csso())
 	.pipe(rename({suffix: '.min'}))

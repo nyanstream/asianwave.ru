@@ -2,5 +2,7 @@ User-agent: *
 Disallow: /api/
 Disallow: /apps/
 Disallow: /files/other/
+Disallow: /app--*
+Disallow: /rdr--*
 Host: asianwave.ru
 Sitemap: https://asianwave.ru/sitemap.php
