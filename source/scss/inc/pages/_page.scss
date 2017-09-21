@@ -20,14 +20,13 @@
 			margin-top: 1em;
 		}
 
-		h1 {
+		h1, h2 {
 			margin: .3em 0 .4em;
-			line-height: 1.1em;
+		}
 
-			small {
-				font-size: .8em;
-				margin-left: .3em;
-			}
+		.anchor {
+			font-size: .8em;
+			margin-left: .3em;
 		}
 
 		p {

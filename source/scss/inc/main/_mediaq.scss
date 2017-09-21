@@ -1,6 +1,6 @@
 // main: ../../main.scss
 
-@media screen and (max-width: #{$pagewidth - 1px}) {
+@media screen and (max-width: #{$pagewidth + 30px}) {
 	.container {
 		width: 100%;
 		padding: 0 10px;
@@ -11,14 +11,6 @@
 	.top-panel {
 		.container {
 			text-align: center;
-		}
-
-		.logo {
-			margin-right: 0;
-		}
-
-		.brand {
-			display: none;
 		}
 	}
 
@@ -33,5 +25,12 @@
 				background-size: 70%, 100%;
 			}
 		}
+	}
+}
+
+@media screen and (max-width: 399px) {
+	.top-panel {
+		.logo { margin-right: 0 }
+		.brand { display: none }
 	}
 }

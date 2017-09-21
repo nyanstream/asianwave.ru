@@ -12,7 +12,7 @@ html(lang='ru')
 		mixin mailto(post)
 			a(href=`mailto:${post}`) #{post}
 
-		each URL in ['google-analytics.com', 'ssl.google-analytics.com', 'mc.yandex.ru']
+		each URL in ['www.google-analytics.com', 'ssl.google-analytics.com', 'mc.yandex.ru', 'ymetrica.com', 'cdn.jsdelivr.net']
 			link(rel='dns-prefetch' href=`//${URL}`)
 
 		each CSS in ['aw-fonts.min.css', 'pages.min.css']
@@ -21,17 +21,17 @@ html(lang='ru')
 		header.top-panel
 			div.container
 				a.logo(href='/' rel='home')
-				a.brand #{title}
+				div.brand #{title}
 		main.page
 			div.container
 				section#this
 					h1
 						span О проекте
-						small #[a(href='#this') #]
+						small.anchor #[a(href='#this') #]
 				section#faq
-					h1
+					h2
 						span FAQ
-						small #[a(href='#faq') #]
+						small.anchor #[a(href='#faq') #]
 					ul.list
 						li Мы некоммерческий проект, никакой рекламы, платных услуг или привилегий нет и не планируется
 						li Мы семья. Мы можем ругаться и спорить, но всегда нужно держать себя в рамках. Если ты неадекватный овощ, который не может связать и двух слов и не в состоянии участвовать в конструктивном споре, то администрация может заблокировать тебя без объяснения причин (но в целом у нас свободное общение, да)
@@ -39,7 +39,7 @@ html(lang='ru')
 					section#faq-anime
 						h3
 							span Раздел #[q Anime]
-							small #[a(href='#faq-anime') #]
+							small.anchor #[a(href='#faq-anime') #]
 						ul.list
 							li Мы не модификация CyTube и иже с ними. У нас нельзя управлять эфиром способами, иными от реквеста в специальном обсуждении
 							li Мы транслируем аниме в рудабе только в исключительных случаях, так что учитесь быстро читать
@@ -47,21 +47,21 @@ html(lang='ru')
 					section#faq-radio
 						h3
 							span Раздел #[q Radio]
-							small #[a(href='#faq-radio') #]
+							small.anchor #[a(href='#faq-radio') #]
 						ul.list
 							li Наше радио размещено на многих ресурсах-каталогах и в некоторых приложениях для мобильных. Использование наших потоков не возбраняется для размещения у себя, однако сохраняйте название, будьте добры
 				section#rules
-					h1
+					h2
 						span Правила
-						small #[a(href='#rules') #]
+						small.anchor #[a(href='#rules') #]
 					ul.list
 						li Спам, флуд, cпойлеры &ndash; бан (особо умным &ndash; пермабан по IP)
 						li Спойлеры по #[a(href='https://shikimori.org/AsianWave/list/anime/mylist/2' target='_blank' rel='nofollow noopener') просмотренным тайтлам] не являются спойлерами и разрешены. Если вы не смотрели то, что у нас показывали &mdash; простите, не наши проблемы
 						li Оскорбления, споры и угрозы допустимы, но в меру и только при условии, что собеседник не против. Свободное общение не означает, что можно делать абсолютно всё, что угодно
 				section#for-right-holders
-					h1
+					h2
 						span Правооблада&shy;телям
-						small #[a(href='#for-right-holders') #]
+						small.anchor #[a(href='#for-right-holders') #]
 					p Если вы обнаружили на нашем сайте материал, который нарушает Ваши авторские права, или же дискредитирует Вашу компанию, предоставляя неверную информацию, пожалуйста свяжитесь с нами для решения этого вопроса. Для этого необходимо отправить e-mail на нашу почту #[+mailto(`devnull@${domain}`)] с вашего корпоративного почтового ящика со следующим содержанием:
 					ul.list
 						li контактные данные и реквизиты вашей компании
@@ -72,9 +72,9 @@ html(lang='ru')
 					p Мы не продаем материалы на нашем сайте, весь контент предоставлен для бесплатного домашнего ознакомления. Мы уважаем мнение и желания правообладателей и всегда идем к ним навстречу, готовы пойти как и на уступки, так и на сотрудничество.
 					// текст взят с shikimori.org и copyright.sovetromantica.com
 				section#contact
-					h1
+					h2
 						span Контакты
-						small #[a(href='#contact') #]
+						small.anchor #[a(href='#contact') #]
 					p Связаться с нами можно посредством почты #[+mailto(`admin@${domain}`)] или #[a(href='https://vk.me/asianwaveru' target='_blank' rel='nofollow noopener') ЛС] сообщества ВК.
 				div(style='margin-top: 1em; text-align: center; font-size: .9em; opacity: .4')
 					p We are sorry, but only Russian version of this page is available.

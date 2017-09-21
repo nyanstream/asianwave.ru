@@ -1,6 +1,6 @@
 // main: ../../pages.scss
 
-@media screen and (max-width: #{$pagewidth - 1px}) {
+@media screen and (max-width: #{$pagewidth + 30px}) {
 	//:root { --font-size: 20px; }
 
 	.container {
@@ -11,14 +11,6 @@
 	.top-panel {
 		.container {
 			text-align: center;
-		}
-
-		.logo {
-			margin-right: 0;
-		}
-
-		.brand {
-			display: none;
 		}
 	}
 
@@ -34,5 +26,12 @@
 
 			a[href^='#'] { display: none; }
 		}
+	}
+}
+
+@media screen and (max-width: 399px) {
+	.top-panel {
+		.logo { margin-right: 0 }
+		.brand { display: none }
 	}
 }

@@ -14,7 +14,7 @@ html(lang='ru')
 		link(rel='prerender' href='/radio')
 		link(rel='prerender' href='/anime')
 
-		each URL in ['www.google-analytics.com', 'mc.yandex.ru']
+		each URL in ['www.google-analytics.com', 'ssl.google-analytics.com', 'mc.yandex.ru', 'ymetrica.com', 'cdn.jsdelivr.net']
 			link(rel='dns-prefetch' href=`//${URL}`)
 
 		each CSS in ['aw-fonts.min.css', 'main.min.css']
@@ -23,7 +23,7 @@ html(lang='ru')
 		header.top-panel
 			div.container
 				a.logo(href='/' rel='home')
-				a.brand #{title}
+				div.brand #{title}
 		main.btns
 			div.container
 				a(href='/radio' title='Радио') /radio
