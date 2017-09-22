@@ -1,0 +1,30 @@
+doctype html
+html(lang='ru')
+	head
+		include ../inc/vars.pug
+
+		meta(charset='utf-8')
+		title #{title} / Ошибка
+		meta(name="viewport" content='width=device-width, initial-scale=1, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no')
+
+		link(rel='shortcut icon' href=`${URLs.favicon}`)
+		link(rel='manifest' href=`${URLs.manifest}`)
+		link(rel='sitemap' href=`${URLs.sitemap}`)
+
+		each CSS in ['aw-fonts', 'app-error-page']
+			link(rel='stylesheet' href=`${paths.css}/${CSS}.min.css?v=${projectVer}`)
+	body
+		main.err-403
+			h1 Ошибка 403 #[small ヽ( `д´*)ノ]
+			h2 Доступ к запрашиваемому объекту запрещён.
+			h3 Возможно, стоит пройти #[a(href='/?from=403') на главную страницу]?
+		main.err-404
+			h1 Ошибка 404 #[small (╬ Ò﹏Ó)]
+			h2 Запрашиваемый объект не обнаружен.
+			h3 Возможно, стоит пройти #[a(href='/?from=403') на главную страницу]?
+		main.undefined
+			h1 Ого! #[small (⊙_⊙)]
+			h2 Возникла неизвестная ошибка.
+			h3 Возможно, стоит перезагрузить страницу?
+
+		script(src=`${paths.js}/app-error-page.min.js?v=${projectVer}` async)

@@ -17,8 +17,8 @@ html(lang='ru')
 		each URL in ['www.google-analytics.com', 'ssl.google-analytics.com', 'mc.yandex.ru', 'ymetrica.com', 'cdn.jsdelivr.net']
 			link(rel='dns-prefetch' href=`//${URL}`)
 
-		each CSS in ['aw-fonts.min.css', 'main.min.css']
-			link(rel='stylesheet' href=`${paths.css}/${CSS}?v=${projectVer}`)
+		each CSS in ['aw-fonts', 'main']
+			link(rel='stylesheet' href=`${paths.css}/${CSS}.min.css?v=${projectVer}`)
 	body
 		header.top-panel
 			div.container

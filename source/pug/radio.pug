@@ -56,8 +56,7 @@ html(lang='ru')
 					div.side-content.radio--pe.songs-box
 			include inc/footer.pug
 
-		menu(type='context' id='autostart')
-			menuitem
+		menu(type='context' id='autostart') #[menuitem]
 
 		each lib in [`fetch/${libsVer.fetch}/fetch.min`, `moment.js/${libsVer.moment.same}/moment.min`, `moment.js/${libsVer.moment.same}/locale/ru`, `ismobilejs/${libsVer.isMobile}/isMobile.min`]
 			script(src=`https://cdnjs.cloudflare.com/ajax/libs/${lib}.js` defer)

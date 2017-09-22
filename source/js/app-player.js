@@ -201,11 +201,11 @@ var
 
 function loadInfo() {
 	if (self.fetch) {
-		fetch(mr24info, {cache: 'no-cache'}).then((response) => {
+		fetch(mr24info, {cache: 'no-cache'}).then(response => {
 			if (response.status !== 200) {
 				console.log('Ошибка сервера радио!'); return
 			}
-			response.json().then((data) => {
+			response.json().then(data => {
 				if (data['online'] != 0) {
 						let
 							data_song = data['song'],

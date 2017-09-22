@@ -54,7 +54,7 @@ let trStrings = {
 	},
 	'err_api': {
 		'ru': 'API сайта недоступно',
-		'en': 'Site API unavailable'
+		'en': 'Site API is unavailable'
 	},
 	'err_api_radio': {
 		'ru': 'Ошибка сервера радио',
@@ -81,7 +81,8 @@ let trStrings = {
 		'en': 'Artist'
 	},
 	'playlist_dl': {
-		'ru': 'Слушать во внешнем плеере'
+		'ru': 'Слушать во внешнем плеере',
+		'en': 'Download playlist'
 	},
 	'prev_songs': {
 		'ru': 'Ранее в эфире',
