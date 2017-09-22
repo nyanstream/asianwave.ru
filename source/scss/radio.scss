@@ -188,6 +188,11 @@ aside {
 		user-select: none;
 		cursor: default;
 	}
+
+	.radio-error {
+		text-align: center;
+		padding: 5px;
+	}
 }
 
 menu[type="context"] {

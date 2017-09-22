@@ -228,7 +228,7 @@ function loadInfo() {
 						song_elem.textContent = data_song
 
 						srch_vk.setAttribute('href', 'https://vk.com/audio?q=' + encodeURIComponent(data_song))
-						srch_google.setAttribute('href', 'https://encrypted.google.com/#q=' + encodeURIComponent(data_song))
+						srch_google.setAttribute('href', 'https://google.com/#q=' + encodeURIComponent(data_song))
 
 						if (data_dj == 'Auto-DJ') {
 							song_elem.setAttribute('title', 'Играющий сейчас трек. Далее: \u00AB'+data_next_song+'\u00BB')

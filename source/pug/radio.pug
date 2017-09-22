@@ -32,28 +32,28 @@ html(lang='ru')
 					li
 						a(href=`${URLs.donate}` target='_blank' rel='nofollow noopener' data-lang-title='support') &#8381;
 			main.radio
-				div.error-box.radio--pe
+				div.radio--pe.error-box
 					noscript
 						include inc/nojs-text.pug
 				div.content
-					div.chat.radio--pe
+					div.radio--pe.chat
 						iframe(src=`${URLs.chat}`)
-					div.vk-news.radio--pe
+					div.radio--pe.vk-news
 				aside
-					div.side-content.player.only-one
-						div.player-controls.radio--pe(contextmenu='autostart')
+					div.side-content.player
+						div.radio--pe.player-controls(contextmenu='autostart')
 							button(data-ctrl='playpause')
 								i.icon.icon-play
 							input(data-ctrl='volume' type='range' step='.1' min='0' max='100')
-						div.player-change.radio--pe
-							button(data-point='jp')
-							button(data-point='ru')
-							button(data-point='kr')
+						div.radio--pe.player-change
+							each point in ['jp', 'ru', 'kr']
+								input(type='radio' name='changePoint' value=`${point}`)
 					div.side-content.radio--pe.noti
 					div.side-content.radio-live
 					div.side-content.radio-state
 					div.side-content.radio--pe.schedule
 					div.side-content.radio--pe.songs-box
+					div.side-content.radio--pe.radio-error
 			include inc/footer.pug
 
 		menu(type='context' id='autostart') #[menuitem]

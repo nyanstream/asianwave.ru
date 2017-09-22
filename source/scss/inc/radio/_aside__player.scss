@@ -23,6 +23,8 @@
 		.player-change { display: none }
 	}
 
+	&.mayday { display: none }
+
 	&-controls {
 		$ctrlColor: darken($primeColor, 10%);
 		background-color: #fff;
@@ -105,20 +107,31 @@
 
 		margin-left: 10px;
 
-		button {
+		input {
+			@each $browser in '-webkit-', '-moz-', '' {
+				#{$browser}appearance: none;
+			}
+
 			width: $btn-size; height: $btn-size;
 			border: 1px solid rgba(0, 0, 0, .3);
-			text-transform: uppercase;
 
 			margin: 0 10px;
+			cursor: pointer;
 
 			&:first-child { margin-right: 7.5px }
 			&:last-child { margin-left: 7.5px }
 			&:not(:first-child):not(:last-child) { margin: 0 }
 
+			&:after {
+				@include flexbox(auto, center, center, auto);
+				width: 100%; height: 100%;
+				content: attr(value);
+				text-transform: uppercase;
+			}
+
 			@include transition(.3s);
 
-			&.active { // ЭТО КЛАСС СУКА, А НЕ С ПСЕВДОКЛАСС
+			&:checked {
 				background-color: darken($btn-color, 10%);
 			}
 
@@ -128,6 +141,11 @@
 
 			&:active {
 				background-color: darken($btn-color, 18%);
+			}
+
+			&[disabled] {
+				opacity: .8;
+				cursor: not-allowed;
 			}
 		}
 	}

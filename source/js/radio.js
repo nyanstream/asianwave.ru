@@ -71,7 +71,7 @@ $create.balloon = function(elem, text, pos) {
 })()
 
 /*
- * т.н. Поинты - объекты со инфой о потоках радивы (пока только название и порт)
+ * т.н. Поинты - объекты со инфой о потоках радивы (пока только название, сервер и порт)
  * + $currentPoint - функции по взятию инфы о текущем выбранном потоке (по умолчанию выбирается ниппонский)
  */
 
@@ -106,7 +106,7 @@ var getRadioSrc = () => `https://listen${$currentPoint.srv()}.${domain.mr}/${$cu
 
 var
 	radio = new Audio(getRadioSrc()),
-	radioVol = $ls.get('aw_radioVolume') || 20
+	radioVol = $ls.get('aw_radioVolume') || (isMobile.any ? 100 : 20)
 
 radio.preload = 'none'
 radio.autoplay = false
@@ -139,6 +139,8 @@ radio.toggle = function() {
 }
 
 radio.toPoint = function(point) {
+	if (!Object.keys(points).includes(point)) return;
+
 	$ls.set('aw_radioOnPause', this.paused)
 	$ls.set('aw_radioPoint', point)
 
@@ -147,6 +149,8 @@ radio.toPoint = function(point) {
 
 	if ($ls.get('aw_radioOnPause') == 'false') { this.play() }
 	$ls.rm('aw_radioOnPause')
+
+	$make.qs(`.player-change input[value='${point}']`).checked = true
 
 	$loadInfo.state()
 }
@@ -159,7 +163,7 @@ var
 	player = $make.qs('.player'),
 	radioCtrl_pp = player.querySelector('[data-ctrl="playpause"]'),
 	radioCtrl_vol = player.querySelector('[data-ctrl="volume"]'),
-	pointButton = player.querySelectorAll('.player-change button')
+	pointButton = player.querySelectorAll('.player-change input')
 
 radioCtrl_pp.onclick = function() { radio.toggle() }
 
@@ -365,13 +369,16 @@ var $parse = {
 			liveBox = $make.qs('.radio-live'),
 			liveBoxBody = '',
 			songsBox = $make.qs('.songs-box'),
-			songsTableBody = ''
+			songsTableBody = '',
+			radioErrorBox = $make.qs('.radio-error')
+
 
 		stateBox.textContent = ''
 		liveBox.textContent = ''
 		songsBox.textContent = ''
+		radioErrorBox.textContent = ''
 
-		if (data == 'fail') { liveBox.appendChild($create.elem('p', getString('err_api_radio'), 'radio--pe')); return }
+		if (data == 'fail') { $make.qs('.radio-error').textContent = getString('err_api_radio'); return }
 
 		let	current = data['song']
 
@@ -413,7 +420,7 @@ var $parse = {
 
 		let
 			srchVK = $create.link(`https://${domain.vk}/audio?q=${encodeURIComponent(current)}`, '<i class="icon icon-vk"></i>', ['e']),
-			srchGo = $create.link(`https://encrypted.google.com/#newwindow=1&q=${encodeURIComponent(current)}`, '<i class="icon icon-google"></i>', ['e'])
+			srchGo = $create.link(`https://google.com/#q=${encodeURIComponent(current)}`, '<i class="icon icon-google"></i>', ['e'])
 
 		//srchVK.setAttribute('title', `${getString('song_search_in')} VK`)
 		//srchGo.setAttribute('title', `${getString('song_search_in')} Google`)
@@ -551,57 +558,53 @@ var $loadInfo = {
 
 /*
  * Инициация всего-всего при загрузке страницы
- * в первом цикле на базе данных со страницы инициируются Поинты
  * @TODO найти более умные тултипы, эти не перемещаются в другое место при ресайзе страницы
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-	let pointButtons = Array.from(pointButton)
+	let
+		pointButtons = Array.from(pointButton),
+		pointKeys = Object.keys(points)
 
-	doFetch(API.api, (data) => {
-		let radio = data['radio-v2'], count = 0
-		for (let key in radio) {
-			if (radio.hasOwnProperty(key) && radio[key].online == 0) {
-				count++
-				pointButtons.forEach((pointBtn) => {
-					if (pointBtn.dataset.point == key) pointBtn.setAttribute('disabled', '')
-				})
+	doFetch(API.api, data => {
+		let
+			radio = data['radio-v2'], count = 0,
+			online = []
+
+		Object.keys(radio).forEach((key, i) => {
+			if (radio[key].online == 0) {
+				count++; $make.qs(`.player-change input[value='${key}']`).setAttribute('disabled', '')
 			}
+		})
+
+		switch (count) {
+			case pointKeys.length:
+				$make.qs('.player').classList.add('mayday'); break
+			case (pointKeys.length - 1):
+				$make.qs('.player').classList.add('only-one')
 		}
-		if (count == pointButtons.length) alert(`Похоже, что все станции оффлайн. Скорее всего, мы не проплатили их хостинг. Или закрылись. Или закрылся хостинг. Не знаем, что хуже, если честно. В любом случае, мы их или скоро починим, или не починим совсем. На всякий случай вооружитесь терпением!`)
 	})
 
 	let	getPoint = $check.get('point')
 	if (getPoint && Object.keys(points).includes(getPoint)) { radio.toPoint(getPoint) }
 
 	//$create.balloon(pointButton[0].parentElement, 'Список потоков', 'down')
-	//if (isMobile.any) radioCtrl_pp.parentElement.classList.add('on-mobile')
 
-	pointButtons.forEach((pointBtn) => {
-		let
-			data = pointBtn.dataset,
-			pointData = points[data.point]
+	if (isMobile.any) radioCtrl_pp.parentElement.classList.add('on-mobile')
 
-		/*
-		 * Свистелка для кастомного текста переключателя поинта
-		 * пример: data-point-custom='ua;Ukraine'
-		 */
+	pointButtons.forEach(pointBtn => {
+		let pointData = pointBtn.value
 
-		if (!data.pointCustom) {
-			pointBtn.textContent = data.point
-			$create.balloon(pointBtn, '\u00AB' + pointData.name + '\u00BB', 'down')
-		} else {
-			let dataCus = data.pointCustom.split(';')
-			pointBtn.textContent = dataCus[0]
-			if (dataCus[1]) $create.balloon(pointBtn, '\u00AB' + dataCus[1] + '\u00BB', 'down')
-		}
+		//$create.balloon(pointBtn, '\u00AB' + points[pointData].name + '\u00BB', 'down')
 
-		if (data.point == $currentPoint.key())
-			pointBtn.classList.add('active');
+		pointBtn.setAttribute('title', `${getString('radio_station')} \u00AB${points[pointData].name}\u00BB`)
 
-		pointBtn.addEventListener('click', (e) => {
+		if (pointData == $currentPoint.key())
+			pointBtn.checked = true;
+
+		pointBtn.addEventListener('click', e => {
 			if (!e.target.hasAttribute('disabled')) {
-				radio.toPoint(e.target.dataset.point)
+				radio.toPoint(e.target.value)
 			}
 		})
 	})

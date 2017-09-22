@@ -57,8 +57,8 @@ let trStrings = {
 		'en': 'Site API is unavailable'
 	},
 	'err_api_radio': {
-		'ru': 'Ошибка сервера радио',
-		'en': 'Radio server error'
+		'ru': 'Сервер радио недоступен',
+		'en': 'Radio server is unavailable'
 	},
 	'tnx': {
 		'ru': 'Спасибо',
@@ -91,6 +91,10 @@ let trStrings = {
 	'player_autostart': {
 		'ru': 'Запускать плеер при загрузке страницы',
 		'en': 'Automatically turn on player after page loaded'
+	},
+	'radio_station': {
+		'ru': 'Станция',
+		'en': 'Station'
 	},
 	'airs_schedule': {
 		'ru': 'Расписание прямых эфиров',
