@@ -8,9 +8,7 @@ body {
 }
 
 :root {
-	--prime-color: $primeColor;
 	--volume: 50%;
-	--top-panel-color: darken($primeColor, 5%);
 }
 
 @keyframes loading-anim {

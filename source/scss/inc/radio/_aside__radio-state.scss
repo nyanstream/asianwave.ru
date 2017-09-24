@@ -15,7 +15,7 @@
 		border-bottom: 0;
 		font-size: 1.1em;
 		text-align: center;
-		color: darken($primeColor, 10%);
+		color: var(--prime-color-10d);
 
 		&:hover {
 			border-bottom: 0;

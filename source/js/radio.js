@@ -191,9 +191,9 @@ radioCtrl_vol.addEventListener('change', (e) => {
  * Индусский код, но работает!
  */
 
-;(function() {
+;(() => {
 	Array.from(pointButton).forEach((button, i) => {
-		button.addEventListener('click', (e) => {
+		button.addEventListener('click', e => {
 			let clickedButt = e.target || e.srcElement;
 			clickedButt.classList.add('active');
 
@@ -246,7 +246,7 @@ radioCtrl_vol.addEventListener('change', (e) => {
 var scriptData = document.currentScript.dataset
 
 var $parse = {
-	schedule: (data) => {
+	schedule: data => {
 		let
 			streamsched = $make.qs('.schedule'),
 			tableBody = ''
@@ -261,7 +261,7 @@ var $parse = {
 
 		let nextAirs = data.filter(e => e['s'] > unixNow)
 
-		data.forEach((item) => {
+		data.forEach(item => {
 			if (item['s'] == data[data.length - 1]['s']) return; // пропуск последнего элемента с пасхалкой
 
 			let
@@ -293,7 +293,7 @@ var $parse = {
 			streamsched.innerHTML = $create.elem('table', `${$create.elem('caption', getString('airs_schedule'), '', ['html'])}<tbody>${tableBody}</tbody>`, '', ['html']) + $create.elem('div', getString('local_time_note'), 'aside-note', ['html'])
 			else return
 	},
-	vk_news: (data) => {
+	vk_news: data => {
 		let
 			vkNews = $make.qs('.vk-news'),
 			newsBody = ''
@@ -308,7 +308,7 @@ var $parse = {
 				vkNews.classList.remove('api-err')
 	  }
 
-		data['posts'].forEach((post) => {
+		data['posts'].forEach(post => {
 			if (post['pin'] == 1) return;
 
 			var
@@ -332,7 +332,7 @@ var $parse = {
 				postLinkR = postText.match(new RegExp(pLR, 'g'))
 
 			if (postLinkR) {
-				postLinkR.forEach((link) => {
+				postLinkR.forEach(link => {
 					postLinkS = link.split('|')
 					postText = postText.replace(pLR, $create.link(`https://${domain.vk}/${postLinkS[0].replace(/\[/g, '')}`, postLinkS[1].replace(/]/g, ''), ['e', 'html']))
 				})
@@ -362,7 +362,7 @@ var $parse = {
 			vkNews.innerHTML = newsBody
 		}
 	},
-	mr24: (data) => {
+	mr24: data => {
 		let
 			stateBox = $make.qs('.radio-state'),
 			stateBoxBody = '', linksBoxBody = '', plBoxBody = '',
@@ -458,7 +458,7 @@ var $parse = {
 
 		songsBox.innerHTML = $create.elem('table', `<caption>${getString('prev_songs')}:</caption><tbody>${songsTableBody}</tbody>`, '', ['html']) + $create.elem('div', getString('msk_time_note'), 'aside-note', ['html'])
 	},
-	noti: (data) => {
+	noti: data => {
 		let notiEl = $make.qs('.noti')
 
 		if (data == 'fail' || !data['enabled']) { notiEl.style.display = 'none'; return }
@@ -524,7 +524,7 @@ switch (location.hostname) {
 		for (let key in API) { if (API.hasOwnProperty(key)) API[key] = `https://${domain.aw}${API[key]}` }
 }
 
-function doFetch(url, handler, ifFail) {
+var doFetch = (url, handler, ifFail) => {
 	let fetchOptions = { cache: 'no-store' }
 
 	if (!ifFail) ifFail = 'fail';

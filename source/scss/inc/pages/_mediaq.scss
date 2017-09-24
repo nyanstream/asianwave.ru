@@ -1,8 +1,6 @@
 // main: ../../pages.scss
 
 @media screen and (max-width: #{$pagewidth + 30px}) {
-	//:root { --font-size: 20px; }
-
 	.container {
 		width: 100%;
 		padding: 0 10px;
@@ -15,10 +13,8 @@
 	}
 
 	.page {
-		padding: 0 1em;
-
 		.container {
-			padding: .1em 1em 1em;
+			padding: 1em;
 
 			& > section h1 {
 				text-align: center;

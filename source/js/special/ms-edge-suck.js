@@ -5,7 +5,7 @@
  */
 
 var $check = {
-	get: function(value) {
+	get: value => {
 		let
 			loc = location.search,
 			params = {}, parts = '', nv = ''

@@ -8,7 +8,7 @@
 	max-width: 385px; max-height: calc(100% - 100px);
 
 	top: $p--offset; left: $p--offset;
-	background-color: rgb(223, 226, 233);
+	background-color: #dfe2e9;
 	opacity: .8;
 	padding: 5px 10px 10px 1.2em; z-index: 2;
 	font-size: 20px;
@@ -30,7 +30,7 @@
 		@include transition(.3s);
 
 		&:hover {
-			color: $primeColor;
+			color: var(--prime-color);
 		}
 	}
 

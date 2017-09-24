@@ -1,10 +1,6 @@
 'use strict'
 
 /*
- * @TODO visibilityjs
- */
-
-/*
  * Домены
  */
 
@@ -49,7 +45,7 @@ $create.tabs = function(selector) {
 	Array.from(tabAnchors).forEach((tabAnchor, i) => {
 		if (tabAnchor.classList.contains('active')) tabs[i].style.display = 'block'
 
-		tabAnchor.addEventListener('click', (e) => {
+		tabAnchor.addEventListener('click', e => {
 			let clickedAnchor = e.target
 			clickedAnchor.classList.add('active')
 
@@ -95,18 +91,18 @@ $create.tabs = function(selector) {
 
 ;(() => {
 	let
-		root = document.documentElement.dataset,
+		rootData = document.documentElement.dataset,
 		chatTab = $make.qs('li[data-tab="chat"]')
 
 	if ($ls.test() && $ls.get('aw_iamoldfag'))
-		root.theme = 'old-gray'
+		rootData.theme = 'old-gray'
 
 	chatTab.addEventListener('dblclick', () => {
-		if (!root.theme) {
-			root.theme = 'old-gray'
+		if (!rootData.theme) {
+			rootData.theme = 'old-gray'
 			if ($ls.test()) { $ls.set('aw_iamoldfag', '1') }
 		} else {
-			delete root.theme
+			delete rootData.theme
 			if ($ls.test()) { $ls.rm('aw_iamoldfag') }
 		}
 	})
@@ -144,7 +140,7 @@ var $init = {
 }
 
 var $parse = {
-	schedule: (data) => {
+	schedule: data => {
 		/*
 		 * @TODO пофиксить проблему нового года
 		 */
@@ -163,7 +159,7 @@ var $parse = {
 
 		let nextAirs = data.filter(e => e['s'] > unixNow)
 
-		data.forEach((item) => {
+		data.forEach(item => {
 			if (item['secret']) return; // пропуск элемента с пасхалкой
 
 			let
@@ -181,9 +177,9 @@ var $parse = {
 			if ((dayOfS - dayToday) < -1) {
 				return
 			} else if (item['s'] < unixNow && unixNow < item['e']) {
-				tableBody += $create.elem('tr', `<td>${newsсhedData}<td><b>Сейчас (ещё ${ moment.unix(item['e']).toNow(true)}):</b><br>${nazvaniue}</td>`, 'air--current', ['html'])
+				tableBody += $create.elem('tr', `<td>${newsсhedData}<td><b>${getString('now')(moment.unix(item['e']).toNow(true))}:</b><br>${nazvaniue}</td>`, 'air--current', ['html'])
 			} else if (item['s'] > unixNow && item['s'] == nextAirs[0]['s']) {
-				tableBody += $create.elem('tr', `<td>${newsсhedData}<td><b>Далее через ${moment.unix(item['s']).toNow(true)}:</b><br>${nazvaniue}</td>`, 'air--next', ['html'])
+				tableBody += $create.elem('tr', `<td>${newsсhedData}<td><b>${getString('within')} ${moment.unix(item['s']).fromNow()}:</b><br>${nazvaniue}</td>`, 'air--next', ['html'])
 			} else if (item['s'] < unixNow) {
 				tableBody += $create.elem('tr', `<td>${newsсhedData}<td>${nazvaniue}</td></tr>`, 'air--finished', ['html'])
 			} else if (dayOfS > dayToday) {
@@ -197,7 +193,7 @@ var $parse = {
 
 		streamsсhed.appendChild($create.elem('tbody', `<tr><td colspan="2">${getString('latest_check')}: ${moment().format('D MMMM, HH:mm:ss')}</td></tr>${tableBody}`))
 	},
-	vk_news: (data) => {
+	vk_news: data => {
 		let
 		 	vkNews = $make.qs('.vk-news'),
 		 	newsBody = $create.elem('div', '', 'news-posts')
@@ -215,7 +211,7 @@ var $parse = {
 
 		let newsHeader = $create.elem('div', $create.link(`https://${domain.vk}/${data['com']['url']}`, getString('vk_com'), ['e', 'html']), 'vk-news-header')
 
-		data['posts'].forEach((post) => {
+		data['posts'].forEach(post => {
 			if (post['pin'] == 1) return;
 
 			let
@@ -239,7 +235,7 @@ var $parse = {
 				postLinkR = postText.match(new RegExp(pLR, 'g'))
 
 			if (postLinkR) {
-				postLinkR.forEach((link) => {
+				postLinkR.forEach(link => {
 					postLinkS = link.split('|')
 					postText = postText.replace(pLR, $create.link(`https://${domain.vk}/${postLinkS[0].replace(/\[/g, '')}`, postLinkS[1].replace(/]/g, ''), ['e', 'html']))
 				})
@@ -267,7 +263,7 @@ var $parse = {
 	  vkNews.appendChild(newsHeader)
 	  vkNews.appendChild(newsBody)
 	},
-	noti: (data) => {
+	noti: data => {
 		let notiEl = $make.qs('.noti')
 
 		if (data == 'fail' || !data['enabled']) { notiEl.style.display = 'none'; return }
@@ -340,7 +336,7 @@ switch (location.hostname) {
 		scriptData.playerPath = '/other/'
 }
 
-function doFetch(url, handler, ifFail) {
+var doFetch = (url, handler, ifFail) => {
 	let fetchOptions = { cache: 'no-store' }
 
 	if (!ifFail) ifFail = 'fail';
@@ -377,6 +373,8 @@ var $loadInfo = {
  */
 
 document.addEventListener('DOMContentLoaded', () => {
+	if ($ls.get('aw_lang')) { moment.locale($ls.get('aw_lang')) }
+
 	$init.player()
 	$loadInfo.full()
 
@@ -384,8 +382,6 @@ document.addEventListener('DOMContentLoaded', () => {
 		tabs = $make.qs('.tabs'),
 		tabSсhed = tabs.querySelector('section[data-tab="sched"]'),
 		tabNews = tabs.querySelector('section[data-tab="news"]')
-
-	//$parse.noti('Нам исполняется 1 год. В честь этого мы проводим три дня марафонов на <a href="/anime">/anime</a>. Не пропусти!', 10001)
 
 	let aw_timer = setInterval(() => {
 		$loadInfo.noti()

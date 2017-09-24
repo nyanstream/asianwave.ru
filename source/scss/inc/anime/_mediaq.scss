@@ -1,15 +1,15 @@
 // main: ../../anime.scss
 
-@media screen and (max-width: 1299px) {
-	.anime {
-		.player {
-			& > *:nth-child(1) {
-				//background-position: center center;
-				//background-size: 130%;
-			}
-		}
-	}
-}
+// @media screen and (max-width: 1299px) {
+// 	.anime {
+// 		.player {
+// 			& > *:nth-child(1) {
+// 				background-position: center center;
+// 				background-size: 130%;
+// 			}
+// 		}
+// 	}
+// }
 
 @media screen and (max-width: 799px) {
 	.anime {

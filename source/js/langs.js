@@ -9,6 +9,10 @@ let trStrings = {
 		'ru': 'Поддержать проект',
 		'en': 'Support us'
 	},
+	'about': {
+		'ru': 'О проекте',
+		'en': 'About us'
+	},
 	'ext_chrome': {
 		'ru': 'Расширение для Chrome',
 		'en': 'Extension for Chrome'
@@ -154,10 +158,18 @@ let trStrings = {
 	'tabs_show': {
 		'ru': 'Показать боковую панель',
 		'en': 'Show sidebar'
+	},
+	'within': {
+		'ru': 'Далее',
+		'en': 'Starts'
+	},
+	'now': {
+		'ru': s => `Сейчас (ещё ${s})`,
+		'en': s => `Now (${s} left)`
 	}
 }
 
-function getString(string) {
+var getString = string => {
 	let userLang = 'ru'
 	if ($ls.test()) userLang = $ls.get('aw_lang') || 'ru'
 
@@ -173,7 +185,23 @@ function getString(string) {
 		elems = $make.qs('[data-lang]', ['a']),
 		elemsTitle = $make.qs('[data-lang-title]', ['a'])
 
-	if (elems) Array.from(elems).forEach((elem) => { if (elem.dataset.langNo != '') elem.textContent = getString(elem.dataset.lang) })
+	let errString = s => `Для строки ${s} нет локализации`
 
-	if (elemsTitle) Array.from(elemsTitle).forEach((elem) => { if (elem.dataset.langNo != '') elem.setAttribute('title', getString(elem.dataset.langTitle)) })
+	if (elems) {
+		Array.from(elems).forEach(elem => {
+			let string = getString(elem.dataset.lang)
+			if (string) {
+				elem.textContent = string
+			} else { console.log(errString(elem.dataset.lang)) }
+		})
+	}
+
+	if (elemsTitle) {
+		Array.from(elemsTitle).forEach(elem => {
+			let string = getString(elem.dataset.langTitle)
+			if (string) {
+				elem.setAttribute('title', string)
+			} else { console.log(errString(elem.dataset.langTitle)) }
+		})
+	}
 })()

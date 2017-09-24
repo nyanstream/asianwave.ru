@@ -1,6 +1,6 @@
 'use strict'
 
-function hasFlash() {
+var hasFlash = () => {
 	let hasFlash = false
 
 	try {

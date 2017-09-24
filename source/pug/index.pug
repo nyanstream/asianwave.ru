@@ -34,4 +34,7 @@ html(lang='ru')
 				p &#9829; 2016 &ndash; 2017 &middot; #[a(href='/about') О проекте]
 		div.css-preload ¯\_(ツ)_/¯
 
+		each JS in ['kamina', 'special/glados']
+			script(src=`${paths.js}/${JS}.min.js?v=${projectVer}` defer)
+
 		include inc/bbiswu.pug
