@@ -1,10 +1,10 @@
-'use strict';
+'use strict'
 
 /*
  * Google Analytics
  */
 
-(function(i, s, o, g, r, a, m) {
+;(function(i, s, o, g, r, a, m) {
     i['GoogleAnalyticsObject'] = r;
     i[r] = i[r] || function() {
         (i[r].q = i[r].q || []).push(arguments)
@@ -13,13 +13,13 @@
     a.async = 1;
     a.src = g;
     m.parentNode.insertBefore(a, m)
-})(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga'), ga('create', 'UA-79528573-1', 'auto'), ga('send', 'pageview');
+})(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga'), ga('create', 'UA-79528573-1', 'auto'), ga('send', 'pageview')
 
 /*
  * Yandex Metrika
  */
 
-(function(d, w, c) {
+;(function(d, w, c) {
     (w[c] = w[c] || []).push(function() {
         try {
             w.yaCounter38037540 = new Ya.Metrika({

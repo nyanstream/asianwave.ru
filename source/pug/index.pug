@@ -11,8 +11,8 @@ html(lang='ru')
 
 		link(rel='canonical' href=`${URLs.same}`)
 
-		link(rel='prerender' href='/radio')
-		link(rel='prerender' href='/anime')
+		each URL in ['radio', 'anime']
+			link(rel='prerender' href=`/${URL}`)
 
 		each URL in ['www.google-analytics.com', 'ssl.google-analytics.com', 'mc.yandex.ru', 'ymetrica.com', 'cdn.jsdelivr.net']
 			link(rel='dns-prefetch' href=`//${URL}`)
@@ -26,15 +26,14 @@ html(lang='ru')
 				div.brand #{title}
 		main.btns
 			div.container
-				a(href='/radio' title='Радио') /radio
-				a(href='/anime' title='Анима') /anime
-		footer
-			div.container
-				p #[a(href='/' rel='home') #{title}] &ndash; мультимедийный портал для поклонников азиатской культуры всех жанров и типов.
-				p &#9829; 2016 &ndash; 2017 &middot; #[a(href='/about') О проекте]
+				a(href='/radio' data-lang-title='radio') /radio
+				a(href='/anime' data-lang-title='anime') /anime
+		
+		include inc/footer.pug
+		
 		div.css-preload ¯\_(ツ)_/¯
 
-		each JS in ['kamina', 'special/glados']
+		each JS in ['kamina', 'langs', 'special/glados']
 			script(src=`${paths.js}/${JS}.min.js?v=${projectVer}` defer)
 
 		include inc/bbiswu.pug

@@ -1,6 +1,10 @@
 'use strict'
 
-let trStrings = {
+/*
+ * Локализуемые строки
+ */
+
+var trStrings = {
 	'site_description': {
 		'ru': 'Мультимедийный портал для поклонников азиатской культуры всех жанров и типов',
 		'en': 'Russian multimedia portal for Asian culture fans of all genres and types'
@@ -169,13 +173,22 @@ let trStrings = {
 	}
 }
 
-var getString = string => {
-	let userLang = 'ru'
+/*
+ * Функция, возвращающая значение запрашиваемой строки из переменной trStrings
+ * У некоторых объектов, являющихся своеобразными "шаблонами" (например now), возвращается функция. В этом случае следует делать вызов следующим образом:
+ * getString('now')('час') -> "Сейчас (ещё час)"`
+ */
+
+var getString = s => {
+	let userLang = 'ru', tr = ''
 	if ($ls.test()) userLang = $ls.get('aw_lang') || 'ru'
 
-	let	tr = trStrings[string][userLang]
-
-	if (!tr) return trStrings[string]['ru']
+	try {
+		if (!Object.keys(trStrings[s]).includes(userLang)) { throw 42 }
+		if (trStrings[s][userLang]) { tr = trStrings[s][userLang] }
+	} catch (e) {
+		if (trStrings[s] && trStrings[s]['ru']) { tr = trStrings[s]['ru'] }
+	}
 
 	return tr
 }
@@ -185,23 +198,23 @@ var getString = string => {
 		elems = $make.qs('[data-lang]', ['a']),
 		elemsTitle = $make.qs('[data-lang-title]', ['a'])
 
-	let errString = s => `Для строки ${s} нет локализации`
+	let l10nErr = s => console.warn(`Ошибка: cтрока "${s}" не переведена или неправильно используется`)
 
-	if (elems) {
+	if (elems && elems.length != 0) {
 		Array.from(elems).forEach(elem => {
 			let string = getString(elem.dataset.lang)
-			if (string) {
+			if (string && string != '' && typeof string != 'function') {
 				elem.textContent = string
-			} else { console.log(errString(elem.dataset.lang)) }
+			} else { l10nErr(elem.dataset.lang) }
 		})
 	}
 
-	if (elemsTitle) {
+	if (elemsTitle && elemsTitle.length != 0) {
 		Array.from(elemsTitle).forEach(elem => {
 			let string = getString(elem.dataset.langTitle)
-			if (string) {
+			if (string && string != '' && typeof string != 'function') {
 				elem.setAttribute('title', string)
-			} else { console.log(errString(elem.dataset.langTitle)) }
+			} else { l10nErr(elem.dataset.langTitle) }
 		})
 	}
 })()

@@ -13,13 +13,14 @@
 		if ($ls.test()) {
 			if ($ls.get(key) != 'en') {
 				$ls.set(key, 'en')
-				alert(`${reason} включено, зайдите зайдите в один из разделов`)
+				alert(`${reason} включено`)
 			} else {
 				$ls.rm(key, 'en')
 				alert(`${reason} отключено`)
 			}
+			location.reload(true)
 		} else {
-			alert(`Невозможно включить ${reason.toLowerCase()}, в браузере отключено сохранение данных`)
+			alert(`Невозможно включить ${reason.toLowerCase()}, так как в браузере отключено сохранение данных`)
 		}
 	}
 })()
