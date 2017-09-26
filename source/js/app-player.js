@@ -52,7 +52,7 @@ if ($ls.test()) {
 	}
 } else {
 	steram_vol = stream_vol_def
-	console.log('Локальное хранилище отключено!')
+	console.warn('Ошибка: локальное хранилище отключено!')
 }
 
 /*
@@ -203,7 +203,7 @@ function loadInfo() {
 	if (self.fetch) {
 		fetch(mr24info, {cache: 'no-cache'}).then(response => {
 			if (response.status !== 200) {
-				console.log('Ошибка сервера радио!'); return
+				console.warn('Ошибка: Сервер радио недоступен!'); return
 			}
 			response.json().then(data => {
 				if (data['online'] != 0) {

@@ -6,7 +6,7 @@
 
 ;(() => {
 	let
-		key = 'aw_lang',
+		key = 'aw_l10n',
 		reason = 'Тестирование английской локализации'
 
 	$make.qs('.brand').ondblclick = () => {

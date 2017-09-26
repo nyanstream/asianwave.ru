@@ -331,6 +331,7 @@ var $parse = {
 				pLR = /\[(.*?)\]/,
 				postLinkR = postText.match(new RegExp(pLR, 'g'))
 
+			if (postText == '') return;
 			if (postLinkR) {
 				postLinkR.forEach(link => {
 					postLinkS = link.split('|')

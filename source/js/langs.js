@@ -181,7 +181,7 @@ var trStrings = {
 
 var getString = s => {
 	let userLang = 'ru', tr = ''
-	if ($ls.test()) userLang = $ls.get('aw_lang') || 'ru'
+	if ($ls.test()) userLang = $ls.get('aw_l10n') || 'ru'
 
 	try {
 		if (!Object.keys(trStrings[s]).includes(userLang)) { throw 42 }
@@ -194,27 +194,43 @@ var getString = s => {
 }
 
 ;(() => {
-	let
-		elems = $make.qs('[data-lang]', ['a']),
-		elemsTitle = $make.qs('[data-lang-title]', ['a'])
+	/*
+	 * @TODO сделать поддержку шаблонов (например, с помощью дополнительного аттрибута "data-lang-var")
+	 */
 
 	let l10nErr = s => console.warn(`Ошибка: cтрока "${s}" не переведена или неправильно используется`)
 
-	if (elems && elems.length != 0) {
-		Array.from(elems).forEach(elem => {
+	/*
+	 * Поиск HTML-элементов для локализации
+	 * Элементы должны иметь аттрибут "data-lang" со нужным значением из переменной trStrings
+	 */
+
+	try {
+		let elems = $make.qs('[data-lang]', ['a'])
+
+		elems = Array.from(elems)
+		elems.forEach(elem => {
 			let string = getString(elem.dataset.lang)
 			if (string && string != '' && typeof string != 'function') {
 				elem.textContent = string
 			} else { l10nErr(elem.dataset.lang) }
 		})
-	}
+	} catch (e) {}
 
-	if (elemsTitle && elemsTitle.length != 0) {
-		Array.from(elemsTitle).forEach(elem => {
+	/*
+	 * Поиск HTML-элементов для локализации их аттрибутов "title"
+	 * Элементы должны иметь аттрибут "data-lang-title" со нужным значением из переменной trStrings
+	 */
+
+	try {
+		let elemsTitle = $make.qs('[data-lang-title]', ['a'])
+
+		elemsTitle = Array.from(elemsTitle)
+		elemsTitle.forEach(elem => {
 			let string = getString(elem.dataset.langTitle)
 			if (string && string != '' && typeof string != 'function') {
 				elem.setAttribute('title', string)
 			} else { l10nErr(elem.dataset.langTitle) }
 		})
-	}
+	} catch (e) {}
 })()

@@ -1,6 +1,6 @@
 <?php
 	date_default_timezone_set('Europe/Moscow');
-	error_reporting(0); // отключать во время дебага (?)
+	error_reporting(0);
 
 	include 'topsec/vars.php';
 
@@ -31,13 +31,13 @@
 		$APIep = $GLOBALS['APIep'];
 		$vkData = $GLOBALS['vkData'];
 		$imgProxy = $GLOBALS['imgProxy'];
-		
+
 		$vkFile = 'vk-info.json';
 
 		if (filemtime($vkFile) < time() - 10) {
 			$vk_vid_ac = file_get_contents('topsec/vk-token.txt');
 			$url = $APIep['vk'] . '/wall.get?owner_id=-' . $vkData['comID'] . '&count=6&extended=1&v=' . $vkData['api-version'] . '&access_token=' . $vk_vid_ac;
-			
+
 			$vk = file_get_contents($url);
 			if (!$vk) { return false; }
 
@@ -58,7 +58,7 @@
 
 				if ($post->copy_history) { $postType = 'copy'; }
 				if ($post->is_pinned) { $postPin = 1; }
-				
+
 				$vkWall[$i] = [
 					'id' => $post->id,
 					'time' => $post->date,
@@ -101,7 +101,7 @@
 	function get_vk_stream_link() {
 		$APIep = $GLOBALS['APIep'];
 		$vkData = $GLOBALS['vkData'];
-		
+
 		$vkFile = 'vk-stream.json';
 
 		if (filemtime($vkFile) < time() - 10) {

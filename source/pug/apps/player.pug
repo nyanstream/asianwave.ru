@@ -38,8 +38,5 @@ html(lang='ru')
 		each lib in [`fetch/${libsVer.fetch}/fetch.min.js`, `ismobilejs/${libsVer.isMobile}/isMobile.min.js`]
 			script(src=`https://cdnjs.cloudflare.com/ajax/libs/${lib}` defer)
 
-		each JS in ['kamina', 'special/ms-edge-suck', 'langs']
-			script(src=`${paths.js}/${JS}.min.js?v=${projectVer}` defer)
-
 		script(src=`${paths.js}/kamina.min.js?v=${projectVer}` defer)
 		script(src=`${paths.js}/app-player.min.js?v=${projectVer}` data-port='7934' data-server='1' defer)

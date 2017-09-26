@@ -1,6 +1,6 @@
 <?php
 	date_default_timezone_set('Europe/Moscow');
-	//error_reporting(0);
+	error_reporting(0);
 
 	include 'topsec/vars.php';
 
@@ -16,22 +16,17 @@
 				$mr24_info = json_decode($mr24_cnt);
 
 				if (!$mr24_cnt) {
-					$r_stat = null;
+					$r_stat = ['online' => 0];
 				} else {
-					$r_online = $mr24_info->online;
-					$r_rj = $mr24_info->djname;
-					for ($e = 0; $e <= ((count($mr24_info->songs) - 1) / 2 - 1); $e++) { $r_prevs[$e] = $mr24_info->songs[$e]; }
-					$r_listeners = $mr24_info->listeners;
+					$r_stat = [
+						'online' => $mr24_info->online,
+						'rj' => $mr24_info->djname,
+						'song' => [
+							'curr' => $mr24_info->song,
+							'next' => $mr24_info->nextsongs[0],
+						'listeners' => $mr24_info->listeners]
+					];
 				}
-
-				$r_stat = [
-					'online' => $r_online,
-					'rj' => $r_rj,
-					'song' => [
-						'curr' => $mr24_info->song,
-						'next' => $mr24_info->nextsongs[0]/*,
-						//'prev' => $r_prevs*/], // пока не нужно
-					'listeners' => $r_listeners];
 
 				$r_json[$point[0]] = $r_stat;
 			}
