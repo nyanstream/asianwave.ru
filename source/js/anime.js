@@ -201,12 +201,13 @@ var $parse = {
 	  vkNews.textContent = ''
 
 	  if (data == 'fail' || !data.posts) {
-		 	vkNews.classList.add('api-err')
-		 	vkNews.appendChild($create.elem('p', getString('err_api')))
-		 	return
+			vkNews.classList.add('api-err')
+			vkNews.appendChild($create.elem('p', getString('err_api')))
+			return
 	  } else {
-		 	if (vkNews.classList.contains('api-err'))
+			if (vkNews.classList.contains('api-err')) {
 				vkNews.classList.remove('api-err')
+			}
 	  }
 
 		let newsHeader = $create.elem('div', $create.link(`https://${domain.vk}/${data['com']['url']}`, getString('vk_com'), ['e', 'html']), 'vk-news-header')
@@ -255,10 +256,10 @@ var $parse = {
 				vkPostMeta = $create.elem('div', vkPostMetaLink, 'vk-post-meta'),
 				vkPostBody = $create.elem('div', `${postImgLink}<p>${postText}</p>`, 'vk-post-body')
 
-		 	vkPost.appendChild(vkPostMeta)
-		 	vkPost.appendChild(vkPostBody)
+			vkPost.appendChild(vkPostMeta)
+			vkPost.appendChild(vkPostBody)
 
-		 	newsBody.innerHTML += vkPost.outerHTML;
+			newsBody.innerHTML += vkPost.outerHTML;
 	  })
 
 	  vkNews.appendChild(newsHeader)

@@ -22,8 +22,8 @@ var
 
 var $embed = {
 	sched: () => {
-		fetch(`${API.schedule}?t=${Date.now()}`, fetchOptions).then((response) => {
-			response.json().then((data) => {
+		fetch(`${API.schedule}?t=${Date.now()}`, fetchOptions).then(response => {
+			response.json().then(data => {
 				let
 					dayToday = moment().format('DDD YY'),
 					dayTodayFull = moment().format('D MMMM (dddd)'),
@@ -32,7 +32,7 @@ var $embed = {
 				dataCont.textContent = ''
 				dataCont.appendChild($create.elem('p', dayTodayFull))
 
-				data.forEach((item) => {
+				data.forEach(item => {
 					let
 						timeS = moment.unix(item['s']),
 						dayOfS = timeS.format('DDD YY'),
@@ -44,8 +44,8 @@ var $embed = {
 		})
 	},
 	sched_next: () =>  {
-		fetch(`${API.schedule}?t=${Date.now()}`, fetchOptions).then((response) =>  {
-			response.json().then((data) => {
+		fetch(`${API.schedule}?t=${Date.now()}`, fetchOptions).then(response =>  {
+			response.json().then(data => {
 				let nextAirs = data.filter((e) => e['s'] > moment().unix())
 
 				if (nextAirs.length == 0) return;
@@ -60,8 +60,8 @@ var $embed = {
 
 		//if ($check.get('song') == '') point = 7934
 
-		fetch(`https://${domain.mr}/users/${point}/status.json?t=${Date.now()}`, fetchOptions).then((response) => {
-			response.json().then((data) => {
+		fetch(`https://${domain.mr}/users/${point}/status.json?t=${Date.now()}`, fetchOptions).then(response => {
+			response.json().then(data => {
 				dataCont.textContent = ''
 				dataCont.appendChild($create.elem('p', data['song'].replace(' - ', ' &ndash; ')))
 			})

@@ -14,13 +14,9 @@ let
 	pug =         require('gulp-pug'),
 	liveServer =  require('browser-sync')
 
-let minify = composer(uglifyjs, console)
-
-let reloadServer = () => {
-	//if (liveServer.active)
-		return liveServer.stream()
-		//else console.log('ddds')
-}
+let
+	minify = composer(uglifyjs, console),
+	reloadServer = () => liveServer.stream()
 
 let paths = {
 	html: {

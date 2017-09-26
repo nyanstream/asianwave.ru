@@ -304,8 +304,9 @@ var $parse = {
 			vkNews.appendChild($create.elem('p', getString('err_api')))
 			return
 		} else {
-		 	if (vkNews.classList.contains('api-err'))
+			if (vkNews.classList.contains('api-err')) {
 				vkNews.classList.remove('api-err')
+			}
 	  }
 
 		data['posts'].forEach(post => {
@@ -381,7 +382,7 @@ var $parse = {
 
 		if (data == 'fail') { $make.qs('.radio-error').textContent = getString('err_api_radio'); return }
 
-		let	current = data['song']
+		let current = data['song']
 
 		/* Блок с выводом текущего трека */
 
@@ -586,7 +587,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		}
 	})
 
-	let	getPoint = $check.get('point')
+	let getPoint = $check.get('point')
 	if (getPoint && Object.keys(points).includes(getPoint)) { radio.toPoint(getPoint) }
 
 	//$create.balloon(pointButton[0].parentElement, 'Список потоков', 'down')

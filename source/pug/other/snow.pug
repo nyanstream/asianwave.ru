@@ -7,10 +7,10 @@ html(lang='ru')
 		title #{title} / Снежок!
 		link(rel='shortcut icon' href=`${URLs.favicon}`)
 
-		meta(name='viewport' content='width=device-width, initial-scale=1')
+		meta(name='viewport' content='width=device-width, initial-scale=1, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no')
 		meta(name='robots' content='noindex, nofollow')
 
 		style.
-			html, body { margin: 0; padding: 0; width: 100%; height: 100%; background-color: transparent; overflow: hidden }
+			html, body { margin: 0; padding: 0; width: 100%; height: 100%; background-color: #000; overflow: hidden }
 	body
 		script(src=`${paths.js}/special/snow.min.js?v=${projectVer}`)
