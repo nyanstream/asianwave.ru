@@ -5,19 +5,22 @@ footer {
 	font-size: 16px;
 	margin: 25px 0;
 
+	$_linkColor: rgba(255, 255, 255, .6);
+
 	p {
 		padding: 0 5px;
 		line-height: 1.5em;
-		color: rgba(128, 128, 128, .5);
+		color: $_linkColor;
+		text-shadow: 1px 1px 1px rgba(80, 80, 80, .6);
 	}
 
 	a {
-		color: rgba(128, 128, 128, .5);
+		color: $_linkColor;
 		@include transition(.3s);
 		text-decoration: none;
 
 		&:hover {
-			color: rgba(128, 128, 128, .8);
+			color: darken($_linkColor, 10%);
 		}
 	}
 }

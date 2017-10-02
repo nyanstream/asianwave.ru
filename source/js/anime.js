@@ -189,7 +189,7 @@ var $parse = {
 			}
 		})
 
-		if (tableBody == '') tableBody += $create.elem('tr', '<td colspan="2">Расписание пустое ¯\\_(ツ)_/¯</td>', '', ['html'])
+		if (tableBody == '') tableBody += $create.elem('tr', `<td colspan="2">${getString('empty_schedule')} ¯\\_(ツ)_/¯</td>`, '', ['html'])
 
 		streamsсhed.appendChild($create.elem('tbody', `<tr><td colspan="2">${getString('latest_check')}: ${moment().format('D MMMM, HH:mm:ss')}</td></tr>${tableBody}`))
 	},
@@ -244,7 +244,7 @@ var $parse = {
 			}
 
 			let
-				vkPostMetaLink = $create.link(`https://${domain.vk}/wall-${data['com']['id']}_${post['id']}`, moment.unix(post['time']).format('D MMMM YYYY в HH:mm'), ['e', 'html'])
+				vkPostMetaLink = $create.link(`https://${domain.vk}/wall-${data['com']['id']}_${post['id']}`, moment.unix(post['time']).format('LLL'), ['e', 'html'])
 
 			if (post['type'] == 'copy') {
 				isCopy = ' is-repost'
@@ -375,7 +375,7 @@ var $loadInfo = {
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-	if ($ls.get('aw_lang')) { moment.locale($ls.get('aw_lang')) }
+	if ($ls.get('aw_l10n')) { moment.locale($ls.get('aw_l10n')) }
 
 	$init.player()
 	$loadInfo.full()

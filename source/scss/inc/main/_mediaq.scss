@@ -7,7 +7,7 @@
 	}
 }
 
-@media screen and (max-width: #{$btnpadding * 5 + $btnwidth * 2}) {
+@media screen and (max-width: #{$btnPadding * 5 + $btnWidth * 2}) {
 	.top-panel {
 		.container {
 			text-align: center;
@@ -19,10 +19,10 @@
 			width: 250px; height: 250px;
 			margin: 5px;
 
-			background-position: center center, center center;
+			background-position: center center, top -40px center;
 
 			&:hover {
-				background-size: 70%, 100%;
+				background-size: $btnPercent, 100%;
 			}
 		}
 	}

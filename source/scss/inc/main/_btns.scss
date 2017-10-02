@@ -1,29 +1,30 @@
 // main: ../../main.scss
 
-$btnpadding: 35px;
-$btnwidth: 300px;
+$btnPadding: 35px;
+$btnWidth: 300px;
+$btnPercent: 65%;
 
 .btns {
 	user-select: none;
 
 	.container > a {
 		display: inline-block;
-		width: $btnwidth; height: 500px;
-		margin: 0 $btnpadding 0 $btnpadding;
+		width: $btnWidth; height: 500px;
+		margin: 0 $btnPadding 0 $btnPadding;
 
 		background-repeat: no-repeat, no-repeat;
-		background-color: rgba(#fff, .9);
-		background-position: bottom 20px center, center center;
+		background-color: rgba(158, 129, 162, .9);
+		background-position: center center, center center;
 
 		&, &.disabled:hover {
-			background-size: 70%, 100%;
+			background-size: $btnPercent, 100%;
 		}
 
 		box-shadow: var(--shadow);
 		@include transition(.3s);
 
 		&:hover {
-			background-size: 70%, 105%;
+			background-size: $btnPercent, 105%;
 			//box-shadow: 5px 10px 20px rgba(0, 0, 0, .5);
 		}
 
@@ -40,10 +41,10 @@ $btnwidth: 300px;
 		@each $afon in radio, anime {
 			.container a[href*='#{$afon}'] {
 				&, &.disabled:hover {
-				background-image: url('#{$imgpath}/main/#{$afon}-btn.png'), url('#{$imgpath}/main/#{$afon}-bckg.png');}
+				background-image: url('#{$imgPath}/main/#{$afon}-btn.png'), url('#{$imgPath}/main/#{$afon}-bckg.png');}
 
 				&:hover {
-					background-image: url('#{$imgpath}/main/hover-btn.png'), url('#{$imgpath}/main/#{$afon}-bckg.png');
+					background-image: url('#{$imgPath}/main/hover-btn.png'), url('#{$imgPath}/main/#{$afon}-bckg.png');
 				}
 			}
 		}
@@ -51,7 +52,7 @@ $btnwidth: 300px;
 } // .btns
 
 .css-preload {
-	background-image: url('#{$imgpath}/main/hover-btn.png');
+	background-image: url('#{$imgPath}/main/hover-btn.png');
 	width: 1px; height: 1px;
 	background-size: 0 0;
 }

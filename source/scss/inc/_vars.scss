@@ -2,8 +2,12 @@ $doNotDelete: '';
 
 /* Главный цвет */
 //$primeColor: #FF305E;
-$primeColor: rgb(251, 169, 173);
+$primeColor: #7ed8d8;
 //$primeColor: rgb(235, 205, 70);
+
+/* Цвета градиента */
+$gradientColorTop: rgb(214, 63, 105);
+$gradientColorBottom: rgb(134, 88, 136);
 
 /* Цвет текста */
 $textColor: #000;
@@ -11,10 +15,9 @@ $textColor: #000;
 /* Верхняя панель в разделах */
 $top-panel--height: 40px;
 $top-panel--brandHeight: 20px;
-$top-panel--color: darken($primeColor, 5%);
 
 /* Стандартный размер шрифта */
 $fontsize: 16px;
 
 /* Папка с пикчами */
-$imgpath: '/files/img';
+$imgPath: '/files/img';

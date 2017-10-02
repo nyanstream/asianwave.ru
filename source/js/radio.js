@@ -341,7 +341,7 @@ var $parse = {
 			}
 
 			var
-				vkPostMetaLink = $create.link(`https://${domain.vk}/wall-${data['com']['id']}_${post['id']}`, moment.unix(post['time']).format('D MMMM YYYY в HH:mm'), ['e', 'html'])
+				vkPostMetaLink = $create.link(`https://${domain.vk}/wall-${data['com']['id']}_${post['id']}`, moment.unix(post['time']).format('LLL'), ['e', 'html'])
 
 			if (post['type'] == 'copy') {
 				isCopy = ' is-repost'
@@ -564,6 +564,8 @@ var $loadInfo = {
  */
 
 document.addEventListener('DOMContentLoaded', () => {
+	if ($ls.get('aw_l10n')) { moment.locale($ls.get('aw_l10n')) }
+
 	let
 		pointButtons = Array.from(pointButton),
 		pointKeys = Object.keys(points)

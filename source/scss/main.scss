@@ -3,11 +3,12 @@
 
 :root {
 	--prime-color: $primeColor;
+	--prime-color-5d: darken($primeColor, 5%);
 	--shadow: 0 5px 20px rgba(0, 0, 0, .5);
 }
 
 @include reset;
-@include selection(darken($primeColor, 5%), #fff);
+@include selection(var(--prime-color-5d), #fff);
 
 $pagewidth: 960px;
 
@@ -21,7 +22,7 @@ body {
 		font-size: 0;
 	}
 
-	background-image: url('#{$imgpath}/main/bckg.png');
+	background-image: url('#{$imgPath}/main/bckg.png'), linear-gradient(to bottom, $gradientColorBottom, $gradientColorTop);
 	background-position: bottom center;
 	background-repeat: no-repeat;
 	background-size: 100%;

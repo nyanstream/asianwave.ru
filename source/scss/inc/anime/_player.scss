@@ -4,7 +4,7 @@
 	background-color: #000;
 
 	// & > *:nth-child(1) {
-	// 	background-image: url('#{$imgpath}/anime-offline.png');
+	// 	background-image: url('#{$imgPath}/anime-offline.png');
 	// 	background-repeat: no-repeat;
 	// 	//background-position: center bottom;
 	// 	background-position: left bottom;
@@ -40,7 +40,7 @@
 
 			&:not(.jw-state-playing):not(.jw-flag-flash-blocked) .jw-preview {
 				display: block !important;
-				background-image: url('#{$imgpath}/anime-offline.png');
+				background-image: url('#{$imgPath}/anime-offline.png');
 				background-repeat: no-repeat;
 				background-position: left bottom;
 				background-size: cover;

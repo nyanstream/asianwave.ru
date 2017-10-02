@@ -11,12 +11,12 @@
 // 	}
 // }
 
-@media screen and (max-width: 799px) {
+@media screen and (max-width: 949px) {
 	.anime {
 		& > * {
 			display: inline-block;
 			vertical-align: middle;
-			height: auto; width: 100% !important;
+			width: 100% !important;
 		}
 
 		.player {

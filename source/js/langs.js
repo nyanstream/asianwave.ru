@@ -108,6 +108,10 @@ var trStrings = {
 		'ru': 'Расписание прямых эфиров',
 		'en': 'Scheldue of LIVE airs'
 	},
+	'empty_schedule': {
+		'ru': 'Расписание пустое',
+		'en': 'Scheldue is empty'
+	},
 	'rj_current': {
 		'ru': 'Ведущий в эфире',
 		'en': 'RJ is on air'
