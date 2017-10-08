@@ -2,4 +2,6 @@ node_modules/
 build/files/js/
 build/files/css/
 build/**/*.html
+build/api/**/*.php
+build/api/**/*.json
 npm-debug.log

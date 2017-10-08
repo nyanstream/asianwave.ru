@@ -41,10 +41,10 @@ $btnPercent: 65%;
 		@each $afon in radio, anime {
 			.container a[href*='#{$afon}'] {
 				&, &.disabled:hover {
-				background-image: url('#{$imgPath}/main/#{$afon}-btn.png'), url('#{$imgPath}/main/#{$afon}-bckg.png');}
+				background-image: url('#{$imgPath}/main/#{$afon}-btn.png?v=#{$projectVer}'), url('#{$imgPath}/main/#{$afon}-bckg.png?v=#{$projectVer}');}
 
 				&:hover {
-					background-image: url('#{$imgPath}/main/hover-btn.png'), url('#{$imgPath}/main/#{$afon}-bckg.png');
+					background-image: url('#{$imgPath}/main/hover-btn.png?v=#{$projectVer}'), url('#{$imgPath}/main/#{$afon}-bckg.png?v=#{$projectVer}');
 				}
 			}
 		}
@@ -52,7 +52,7 @@ $btnPercent: 65%;
 } // .btns
 
 .css-preload {
-	background-image: url('#{$imgPath}/main/hover-btn.png');
+	background-image: url('#{$imgPath}/main/hover-btn.png?v=#{$projectVer}');
 	width: 1px; height: 1px;
 	background-size: 0 0;
 }

@@ -49,7 +49,7 @@
 
 	function schedNew($_time, $_duration, $_title, $_link, $_is_secret) {
 		$time_start = strtotime($_time);
-		if ($_duration) {	$duration = $_duration * 60; } else { $duration = 3600;	}
+		if ($_duration) { $duration = $_duration * 60; } else { $duration = 3600; }
 		$time_end = $time_start + $duration;
 
 		$title = addcslashes($_title, '"');
@@ -60,8 +60,8 @@
 			'title' => json_decode('"' . $title . '"')
 		];
 
-		if ($_link != null) {	$new['link'] = json_decode('"' . $link . '"');	}
-		if ($_is_secret == 'on') {	$new['secret'] = true;	}
+		if ($_link != null) { $new['link'] = json_decode('"' . $link . '"'); }
+		if ($_is_secret == 'on') { $new['secret'] = true; }
 
 		return $new;
 	}
@@ -121,7 +121,7 @@
 	if (isset($_POST['rm_air'])) {
 		switch ($_POST['where']) {
 			case 'radio':
-				rmShedData($file['sched']['radio'], $schedRadio_data, $schedRadio_latest);	break;
+				rmShedData($file['sched']['radio'], $schedRadio_data, $schedRadio_latest); break;
 			case 'anime':
 				rmShedData($file['sched']['anime'], $schedAnime_data, $schedAnime_latest);
 		}
@@ -167,7 +167,7 @@
 			'text' => json_decode('"' . $text . '"')
 		];
 
-		if ($_color != '#ffffff') {	$new['color'] = json_decode('"' . $_color . '"');	}
+		if ($_color != '#ffffff') { $new['color'] = json_decode('"' . $_color . '"'); }
 
 		return $new;
 	}
@@ -175,7 +175,7 @@
 	if (isset($_POST['noti'])) {
 		if (!isset($_POST['noti_rm'])) {
 			$noti_content = notiNew($_POST['noti_text'], $_POST['noti_color']);
-		}	else { $noti_content = ['enabled' => false]; }
+		} else { $noti_content = ['enabled' => false]; }
 
 		file_put_contents($path . '/' . $file['noti'], json_encode($noti_content, JSON_UNESCAPED_UNICODE));
 	}

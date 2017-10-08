@@ -28,7 +28,7 @@
 			height: $top-panel--logo-height;
 			margin-right: 5px;
 
-			background-image: url('#{$imgPath}/logo.png');
+			background-image: url('#{$imgPath}/logo.png?v=#{$projectVer}');
 			background-position: center center;
 			background-repeat: no-repeat;
 			background-size: contain;

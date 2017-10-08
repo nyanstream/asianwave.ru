@@ -107,9 +107,7 @@
 		margin-left: 10px;
 
 		input {
-			@each $browser in '-webkit-', '-moz-', '' {
-				#{$browser}appearance: none;
-			}
+			@include disable-appearance;
 
 			width: $btn-size; height: $btn-size;
 			border: 1px solid rgba(0, 0, 0, .3);

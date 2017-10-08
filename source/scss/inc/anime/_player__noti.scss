@@ -25,12 +25,17 @@
 		display: inline-block;
 		position: relative;
 		cursor: pointer;
-		left: -.8em;
+		font-size: .8em;
+		left: -1.2em;
 
 		@include transition(.3s);
 
+		&:before {
+			content: '🗙';
+		}
+
 		&:hover {
-			color: var(--prime-color);
+			opacity: .7;
 		}
 	}
 

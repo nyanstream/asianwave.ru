@@ -312,22 +312,23 @@ var $parse = {
 		data['posts'].forEach(post => {
 			if (post['pin'] == 1) return;
 
-			var
+			let
 				postImgLink = '', isCopy = '', postLinkS = '',
 				postImg = post['pic']
 
 			if (postImg) {
-				var postImgElem = $create.elem('img')
+				let	postImgElem = $create.elem('img')
 
 				postImgElem.setAttribute('src', postImg['small'])
 				postImgElem.setAttribute('alt', '')
 
-				if (postImg['big'])
-					postImgLink = $create.link(postImg['big'], postImgElem.outerHTML, ['e', 'html'])
-					else postImgLink = $create.link(postImg['small'], postImgElem.outerHTML, ['e', 'html'])
+				postImgLink = $create.link(postImg['big'] ? postImg['big'] : postImg['small'], '')
+
+				postImgLink.classList.add('link2img')
+				postImgLink.appendChild(postImgElem)
 			}
 
-			var
+			let
 				postText = post['text'].replace(/\n/g, '<br>'),
 				pLR = /\[(.*?)\]/,
 				postLinkR = postText.match(new RegExp(pLR, 'g'))
@@ -340,7 +341,7 @@ var $parse = {
 				})
 			}
 
-			var
+			let
 				vkPostMetaLink = $create.link(`https://${domain.vk}/wall-${data['com']['id']}_${post['id']}`, moment.unix(post['time']).format('LLL'), ['e', 'html'])
 
 			if (post['type'] == 'copy') {
@@ -348,10 +349,13 @@ var $parse = {
 				vkPostMetaLink += ` <span title="${getString('vk_repost')}">\u2935</a>`
 			}
 
-			var
+			let
 				vkPost = $create.elem('div', '', 'vk-post' + isCopy),
 				vkPostMeta = $create.elem('div', vkPostMetaLink, 'vk-post-meta'),
-				vkPostBody = $create.elem('div', `${postImgLink}<p>${postText}</p>`, 'vk-post-body')
+				vkPostBody = $create.elem('div', '', 'vk-post-body')
+
+			if (postImgLink) { vkPostBody.appendChild(postImgLink) }
+			vkPostBody.appendChild($create.elem('p', postText))
 
 			vkPost.appendChild(vkPostMeta)
 			vkPost.appendChild(vkPostBody)
@@ -373,7 +377,6 @@ var $parse = {
 			songsBox = $make.qs('.songs-box'),
 			songsTableBody = '',
 			radioErrorBox = $make.qs('.radio-error')
-
 
 		stateBox.textContent = ''
 		liveBox.textContent = ''

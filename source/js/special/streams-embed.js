@@ -68,7 +68,7 @@ var $embed = {
 		})
 	},
 	time: () => {
-		dataCont.textContent = `Время сейчас: ${moment().format('HH:mm:ss')}`
+		dataCont.textContent = `Время у стримера: ${moment().format('HH:mm:ss')}`
 	}
 }
 

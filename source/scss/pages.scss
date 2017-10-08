@@ -25,7 +25,7 @@ body {
 		font-size: 0;
 	}
 
-	background-image: url('#{$imgPath}/main/bckg.png'), linear-gradient(to bottom, $gradientColorBottom, $gradientColorTop);
+	background-image: url('#{$imgPath}/main/bckg.png?v=#{$projectVer}'), linear-gradient(to bottom, $gradientColorBottom, $gradientColorTop);
 	background-position: bottom center;
 	background-repeat: no-repeat;
 	background-size: 100%;

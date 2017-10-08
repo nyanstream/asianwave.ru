@@ -3,7 +3,7 @@
 
 body {
 	background-color: #f4f4f4;
-	background-image: url('#{$imgPath}/radio-bckg.png');
+	background-image: url('#{$imgPath}/radio-bckg.png?v=#{$projectVer}');
 	background-position: top center;
 }
 
@@ -26,7 +26,6 @@ $fontSize: 16px;
 	@include flexbox(auto, center, auto, auto);
 	width: $pageWidth;
 	margin: 10px auto;
-	font-size: 0;
 
 	& > * {
 		// display: inline-block;

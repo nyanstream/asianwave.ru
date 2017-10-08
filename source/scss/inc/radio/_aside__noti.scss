@@ -17,7 +17,7 @@
 	}
 
 	&-close {
-		$btnColor: #e6e6e6;
+		$btnColor: rgba(245, 245, 245, .8);
 		background-color: $btnColor;
 		border-top: 1px solid rgba(0, 0, 0, .1);
 		border-bottom: 0;

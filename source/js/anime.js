@@ -220,14 +220,15 @@ var $parse = {
 				postImg = post['pic']
 
 			if (postImg) {
-				let postImgElem = $create.elem('img')
+				let	postImgElem = $create.elem('img')
 
 				postImgElem.setAttribute('src', postImg['small'])
 				postImgElem.setAttribute('alt', '')
 
-				if (postImg['big'])
-					postImgLink = $create.link(postImg['big'], postImgElem.outerHTML, ['e', 'html'])
-					else postImgLink = $create.link(postImg['small'], postImgElem.outerHTML, ['e', 'html'])
+				postImgLink = $create.link(postImg['big'] ? postImg['big'] : postImg['small'], '')
+
+				postImgLink.classList.add('link2img')
+				postImgLink.appendChild(postImgElem)
 			}
 
 			let
@@ -254,7 +255,10 @@ var $parse = {
 			let
 				vkPost = $create.elem('div', '', 'vk-post' + isCopy),
 				vkPostMeta = $create.elem('div', vkPostMetaLink, 'vk-post-meta'),
-				vkPostBody = $create.elem('div', `${postImgLink}<p>${postText}</p>`, 'vk-post-body')
+				vkPostBody = $create.elem('div', '', 'vk-post-body')
+
+			if (postImgLink) { vkPostBody.appendChild(postImgLink) }
+			vkPostBody.appendChild($create.elem('p', postText))
 
 			vkPost.appendChild(vkPostMeta)
 			vkPost.appendChild(vkPostBody)
@@ -280,7 +284,7 @@ var $parse = {
 			else notiEl.style.backgroundColor = null
 
 		let
-			notiClose = $create.elem('div', '\u00D7', 'noti-close'),
+			notiClose = $create.elem('div', '', 'noti-close'),
 			notiContent = $create.elem('div', text, 'noti-content'),
 			notiItems = []
 

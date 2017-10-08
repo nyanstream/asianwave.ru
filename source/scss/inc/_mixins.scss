@@ -40,6 +40,12 @@
 	        filter: $settings;
 }
 
+@mixin disable-appearance {
+	-webkit-appearance: none;
+	   -moz-appearance: none;
+	        appearance: none;
+}
+
 @mixin opacity {
 	opacity: .9;
 }

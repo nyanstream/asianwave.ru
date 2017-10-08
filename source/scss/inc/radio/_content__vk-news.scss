@@ -30,7 +30,7 @@
 			padding-bottom: 5px;
 
 			a {
-				&[href$='.jpg'] {
+				&.link2img {
 					display: inherit;
 					border-bottom: 0;
 				}
