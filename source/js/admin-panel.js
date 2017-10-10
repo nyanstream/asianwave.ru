@@ -24,13 +24,17 @@ var initAdminPanel = PHP_data => {
 			animeInfoEl = $make.qs('.rm-air .info-anime'),
 			radioInfoEl = $make.qs('.rm-air .info-radio')
 
-		if (data.schedAnimeCount > 0) {
-			animeInfoEl.innerHTML = `Название: <q>${data.schedAnimeLatest.title}</q>. Начало ${moment.unix(data.schedAnimeLatest.start).format('LLL')}; Конец: ${moment.unix(data.schedAnimeLatest.end).format('LLL')}`
-		} else { animeInfoEl.textContent = 'Расписание пустое' }
+		if (animeInfoEl) {
+			if (data.schedAnimeCount > 0 && animeInfoEl) {
+				animeInfoEl.innerHTML = `Название: <q>${data.schedAnimeLatest.title}</q>. Начало ${moment.unix(data.schedAnimeLatest.start).format('LLL')}; Конец: ${moment.unix(data.schedAnimeLatest.end).format('LLL')}`
+			} else { animeInfoEl.textContent = 'Расписание пустое' }
+		}
 
-		if (data.schedRadioCount > 0) {
-			radioInfoEl.innerHTML = `Название: <q>${data.schedRadioLatest.title}</q>. Начало ${moment.unix(data.schedRadioLatest.start).format('LLL')}; Конец: ${moment.unix(data.schedRadioLatest.end).format('LLL')}`
-		} else { radioInfoEl.textContent = 'Расписание пустое' }
+		if (radioInfoEl) {
+			if (data.schedRadioCount > 0) {
+				radioInfoEl.innerHTML = `Название: <q>${data.schedRadioLatest.title}</q>. Начало ${moment.unix(data.schedRadioLatest.start).format('LLL')}; Конец: ${moment.unix(data.schedRadioLatest.end).format('LLL')}`
+			} else { radioInfoEl.textContent = 'Расписание пустое' }
+		}
 
 		Object.keys(emptySched).forEach(key => {
 			if (emptySched[key]) { $make.qs(`.rm-air input[type="radio"][value="${key}"]`).setAttribute('disabled', '') }
@@ -51,6 +55,8 @@ var initAdminPanel = PHP_data => {
 			radio: data.schedRadioCountExpr
 		}
 
+		if (!$make.qs('.expired-clear')) { throw 42 }
+
 		$make.qs('.expired-clear .count').innerHTML = `Всего просроченных эфиров: ${exprsSched['anime'] + exprsSched['radio']}; ${exprsSched['anime']} в /anime, ${exprsSched['radio']} в /radio.`
 
 		if (exprsSched['anime'] + exprsSched['radio'] == 0) {
@@ -61,10 +67,15 @@ var initAdminPanel = PHP_data => {
 	} catch (e) {}
 
 	try {
-		$make.qs('.vk-link').appendChild($create.link(`${data.vk.URL}?client_id=${data.vk.appID}&display=page&redirect_uri=https://${data.server}/api/${data.vk.api}&scope=video,offline&response_type=code&state=vk-get-code`, 'Просто нажми сюда', ['e']))
+		let vkLink = $make.qs('.vk-link')
+		if (!vkLink) { throw 42 }
+
+		vkLink.appendChild($create.link(`${data.vk.URL}?client_id=${data.vk.appID}&display=page&redirect_uri=https://${data.server}/api/${data.vk.api}&scope=video,offline&response_type=code&state=vk-get-code`, 'Просто нажми сюда', ['e']))
 	} catch (e) {}
 
 	try {
+		if ($make.qs('.noti')) { throw 42 }
+
 		let
 			notiCreateF = $make.qs('.noti input#noti_text'),
 			notiCreateC = $make.qs('.noti input#noti_color'),
@@ -109,9 +120,15 @@ var initAdminPanel = PHP_data => {
 			tsAnime = data.ts.anime, tsRadio = data.ts.radio, tsNoti = data.ts.noti,
 			currentTime = data.ts.current
 
-		$make.qs('footer .tsRadio').textContent = moment.unix(tsRadio).from()
-		$make.qs('footer .tsAnime').textContent = moment.unix(tsAnime).from()
-		$make.qs('footer .tsNoti').textContent = moment.unix(tsNoti).from()
-		$make.qs('footer .tsCurrent').textContent = moment.unix(currentTime).format('LL LTS')
+		let
+			tsAnimeElem = $make.qs('footer .tsAnime'),
+			tsRadioElem = $make.qs('footer .tsRadio'),
+			tsNotiElem = $make.qs('footer .tsNoti'),
+			tsCurrentElem = $make.qs('footer .tsCurrent')
+
+		if (tsAnimeElem) { tsAnimeElem.textContent = moment.unix(tsAnime).from() }
+		if (tsRadioElem) { tsRadioElem.textContent = moment.unix(tsRadio).from() }
+		if (tsNotiElem) { tsNotiElem.textContent = moment.unix(tsNoti).from() }
+		if (tsCurrentElem) { tsCurrentElem.textContent = moment.unix(currentTime).format('LL LTS') }
 	} catch (e) {}
 }

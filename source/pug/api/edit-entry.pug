@@ -1,5 +1,10 @@
 |<?php
 |	date_default_timezone_set('Europe/Moscow');
+|
+|	if (isset($_POST['expired_clear']) || isset($_POST['noti'])) { exit; }
+|	if (isset($_POST['add_air']) && $_POST['where'] == 'radio') { exit; }
+|	if (isset($_POST['rm_air']) && $_POST['where'] == 'radio') { exit; }
+|	
 |	include_once '../../api/topsec/panel-core.php';
 |?>
 doctype html
@@ -54,12 +59,8 @@ html(lang='ru')
 							input#air_link(name='air_link' type='text' placeholder='https://shikimori.org/animes/1639')
 							br
 							em.text-m-m Необязательно, но желательно.
-						p
-							label Куда добавлять эфир:
-							input#where_anime_add(name='where' type='radio' value='anime' checked required)
-							label(for='where_anime_add') /anime
-							input#where_radio_add(name='where' type='radio' value='radio' required)
-							label(for='where_radio_add') /radio
+						p.hidden
+							input#where_anime(name='where' type='radio' value='anime' checked required hidden)
 						p(style='display: none')
 							label(for='air_is_secret') Эфир секретный?
 							input#air_is_secret(name='air_is_secret' type='checkbox')
@@ -71,59 +72,18 @@ html(lang='ru')
 				form(action='?action' method='post')
 					fieldset.rm-air
 						legend Удалить последний эфир из расписания
-						p
-							span Последний эфир на /anime: #[samp.info-anime]
-							br
-							span Последний эфир на /radio: #[samp.info-radio]
-						p
-							label Откуда удалять?
-							input#where_anime_rm(name='where' type='radio' value='anime' required checked)
-							label(for='where_anime_rm') /anime
-							input#where_radio_rm(name='where' type='radio' value='radio' required)
-							label(for='where_radio_rm') /radio
+						p #[samp.info-anime]
+						p.hidden
+							input#where_anime(name='where' type='radio' value='anime' required checked hidden)
 						p
 							label(for="rm_air_cnf") Вы точно этого хотите?
 							input#rm_air_cnf(name='rm_air_cnf' type='checkbox' required)
 						p.submit
 							input(name='rm_air' type='submit' value='Удалить')
-				form(action='?action' method='post')
-					fieldset.expired-clear
-						legend Удалить старые эфиры из расписания
-						p #[samp.count]
-						p
-							label(for='expire_chear_cnf') Вы точно этого хотите?
-							input#expire_chear_cnf(name='expire_chear_cnf' type="checkbox" required)
-						p.submit
-							input(name='expired_clear' type='submit' value='Удалить')
-				form(action='?action' method='post')
-					fieldset.noti
-						legend Работа с оповещением
-						p.noti-text.text-m
-						p
-							label(for='noti_text') Текст:
-							input#noti_text(name='noti_text' type='text' placeholder='напр. Розыгрыш BMW M3, не пропусти!' required)
-						details.text-m
-							summary Памятка по разметке
-							p Для стилизации текста можно использовать #[kbd &lt;b&gt;#[b жирный шрифт]&lt;/b&gt;] и #[kbd &lt;i&gt;#[i курсив]&lt;/i&gt;], деление на абзацы с помощью #[kbd &lt;br&gt;].#[br]Ссылки должны быть вида #[kbd &lt;a href="https://..."&gt;текст&lt;/a&gt;]. В случае локальных ссылок следует использовать #[kbd &lt;a href="/pisos"&gt;&lt;текст&lt;/a&gt;].
-						p
-							label(for='noti_color') Цвет фона:
-							input#noti_color(name='noti_color' type='color' value='#ffffff')
-							br
-							em.text-m-m По техническим причинам рекомендуется выбирать светлые цвета.
-						p
-							label(for='noti_rm') Удалить последнее оповещение?
-							input#noti_rm(name='noti_rm' type='checkbox')
-						p.submit
-							input(name='noti' type='submit' value='Создать')
-				fieldset
-					legend Обновление токена доступа ВК
-					p.vk-link
 
 				footer.text-m
 					p Asian Wave v#{projectVer}, #{subTitle} v0.6
 					p Последнее обновление расписания /anime: #[span.tsAnime]
-					p Последнее обновление расписания /radio: #[span.tsRadio]
-					p Последнее обновление оповещения: #[span.tsNoti]
 					p Московское время (на сервере): #[span.tsCurrent]
 
 		each lib in [`moment.js/${libsVer.moment.same}/moment.min.js`, `moment.js/${libsVer.moment.same}/locale/ru.js`, `moment-timezone/${libsVer.moment.timezone}/moment-timezone-with-data.min.js`]
@@ -135,36 +95,14 @@ html(lang='ru')
 		|<?php $PHP_data = [
 		|	'timezone' => date_default_timezone_get(),
 		|	'schedAnimeCount' => $schedAnime_count,
-		|	'schedAnimeCountExpr' => countExprs($schedAnime_data_tmp),
 		|	'schedAnimeLatest' => [
 		|		'is' => $schedAnime_latest ? true : false,
 		|		'title' => $schedAnime_latest ? $schedAnime_latest['title'] : '',
 		|		'start' => $schedAnime_latest ? $schedAnime_latest['s'] : null,
 		|		'end' => $schedAnime_latest ? $schedAnime_latest['e'] : null,
 		|	],
-		|	'schedRadioCount' => $schedRadio_count,
-		|	'schedRadioLatest' => [
-		|		'is' => $schedRadio_latest ? true : false,
-		|		'title' => $schedRadio_latest ? $schedRadio_latest['title'] : '',
-		|		'start' => $schedRadio_latest ? $schedRadio_latest['s'] : null,
-		|		'end' => $schedRadio_latest ? $schedRadio_latest['e'] : null,
-		|	],
-		|	'schedRadioCountExpr' => countExprs($schedRadio_data_tmp),
-		|	'noti' => [
-		|		'enabled' => $noti_data['enabled'],
-		|		'text' => $noti_data['text'] ? $noti_data['text'] : '',
-		|		'color' => isset($noti_data['color']) ? $noti_data['color'] : false
-		|	],
-		|	'vk' => [
-		|		'URL' => $APIep['vk_au'],
-		|		'appID' => $vkData['id'],
-		|		'api' => 'api-backend-vk.php'
-		|	],
-		|	'server' => $_SERVER['SERVER_NAME'],
 		|	'ts' => [
 		|		'anime' => filemtime($file['sched']['anime']),
-		|		'radio' => filemtime($file['sched']['radio']),
-		|		'noti' => filemtime($file['sched']['noti']),
 		|		'current' => time()
 		|	]
 		|]; ?>

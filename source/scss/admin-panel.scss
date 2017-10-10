@@ -36,6 +36,14 @@ p {
 		margin-top: 5px;
 	}
 
+	&.hidden {
+		display: none;
+	}
+
+	&.submit {
+		margin-top: 15px;
+	}
+
 	label:first-child {
 		margin-right: 5px;
 	}
@@ -60,8 +68,7 @@ input {
 
 	&[type='color'] { padding: 0 }
 
-	&[type='submit'], &[type='radio'] {
-		@include transition(.3s);
+	&[type='submit'], &[type='radio'], &[type='checkbox'], &[type='color'] {
 		cursor: pointer;
 	}
 
@@ -73,6 +80,8 @@ input {
 		border-radius: 5px;
 		background-color: $_color;
 
+		@include transition(.3s);
+
 		&:hover {
 			background-color: darken($_color, 5%);
 		}
@@ -82,12 +91,16 @@ input {
 		$_size: 1.3em;
 		width: $_size; height: $_size;
 
-		&:not([disabled]) + label[for] {
+		& + label[for] {
 			cursor: pointer;
 		}
 
 		&[disabled] {
 			cursor: not-allowed;
+
+			& + label[for] {
+				cursor: not-allowed;
+			}
 		}
 	}
 
