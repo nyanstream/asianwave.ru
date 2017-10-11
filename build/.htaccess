@@ -62,8 +62,5 @@ Redirect 301 /rdr--twitch https://www.twitch.tv/asianwave
 # короткий адрес для видео-прожекта
 Redirect 301 /video https://video.asianwave.ru
 
-# фикс для ленивого разработчика
-Redirect 301 /build/other/ /files/other/
-
 # фикс для расширения
 Redirect 301 /files/code/css/chrome-app-events.min.css /files/css/chrome-app-events.min.css

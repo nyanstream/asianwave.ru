@@ -63,6 +63,7 @@ $create.tabs = function(selector) {
 
 /*
  * Скрытие табов
+ * @TODO назначать класс на контейнер, символ менять через CSS
  */
 
 ;(() => {
@@ -70,7 +71,7 @@ $create.tabs = function(selector) {
 		closeTabsCtr = $make.qs('.closeTabs'),
 		mainCont = $make.qs('.anime').classList
 
-	closeTabsCtr.addEventListener('click', (e) => {
+	closeTabsCtr.addEventListener('click', e => {
 		let _this = e.target
 
 		if (!mainCont.contains('no-tabs')) {
@@ -129,12 +130,18 @@ var $init = {
 		let backup = $check.get('b') || scriptData.backupBydefault
 		if (backup == '') backup = true
 
-		if (backup)
-			playerURL = `${playerURL}backup${((backup == 'jw') ? '-jw' : '')}`
-			else playerURL = playerURL + 'main'
+		if (backup) {
+			playerURL += 'backup'
+			switch (backup) {
+				case 'jw':
+					playerURL += '-jw'; break
+				case 'yukku':
+					playerURL += '-yukku'
+			}
+		} else { playerURL = playerURL + 'main' }
 
 		playerFrame.setAttribute('allowfullscreen', '')
-		playerFrame.setAttribute('src', `${playerPath}${playerURL}.html${playerHash}`)
+		playerFrame.setAttribute('src', `${playerPath}${playerURL}.htm${playerHash}`)
 		playerEmbed.appendChild(playerFrame)
 	}
 }
@@ -339,7 +346,6 @@ switch (location.hostname) {
 	case '127.0.0.1':
 	case 'localhost':
 		for (let key in API) { if (API.hasOwnProperty(key)) API[key] = `https://${domain.aw}${API[key]}` }
-		scriptData.playerPath = '/other/'
 }
 
 var doFetch = (url, handler, ifFail) => {
