@@ -20,12 +20,8 @@ let
 
 let paths = {
 	html: {
-		dev: ['source/pug/**/*.pug', '!source/pug/inc/**/*.pug', '!source/pug/api/**/*.pug'],
+		dev: ['source/pug/**/*.pug', '!source/pug/inc/**/*.pug'],
 		prod: 'build/'
-	},
-	php: {
-		dev: 'source/pug/api/**/*.pug',
-		prod: 'build/api/'
 	},
 	js: {
 		dev: 'source/js/**/*.js',
@@ -48,18 +44,17 @@ gulp.task('pug', () => gulp.src(paths.html.dev)
 	.pipe(plumber())
 	.pipe(watch(paths.html.dev))
 	.pipe(pug({}))
+	.pipe(rename(file => {
+		switch (file.dirname) {
+			case 'api':
+				file.extname = '.php'; break
+			case 'other':
+				file.dirname = `files/${file.dirname}`
+				file.extname = '.htm'
+		}
+	}))
 	.pipe(bom())
 	.pipe(gulp.dest(paths.html.prod))
-	.pipe(reloadServer())
-)
-
-gulp.task('php', () => gulp.src(paths.php.dev)
-	.pipe(plumber())
-	.pipe(watch(paths.php.dev))
-	.pipe(pug({}))
-	.pipe(rename({extname: '.php'}))
-	.pipe(bom())
-	.pipe(gulp.dest(paths.php.prod))
 	.pipe(reloadServer())
 )
 
@@ -79,9 +74,8 @@ gulp.task('minify-js', () => gulp.src(paths.js.dev)
 )
 
 gulp.task('scss', () => watch_sass(paths.css.dev)
-	.pipe(plumber())
-	//.pipe(watch_sass(paths.css.dev))
 	//gulp.src(paths.css.dev)
+	.pipe(plumber())
 	.pipe(sass({outputStyle: 'compressed'}))
 	.pipe(csso())
 	.pipe(rename({suffix: '.min'}))
@@ -90,5 +84,5 @@ gulp.task('scss', () => watch_sass(paths.css.dev)
 	.pipe(reloadServer())
 )
 
-gulp.task('default', ['pug', 'php', 'get-kamina', 'minify-js', 'scss'])
+gulp.task('default', ['pug', 'get-kamina', 'minify-js', 'scss'])
 gulp.task('dev', ['liveReload', 'default'])
