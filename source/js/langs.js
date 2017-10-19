@@ -136,8 +136,9 @@ var trStrings = {
 		'ru': 'Оповещение',
 		'en': 'Notification'
 	},
-	'noti_close': {
-		'ru': 'Скрыть оповещение'
+	'noti_hide': {
+		'ru': 'Скрыть оповещение',
+		'en': 'Hide notification'
 	},
 	'hide': {
 		'ru': 'Скрыть',

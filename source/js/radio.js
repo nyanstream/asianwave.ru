@@ -6,9 +6,10 @@
 
 var domain = {
 	'aw': 'asianwave.ru',
-	'mr': 'myradio24.com',
 	'vk': 'vk.com'
 }
+
+domain.radio = `ryuko.${domain.aw}`
 
 /*
  * Дополнение к камине
@@ -78,31 +79,31 @@ $create.balloon = function(elem, text, pos) {
 var points = {
 	'jp': {
 		'name': 'Japan',
-		'port': 7934,
-		'srv': 1
+		'port': 8000,
+		'id': 1
 	}, 'ru': {
 		'name': 'Russia',
-		'port': 9759,
-		'srv': 1
+		'port': 8010,
+		'id': 2
 	}, 'kr': {
 		'name': 'Korea',
-		'port': 3799,
-		'srv': 1
+		'port': 8020,
+		'id': 3
 	}
 }
 
 var $currentPoint = {
 	port: () => $ls.get('aw_radioPoint') ? points[$ls.get('aw_radioPoint')].port : points['jp'].port,
 	name: () => $ls.get('aw_radioPoint') ? points[$ls.get('aw_radioPoint')].name : points['jp'].name,
-	srv: () => $ls.get('aw_radioPoint') ? points[$ls.get('aw_radioPoint')].srv : points['jp'].srv,
+	id: () => $ls.get('aw_radioPoint') ? points[$ls.get('aw_radioPoint')].id : points['jp'].id,
 	key: () => $ls.get('aw_radioPoint') || 'jp'
 }
 
 /*
- * Инициация радивы
+ * Инициация радио
  */
 
-var getRadioSrc = () => `https://listen${$currentPoint.srv()}.${domain.mr}/${$currentPoint.port()}`
+var getRadioSrc = () => `https://${domain.radio}/radio/${$currentPoint.port()}/listen`
 
 var
 	radio = new Audio(getRadioSrc()),
@@ -176,13 +177,13 @@ radio.volume = radioVol/100
  */
 
 document.documentElement.style.setProperty('--volume', radioVol + '%')
-radioCtrl_vol.addEventListener('input', (e) => {
+radioCtrl_vol.addEventListener('input', e => {
 	radioVol = e.target.value
 	radio.volume = radioVol/100
 	document.documentElement.style.setProperty('--volume', radioVol + '%')
 });
 
-radioCtrl_vol.addEventListener('change', (e) => {
+radioCtrl_vol.addEventListener('change', e => {
 	$ls.set('aw_radioVolume', e.target.value)
 })
 
@@ -262,7 +263,7 @@ var $parse = {
 		let nextAirs = data.filter(e => e['s'] > unixNow)
 
 		data.forEach(item => {
-			if (item['s'] == data[data.length - 1]['s']) return; // пропуск последнего элемента с пасхалкой
+			if (item['secret'])  { return } // пропуск секретных элементов
 
 			let
 				newsсhedData = `${moment.unix(item['s']).format('D MMMM')}<br>${moment.unix(item['s']).format('HH:mm')} &ndash; ${moment.unix(item['e']).format('HH:mm')}</td>`,
@@ -272,26 +273,26 @@ var $parse = {
 				dayOfS = moment.unix(item['s']).dayOfYear(),
 				dayofE = moment.unix(item['e']).dayOfYear()
 
-			if (item['link'])
+			if (item['link']) {
 				nazvaniue = $create.link(item['link'], item['title'], ['e', 'html'])
-				else nazvaniue = $make.safe(item['title'])
+			} else { nazvaniue = $make.safe(item['title']) }
 
-			if ((dayOfS - dayToday) < -1 || item['s'] < unixNow) {
+			if ((dayOfS - dayToday) < -1 || item['e'] < unixNow) {
 				return
 			} else if (item['s'] < unixNow && unixNow < item['e']) {
-				tableBody += $create.elem('tr', `<td>${newsсhedData}<td><b>Сейчас (ещё ${ moment.unix(item['e']).toNow(true)}):</b><br>${nazvaniue}</td>`, 'air--current', ['html'])
+				tableBody += $create.elem('tr', `<td>${newsсhedData}</td><td><b>${getString('now')(moment.unix(item['e']).toNow(true))}:</b><br>${nazvaniue}</td>`, 'air--current', ['html'])
 			} else if (item['s'] > unixNow && item['s'] == nextAirs[0]['s']) {
-				tableBody += $create.elem('tr', `<td>${newsсhedData}<td><b>Далее через ${moment.unix(item['s']).toNow(true)}:</b><br>${nazvaniue}</td>`, 'air--next', ['html'])
+				tableBody += $create.elem('tr', `<td>${newsсhedData}</td><td><b>${getString('within')} ${moment.unix(item['s']).fromNow()}:</b><br>${nazvaniue}</td>`, 'air--next', ['html'])
 			} else if (dayOfS > dayToday) {
-				tableBody += $create.elem('tr', `<td>${newsсhedData}<td>${nazvaniue}</td></tr>`, 'air--notToday', ['html'])
+				tableBody += $create.elem('tr', `<td>${newsсhedData}</td><td>${nazvaniue}</td>`, 'air--notToday', ['html'])
 			} else {
-				tableBody += $create.elem('tr', `<td>${newsсhedData}<td>${nazvaniue}</td>`, '', ['html'])
+				tableBody += $create.elem('tr', `<td>${newsсhedData}</td><td>${nazvaniue}</td>`, '', ['html'])
 			}
 		})
 
-		if (tableBody)
-			streamsched.innerHTML = $create.elem('table', `${$create.elem('caption', getString('airs_schedule'), '', ['html'])}<tbody>${tableBody}</tbody>`, '', ['html']) + $create.elem('div', getString('local_time_note'), 'aside-note', ['html'])
-			else return
+		if (tableBody != '') {
+			streamsched.appendChild($create.elem('table', `${$create.elem('caption', getString('airs_schedule'), '', ['html'])}<tbody>${tableBody}</tbody>`, '', ['html']))
+		} else { return }
 	},
 	vk_news: data => {
 		let
@@ -368,7 +369,7 @@ var $parse = {
 			vkNews.innerHTML = newsBody
 		}
 	},
-	mr24: data => {
+	radio: data => {
 		let
 			stateBox = $make.qs('.radio-state'),
 			stateBoxBody = '', linksBoxBody = '', plBoxBody = '',
@@ -383,49 +384,30 @@ var $parse = {
 		songsBox.textContent = ''
 		radioErrorBox.textContent = ''
 
-		if (data == 'fail') { $make.qs('.radio-error').textContent = getString('err_api_radio'); return }
+		//console.log(data)
 
-		let current = data['song']
+		if (data == 'fail') { $make.qs('.radio-error').textContent = getString('err_api_radio'); return }
 
 		/* Блок с выводом текущего трека */
 
 		let
-			currentSplit = current.split(' - '),
-			currentA = currentSplit[0],
-			currentS = currentSplit[1]
+			current = data['now_playing']['song'],
+			currentFull = current['text'],
+			currentA = current['artist'],
+			currentS = current['title']
 
-		if (!current) currentA = '\u00af\u005c\u005f\u0028\u30c4\u0029\u005f\u002f\u00af';
-		if (!currentS) currentS = '';
+		if (!current) { currentA = '\u00af\u005c\u005f\u0028\u30c4\u0029\u005f\u002f\u00af' }
+		if (!currentS) { currentS = '' }
 
 		stateBoxBody = $create.elem('div', `<p title="${getString('song_current_track')}: ${$make.safe(currentS)}">${$make.safe(currentS)}</p><p title="${getString('song_current_artist')}: ${$make.safe(currentA)}">${$make.safe(currentA)}</p>`, 'current radio--pe')
 
 		$create.balloon(stateBoxBody, getString('song_current'), 'down')
 
-		/* Блок с выводом состояния прямого эфира (в остальных случаях скрыт) */
-
-		let
-			currRJ = $create.elem('div', `<p>${getString('rj_current')}:</p><p>${$make.safe(data['djname'])}</p>`, 'curr-rj radio--pe'),
-			currLstn = $create.elem('div', `<div>${$make.safe(data['listeners'])}</div>`, 'curr-lstn radio--pe')
-
-		$create.balloon(currLstn, getString('listeners_current'), 'left')
-
-		//currRJ.classList.add('radio--pe')
-		//currLstn.classList.add('radio--pe')
-
-		switch (data['djname'].toLowerCase()) {
-			case '':
-			case 'auto-dj':
-				break
-			default:
-				liveBox.appendChild(currRJ)
-				liveBox.appendChild(currLstn)
-		}
-
 		/* Блоки со ссылками на текущий трек и на загрузку "плейлиста" */
 
 		let
-			srchVK = $create.link(`https://${domain.vk}/audio?q=${encodeURIComponent(current)}`, '<i class="icon icon-vk"></i>', ['e']),
-			srchGo = $create.link(`https://google.com/#q=${encodeURIComponent(current)}`, '<i class="icon icon-google"></i>', ['e'])
+			srchVK = $create.link(`https://${domain.vk}/audio?q=${encodeURIComponent(currentFull)}`, '<i class="icon icon-vk"></i>', ['e']),
+			srchGo = $create.link(`https://google.com/search?q=${encodeURIComponent(currentFull)}`, '<i class="icon icon-google"></i>', ['e'])
 
 		//srchVK.setAttribute('title', `${getString('song_search_in')} VK`)
 		//srchGo.setAttribute('title', `${getString('song_search_in')} Google`)
@@ -436,6 +418,8 @@ var $parse = {
 
 		$create.balloon(linksBoxBody, getString('song_search'), 'left')
 
+		/* Файл плейлиста */
+
 		let plLink = $create.link('', '<i class="icon icon-music"></i>')
 
 		plLink.setAttribute('href', `data:audio/x-mpegurl;charset=utf-8;base64,${window.btoa(radio.src + '\n')}`)
@@ -445,23 +429,45 @@ var $parse = {
 
 		$create.balloon(plBoxBody, getString('playlist_dl'), 'left')
 
+		/* Блок с выводом состояния прямого эфира (в остальных случаях скрыт) */
+
+		// let
+		// 	currRJ = $create.elem('div', `<p>${getString('rj_current')}:</p><p>${$make.safe(data['djname'])}</p>`, 'curr-rj radio--pe'),
+		// 	currLstn = $create.elem('div', `<div>${$make.safe(data['listeners'])}</div>`, 'curr-lstn radio--pe')
+		//
+		// $create.balloon(currLstn, getString('listeners_current'), 'left')
+
+		//currRJ.classList.add('radio--pe')
+		//currLstn.classList.add('radio--pe')
+
+		// switch (data['djname'].toLowerCase()) {
+		// 	case '':
+		// 	case 'auto-dj':
+		// 		break
+		// 	default:
+		// 		liveBox.appendChild(currRJ)
+		// 		liveBox.appendChild(currLstn)
+		// }
+
 		/* Блок с выводом недавних треков */
 
+		songsTableBody = $create.elem('table')
+		songsTableBody.appendChild($create.elem('caption', getString('prev_songs')))
+
 		let
-			lastSongs = data['songs'].reverse(),
+			lastSongs = data['song_history'],
 			numOfSongs = lastSongs.length
 
-		if (numOfSongs >= 10) numOfSongs = (lastSongs.length - 1) / 2;
-
 		for (let i = 0; i < numOfSongs; i++) {
-			songsTableBody += `<tr><td>${$make.safe(lastSongs[i][0])}</td><td>${$make.safe(lastSongs[i][1].replace(' - ', ' – '))}</td></tr>`
+			let lastSongData = lastSongs[i]
+			songsTableBody.appendChild($create.elem('tr', `<td>${moment.unix(lastSongData['played_at']).format('HH:mm')}</td><td>${$make.safe(lastSongData['song']['text'].replace(' - ', ' – '))}`))
 		}
 
 		stateBox.appendChild(stateBoxBody)
 		stateBox.appendChild(linksBoxBody)
 		stateBox.appendChild(plBoxBody)
 
-		songsBox.innerHTML = $create.elem('table', `<caption>${getString('prev_songs')}:</caption><tbody>${songsTableBody}</tbody>`, '', ['html']) + $create.elem('div', getString('msk_time_note'), 'aside-note', ['html'])
+		songsBox.appendChild(songsTableBody)
 	},
 	noti: data => {
 		let notiEl = $make.qs('.noti')
@@ -473,12 +479,12 @@ var $parse = {
 			text = data['text'],
 			color = data['color']
 
-		if (color)
+		if (color) {
 			notiEl.style.backgroundColor = color
-			else notiEl.style.backgroundColor = null
+		} else { notiEl.style.backgroundColor = null }
 
 		let
-			notiClose = $create.elem('button', getString('noti_close').toLowerCase(), 'noti-close'),
+			notiClose = $create.elem('button', getString('noti_hide').toLowerCase(), 'noti-close'),
 			notiContent = $create.elem('div', `<p>${getString('noti')}:</p><p>${text}</p>`, 'noti-content'),
 			notiItems = []
 
@@ -517,16 +523,18 @@ var $parse = {
 var apiPrefix = (scriptData.apiPrefix && scriptData.apiPrefix != '') ? scriptData : 'api'
 
 var API = {
-	'api': `/${apiPrefix}/api.json`,
-	'sched': `/${apiPrefix}/radio-sched.json`,
-	'noti': `/${apiPrefix}/noti.json`,
-	'vk_news': `/${apiPrefix}/vk-info.json`
+	'api': 'api.json',
+	'sched': 'radio-sched.json',
+	'noti': 'noti.json',
+	'vk_news': 'vk-info.json',
 }
 
 switch (location.hostname) {
 	case '127.0.0.1':
 	case 'localhost':
-		for (let key in API) { if (API.hasOwnProperty(key)) API[key] = `https://${domain.aw}${API[key]}` }
+		Object.keys(API).forEach(key => {
+			API[key] = `https://${domain.aw}/${apiPrefix}/${API[key]}`
+		})
 }
 
 var doFetch = (url, handler, ifFail) => {
@@ -538,26 +546,18 @@ var doFetch = (url, handler, ifFail) => {
 		response.json().then(data => {
 			handler(data)
 		})
-	}).catch(error => {
-		handler(ifFail)
-	})
+	}).catch(e => { handler(ifFail) })
 }
 
 var $loadInfo = {
-	state: () => {
-		doFetch(`https://${domain.mr}/users/${$currentPoint.port()}/status.json`, $parse.mr24)
-	},
-	sched: () => {
-		doFetch(API.sched, $parse.schedule)
-	},
-	vk_news: () => {
-		doFetch(API.vk_news, $parse.vk_news)
-	},
-	noti: () => {
-		doFetch(API.noti, $parse.noti)
-	},
-	full: function() {
-		for (let key in this) { if (this.hasOwnProperty(key) && key != 'full') this[key]() }
+	state: () => doFetch(`https://${domain.radio}/api/nowplaying/${$currentPoint.id()}`, $parse.radio),
+	sched: () => doFetch(API.sched, $parse.schedule),
+	vk_news: () => doFetch(API.vk_news, $parse.vk_news),
+	noti: () => doFetch(API.noti, $parse.noti),
+	full() {
+		Object.keys(this).forEach(key => {
+			if (key != 'full') this[key]()
+		})
 	}
 }
 
@@ -568,36 +568,37 @@ var $loadInfo = {
 
 document.addEventListener('DOMContentLoaded', () => {
 	if ($ls.get('aw_l10n')) { moment.locale($ls.get('aw_l10n')) }
+	if ($check.get('embed-vk')) { $make.qs('.container').classList.add('embed-vk') }
 
 	let
 		pointButtons = Array.from(pointButton),
 		pointKeys = Object.keys(points)
 
-	doFetch(API.api, data => {
-		let
-			radio = data['radio-v2'], count = 0,
-			online = []
-
-		Object.keys(radio).forEach((key, i) => {
-			if (radio[key].online == 0) {
-				count++; $make.qs(`.player-change input[value='${key}']`).setAttribute('disabled', '')
-			}
-		})
-
-		switch (count) {
-			case pointKeys.length:
-				$make.qs('.player').classList.add('mayday'); break
-			case (pointKeys.length - 1):
-				$make.qs('.player').classList.add('only-one')
-		}
-	})
+	// doFetch(API.api, data => {
+	// 	let
+	// 		radio = data['radio-v2'], count = 0,
+	// 		online = []
+	//
+	// 	Object.keys(radio).forEach((key, i) => {
+	// 		if (radio[key].online == 0) {
+	// 			count++; $make.qs(`.player-change input[value='${key}']`).setAttribute('disabled', '')
+	// 		}
+	// 	})
+	//
+	// 	switch (count) {
+	// 		case pointKeys.length:
+	// 			$make.qs('.player').classList.add('mayday'); break
+	// 		case (pointKeys.length - 1):
+	// 			$make.qs('.player').classList.add('only-one')
+	// 	}
+	// })
 
 	let getPoint = $check.get('point')
 	if (getPoint && Object.keys(points).includes(getPoint)) { radio.toPoint(getPoint) }
 
 	//$create.balloon(pointButton[0].parentElement, 'Список потоков', 'down')
 
-	if (isMobile.any) radioCtrl_pp.parentElement.classList.add('on-mobile')
+	if (isMobile.any) { radioCtrl_pp.parentElement.classList.add('on-mobile') }
 
 	pointButtons.forEach(pointBtn => {
 		let pointData = pointBtn.value

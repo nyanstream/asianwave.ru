@@ -22,6 +22,18 @@ body {
 $pageWidth: 1200px;
 $fontSize: 16px;
 
+.container {
+	&.embed-vk {
+		.schedule { max-height: 110px }
+		.songs-box {
+			max-height: 230px;
+			overflow-y: auto;
+		}
+
+		.vk-news, footer { display: none }
+	}
+}
+
 .radio {
 	@include flexbox(auto, center, auto, auto);
 	width: $pageWidth;

@@ -132,42 +132,7 @@ html(lang='ru')
 		each JS in ['kamina', 'admin-panel']
 			script(src=`${paths.js}/${JS}.min.js?v=${projectVer}` defer)
 
-		|<?php $PHP_data = [
-		|	'timezone' => date_default_timezone_get(),
-		|	'schedAnimeCount' => $schedAnime_count,
-		|	'schedAnimeCountExpr' => countExprs($schedAnime_data_tmp),
-		|	'schedAnimeLatest' => [
-		|		'is' => $schedAnime_latest ? true : false,
-		|		'title' => $schedAnime_latest ? $schedAnime_latest['title'] : '',
-		|		'start' => $schedAnime_latest ? $schedAnime_latest['s'] : null,
-		|		'end' => $schedAnime_latest ? $schedAnime_latest['e'] : null,
-		|	],
-		|	'schedRadioCount' => $schedRadio_count,
-		|	'schedRadioLatest' => [
-		|		'is' => $schedRadio_latest ? true : false,
-		|		'title' => $schedRadio_latest ? $schedRadio_latest['title'] : '',
-		|		'start' => $schedRadio_latest ? $schedRadio_latest['s'] : null,
-		|		'end' => $schedRadio_latest ? $schedRadio_latest['e'] : null,
-		|	],
-		|	'schedRadioCountExpr' => countExprs($schedRadio_data_tmp),
-		|	'noti' => [
-		|		'enabled' => $noti_data['enabled'],
-		|		'text' => $noti_data['text'] ? $noti_data['text'] : '',
-		|		'color' => isset($noti_data['color']) ? $noti_data['color'] : false
-		|	],
-		|	'vk' => [
-		|		'URL' => $APIep['vk_au'],
-		|		'appID' => $vkData['id'],
-		|		'api' => 'api-backend-vk.php'
-		|	],
-		|	'server' => $_SERVER['SERVER_NAME'],
-		|	'ts' => [
-		|		'anime' => filemtime($file['sched']['anime']),
-		|		'radio' => filemtime($file['sched']['radio']),
-		|		'noti' => filemtime($file['sched']['noti']),
-		|		'current' => time()
-		|	]
-		|]; ?>
+		include ../inc/php-script-data.pug
 
 		script
 			|<?php echo "document.addEventListener('DOMContentLoaded', () => { initAdminPanel(" . json_encode($PHP_data, JSON_UNESCAPED_UNICODE) . ") })" ?>

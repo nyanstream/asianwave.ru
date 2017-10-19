@@ -37,7 +37,7 @@ var domain = {
  * Найдено здесь: https://goo.gl/lsSkEe
  */
 
-$create.tabs = function(selector) {
+$create.tabs = selector => {
 	let
 		tabAnchors = $make.qs(selector + ' li', ['a']),
 		tabs = $make.qs(selector + ' section', ['a'])
@@ -167,7 +167,7 @@ var $parse = {
 		let nextAirs = data.filter(e => e['s'] > unixNow)
 
 		data.forEach(item => {
-			if (item['secret']) return; // пропуск элемента с пасхалкой
+			if (item['secret'])  { return } // пропуск секретных элементов
 
 			let
 				newsсhedData = `${moment.unix(item['s']).format('D MMMM')}<br>${moment.unix(item['s']).format('HH:mm')} &ndash; ${moment.unix(item['e']).format('HH:mm')}</td>`,
@@ -177,26 +177,28 @@ var $parse = {
 				dayOfS = moment.unix(item['s']).dayOfYear(),
 				dayofE = moment.unix(item['e']).dayOfYear()
 
-			if (item['link'])
+			if (item['link']) {
 				nazvaniue = $create.link(item['link'], item['title'], ['e', 'html'])
-				else nazvaniue = $make.safe(item['title'])
+			} else { nazvaniue = $make.safe(item['title']) }
 
 			if ((dayOfS - dayToday) < -1) {
 				return
 			} else if (item['s'] < unixNow && unixNow < item['e']) {
-				tableBody += $create.elem('tr', `<td>${newsсhedData}<td><b>${getString('now')(moment.unix(item['e']).toNow(true))}:</b><br>${nazvaniue}</td>`, 'air--current', ['html'])
+				tableBody += $create.elem('tr', `<td>${newsсhedData}</td><td><b>${getString('now')(moment.unix(item['e']).toNow(true))}:</b><br>${nazvaniue}</td>`, 'air--current', ['html'])
 			} else if (item['s'] > unixNow && item['s'] == nextAirs[0]['s']) {
-				tableBody += $create.elem('tr', `<td>${newsсhedData}<td><b>${getString('within')} ${moment.unix(item['s']).fromNow()}:</b><br>${nazvaniue}</td>`, 'air--next', ['html'])
+				tableBody += $create.elem('tr', `<td>${newsсhedData}</td><td><b>${getString('within')} ${moment.unix(item['s']).fromNow()}:</b><br>${nazvaniue}</td>`, 'air--next', ['html'])
 			} else if (item['s'] < unixNow) {
-				tableBody += $create.elem('tr', `<td>${newsсhedData}<td>${nazvaniue}</td></tr>`, 'air--finished', ['html'])
+				tableBody += $create.elem('tr', `<td>${newsсhedData}</td><td>${nazvaniue}</td>`, 'air--finished', ['html'])
 			} else if (dayOfS > dayToday) {
-				tableBody += $create.elem('tr', `<td>${newsсhedData}<td>${nazvaniue}</td></tr>`, 'air--notToday', ['html'])
+				tableBody += $create.elem('tr', `<td>${newsсhedData}</td><td>${nazvaniue}</td>`, 'air--notToday', ['html'])
 			} else {
 				tableBody += $create.elem('tr', `<td>${newsсhedData}</td><td>${nazvaniue}</td>`, '', ['html'])
 			}
 		})
 
-		if (tableBody == '') tableBody += $create.elem('tr', `<td colspan="2">${getString('empty_schedule')} ¯\\_(ツ)_/¯</td>`, '', ['html'])
+		if (tableBody == '') {
+			tableBody += $create.elem('tr', `<td colspan="2">${getString('empty_schedule')} ¯\\_(ツ)_/¯</td>`, '', ['html'])
+		}
 
 		streamsсhed.appendChild($create.elem('tbody', `<tr><td colspan="2">${getString('latest_check')}: ${moment().format('D MMMM, HH:mm:ss')}</td></tr>${tableBody}`))
 	},
@@ -220,7 +222,7 @@ var $parse = {
 		let newsHeader = $create.elem('div', $create.link(`https://${domain.vk}/${data['com']['url']}`, getString('vk_com'), ['e', 'html']), 'vk-news-header')
 
 		data['posts'].forEach(post => {
-			if (post['pin'] == 1) return;
+			if (post['pin'] == 1) { return }
 
 			let
 				postImgLink = '', isCopy = '', postLinkS = '',
@@ -243,7 +245,7 @@ var $parse = {
 				pLR = /\[(.*?)\]/,
 				postLinkR = postText.match(new RegExp(pLR, 'g'))
 
-			if (postText == '') return;
+			if (postText == '') { return }
 			if (postLinkR) {
 				postLinkR.forEach(link => {
 					postLinkS = link.split('|')
@@ -286,9 +288,9 @@ var $parse = {
 			text = data['text'],
 			color = data['color']
 
-		if (color)
+		if (color) {
 			notiEl.style.backgroundColor = color
-			else notiEl.style.backgroundColor = null
+		} else { notiEl.style.backgroundColor = null }
 
 		let
 			notiClose = $create.elem('div', '', 'noti-close'),
@@ -297,7 +299,7 @@ var $parse = {
 
 		notiEl.textContent = ''
 
-		notiClose.setAttribute('title', getString('noti_close'))
+		notiClose.setAttribute('title', getString('noti_hide'))
 
 		if (notiContent.querySelector('a[href]')) {
 			let notiLinks = notiContent.querySelectorAll('a[href]')
@@ -345,7 +347,9 @@ var API = {
 switch (location.hostname) {
 	case '127.0.0.1':
 	case 'localhost':
-		for (let key in API) { if (API.hasOwnProperty(key)) API[key] = `https://${domain.aw}${API[key]}` }
+		Object.keys(API).forEach(key => {
+			API[key] = `https://${domain.aw}${API[key]}`
+		})
 }
 
 var doFetch = (url, handler, ifFail) => {
@@ -357,26 +361,17 @@ var doFetch = (url, handler, ifFail) => {
 		response.json().then(data => {
 			handler(data)
 		})
-	}).catch(error => {
-		handler(ifFail)
-	})
+	}).catch(e => { handler(ifFail) })
 }
 
 var $loadInfo = {
-	sсhed: () => {
-		doFetch(API.schedule, $parse.schedule)
-	},
-	noti: () => {
-		doFetch(API.noti, $parse.noti)
-	},
-	vk_news: () => {
-		doFetch(API.vk_news, $parse.vk_news)
-	},
-	// vk_stream: () => {
-	// 	doFetch(API.vk_stream, $parse.vk_stream)
-	// },
-	full: function() {
-		for (let key in this) { if (this.hasOwnProperty(key) && key != 'full') this[key]() }
+	sсhed: () => doFetch(API.schedule, $parse.schedule),
+	noti: () => doFetch(API.noti, $parse.noti),
+	vk_news: () => doFetch(API.vk_news, $parse.vk_news),
+	full() {
+		Object.keys(this).forEach(key => {
+			if (key != 'full') this[key]()
+		})
 	}
 }
 

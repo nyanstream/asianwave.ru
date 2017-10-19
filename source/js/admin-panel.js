@@ -74,13 +74,13 @@ var initAdminPanel = PHP_data => {
 	} catch (e) {}
 
 	try {
-		if ($make.qs('.noti')) { throw 42 }
+		if (!$make.qs('.noti')) { throw 42 }
 
 		let
-			notiCreateF = $make.qs('.noti input#noti_text'),
-			notiCreateC = $make.qs('.noti input#noti_color'),
-			notiSubmitBtn = $make.qs('.noti input[type="submit"]'),
-			notiSubmitBtnText = 'Создать'
+			notiCreateF =        $make.qs('.noti input#noti_text'),
+			notiCreateC =        $make.qs('.noti input#noti_color'),
+			notiSubmitBtn =      $make.qs('.noti input[type="submit"]'),
+			notiSubmitBtnText =  'Создать'
 
 		if (data.noti.enabled == true) {
 			let
@@ -117,18 +117,26 @@ var initAdminPanel = PHP_data => {
 
 	try {
 		let
-			tsAnime = data.ts.anime, tsRadio = data.ts.radio, tsNoti = data.ts.noti,
-			currentTime = data.ts.current
+			tsAnime =      parseInt(data.ts.anime),
+			tsRadio =      parseInt(data.ts.radio),
+			tsNoti =       parseInt(data.ts.noti),
+			currentTime =  parseInt(data.ts.current)
 
 		let
-			tsAnimeElem = $make.qs('footer .tsAnime'),
-			tsRadioElem = $make.qs('footer .tsRadio'),
-			tsNotiElem = $make.qs('footer .tsNoti'),
-			tsCurrentElem = $make.qs('footer .tsCurrent')
+			tsAnimeElem =    $make.qs('footer .tsAnime'),
+			tsRadioElem =    $make.qs('footer .tsRadio'),
+			tsNotiElem =     $make.qs('footer .tsNoti'),
+			tsCurrentElem =  $make.qs('footer .tsCurrent')
 
 		if (tsAnimeElem) { tsAnimeElem.textContent = moment.unix(tsAnime).from() }
 		if (tsRadioElem) { tsRadioElem.textContent = moment.unix(tsRadio).from() }
 		if (tsNotiElem) { tsNotiElem.textContent = moment.unix(tsNoti).from() }
-		if (tsCurrentElem) { tsCurrentElem.textContent = moment.unix(currentTime).format('LL LTS') }
+
+		if (tsCurrentElem) {
+			setInterval(() => {
+				tsCurrentElem.textContent = moment.unix(currentTime).format('LL LTS')
+				++currentTime
+			}, 1000)
+		}
 	} catch (e) {}
 }
