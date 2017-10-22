@@ -1,6 +1,8 @@
 @import 'inc/vars';
 @import 'inc/mixins';
 
+$aw_isIndex: '';
+
 :root {
 	--prime-color: $primeColor;
 	--prime-color-5d: darken($primeColor, 5%);
@@ -22,7 +24,7 @@ body {
 		font-size: 0;
 	}
 
-	background-image: url('#{$imgPath}/main/bckg.png?v=#{$projectVer}'), linear-gradient(to bottom, $gradientColorBottom, $gradientColorTop);
+	background-image: url('#{$imgPath}/main/bckg.png?v=#{$projectVer}'), linear-gradient(to bottom, $gradientColorTop, $gradientColorBottom);
 	background-position: bottom center;
 	background-repeat: no-repeat;
 	background-size: 100%;
@@ -42,4 +44,7 @@ body {
 @import 'inc/main/top-panel';
 @import 'inc/main/btns';
 @import 'inc/main/footer';
+
+@import 'inc/main/events';
+
 @import 'inc/main/mediaq';

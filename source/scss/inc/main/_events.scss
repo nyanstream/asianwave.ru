@@ -1,0 +1,24 @@
+$eventCode: 'halloween';
+
+body {
+	background-image: url('#{$imgPath}/main/#{$eventCode}/bckg.png?v=#{$projectVer}'), linear-gradient(to bottom, $gradientColorTop, $gradientColorBottom);
+}
+
+@if (variable-exists(aw_isIndex)) {
+	.btns {
+		@each $afon in radio, anime {
+			.container a[href*='#{$afon}'] {
+				&, &.disabled:hover {
+				background-image: url('#{$imgPath}/main/#{$eventCode}/#{$afon}-btn.png?v=#{$projectVer}'), url('#{$imgPath}/main/#{$eventCode}/#{$afon}-bckg.png?v=#{$projectVer}');}
+
+				&:hover {
+					background-image: url('#{$imgPath}/main/#{$eventCode}/hover-btn.png?v=#{$projectVer}'), url('#{$imgPath}/main/#{$eventCode}/#{$afon}-bckg.png?v=#{$projectVer}');
+				}
+			}
+		}
+	}
+
+	.css-preload {
+		background-image: url('#{$imgPath}/main/#{$eventCode}/hover-btn.png?v=#{$projectVer}');
+	}
+}

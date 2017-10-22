@@ -19,7 +19,7 @@ var domain = {
 		isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor),
 		isOpera = /OPR\//.test(navigator.userAgent)
 
-	if (chrExtBtn) { // на случай, если опять забуду, что поменял класс элемента
+	try { // на случай, если опять забуду, что поменял класс элемента
 		if (!isChrome) chrExtBtn.style.display = 'none';
 		if (isOpera) {
 			let icon = chrExtBtn.firstChild
@@ -29,7 +29,7 @@ var domain = {
 			chrExtBtn.setAttribute('href', '/app--opera')
 			chrExtBtn.setAttribute('title', getString('ext_opera'))
 		}
-	}
+	} catch (e) {}
 })()
 
 /*
@@ -39,18 +39,18 @@ var domain = {
 
 $create.tabs = selector => {
 	let
-		tabAnchors = $make.qs(selector + ' li', ['a']),
-		tabs = $make.qs(selector + ' section', ['a'])
+		tabAnchors = $make.qs(selector + ' [data-tab-radio]', ['a']),
+		tabs = $make.qs(selector + ' [data-tab]', ['a'])
 
 	Array.from(tabAnchors).forEach((tabAnchor, i) => {
-		if (tabAnchor.classList.contains('active')) tabs[i].style.display = 'block'
+		if (tabAnchor.classList.contains('active')) { tabs[i].style.display = 'block' }
 
 		tabAnchor.addEventListener('click', e => {
 			let clickedAnchor = e.target
 			clickedAnchor.classList.add('active')
 
 			for (let i = 0, tabsLength = tabs.length; i < tabsLength; i++) {
-				if (tabs[i].dataset.tab == clickedAnchor.dataset.tab) {
+				if (tabs[i].dataset.tab == clickedAnchor.dataset.tabRadio) {
 					tabs[i].style.display = 'block'
 				} else {
 					tabs[i].style.display = 'none'
@@ -93,7 +93,7 @@ $create.tabs = selector => {
 ;(() => {
 	let
 		rootData = document.documentElement.dataset,
-		chatTab = $make.qs('li[data-tab="chat"]')
+		chatTab = $make.qs('[data-tab-radio="chat"]')
 
 	if ($ls.test() && $ls.get('aw_iamoldfag'))
 		rootData.theme = 'old-gray'
@@ -167,7 +167,7 @@ var $parse = {
 		let nextAirs = data.filter(e => e['s'] > unixNow)
 
 		data.forEach(item => {
-			if (item['secret'])  { return } // пропуск секретных элементов
+			if (item['secret']) { return } // пропуск секретных элементов
 
 			let
 				newsсhedData = `${moment.unix(item['s']).format('D MMMM')}<br>${moment.unix(item['s']).format('HH:mm')} &ndash; ${moment.unix(item['e']).format('HH:mm')}</td>`,
@@ -207,17 +207,17 @@ var $parse = {
 		 	vkNews = $make.qs('.vk-news'),
 		 	newsBody = $create.elem('div', '', 'news-posts')
 
-	  vkNews.textContent = ''
+		vkNews.textContent = ''
 
-	  if (data == 'fail' || !data.posts) {
-			vkNews.classList.add('api-err')
-			vkNews.appendChild($create.elem('p', getString('err_api')))
-			return
-	  } else {
-			if (vkNews.classList.contains('api-err')) {
-				vkNews.classList.remove('api-err')
-			}
-	  }
+	if (data == 'fail' || !data.posts) {
+		vkNews.classList.add('api-err')
+		vkNews.appendChild($create.elem('p', getString('err_api')))
+		return
+	} else {
+		if (vkNews.classList.contains('api-err')) {
+			vkNews.classList.remove('api-err')
+		}
+	}
 
 		let newsHeader = $create.elem('div', $create.link(`https://${domain.vk}/${data['com']['url']}`, getString('vk_com'), ['e', 'html']), 'vk-news-header')
 
@@ -273,10 +273,10 @@ var $parse = {
 			vkPost.appendChild(vkPostBody)
 
 			newsBody.innerHTML += vkPost.outerHTML;
-	  })
+		})
 
-	  vkNews.appendChild(newsHeader)
-	  vkNews.appendChild(newsBody)
+		vkNews.appendChild(newsHeader)
+		vkNews.appendChild(newsBody)
 	},
 	noti: data => {
 		let notiEl = $make.qs('.noti')
@@ -338,19 +338,21 @@ var $parse = {
 var apiPrefix = (scriptData.apiPrefix && scriptData.apiPrefix != '') ? scriptData : 'api'
 
 var API = {
-	'schedule': `/${apiPrefix}/anime-sched.json`,
-	'noti': `/${apiPrefix}/noti.json`,
-	'vk_news': `/${apiPrefix}/vk-info.json`,
-	'vk_stream': `/${apiPrefix}/vk-stream.json`
+	'schedule': 'anime-sched.json',
+	'noti': 'noti.json',
+	'vk_news': 'vk-info.json',
+	'vk_stream': 'vk-stream.json'
 }
 
-switch (location.hostname) {
-	case '127.0.0.1':
-	case 'localhost':
-		Object.keys(API).forEach(key => {
+Object.keys(API).forEach(key => {
+	API[key] = `/${apiPrefix}/${API[key]}`
+
+	switch (location.hostname) {
+		case '127.0.0.1':
+		case 'localhost':
 			API[key] = `https://${domain.aw}${API[key]}`
-		})
-}
+	}
+})
 
 var doFetch = (url, handler, ifFail) => {
 	let fetchOptions = { cache: 'no-store' }

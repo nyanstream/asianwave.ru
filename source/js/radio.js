@@ -146,12 +146,13 @@ radio.toPoint = function(point) {
 	$ls.set('aw_radioPoint', point)
 
 	this.src = getRadioSrc()
-	this.load()
 
-	if ($ls.get('aw_radioOnPause') == 'false') { this.play() }
+	if ($ls.get('aw_radioOnPause') == 'false') {
+		this.load()
+		this.play()
+	}
+
 	$ls.rm('aw_radioOnPause')
-
-	$make.qs(`.player-change input[value='${point}']`).checked = true
 
 	$loadInfo.state()
 }
@@ -164,9 +165,9 @@ var
 	player = $make.qs('.player'),
 	radioCtrl_pp = player.querySelector('[data-ctrl="playpause"]'),
 	radioCtrl_vol = player.querySelector('[data-ctrl="volume"]'),
-	pointButton = player.querySelectorAll('.player-change input')
+	pointButton = player.querySelectorAll('.player-change button')
 
-radioCtrl_pp.onclick = function() { radio.toggle() }
+radioCtrl_pp.onclick = () => radio.toggle()
 
 radioCtrl_vol.value = radioVol
 radio.volume = radioVol/100
@@ -192,20 +193,20 @@ radioCtrl_vol.addEventListener('change', e => {
  * Индусский код, но работает!
  */
 
-;(() => {
-	Array.from(pointButton).forEach((button, i) => {
-		button.addEventListener('click', e => {
-			let clickedButt = e.target || e.srcElement;
-			clickedButt.classList.add('active');
+ ;(function() {
+ 	Array.from(pointButton).forEach((button, i) => {
+ 		button.addEventListener('click', e => {
+ 			let clickedButt = e.target
+ 			clickedButt.classList.add('active')
 
-			for (let i = 0, pbLength = pointButton.length; i < pbLength; i++) {
-				if (clickedButt.dataset.point !== pointButton[i].dataset.point) {
-					pointButton[i].classList.remove('active');
-				}
-			}
-		})
-	})
-})()
+ 			for (let i = 0, pbLength = pointButton.length; i < pbLength; i++) {
+ 				if (clickedButt.value !== pointButton[i].value) {
+ 					pointButton[i].classList.remove('active')
+ 				}
+ 			}
+ 		})
+ 	})
+ })()
 
 /*
  * Фича автостарта плеера для огнелиса (и хрома с флагом).
@@ -263,7 +264,7 @@ var $parse = {
 		let nextAirs = data.filter(e => e['s'] > unixNow)
 
 		data.forEach(item => {
-			if (item['secret'])  { return } // пропуск секретных элементов
+			if (item['secret']) { return } // пропуск секретных элементов
 
 			let
 				newsсhedData = `${moment.unix(item['s']).format('D MMMM')}<br>${moment.unix(item['s']).format('HH:mm')} &ndash; ${moment.unix(item['e']).format('HH:mm')}</td>`,
@@ -308,7 +309,7 @@ var $parse = {
 			if (vkNews.classList.contains('api-err')) {
 				vkNews.classList.remove('api-err')
 			}
-	  }
+		}
 
 		data['posts'].forEach(post => {
 			if (post['pin'] == 1) return;
@@ -422,7 +423,7 @@ var $parse = {
 
 		let plLink = $create.link('', '<i class="icon icon-music"></i>')
 
-		plLink.setAttribute('href', `data:audio/x-mpegurl;charset=utf-8;base64,${window.btoa(radio.src + '\n')}`)
+		plLink.setAttribute('href', `data:audio/x-mpegurl;charset=utf-8;base64,${btoa(radio.src + '\n')}`)
 		plLink.setAttribute('download', `Asian Wave ${$currentPoint.name()}.m3u`)
 
 		plBoxBody = $create.elem('div', plLink.outerHTML, 'dlm3u radio--pe')
@@ -529,13 +530,15 @@ var API = {
 	'vk_news': 'vk-info.json',
 }
 
-switch (location.hostname) {
-	case '127.0.0.1':
-	case 'localhost':
-		Object.keys(API).forEach(key => {
-			API[key] = `https://${domain.aw}/${apiPrefix}/${API[key]}`
-		})
-}
+Object.keys(API).forEach(key => {
+	API[key] = `/${apiPrefix}/${API[key]}`
+
+	switch (location.hostname) {
+		case '127.0.0.1':
+		case 'localhost':
+			API[key] = `https://${domain.aw}${API[key]}`
+	}
+})
 
 var doFetch = (url, handler, ifFail) => {
 	let fetchOptions = { cache: 'no-store' }
@@ -603,12 +606,9 @@ document.addEventListener('DOMContentLoaded', () => {
 	pointButtons.forEach(pointBtn => {
 		let pointData = pointBtn.value
 
-		//$create.balloon(pointBtn, '\u00AB' + points[pointData].name + '\u00BB', 'down')
-
 		pointBtn.setAttribute('title', `${getString('radio_station')} \u00AB${points[pointData].name}\u00BB`)
 
-		if (pointData == $currentPoint.key())
-			pointBtn.checked = true;
+		if (pointData == $currentPoint.key()) { pointBtn.classList.add('active') }
 
 		pointBtn.addEventListener('click', e => {
 			if (!e.target.hasAttribute('disabled')) {

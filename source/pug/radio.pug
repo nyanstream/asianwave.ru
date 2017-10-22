@@ -42,12 +42,12 @@ html(lang='ru')
 				aside
 					div.side-content.player
 						div.radio--pe.player-controls(contextmenu='autostart')
-							button(data-ctrl='playpause')
+							button(data-ctrl='playpause' data-lang-label='play')
 								i.icon.icon-play
-							input(data-ctrl='volume' type='range' step='.1' min='0' max='100')
+							input(data-ctrl='volume' type='range' step='.1' min='0' max='100' data-lang-label='change_volume')
 						div.radio--pe.player-change
 							each point in ['jp', 'ru', 'kr']
-								input(type='radio' name='changePoint' value=`${point}`)
+								button(role='radio' value=`${point}`) #{point}
 					div.side-content.radio--pe.noti
 					div.side-content.radio-live
 					div.side-content.radio-state

@@ -39,14 +39,20 @@ html(lang='ru')
 					div.warnings
 						div.api
 							p С нашим API возникла какая-то ошибка!
-							p <br>Попробуйте дважды кликнуть на наш логотип в шапке сайта для перезагрузки. Скорее всего, всё уже починилось само.
-							p(style='font-size: .8em') <br>(но если нет, то начните возмущаться в чате или #[a(href='https://vk.me/asianwaveru' target='_blank' rel='nofollow noopener') напишите сюда], мы постараемся отреагировать как можно быстрее)
-							p(style='font-size: .7em') <br>(a ещё можно попробовать #[a(href='?b') нажать сюда])
+							br
+							p Попробуйте дважды кликнуть на наш логотип в шапке сайта для перезагрузки. Скорее всего, всё уже починилось само.
+							br
+							p(style='font-size: .8em') (но если нет, то начните возмущаться в чате или #[a(href='https://vk.me/asianwaveru' target='_blank' rel='nofollow noopener') напишите сюда], мы постараемся отреагировать как можно быстрее)
+							br
+							p(style='font-size: .7em') (a ещё можно попробовать #[a(href='?b') нажать сюда])
 				aside.tabs
 					ul
-						li.active(data-lang='tab_chat' data-tab='chat') Чат
-						li(data-lang='tab_sched' data-tab='sched') Расписание
-						li(data-lang='tab_news' data-tab='news') Новости
+						li
+							button.active(role='radio' data-lang='tab_chat' data-tab-radio='chat') Чат
+						li
+							button(role='radio' data-lang='tab_sched' data-tab-radio='sched') Расписание
+						li
+							button(role='radio' data-lang='tab_news' data-tab-radio='news') Новости
 					section(data-tab='chat')
 						iframe(src=`${URLs.chat}`)
 					section(data-tab='sched')

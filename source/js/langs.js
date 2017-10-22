@@ -175,6 +175,14 @@ var trStrings = {
 	'now': {
 		'ru': s => `Сейчас (ещё ${s})`,
 		'en': s => `Now (${s} left)`
+	},
+	'play': {
+		'ru': 'Играть',
+		'en': 'Play'
+	},
+	'change_volume': {
+		'ru': 'Смена громкости',
+		'en': 'Change volume'
 	}
 }
 
@@ -236,6 +244,23 @@ var getString = s => {
 			if (string && string != '' && typeof string != 'function') {
 				elem.setAttribute('title', string)
 			} else { l10nErr(elem.dataset.langTitle) }
+		})
+	} catch (e) {}
+
+	/*
+	 * Поиск HTML-элементов для локализации их аттрибутов "aria-label"
+	 * Элементы должны иметь аттрибут "data-lang-label" со нужным значением из переменной trStrings
+	 */
+
+	try {
+		let elemsTitle = $make.qs('[data-lang-label]', ['a'])
+
+		elemsTitle = Array.from(elemsTitle)
+		elemsTitle.forEach(elem => {
+			let string = getString(elem.dataset.langLabel)
+			if (string && string != '' && typeof string != 'function') {
+				elem.setAttribute('aria-label', string)
+			} else { l10nErr(elem.dataset.langLabel) }
 		})
 	} catch (e) {}
 })()
