@@ -18,6 +18,28 @@ $pagewidth: 1000px;
 	width: 100%;
 	height: calc(100vh - #{$top-panel--height});
 
+	&.error {
+		& > * { display: none }
+		.error-box { display: block }
+	}
+
+	.error-box {
+		display: none;
+		width: 100%;
+		padding: 10px;
+
+		font-size: 16px;
+		text-align: center;
+
+		p {
+			margin: 5px 0;
+		}
+	}
+}
+
+.content {
+	width: 100%; height: 100%;
+
 	& > * {
 		display: inline-block;
 		vertical-align: middle;

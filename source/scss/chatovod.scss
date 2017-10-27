@@ -3,6 +3,12 @@
 
 @include reset;
 
+:root {
+	--prime-color-10d: darken($primeColor, 10%);
+	--border-color: rgba(190, 190, 190, .2);
+	--scroll-color: #828282;
+}
+
 body .chat {
 	font-family: Roboto, Arial, sans-serif !important;
 }
@@ -24,7 +30,10 @@ body .chat {
 em { font-style: normal }
 strong { font-weight: normal }
 
-a[href*='?cat=vip'], .chatLinkImage { display: none !important }
+a[href*='?cat=vip'],
+.chatLinkImage {
+	display: none !important
+}
 
 .chat, .chatHeader {
 	border-color: transparent;
@@ -33,14 +42,19 @@ a[href*='?cat=vip'], .chatLinkImage { display: none !important }
 
 .chat {
 	font-size: 14px;
-	border: 1px solid rgba(190, 190, 190, 0.2);
+	border: 1px solid var(--border-color);
 
 	&Main, &Footer {
 		background-color: auto;
 		background-image: none;
 	}
 
-	@at-root .smilesBox, &Main, &EventDiv, &PopupMenuDiv1, &PopupMenuDiv2, &People ul.chatPeopleList li.hover {
+	@at-root .smilesBox,
+	&Main,
+	&EventDiv,
+	&PopupMenuDiv1,
+	&PopupMenuDiv2,
+	&People ul.chatPeopleList li.hover {
     background-color: #fff;
 	}
 
@@ -55,41 +69,63 @@ a[href*='?cat=vip'], .chatLinkImage { display: none !important }
 
 	&Send {
 		&LinksPanel {
-			.chatLinkGold, .chatLinkProfile, .chatLinkMore { display: none }
+			.chatLinkGold,
+			.chatLinkProfile,
+			.chatLinkMore {
+				display: none
+			}
 
 			a.chatLinkSmiles {
-				background: transparent url('../img/sm/zephir.png') no-repeat 0 0;
+				background: none;
+				background-image: url('#{$imgPath}/sm/zephir.png?v=#{$projectVer}');
+				background-color: transparent;
+				background-repeat: no-repeat;
 			}
 		}
 	}
 
-	&SendButtonPanel input, &SendExitPanel select, &SetupNickname input, &Full #join-buttons input {
+	&SendButtonPanel input,
+	&SendExitPanel select,
+	&SetupNickname input,
+	&Full #join-buttons input {
+		$_borderColor: #a9a9a9;
+
 		background-color: #fff;
-		border: 1px solid #a9a9a9;
+		border: 1px solid $_borderColor;
 
 		@include transition(.3s);
 
 		&:hover {
 			background-color: darken(#fff, 3%);
-			border-color: darken(#a9a9a9, 10%);
+			border-color: darken($_borderColor, 10%);
 		}
 	}
 
-	&Message img[alt*=":"], & .smilesBox a[onclick*='chatSmile'] img {
+	&Message img[alt*=":"],
+	& .smilesBox a[onclick*='chatSmile'] img {
 		max-height: 64px;
 		margin: 0 2px;
 	}
 
 	&Message {
-		&ToMe .chatToUser { color: #fff !important }
-		span:not([class*='User']) { color: #000 !important }
-		.chatUserFrom span[style] { color: darken($primeColor, 30%)!important }
+		&ToMe .chatToUser {
+			color: #fff !important
+		}
+
+		span:not([class*='User']) {
+			color: #000 !important
+		}
+
+		.chatUserFrom span[style] {
+			color: var(--prime-color-10d) !important
+		}
 	}
 
 	&Main {
 		top: 0;
 
-		& .chatMessages, & .chatPrivateMessages {
+		& .chatMessages,
+		& .chatPrivateMessages {
 			font-size: 1em;
 		}
 	}
@@ -114,7 +150,7 @@ a[href*='?cat=vip'], .chatLinkImage { display: none !important }
 	&UserFrom,
 	&People ul.chatPeopleList li a.chatUser,
 	&People ul.chatPeopleList li a.chatUser span[style] {
-    color: darken($primeColor, 30%) !important;
+    color: var(--prime-color-10d) !important;
 	}
 
 	&Header {
@@ -131,16 +167,23 @@ a[href*='?cat=vip'], .chatLinkImage { display: none !important }
 
 	&TopLineWrapper {
 		a {
-			&[href*='photos'], &[href*='cat=bal'], &[href*='guests'], &[href*='gallery'], &[href*='news'], &[href*='rules'], &[href*='code'] { display: none }
+			&[href*='photos'], &[href*='cat=bal'], &[href*='guests'],
+			&[href*='gallery'], &[href*='news'], &[href*='rules'],
+			&[href*='code'] {
+				display: none
+			}
 		}
 
 		& > ul > li > a {
 			text-shadow: none;
-			&:hover { background-color: rgba(0, 0, 0, .1) }
+
+			&:hover {
+				background-color: rgba(#000, .1)
+			}
 		}
 
 		& > ul > li > ul > li > a {
-			width: auto;
+			width: auto
 		}
 	}
 
@@ -160,16 +203,17 @@ a[href*='?cat=vip'], .chatLinkImage { display: none !important }
 		}
 	}
 
-	#chatMainMenuProfile, #chatMainMenuChat {
+	#chatMainMenuProfile,
+	#chatMainMenuChat {
 		width: auto !important;
 		border: 0;
-		box-shadow: 0px 0px 5px rgba(0, 0, 0, .2);
+		box-shadow: 0px 0px 5px rgba(#000, .2);
 		min-width: 130px;
 	}
 
 	.chatPopupMenuDiv2 {
 		border: 0;
-		box-shadow: 0px 0px 5px rgba(0, 0, 0, .1);
+		box-shadow: 0px 0px 5px rgba(#000, .1);
 	}
 
 	.smilesBox {
@@ -177,8 +221,8 @@ a[href*='?cat=vip'], .chatLinkImage { display: none !important }
 	}
 
 	#scrollBottomBox {
-		background-color: #828282;
-		border-color: #828282;
+		background-color: var(--scroll-color);
+		border-color: var(--scroll-color);
 		font-family: inherit;
 		color: #fff;
 		opacity: .8;

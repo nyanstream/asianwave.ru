@@ -1,7 +1,9 @@
 'use strict'
 
 var initAdminPanel = PHP_data => {
-	var data = PHP_data
+	let data = PHP_data
+
+	let hide = elem => elem.style.display = 'none'
 
 	moment.tz.setDefault(data.timezone)
 	Array.from($make.qs('form', ['a'])).forEach(form => { form.reset() })
@@ -12,7 +14,7 @@ var initAdminPanel = PHP_data => {
 			newTime = data.schedAnimeLatest.end
 
 		if (needChangeTime) $make.qs('.add-air input[type*=datetime]').setAttribute('value', moment.unix(newTime).format('YYYY-MM-DDTHH:mm'))
-	} catch (e) {}
+	} catch (e) { hide($make.qs('.add-air')) }
 
 	try {
 		let emptySched = {
@@ -47,7 +49,7 @@ var initAdminPanel = PHP_data => {
 		if (schedsNames.length == emptyScheds.length) {
 			Array.from($make.qs('.rm-air input', ['a'])).forEach(input => { input.setAttribute('disabled', '') })
 		}
-	} catch (e) {}
+	} catch (e) { hide($make.qs('.rm-air')) }
 
 	try {
 		let exprsSched = {
@@ -64,14 +66,14 @@ var initAdminPanel = PHP_data => {
 				input.setAttribute('disabled', '')
 			})
 		}
-	} catch (e) {}
+	} catch (e) { hide($make.qs('.expired-clear')) }
 
 	try {
-		let vkLink = $make.qs('.vk-link')
+		let vkLink = $make.qs('.vk-link p')
 		if (!vkLink) { throw 42 }
 
 		vkLink.appendChild($create.link(`${data.vk.URL}?client_id=${data.vk.appID}&display=page&redirect_uri=https://${data.server}/api/${data.vk.api}&scope=video,offline&response_type=code&state=vk-get-code`, 'Просто нажми сюда', ['e']))
-	} catch (e) {}
+	} catch (e) { hide($make.qs('.vk-link')) }
 
 	try {
 		if (!$make.qs('.noti')) { throw 42 }
@@ -113,7 +115,7 @@ var initAdminPanel = PHP_data => {
 				notiSubmitBtn.value = notiSubmitBtnText
 			}
 		})
-	} catch (e) {}
+	} catch (e) { hide($make.qs('.noti')) }
 
 	try {
 		let

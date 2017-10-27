@@ -16,7 +16,7 @@ html(lang='ru')
 			link(rel='stylesheet' href=`${paths.css}/${CSS}.min.css?v=${projectVer}`)
 		noscript
 			style.
-				.radio, .error-box { display: block !important } .radio > * { display: none }
+				.radio .error-box { display: block } .radio > * { display: none }
 	body
 		div.container
 			header.top-panel
@@ -37,8 +37,8 @@ html(lang='ru')
 						include inc/nojs-text.pug
 				div.content
 					div.radio--pe.chat
-						iframe(src=`${URLs.chat}`)
-					div.radio--pe.vk-news
+						iframe(src=`${URLs.chat}` data-lang-title='chat')
+					div.radio--pe.vk-posts
 				aside
 					div.side-content.player
 						div.radio--pe.player-controls(contextmenu='autostart')
@@ -61,7 +61,7 @@ html(lang='ru')
 		each lib in [`fetch/${libsVer.fetch}/fetch.min`, `moment.js/${libsVer.moment.same}/moment.min`, `moment.js/${libsVer.moment.same}/locale/ru`, `ismobilejs/${libsVer.isMobile}/isMobile.min`]
 			script(src=`https://cdnjs.cloudflare.com/ajax/libs/${lib}.js` defer)
 
-		each JS in ['kamina', 'special/ms-edge-suck', 'langs', 'radio']
+		each JS in ['kamina', 'special/ms-edge-suck', 'langs', 'core', 'parsers', 'radio']
 			script(src=`${paths.js}/${JS}.min.js?v=${projectVer}` defer)
 
 		include inc/bbiswu.pug

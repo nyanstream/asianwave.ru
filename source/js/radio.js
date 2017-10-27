@@ -1,36 +1,20 @@
 'use strict'
 
 /*
- * Домены
+ * Дополнение к камине для создания тултипов
  */
 
-var domain = {
-	'aw': 'asianwave.ru',
-	'vk': 'vk.com'
-}
-
-domain.radio = `ryuko.${domain.aw}`
-
-/*
- * Дополнение к камине
- */
-
-$create.balloon = function(elem, text, pos) {
+$create.balloon = (elem, text, pos) => {
 	let to = elem.dataset
 
-	if (!to || isMobile.any) return false;
+	if (!to || isMobile.any) { return }
 
-	if (text)
-		to.balloon = text
-		else to.balloon = ''
-
-	if (pos)
-		to.balloonPos = pos
-		else to.balloonPos = 'up'
+	to.balloon = text ? text : ''
+	to.balloonPos = pos ? pos : 'up'
 }
 
 /*
- * Функция для проверки клиента на совместимость с сайтом (лол)
+ * Проверка клиента на совместимость с сайтом
  */
 
 ;(() => {
@@ -46,29 +30,6 @@ $create.balloon = function(elem, text, pos) {
 	}
 
 	if (err) errorBox.innerHTML += `<p>${getString('err_end')}</p><p><br>${getString('tnx')}! :3</p>`
-})()
-
-/*
- * Детект хрома
- */
-
-;(() => {
-	let
-		chrExtBtn = $make.qs('.right li a[href*="--chrome"]'),
-		isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor),
-		isOpera = /OPR\//.test(navigator.userAgent)
-
-	if (chrExtBtn) { // на случай, если опять забуду, что поменял класс элемента
-		if (!isChrome) chrExtBtn.style.display = 'none';
-		if (isOpera) {
-			let icon = chrExtBtn.firstChild
-
-			icon.classList.remove('icon-chrome')
-			icon.classList.add('icon-opera')
-			chrExtBtn.setAttribute('href', '/app--opera')
-			chrExtBtn.setAttribute('title', getString('ext_opera'))
-		}
-	}
 })()
 
 /*
@@ -102,6 +63,8 @@ var $currentPoint = {
 /*
  * Инициация радио
  */
+
+domain.radio = `ryuko.${domain.aw}`
 
 var getRadioSrc = () => `https://${domain.radio}/radio/${$currentPoint.port()}/listen`
 
@@ -154,7 +117,7 @@ radio.toPoint = function(point) {
 
 	$ls.rm('aw_radioOnPause')
 
-	$loadInfo.state()
+	$loadInfo.radio()
 }
 
 /*
@@ -162,51 +125,53 @@ radio.toPoint = function(point) {
  */
 
 var
-	player = $make.qs('.player'),
-	radioCtrl_pp = player.querySelector('[data-ctrl="playpause"]'),
-	radioCtrl_vol = player.querySelector('[data-ctrl="volume"]'),
-	pointButton = player.querySelectorAll('.player-change button')
+ 	player = $make.qs('.player'),
+ 	radioCtrl_pp = player.querySelector('[data-ctrl="playpause"]'),
+ 	radioCtrl_vol = player.querySelector('[data-ctrl="volume"]'),
+ 	pointButton = player.querySelectorAll('.player-change button')
 
-radioCtrl_pp.onclick = () => radio.toggle()
+;(() => {
+	radioCtrl_pp.onclick = () => radio.toggle()
 
-radioCtrl_vol.value = radioVol
-radio.volume = radioVol/100
-
-/*
- * @HACK текущая громкость пишется в CSS-переменную
- * @TODO если когда-нибудь починят совместимость fill в браузерах, то переписать на него
- */
-
-document.documentElement.style.setProperty('--volume', radioVol + '%')
-radioCtrl_vol.addEventListener('input', e => {
-	radioVol = e.target.value
+	radioCtrl_vol.value = radioVol
 	radio.volume = radioVol/100
-	document.documentElement.style.setProperty('--volume', radioVol + '%')
-});
 
-radioCtrl_vol.addEventListener('change', e => {
-	$ls.set('aw_radioVolume', e.target.value)
-})
+	/*
+	 * @HACK текущая громкость пишется в CSS-переменную
+	 * @TODO если когда-нибудь починят совместимость fill в браузерах, то переписать на него
+	 */
+
+	document.documentElement.style.setProperty('--volume', radioVol + '%')
+	radioCtrl_vol.addEventListener('input', e => {
+		radioVol = e.target.value
+		radio.volume = radioVol/100
+		document.documentElement.style.setProperty('--volume', radioVol + '%')
+	});
+
+	radioCtrl_vol.addEventListener('change', e => {
+		$ls.set('aw_radioVolume', e.target.value)
+	})
+})()
 
 /*
  * Слегка модифицированный скрипт для перключения вкладок из /anime
  * Индусский код, но работает!
  */
 
- ;(function() {
- 	Array.from(pointButton).forEach((button, i) => {
- 		button.addEventListener('click', e => {
- 			let clickedButt = e.target
- 			clickedButt.classList.add('active')
+;(() => {
+	Array.from(pointButton).forEach((button, i) => {
+		button.addEventListener('click', e => {
+			let clickedButt = e.target
+			clickedButt.classList.add('active')
 
- 			for (let i = 0, pbLength = pointButton.length; i < pbLength; i++) {
- 				if (clickedButt.value !== pointButton[i].value) {
- 					pointButton[i].classList.remove('active')
- 				}
- 			}
- 		})
- 	})
- })()
+			for (let i = 0, pbLength = pointButton.length; i < pbLength; i++) {
+				if (clickedButt.value !== pointButton[i].value) {
+					pointButton[i].classList.remove('active')
+				}
+			}
+		})
+	})
+})()
 
 /*
  * Фича автостарта плеера для огнелиса (и хрома с флагом).
@@ -241,135 +206,11 @@ radioCtrl_vol.addEventListener('change', e => {
 })()
 
 /*
- * Парсеры для различных API и прочего (но пока только API)
+ * Парсер API азуры
  * @TODO сделать файлик плейлиста со всеми станциями сразу
  */
 
-var scriptData = document.currentScript.dataset
-
-var $parse = {
-	schedule: data => {
-		let
-			streamsched = $make.qs('.schedule'),
-			tableBody = ''
-
-		let
-			dayToday = moment().dayOfYear(),
-			unixNow = moment().unix()
-
-		streamsched.textContent = ''
-
-		if (data == 'fail') return;
-
-		let nextAirs = data.filter(e => e['s'] > unixNow)
-
-		data.forEach(item => {
-			if (item['secret']) { return } // пропуск секретных элементов
-
-			let
-				newsсhedData = `${moment.unix(item['s']).format('D MMMM')}<br>${moment.unix(item['s']).format('HH:mm')} &ndash; ${moment.unix(item['e']).format('HH:mm')}</td>`,
-				nazvaniue = ''
-
-			let
-				dayOfS = moment.unix(item['s']).dayOfYear(),
-				dayofE = moment.unix(item['e']).dayOfYear()
-
-			if (item['link']) {
-				nazvaniue = $create.link(item['link'], item['title'], ['e', 'html'])
-			} else { nazvaniue = $make.safe(item['title']) }
-
-			if ((dayOfS - dayToday) < -1 || item['e'] < unixNow) {
-				return
-			} else if (item['s'] < unixNow && unixNow < item['e']) {
-				tableBody += $create.elem('tr', `<td>${newsсhedData}</td><td><b>${getString('now')(moment.unix(item['e']).toNow(true))}:</b><br>${nazvaniue}</td>`, 'air--current', ['html'])
-			} else if (item['s'] > unixNow && item['s'] == nextAirs[0]['s']) {
-				tableBody += $create.elem('tr', `<td>${newsсhedData}</td><td><b>${getString('within')} ${moment.unix(item['s']).fromNow()}:</b><br>${nazvaniue}</td>`, 'air--next', ['html'])
-			} else if (dayOfS > dayToday) {
-				tableBody += $create.elem('tr', `<td>${newsсhedData}</td><td>${nazvaniue}</td>`, 'air--notToday', ['html'])
-			} else {
-				tableBody += $create.elem('tr', `<td>${newsсhedData}</td><td>${nazvaniue}</td>`, '', ['html'])
-			}
-		})
-
-		if (tableBody != '') {
-			streamsched.appendChild($create.elem('table', `${$create.elem('caption', getString('airs_schedule'), '', ['html'])}<tbody>${tableBody}</tbody>`, '', ['html']))
-		} else { return }
-	},
-	vk_news: data => {
-		let
-			vkNews = $make.qs('.vk-news'),
-			newsBody = ''
-
-		if (data == 'fail' || !data.posts) {
-			vkNews.classList.add('api-err')
-			vkNews.textContent = ''
-			vkNews.appendChild($create.elem('p', getString('err_api')))
-			return
-		} else {
-			if (vkNews.classList.contains('api-err')) {
-				vkNews.classList.remove('api-err')
-			}
-		}
-
-		data['posts'].forEach(post => {
-			if (post['pin'] == 1) return;
-
-			let
-				postImgLink = '', isCopy = '', postLinkS = '',
-				postImg = post['pic']
-
-			if (postImg) {
-				let	postImgElem = $create.elem('img')
-
-				postImgElem.setAttribute('src', postImg['small'])
-				postImgElem.setAttribute('alt', '')
-
-				postImgLink = $create.link(postImg['big'] ? postImg['big'] : postImg['small'], '')
-
-				postImgLink.classList.add('link2img')
-				postImgLink.appendChild(postImgElem)
-			}
-
-			let
-				postText = post['text'].replace(/\n/g, '<br>'),
-				pLR = /\[(.*?)\]/,
-				postLinkR = postText.match(new RegExp(pLR, 'g'))
-
-			if (postText == '') return;
-			if (postLinkR) {
-				postLinkR.forEach(link => {
-					postLinkS = link.split('|')
-					postText = postText.replace(pLR, $create.link(`https://${domain.vk}/${postLinkS[0].replace(/\[/g, '')}`, postLinkS[1].replace(/]/g, ''), ['e', 'html']))
-				})
-			}
-
-			let
-				vkPostMetaLink = $create.link(`https://${domain.vk}/wall-${data['com']['id']}_${post['id']}`, moment.unix(post['time']).format('LLL'), ['e', 'html'])
-
-			if (post['type'] == 'copy') {
-				isCopy = ' is-repost'
-				vkPostMetaLink += ` <span title="${getString('vk_repost')}">\u2935</a>`
-			}
-
-			let
-				vkPost = $create.elem('div', '', 'vk-post' + isCopy),
-				vkPostMeta = $create.elem('div', vkPostMetaLink, 'vk-post-meta'),
-				vkPostBody = $create.elem('div', '', 'vk-post-body')
-
-			if (postImgLink) { vkPostBody.appendChild(postImgLink) }
-			vkPostBody.appendChild($create.elem('p', postText))
-
-			vkPost.appendChild(vkPostMeta)
-			vkPost.appendChild(vkPostBody)
-
-			newsBody += vkPost.outerHTML;
-		})
-
-		if (vkNews.innerHTML != newsBody) {
-			vkNews.textContent = ''
-			vkNews.innerHTML = newsBody
-		}
-	},
+var $init = {
 	radio: data => {
 		let
 			stateBox = $make.qs('.radio-state'),
@@ -431,6 +272,7 @@ var $parse = {
 		$create.balloon(plBoxBody, getString('playlist_dl'), 'left')
 
 		/* Блок с выводом состояния прямого эфира (в остальных случаях скрыт) */
+		/* @TODO вернуть в том или ином виде, когда запилят фичу со стороны азуры */
 
 		// let
 		// 	currRJ = $create.elem('div', `<p>${getString('rj_current')}:</p><p>${$make.safe(data['djname'])}</p>`, 'curr-rj radio--pe'),
@@ -469,51 +311,6 @@ var $parse = {
 		stateBox.appendChild(plBoxBody)
 
 		songsBox.appendChild(songsTableBody)
-	},
-	noti: data => {
-		let notiEl = $make.qs('.noti')
-
-		if (data == 'fail' || !data['enabled']) { notiEl.style.display = 'none'; return }
-
-		let
-			id = data['time'],
-			text = data['text'],
-			color = data['color']
-
-		if (color) {
-			notiEl.style.backgroundColor = color
-		} else { notiEl.style.backgroundColor = null }
-
-		let
-			notiClose = $create.elem('button', getString('noti_hide').toLowerCase(), 'noti-close'),
-			notiContent = $create.elem('div', `<p>${getString('noti')}:</p><p>${text}</p>`, 'noti-content'),
-			notiItems = []
-
-		notiEl.textContent = ''
-
-		if (notiContent.querySelector('a[href]')) {
-			let notiLinks = notiContent.querySelectorAll('a[href]')
-
-			Array.from(notiLinks).forEach((link) => {
-				link.setAttribute('target', '_blank')
-				if (link.getAttribute('href').indexOf('http') == 0) link.setAttribute('rel', 'nofollow noopener')
-			})
-		}
-
-		notiEl.appendChild(notiContent)
-		notiEl.appendChild(notiClose)
-
-		if ($ls.get('aw_noti')) notiItems = JSON.parse($ls.get('aw_noti'))
-
-		if (!notiItems.includes(id))
-			notiEl.style.display = 'block'
-			else notiEl.style.display = 'none'
-
-		notiClose.addEventListener('click', () => {
-			notiItems[notiItems.length] = id
-			$ls.set('aw_noti', JSON.stringify(notiItems))
-			notiEl.style.display = 'none'
-		});
 	}
 }
 
@@ -521,46 +318,13 @@ var $parse = {
  * Запросы к API
  */
 
-var apiPrefix = (scriptData.apiPrefix && scriptData.apiPrefix != '') ? scriptData : 'api'
-
-var API = {
-	'api': 'api.json',
-	'sched': 'radio-sched.json',
-	'noti': 'noti.json',
-	'vk_news': 'vk-info.json',
-}
-
-Object.keys(API).forEach(key => {
-	API[key] = `/${apiPrefix}/${API[key]}`
-
-	switch (location.hostname) {
-		case '127.0.0.1':
-		case 'localhost':
-			API[key] = `https://${domain.aw}${API[key]}`
-	}
-})
-
-var doFetch = (url, handler, ifFail) => {
-	let fetchOptions = { cache: 'no-store' }
-
-	if (!ifFail) ifFail = 'fail';
-
-	fetch(`${url}?t=${Date.now()}`, fetchOptions).then(response => {
-		response.json().then(data => {
-			handler(data)
-		})
-	}).catch(e => { handler(ifFail) })
-}
-
 var $loadInfo = {
-	state: () => doFetch(`https://${domain.radio}/api/nowplaying/${$currentPoint.id()}`, $parse.radio),
-	sched: () => doFetch(API.sched, $parse.schedule),
-	vk_news: () => doFetch(API.vk_news, $parse.vk_news),
-	noti: () => doFetch(API.noti, $parse.noti),
+	radio: () => doFetch({ URL: `https://${domain.radio}/api/nowplaying/${$currentPoint.id()}`, handler: $init.radio }),
+	_sched: () => doFetch({ URL: API.scheduleRadio, handler: $parser.schedule, handlerOptions: { mode: 'radio' } }),
+	noti: () => doFetch({ URL: API.noti, handler: $parser.noti }),
+	vkNews: () => doFetch({ URL: API.vkNews, handler: $parser.vkNews }),
 	full() {
-		Object.keys(this).forEach(key => {
-			if (key != 'full') this[key]()
-		})
+		Object.keys(this).forEach(key => (key != 'full') ? this[key]() : '')
 	}
 }
 
@@ -619,10 +383,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	$loadInfo.full()
 	let
-		aw_timer_state = setInterval(() => { $loadInfo.state() }, 5000),
+		aw_timer_state = setInterval(() => { $loadInfo.radio() }, 5000),
 		aw_timer_other = setInterval(() => {
-			$loadInfo.sched()
-			$loadInfo.vk_news()
+			$loadInfo._sched()
+			$loadInfo.vkNews()
 			$loadInfo.noti()
 		}, 30000);
 })

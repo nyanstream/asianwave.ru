@@ -148,10 +148,6 @@ var trStrings = {
 		'ru': 'Внимание! У Вас отключено хранение данных, поэтому скрытие оповещения запомиинаться не будет.',
 		'en': 'Attention! You don\'t have data saving enables, so you\'ll see notification even if you close it before.'
 	},
-	'tab_chat': {
-		'ru': 'Чат',
-		'en': 'Chat'
-	},
 	'tab_sched': {
 		'ru': 'Расписание',
 		'en': 'Schedule'
@@ -183,7 +179,15 @@ var trStrings = {
 	'change_volume': {
 		'ru': 'Смена громкости',
 		'en': 'Change volume'
-	}
+	},
+	'player': {
+		'ru': 'Плеер',
+		'en': 'Player'
+	},
+	'chat': {
+		'ru': 'Чат',
+		'en': 'Chat'
+	},
 }
 
 /*
@@ -214,11 +218,18 @@ var getString = s => {
 	let l10nErr = s => console.warn(`Ошибка: cтрока "${s}" не переведена или неправильно используется`)
 
 	/*
-	 * Поиск HTML-элементов для локализации
-	 * Элементы должны иметь аттрибут "data-lang" со нужным значением из переменной trStrings
+	 * Первая буква в строке становится заглавной
+	 * https://stackoverflow.com/a/1026087
 	 */
 
-	try {
+	let capitalize = s => s.charAt(0).toUpperCase() + s.slice(1)
+
+	/*
+	 * Поиск HTML-элементов для локализации
+	 * Элементы должны иметь аттрибут "data-lang" с нужным значением из переменной trStrings
+	 */
+
+	;(() => {
 		let elems = $make.qs('[data-lang]', ['a'])
 
 		elems = Array.from(elems)
@@ -228,39 +239,29 @@ var getString = s => {
 				elem.textContent = string
 			} else { l10nErr(elem.dataset.lang) }
 		})
-	} catch (e) {}
+	})()
 
 	/*
-	 * Поиск HTML-элементов для локализации их аттрибутов "title"
-	 * Элементы должны иметь аттрибут "data-lang-title" со нужным значением из переменной trStrings
+	 * Функция-локализатор аттрибутов у HTML-элементов
+	 * Первое значение - датасет ("data-lang-SOME"), второе - локализуемый аттрибут
+	 * Элементы должны иметь аттрибут "data-lang-SOME" с нужным значением из переменной trStrings
 	 */
 
-	try {
-		let elemsTitle = $make.qs('[data-lang-title]', ['a'])
+	let l10nToAttr = (dataAttr, attr) => {
+		let elems = $make.qs(`[data-lang-${dataAttr}]`, ['a'])
 
-		elemsTitle = Array.from(elemsTitle)
-		elemsTitle.forEach(elem => {
-			let string = getString(elem.dataset.langTitle)
+		elems = Array.from(elems)
+		elems.forEach(elem => {
+			let
+				elemData = `lang${capitalize(dataAttr)}`,
+				string = getString(elem.dataset[elemData])
+
 			if (string && string != '' && typeof string != 'function') {
-				elem.setAttribute('title', string)
-			} else { l10nErr(elem.dataset.langTitle) }
+				elem.setAttribute(attr, string)
+			} else { l10nErr(elem.dataset[elemData]) }
 		})
-	} catch (e) {}
+	}
 
-	/*
-	 * Поиск HTML-элементов для локализации их аттрибутов "aria-label"
-	 * Элементы должны иметь аттрибут "data-lang-label" со нужным значением из переменной trStrings
-	 */
-
-	try {
-		let elemsTitle = $make.qs('[data-lang-label]', ['a'])
-
-		elemsTitle = Array.from(elemsTitle)
-		elemsTitle.forEach(elem => {
-			let string = getString(elem.dataset.langLabel)
-			if (string && string != '' && typeof string != 'function') {
-				elem.setAttribute('aria-label', string)
-			} else { l10nErr(elem.dataset.langLabel) }
-		})
-	} catch (e) {}
+	l10nToAttr('title', 'title')
+	l10nToAttr('label', 'aria-label')
 })()

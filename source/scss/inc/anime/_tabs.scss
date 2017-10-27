@@ -48,40 +48,6 @@
 				}
 			}
 		}
-
-		/*li {
-			display: inline-block;
-			background-color: var(--prime-color-5d);
-			width: calc(100% / 3);
-			height: 100%;
-			padding: 2px;
-			font-size: 16px;
-			text-align: center;
-			color: #fff;
-			list-style: none;
-			cursor: pointer;
-
-			border-left: .5px solid var(--tab-border-color);
-			border-right: .5px solid var(--tab-border-color);
-
-			@include transition(.2s);
-
-			&:first-child {
-				border-left: 0;
-			}
-
-			&:last-child {
-				border-right: 0;
-			}
-
-			&:not(.active):hover {
-				background-color: var(--tab-hover-color);
-			}
-
-			&.active {
-				background-color: var(--tab-active-color);
-			}
-		}*/
 	}
 
 	section {
@@ -91,17 +57,5 @@
 		overflow: hidden;
 
 		@import 'tabs__tab--sched', 'tabs__tab--news';
-	}
-
-	noscript {
-		@include flexbox(auto, center, center, auto);
-
-		height: 100%;
-		min-height: 200px;
-		font-size: 16px;
-		text-align: center;
-		padding: 0 5px;
-
-		p { margin: 5px 0 }
 	}
 }

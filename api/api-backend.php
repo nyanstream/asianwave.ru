@@ -4,46 +4,69 @@
 
 	include 'topsec/vars.php';
 
-	function get_mr24_info() {
-		$APIep = $GLOBALS['APIep'];
-		$radioPoints = $GLOBALS['radioPoints'];
+	function API() {
+		$file =         'radio.json';
+		$APIep =        $GLOBALS['APIep'];
+		$radioPoints =  $GLOBALS['radioPoints'];
+		$radioStat =    [];
 
 		if (filemtime($file) < time() - 10) {
-			//for ($i = 0; $i < count($radioPoints); $i++) {
-			foreach ($radioPoints as $i=>&$point) {
-				$mr24_cnt = file_get_contents($APIep['mr'] . '/' . $point[2] . '/status.json');
+			$radioInfo =       file_get_contents($APIep['radio'] . '/nowplaying');
+			$radioInfo_data =  json_decode($radioInfo, true);
 
-				$mr24_info = json_decode($mr24_cnt);
+			/*
+			 * Первый цикл перебирает все поинты радио, второй - станции из Азуры
+			 */
 
-				if (!$mr24_cnt) {
-					$r_stat = ['online' => 0];
+			foreach ($radioPoints as $i => $point) {
+				if (!$radioInfo_data) {
+					$radioStat[$point['code']] = ['online' => false];
 				} else {
-					$r_stat = [
-						'online' => $mr24_info->online,
-						'rj' => $mr24_info->djname,
-						'song' => [
-							'curr' => $mr24_info->song,
-							'next' => $mr24_info->nextsongs[0],
-						'listeners' => $mr24_info->listeners]
-					];
-				}
+					foreach ($radioInfo_data as $e => $station) {
+						if ($point['id'] == $station['station']['id']) {
+							$songsHistory = [];
+							foreach ($station['song_history'] as $s => $song) {
+								$songsHistory[$s] = [
+									'time' => $song['played_at'],
+									'name' => $song['song']['text']
+								];
+							}
 
-				$r_json[$point[0]] = $r_stat;
+							$radioStat[$point['code']] = [
+								'online' => true,
+								'song' => [
+									'current' => $station['now_playing']['song']['text'],
+									'next' => $station['playing_next']['song']['text'],
+									'history' => $songsHistory
+								],
+								'listeners' => $station['listeners']['current']
+							];
+						}
+					}
+				}
 			}
 
-			/*$stream_stat = [
-				'online' => $stream_online,
-				'viewers' => $stream_viewers];*/
-			$stream_stat = null;
+			$radioStatOld = [];
+			foreach ($radioPoints as $i => $point) {
+				$radioStatOld[$point['code']] = [
+					'online' => 0,
+					'rj' => 'Auto-DJ',
+					'song' => [
+						'curr' => 'This application is decrecated. Please update.',
+						'next' => '',
+					'listeners' => '']
+				];
+			}
 
-			$json_data = [
-				'radio-v2' => $r_json,
-				'anime' => $stream_stat,
-				'timestamp' => time()];
-				
-			file_put_contents(dirname(__FILE__) . '/api.json', json_encode($json_data, JSON_UNESCAPED_UNICODE));
+			$API = [
+				'radio-v3' => $radioStat,
+				'radio-v2' => $radioStatOld,
+				'timestamp' => time()
+			];
+
+			file_put_contents(dirname(__FILE__) . '/' . $file, json_encode($API, JSON_UNESCAPED_UNICODE));
 		}
 	}
 
-	get_mr24_info();
+	API();
 ?>
