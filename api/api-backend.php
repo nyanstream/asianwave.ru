@@ -11,7 +11,7 @@
 		$radioStat =    [];
 
 		if (filemtime($file) < time() - 10) {
-			$radioInfo =       file_get_contents($APIep['radio'] . '/nowplaying');
+			$radioInfo =       file_get_contents('https://galvanize-cors-proxy.herokuapp.com/' . $APIep['radio'] . '/nowplaying');
 			$radioInfo_data =  json_decode($radioInfo, true);
 
 			/*

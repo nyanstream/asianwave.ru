@@ -3,6 +3,7 @@
 * Установи [Node.js](https://nodejs.org/en/download/) и [Git](https://git-scm.com/downloads)
 * Зайди в директорию проекта через терминал/командлайн
 * Введи `npm install` для установки зависимостей
+* Введи `npm install gulp-cli -g` для установки сборщика Gulp
 * Для сборки проекта введи `gulp`, после выполнения нажми Ctrl+C
 * Для работы над проектом введи `gulp dev`, для завершения опять же Ctrl+C
 

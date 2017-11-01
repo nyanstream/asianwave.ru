@@ -1,6 +1,6 @@
 Описание Asian Wave API v0.6
 
-api.json:
+radio.json:
 
 	radio-v3 - данные о состоянии всех потоков радио
 	  jp / ru /kp

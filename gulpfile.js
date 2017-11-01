@@ -84,5 +84,5 @@ gulp.task('scss', () => watch_sass(paths.css.dev)
 	.pipe(reloadServer())
 )
 
-gulp.task('default', ['pug', 'get-kamina', 'minify-js', 'scss'])
-gulp.task('dev', ['liveReload', 'default'])
+gulp.task('default', gulp.parallel('pug', 'get-kamina', 'minify-js', 'scss'))
+gulp.task('dev', gulp.parallel('liveReload', 'default'))

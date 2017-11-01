@@ -320,7 +320,7 @@ var $init = {
 
 var $loadInfo = {
 	radio: () => doFetch({ URL: `https://${domain.radio}/api/nowplaying/${$currentPoint.id()}`, handler: $init.radio }),
-	_sched: () => doFetch({ URL: API.scheduleRadio, handler: $parser.schedule, handlerOptions: { mode: 'radio' } }),
+	schedule: () => doFetch({ URL: API.scheduleRadio, handler: $parser.schedule, handlerOptions: { mode: 'radio' } }),
 	noti: () => doFetch({ URL: API.noti, handler: $parser.noti }),
 	vkNews: () => doFetch({ URL: API.vkNews, handler: $parser.vkNews }),
 	full() {
@@ -334,8 +334,10 @@ var $loadInfo = {
  */
 
 document.addEventListener('DOMContentLoaded', () => {
+	let embedVkChecker = $check.get('embed-vk')
+
 	if ($ls.get('aw_l10n')) { moment.locale($ls.get('aw_l10n')) }
-	if ($check.get('embed-vk')) { $make.qs('.container').classList.add('embed-vk') }
+	if (embedVkChecker) { $make.qs('.container').classList.add('embed-vk') }
 
 	let
 		pointButtons = Array.from(pointButton),
@@ -360,12 +362,45 @@ document.addEventListener('DOMContentLoaded', () => {
 	// 	}
 	// })
 
+	/*
+	 * Получение хэшей в пригодном для дальнейшей работы виде из get-параметра hash при встраивании радио в VK
+	 */
+
+	let getVKhash = () => {
+		let hashs = []
+		if (embedVkChecker && $check.get('hash')) {
+			if ($check.get('hash') == true) { return hashs }
+			hashs = decodeURIComponent($check.get('hash')).split('&')
+			hashs.forEach((hash, i) => {
+				let tmp = hash.split('=')
+				hashs[i] = {
+					'key': tmp[0],
+					'value': tmp[1] ? tmp[1] : null
+				}
+			})
+		}
+		return hashs
+	}
+
+	/*
+	 * Если задан get-запрос "point" (или же такой ключ содержится в хэшах из VK) с ключом, который является действительным и входит в массив points, то радио при загрузке страницы автоматически переключается на нужный поток
+	 * Пример: asianwave.ru/radio?point=ru
+	 */
+
 	let getPoint = $check.get('point')
-	if (getPoint && Object.keys(points).includes(getPoint)) { radio.toPoint(getPoint) }
+	getVKhash().forEach(hash => {
+		if (hash.key == 'point' && hash.value != null) {
+			getPoint = hash.value
+		}
+	})
+
+	if (getPoint && Object.keys(points).includes(getPoint)) {
+		radio.toPoint(getPoint)
+	}
 
 	//$create.balloon(pointButton[0].parentElement, 'Список потоков', 'down')
 
-	if (isMobile.any) { radioCtrl_pp.parentElement.classList.add('on-mobile') }
+	if (isMobile.any) { $make.qs('.player-controls').classList.add('on-mobile') }
 
 	pointButtons.forEach(pointBtn => {
 		let pointData = pointBtn.value
@@ -385,8 +420,8 @@ document.addEventListener('DOMContentLoaded', () => {
 	let
 		aw_timer_state = setInterval(() => { $loadInfo.radio() }, 5000),
 		aw_timer_other = setInterval(() => {
-			$loadInfo._sched()
-			$loadInfo.vkNews()
+			$loadInfo.schedule()
 			$loadInfo.noti()
+			if (!embedVkChecker) { $loadInfo.vkNews() }
 		}, 30000);
 })

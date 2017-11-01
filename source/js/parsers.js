@@ -8,6 +8,7 @@ $parser = {
 	schedule: (data, options) => {
 		/*
 		 * @TODO пофиксить проблему нового года
+		 * @BUG на /аниме перед tbody вставляется tr
 		 */
 
 		options = options ? options : {}

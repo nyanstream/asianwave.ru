@@ -1,11 +1,13 @@
 'use strict'
 
 /*
- * Временное переопределение чека из камины, пока эдж не научится в ес6 (к осени убрать)
+ * Временное переопределение чека из камины, пока эдж не научится в ес6 (к зиме убрать)
  */
 
-var $check = {
-	get: value => {
+var isEdge = (/Edge\//.test(navigator.userAgent)) ? true : false
+
+if (isEdge) {
+	$check.get = value => {
 		let
 			loc = location.search,
 			params = {}, parts = '', nv = ''
@@ -21,5 +23,3 @@ var $check = {
 		return params[value] ? params[value] : false
 	}
 }
-
-var isEdge = (/Edge\//.test(navigator.userAgent)) ? true : false

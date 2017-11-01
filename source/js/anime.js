@@ -138,7 +138,7 @@ var $init = {
  */
 
 var $loadInfo = {
-	_sсhed: () => doFetch({ URL: API.scheduleAnime, handler: $parser.schedule }),
+	schedule: () => doFetch({ URL: API.scheduleAnime, handler: $parser.schedule }),
 	noti: () => doFetch({ URL: API.noti, handler: $parser.noti, handlerOptions: { mode: 'anime' } }),
 	vkNews: () => doFetch({ URL: API.vkNews, handler: $parser.vkNews }),
 	full() {
@@ -163,7 +163,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	let aw_timer = setInterval(() => {
 		$loadInfo.noti()
-		if (!isMobile.any || tabSсhed.style.display == 'block') { $loadInfo._sсhed() }
+		if (!isMobile.any || tabSсhed.style.display == 'block') { $loadInfo.schedule() }
 		if (!isMobile.any || tabNews.style.display == 'block') { $loadInfo.vkNews() }
 	}, 10000)
 
