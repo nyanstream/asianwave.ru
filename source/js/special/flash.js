@@ -1,13 +1,15 @@
 'use strict'
 
 var hasFlash = () => {
-	let hasFlash = false
+	let
+		hasFlash = false,
+		flashMime = 'application/x-shockwave-flash'
 
 	try {
 		let fo = new ActiveXObject('ShockwaveFlash.ShockwaveFlash')
-		if (fo) hasFlash = true
+		if (fo) { hasFlash = true }
 	} catch (e) {
-		if (navigator.mimeTypes	&& navigator.mimeTypes['application/x-shockwave-flash'] != undefined && navigator.mimeTypes['application/x-shockwave-flash'].enabledPlugin) hasFlash = true
+		if (navigator.mimeTypes && navigator.mimeTypes[flashMime] != undefined && navigator.mimeTypes[flashMime].enabledPlugin) { hasFlash = true }
 	}
 
 	return hasFlash

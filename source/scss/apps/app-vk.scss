@@ -1,12 +1,10 @@
-@import 'inc/vars';
-@import 'inc/mixins';
+@import '../inc/vars';
+@import '../inc/mixins';
 
 @include reset;
 @include selection(darken($primeColor, 5%), #fff);
 
 $pagewidth: 860px;
-
-//@import 'inc/vk-app/special';
 
 body {
 	@at-root html, & {
@@ -91,7 +89,7 @@ body {
 		color: #fff;
 	}
 
-	@import 'inc/app-vk/top-panel__right';
+	@import '../inc/app-vk/top-panel__right';
 } // .top-panel
 
 .vk-app {

@@ -4,7 +4,7 @@
  */
 
 ;(() => {
-	'use strict';
+	'use strict'
 
 	let
 		particleCount  = 350,

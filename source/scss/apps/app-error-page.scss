@@ -1,5 +1,5 @@
-@import 'inc/vars';
-@import 'inc/mixins';
+@import '../inc/vars';
+@import '../inc/mixins';
 
 @include reset;
 @include selection(darken($primeColor, 5%), #fff);
@@ -15,7 +15,7 @@ body {
 	background-color: #fff;
 	min-height: 300px;
 
-	@import 'inc/links_style';
+	@import '../inc/links_style';
 }
 
 main {

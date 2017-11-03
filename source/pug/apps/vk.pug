@@ -5,13 +5,13 @@ html(lang='ru')
 
 		meta(charset='utf-8')
 		title #{title} / VK App
-		meta(name='viewport' content='width=device-width, initial-scale=1, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no')
+		include ../inc/meta-viewport.pug
 
 		link(rel='shortcut icon' href=`${URLs.favicon}`)
 		link(rel='manifest' href=`${URLs.manifest}`)
 		link(rel='sitemap' href=`${URLs.sitemap}`)
 
-		each CSS in ['aw-fonts', 'app-vk']
+		each CSS in ['aw-fonts', 'apps/app-vk']
 			link(rel='stylesheet' href=`${paths.css}/${CSS}.min.css?v=${projectVer}`)
 	body
 		header.top-panel

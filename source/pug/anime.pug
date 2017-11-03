@@ -24,14 +24,14 @@ html(lang='ru')
 					a(href='/' class='text' rel='home') #{title} #[span #{subTitle}]
 				ul.right
 					li.li--offset
-						a(href='/app--chrome' target='_blank' data-lang-title='ext_chrome')
+						a.right--elem(href='/app--chrome' target='_blank' data-lang-title='ext_chrome')
 							i.icon.icon-chrome
 					li
-						a(href=`${URLs.requests.anime}` target='_blank' rel='nofollow noopener' data-lang-title='request_anime') &#43;
+						a.right--elem(href=`${URLs.requests.anime}` target='_blank' rel='nofollow noopener' data-lang-title='request_anime') &#43;
 					li.li--offset
-						a(href=`${URLs.donate}` target='_blank' rel='nofollow noopener' data-lang-title='support') &#8381;
+						a.right--elem(href=`${URLs.donate}` target='_blank' rel='nofollow noopener' data-lang-title='support') &#8381;
 					li
-						span.no-link.closeTabs(data-lang-title='tabs_hide') &times;
+						button.right--elem.closeTabs(data-lang-title='tabs_hide') &times;
 			main.anime
 				div.radio--pe.error-box
 					noscript

@@ -5,13 +5,13 @@ html(lang='ru')
 
 		meta(charset='utf-8')
 		title #{title} / Ошибка
-		meta(name='viewport' content='width=device-width, initial-scale=1, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no')
+		include ../inc/meta-viewport.pug
 
 		link(rel='shortcut icon' href=`${URLs.favicon}`)
 		link(rel='manifest' href=`${URLs.manifest}`)
 		link(rel='sitemap' href=`${URLs.sitemap}`)
 
-		each CSS in ['aw-fonts', 'app-player']
+		each CSS in ['aw-fonts', 'apps/app-player']
 			link(rel='stylesheet' href=`${paths.css}/${CSS}.min.css?v=${projectVer}`)
 	body
 		div.player-container(contextmenu='autostart' data-theme='light')
@@ -39,4 +39,4 @@ html(lang='ru')
 			script(src=`https://cdnjs.cloudflare.com/ajax/libs/${lib}` defer)
 
 		script(src=`${paths.js}/kamina.min.js?v=${projectVer}` defer)
-		script(src=`${paths.js}/app-player.min.js?v=${projectVer}` data-port='7934' data-server='1' defer)
+		script(src=`${paths.js}/apps/app-player.min.js?v=${projectVer}` data-port='7934' data-server='1' defer)

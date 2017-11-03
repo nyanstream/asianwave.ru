@@ -12,21 +12,19 @@ html(lang='ru')
 		include ../inc/meta-viewport.pug
 		meta(name='robots' content='noindex, nofollow')
 
-		style *{box-sizing:border-box;padding:0;margin:0;outline:0}body,html{width:100%;height:100%;background-color:transparent;overflow:hidden}
+		style.
+			* { box-sizing: border-box; padding: 0; margin: 0; outline: 0 }
 
-			//- https://css.github.io/csso/csso.html
-			//- * { box-sizing: border-box; padding: 0; margin: 0; outline: 0 }
-			//- 
-			//- html, body {
-			//- 	width: 100%; height: 100%;
-			//- 	background-color: transparent;
-			//- 	overflow: hidden;
-			//- }
+			html, body {
+				width: 100%; height: 100%;
+				background-color: transparent;
+				overflow: hidden;
+			}
 	body
 		div.data
 
 		each lib in [`moment.js/${libsVer.moment.same}/moment.min.js`, `moment.js/${libsVer.moment.same}/locale/ru.js`, `moment-timezone/${libsVer.moment.timezone}/moment-timezone-with-data.min.js`]
 			script(src=`https://cdnjs.cloudflare.com/ajax/libs/${lib}` defer)
 
-		each JS in ['kamina', 'app-embed-data']
+		each JS in ['kamina', 'apps/app-embed-data']
 			script(src=`/files/js/${JS}.min.js?v=${projectVer}` defer)

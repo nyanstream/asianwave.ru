@@ -1,0 +1,33 @@
+@import '../inc/vars';
+@import '../inc/mixins';
+
+.warning {
+	display: none;
+	font-family: Roboto, Arial, sans-serif;
+	background-color: #fff;
+
+	div {
+		max-width: 940px;
+		padding: 5px;
+		overflow-y: auto;
+	}
+
+	p {
+		text-align: center;
+		font-size: 1.1em;
+		line-height: 1.5;
+
+		&.mini {
+			font-size: .6em;
+			color: #c1c1c1;
+		}
+	}
+
+	kbd {
+		display: inline-block;
+		background-color: #797979;
+		color: #fff;
+		padding: 2.5px 5px;
+		border-radius: 5px;
+	}
+}

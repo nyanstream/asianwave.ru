@@ -1,5 +1,5 @@
-@import 'inc/vars';
-@import 'inc/mixins';
+@import '../inc/vars';
+@import '../inc/mixins';
 
 @include reset;
 @include selection(darken($primeColor, 5%), #fff);
@@ -17,8 +17,8 @@
 	width: 100%; height: 40px;
 
 	@import
-		'inc/app-player/container--themes', // Светлая тема плеера
-		'inc/app-player/container--states'; // "Состояния" плеера (если онлайн и если оффлайн)
+		'../inc/app-player/container--themes', // Светлая тема плеера
+		'../inc/app-player/container--states'; // "Состояния" плеера (если онлайн и если оффлайн)
 } // .player-container
 
 .player-elem {
@@ -39,8 +39,8 @@
 	// }
 
 	@import
-		'inc/app-player/elem--controls', // Селектор с управляющими элементами плеера
-		'inc/app-player/elem--songnow'; // Селектор блока с треком, играющим в данный момент
+		'../inc/app-player/elem--controls', // Селектор с управляющими элементами плеера
+		'../inc/app-player/elem--songnow'; // Селектор блока с треком, играющим в данный момент
 
 	&.djname {
 		min-width: 160px;
@@ -72,7 +72,7 @@
 	// }
 
 	/* Стилизация бегунка выбора громкости */
-	@import 'inc/app-player/ctrl--volume';
+	@import '../inc/app-player/ctrl--volume';
 } // .player-ctrl
 
 .noframe {
@@ -93,4 +93,4 @@
 	}
 }
 
-@import 'inc/app-player/mediaq';
+@import '../inc/app-player/mediaq';

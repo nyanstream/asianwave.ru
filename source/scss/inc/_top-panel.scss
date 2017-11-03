@@ -58,33 +58,47 @@
 	}
 
 	.right {
+		@include flexbox(auto, auto, center, auto);
 		position: absolute;
-		top: 5px; right: 5px;
+		top: 0; right: 0;
+		height: $top-panel--height;
+		padding-right: 5px;
 		font-size: 18px;
-		padding: 2px 0;
+
 		user-select: none;
 		cursor: default;
 
 		li {
 			display: inline;
 			list-style: none;
+			height: 30px;
 
 			&:not(:first-child) {
 				margin-left: 5px;
 			}
 
-			a, .no-link {
-				display: inline-block;
-				box-shadow: inset 0 0 0 20px rgba(0, 0, 0, .1);
+			.right--elem {
+				@include flexbox(auto, center, center, auto);
+
+				background-color: transparent;
+				background-color: rgba(0, 0, 0, .1);
+
+				border: 0;
 				border-radius: 5px;
-				padding: 2.5px 10px;
+				outline: 0;
+
+				height: 100%;
+				padding: 0 10px;
 				opacity: .7;
+
+				font-size: 1em;
 				color: #fff;
-				cursor: pointer;
+
 				@include transition(.3s);
+				cursor: pointer;
 
 				&:hover {
-					opacity: 1;
+					opacity: .9;
 				}
 			}
 
