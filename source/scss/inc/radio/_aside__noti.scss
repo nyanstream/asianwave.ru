@@ -6,7 +6,7 @@
 	padding: 0;
 
 	&-content {
-		padding: 5px 10px;
+		padding: 10px;
 
 		p:first-child {
 			font-size: 1.1em;
@@ -17,20 +17,18 @@
 	}
 
 	&-close {
-		$btnColor: rgba(245, 245, 245, .8);
-		background-color: $btnColor;
-		border-top: 1px solid rgba(0, 0, 0, .1);
+		background-color: rgba(#000, .1);
+		border-top: 1px solid rgba(#000, .1);
 		border-bottom: 0;
 
 		width: 100%; padding: 5px 2.5px;
-		margin-top: 5px;
 		@include transition(.3s);
 
 		user-select: none;
 		cursor: pointer;
 
 		&:hover {
-			background-color: darken($btnColor, 5%);
+			background-color: rgba(#000, .1);
 		}
 	}
 }

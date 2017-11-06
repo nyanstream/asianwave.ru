@@ -7,7 +7,7 @@ meta(name='keywords' content='')
 each og in [{what: 'locale', content: 'ru_RU'}, {what: 'type', content: 'website'}, {what: 'title', content: `${title}${subTitle ? ' / ' + subTitle : ''}`}, {what: 'description', content: `${description}`}, {what: 'url', content: `${URLs.same}`}, {what: 'site_name', content: `${title}`}, {what: 'image', content: '/files/img/share.png'}]
 	meta(property=`og:${og.what}` content=`${og.content}`)
 
-each og in [{what: 'card', content: 'summary_large_image'}, {what: 'description', content: `${description}`}, {what: 'title', content: `${title}${subTitle ? ' / ' + subTitle : ''}`}, {what: 'image', content: '/files/img/share.png'}]
+each og in [{what: 'card', content: 'summary_large_image'}, {what: 'description', content: `${description}`}, {what: 'title', content: `${title}${subTitle ? ' / ' + subTitle : ''}`}, {what: 'image', content: `${paths.img}/share.png?v=${projectVer}`}]
 	meta(name=`twitter:${og.what}` content=`${og.content}`)
 
 meta(name='telegram:channel' content='asianwave')

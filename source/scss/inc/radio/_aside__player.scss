@@ -26,7 +26,6 @@
 	&.mayday { display: none }
 
 	&-controls {
-		background-color: #fff;
 		font-size: 0;
 
 		[data-ctrl='playpause'] {
@@ -53,6 +52,7 @@
 		[data-ctrl='volume'] {
 			$elemHeight: 15px;
 			cursor: pointer;
+			background-color: transparent;
 			width: 100px; height: $elemHeight;
 			margin: 0 10px;
 			border: 1px solid rgba(0, 0, 0, .1);
@@ -101,13 +101,13 @@
 	}
 
 	&-change {
-		$btn-color: #fff;
 		$btn-size: 30px;
 
 		margin-left: 10px;
 
 		button {
 			width: $btn-size; height: $btn-size;
+			background-color: transparent;
 			border: 1px solid rgba(0, 0, 0, .3);
 			outline: 0;
 			text-transform: uppercase;
@@ -122,15 +122,15 @@
 			@include transition(.3s);
 
 			&:focus {
-				background-color: darken($btn-color, 5%);
+				background-color: rgba(#000, .05);
 			}
 
 			&.active {
-				background-color: darken($btn-color, 15%);
+				background-color: rgba(#000, .15);
 			}
 
 			&:not(.active):hover {
-				background-color: darken($btn-color, 10%);
+				background-color: rgba(#000, .1);
 			}
 
 			&[disabled] {

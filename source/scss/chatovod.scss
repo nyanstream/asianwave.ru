@@ -67,8 +67,45 @@ a[href*='?cat=vip'],
 		.chatPeopleTitle { padding-top: 40px }
 	}
 
+	&FooterWrapper {
+		@include flexbox(auto, center, center, auto);
+	}
+
+	&SetupNickname {
+		position: static;
+		line-height: 1;
+
+		input {
+			font-size: 16px;
+			padding: 5px 10px;
+		}
+	}
+
+	&SoundPanel {
+		top: 9px !important;
+		right: 120px !important;
+	}
+
 	&Send {
+		&ExitPanel {
+			top: 6px !important;
+			right: 10px !important;
+		}
+
+		&ButtonPanel {
+			width: auto;
+			top: 32px !important;
+			right: 10px !important;
+		}
+
+		&TextPanel {
+			top: 32px !important;
+			right: 95px !important;
+		}
+
 		&LinksPanel {
+			top: 9px !important;
+
 			.chatLinkGold,
 			.chatLinkProfile,
 			.chatLinkMore {
@@ -160,6 +197,7 @@ a[href*='?cat=vip'],
 		.chatTopLine {
 			background-color: transparent;
 			border-color: #bdbdbd;
+			right: 10px;
 		}
 	}
 

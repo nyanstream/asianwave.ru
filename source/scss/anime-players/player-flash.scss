@@ -17,7 +17,7 @@ body {
 	overflow: hidden;
 
 	&:not(#vga-player) {
-		background-image: url('#{$imgPath}/anime-offline.png?v=#{projectVer}');
+		background-image: url('#{$imgPath}/anime-offline.png?v=#{$projectVer}');
 	}
 
 	&.no-flash {

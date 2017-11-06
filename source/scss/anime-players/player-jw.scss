@@ -10,6 +10,15 @@ html, body {
 	overflow: hidden;
 }
 
+/*
+ * @TODO переписать флексбокс
+ */
+
+.warning {
+	align-items: center;
+	justify-content: center;
+}
+
 #jw-player {
 	&:empty { display: none }
 
@@ -33,7 +42,7 @@ html, body {
 
 	&:not(.jw-state-playing):not(.jw-flag-flash-blocked) .jw-preview {
 		display: block !important;
-		background-image: url('#{$imgPath}/anime-offline.png?v=#{projectVer}');
+		background-image: url('#{$imgPath}/anime-offline.png?v=#{$projectVer}');
 		background-repeat: no-repeat;
 		background-position: center bottom;
 		background-size: cover;

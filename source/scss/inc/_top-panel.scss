@@ -8,6 +8,8 @@
 	background-color: var(--prime-color-5d);
 	overflow: hidden;
 
+	@include transition(.5s);
+
 	a { text-decoration: none }
 
 	.brand {

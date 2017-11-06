@@ -11,7 +11,7 @@ html(lang='ru')
 		link(rel='manifest' href=`${URLs.manifest}`)
 		link(rel='sitemap' href=`${URLs.sitemap}`)
 
-		each CSS in ['aw-fonts', 'app-error-page']
+		each CSS in ['aw-fonts', 'apps/app-error-page']
 			link(rel='stylesheet' href=`${paths.css}/${CSS}.min.css?v=${projectVer}`)
 	body
 		main.err-403
