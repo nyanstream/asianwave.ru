@@ -4,7 +4,7 @@
  * Парсеры для различных API и прочего (но пока только API)
  */
 
-$parser = {
+var $parser = {
 	schedule: (data, options) => {
 		/*
 		 * @TODO пофиксить проблему нового года
@@ -170,13 +170,14 @@ $parser = {
 
 		let
 			notiContent = $create.elem('div', text, 'noti-content'),
-			notiClose = $create.elem('button', '', 'noti-close'),
+			notiHide = $create.elem('button', '', 'noti-hide'),
+			notiHideString = `${getString('hide')} ${getString('noti').toLowerCase()}`,
 			notiItems = []
 
 		if (notiMode == 'anime') {
-			notiClose.setAttribute('title', getString('noti_hide'))
+			notiHide.setAttribute('title', notiHideString)
 		} else {
-			notiClose.innerHTML = getString('noti_hide').toLowerCase()
+			notiHide.textContent = notiHideString
 		}
 
 		if (notiContent.querySelector('a[href]')) {
@@ -191,7 +192,7 @@ $parser = {
 		}
 
 		notiEl.appendChild(notiContent)
-		notiEl.appendChild(notiClose)
+		notiEl.appendChild(notiHide)
 
 		if ($ls.get('aw_noti')) {
 			notiItems = JSON.parse($ls.get('aw_noti'))
@@ -199,7 +200,7 @@ $parser = {
 
 		notiEl.style.display = notiItems.includes(id) ? 'none' : 'block'
 
-		notiClose.addEventListener('click', () => {
+		notiHide.addEventListener('click', () => {
 			notiItems[notiItems.length] = id
 			$ls.set('aw_noti', JSON.stringify(notiItems))
 			notiEl.style.display = 'none'

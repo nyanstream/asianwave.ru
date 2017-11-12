@@ -18,18 +18,12 @@ $create.balloon = (elem, text, pos) => {
  */
 
 ;(() => {
-	let
-		mainCont = $make.qs('.radio'),
-		errorBox = $make.qs('.error-box'),
-		err = !1
-
-	if (!$ls.test()) {
-		mainCont.classList.add('error')
-		errorBox.innerHTML = `<p>${getString('err_ls')}</p><br><p>${getString('err_ls_pls')}`
-		err = !0
-	}
-
-	if (err) errorBox.innerHTML += `<p>${getString('err_end')}</p><p><br>${getString('tnx')}! :3</p>`
+	clientTests({
+		containers: {
+			main: $make.qs('.radio'),
+			error: $make.qs('.error-box')
+		}
+	})
 })()
 
 /*
@@ -77,33 +71,28 @@ radio.autoplay = false
 radio.controls = false
 
 radio.toggle = function() {
-	let pp_icon = radioCtrl_pp.firstChild.classList
+	let btnData = radioCtrl_pp.dataset
 
 	if (this.paused) {
 		this.load()
-		pp_icon.add('loading')
+		btnData.state = 'loading'
 
 		this.addEventListener('error', () => {
-			pp_icon.remove('loading'); return
+			btnData.state = 'stop'; return
 		})
 
 		this.addEventListener('canplaythrough', () => {
-			pp_icon.remove('loading')
 			this.play()
-
-			pp_icon.toggle('icon-pause', true)
-			pp_icon.toggle('icon-play', false)
+			btnData.state = 'play'
 		})
 	} else {
 		this.pause()
-
-		pp_icon.toggle('icon-pause', false)
-		pp_icon.toggle('icon-play', true)
+		btnData.state = 'stop'
 	}
 }
 
 radio.toPoint = function(point) {
-	if (!Object.keys(points).includes(point)) return;
+	if (!Object.keys(points).includes(point)) { return }
 
 	$ls.set('aw_radioOnPause', this.paused)
 	$ls.set('aw_radioPoint', point)

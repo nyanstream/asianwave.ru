@@ -5,18 +5,12 @@
  */
 
 ;(() => {
-	let
-		mainCont = $make.qs('.anime'),
-		errorBox = $make.qs('.error-box'),
-		err = !1
-
-	if (!$ls.test()) {
-		mainCont.classList.add('error')
-		errorBox.innerHTML = `<p>${getString('err_ls')}</p><br><p>${getString('err_ls_pls')}`
-		err = !0
-	}
-
-	if (err) errorBox.innerHTML += `<p>${getString('err_end')}</p><p><br>${getString('tnx')}! :3</p>`
+	clientTests({
+		containers: {
+			main: $make.qs('.anime'),
+			error: $make.qs('.error-box')
+		}
+	})
 })()
 
 /*
@@ -114,7 +108,7 @@ var $init = {
 		playerEmbed.textContent = ''
 
 		let backup = $check.get('b') || scriptData.backupBydefault
-		if (backup == '') backup = true
+		if (backup == '') { backup = true }
 
 		if (backup) {
 			playerURL += 'backup'
@@ -126,7 +120,7 @@ var $init = {
 			}
 		} else { playerURL = playerURL + 'main' }
 
-		playerFrame.setAttribute('title', 'Player')
+		playerFrame.setAttribute('title', getString('player'))
 		playerFrame.setAttribute('allowfullscreen', '')
 		playerFrame.setAttribute('src', `${playerPath}${playerURL}.htm${playerHash}`)
 		playerEmbed.appendChild(playerFrame)

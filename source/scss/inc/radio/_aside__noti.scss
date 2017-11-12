@@ -16,7 +16,7 @@
 		}
 	}
 
-	&-close {
+	&-hide {
 		background-color: rgba(#000, .1);
 		border-top: 1px solid rgba(#000, .1);
 		border-bottom: 0;
@@ -28,7 +28,7 @@
 		cursor: pointer;
 
 		&:hover {
-			background-color: rgba(#000, .1);
+			background-color: rgba(#000, .15);
 		}
 	}
 }

@@ -30,22 +30,43 @@
 
 		[data-ctrl='playpause'] {
 			height: 100%; width: $elemHeight;
-			border-right: 1px solid rgba(0, 0, 0, .1);
+			position: relative;
+			border-right: 1px solid rgba(#000, .1);
+			outline: 0;
 
-			color: var(--prime-color-10d);
-			@include transition(.5s);
+			@include transition(.3s);
 
-			&:hover {
-				color: var(--prime-color-5d);
+			/*
+			 * Фича взята с github.com/daniel-j/parasprite-radio
+			 */
+
+			&:before {
+				position: absolute;
+				content: '';
+				left: 12.5px;
 			}
 
-			.icon {
-				font-size: 2em;
+			&[data-state='stop']:before,
+			&[data-state='loading']:before {
+				top: 10px;
+				border: 0 solid transparent;
+				border-width: 15px 25px;
+				border-left-color: var(--prime-color-10d);
+			}
 
-				&.loading {
-					animation: loading-anim 1s infinite;
-					cursor: wait;
-				}
+			&[data-state='loading'] {
+				animation: loading-anim 1s infinite;
+				cursor: wait;
+			}
+
+			&[data-state='play']:before {
+				top: 12.5px;
+				width: 25px; height: 25px;
+				background-color: var(--prime-color-10d);
+			}
+
+			&:hover {
+				opacity: .8;
 			}
 		}
 

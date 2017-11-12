@@ -24,10 +24,18 @@
 	} catch (e) {}
 })()
 
+/*
+ * Используемые домены
+ */
+
 var domain = {
 	'aw': 'asianwave.ru',
 	'vk': 'vk.com'
 }
+
+/*
+ * Эндпоинты API
+ */
 
 var API = {
 	'scheduleAnime': 'anime-sched.json',
@@ -47,6 +55,10 @@ Object.keys(API).forEach(key => {
 	}
 })
 
+/*
+ * Функция для запросов к API
+ */
+
 var doFetch = options => {
 	let fetchOptions = { cache: 'no-store' }
 
@@ -61,4 +73,26 @@ var doFetch = options => {
 			handler(data, handlerOptions)
 		})
 	}).catch(e => { handler(failData) })
+}
+/*
+ * Функция для проверки клиента на совместимость с сайтом
+ */
+
+var clientTests = options => {
+	if (!options) { return }
+
+	let
+		mainCont = options.containers.main,
+		errorBox = options.containers.error,
+		err = !1
+
+	if (!$ls.test()) {
+		mainCont.classList.add('error')
+		errorBox.innerHTML = `<p>${getString('err_ls')}</p><br><p>${getString('err_ls_pls')}`
+		err = !0
+	}
+
+	if (err) {
+		errorBox.innerHTML += `<p>${getString('err_end')}</p><p><br>${getString('tnx')}! :3</p>`
+	}
 }

@@ -10,6 +10,7 @@
 
 		li {
 			display: inline-block;
+			background-color: var(--prime-color-5d);
 			width: calc(100% / 3);
 			height: 100%;
 			list-style: none;
@@ -29,7 +30,7 @@
 
 			[data-tab-radio] {
 				@include flexbox(auto, center, auto, auto);
-				background-color: var(--prime-color-5d);
+				background-color: transparent;
 				width: 100%; height: 100%;
 				cursor: pointer;
 				font-size: 16px;

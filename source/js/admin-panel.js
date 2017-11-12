@@ -13,7 +13,9 @@ var initAdminPanel = PHP_data => {
 			needChangeTime = (data.schedAnimeCount > 0) ? 'true' : 'false',
 			newTime = data.schedAnimeLatest.end
 
-		if (needChangeTime) $make.qs('.add-air input[type*=datetime]').setAttribute('value', moment.unix(newTime).format('YYYY-MM-DDTHH:mm'))
+		if (needChangeTime) {
+			$make.qs('.add-air input[type*=datetime]').setAttribute('value', moment.unix(newTime).format('YYYY-MM-DDTHH:mm'))
+		}
 	} catch (e) { hide($make.qs('.add-air')) }
 
 	try {

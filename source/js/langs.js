@@ -136,17 +136,13 @@ var trStrings = {
 		'ru': 'Оповещение',
 		'en': 'Notification'
 	},
-	'noti_hide': {
-		'ru': 'Скрыть оповещение',
-		'en': 'Hide notification'
-	},
 	'hide': {
 		'ru': 'Скрыть',
 		'en': 'Hide'
 	},
-	'noti_ls_err': {
-		'ru': 'Внимание! У Вас отключено хранение данных, поэтому скрытие оповещения запомиинаться не будет.',
-		'en': 'Attention! You don\'t have data saving enables, so you\'ll see notification even if you close it before.'
+	'show': {
+		'ru': 'Показать',
+		'en': 'Show'
 	},
 	'tab_sched': {
 		'ru': 'Расписание',
@@ -212,7 +208,7 @@ var getString = s => {
 
 ;(() => {
 	/*
-	 * @TODO сделать поддержку шаблонов (например, с помощью дополнительного аттрибута "data-lang-var")
+	 * @TODO сделать поддержку шаблонов (например, с помощью дополнительного аттрибута "data-lang-template")
 	 */
 
 	let l10nErr = s => console.warn(`Ошибка: cтрока "${s}" не переведена или неправильно используется`)

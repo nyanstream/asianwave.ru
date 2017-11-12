@@ -42,8 +42,7 @@ html(lang='ru')
 				aside
 					div.side-content.player
 						div.radio--pe.player-controls(contextmenu='autostart')
-							button(data-ctrl='playpause' data-lang-label='play')
-								i.icon.icon-play
+							button(data-ctrl='playpause' data-state='stop' data-lang-label='play')
 							input(data-ctrl='volume' type='range' step='.1' min='0' max='100' data-lang-label='change_volume')
 						div.radio--pe.player-change
 							each point in ['jp', 'ru', 'kr']
@@ -58,7 +57,7 @@ html(lang='ru')
 
 		menu(type='context' id='autostart') #[menuitem]
 
-		each lib in [`fetch/${libsVer.fetch}/fetch.min`, `moment.js/${libsVer.moment.same}/moment.min`, `moment.js/${libsVer.moment.same}/locale/ru`, `ismobilejs/${libsVer.isMobile}/isMobile.min`]
+		each lib in [`moment.js/${libsVer.moment.same}/moment.min`, `moment.js/${libsVer.moment.same}/locale/ru`, `ismobilejs/${libsVer.isMobile}/isMobile.min`]
 			script(src=`https://cdnjs.cloudflare.com/ajax/libs/${lib}.js` defer)
 
 		each JS in ['kamina', 'special/ms-edge-suck', 'langs', 'core', 'parsers', 'radio']
