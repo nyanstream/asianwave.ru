@@ -9,6 +9,8 @@
 		'noti' => 'noti.json'
 	];
 
+	$path = getcwd();
+
 	$schedAnime = file_get_contents($file['sched']['anime']);
 	$schedRadio = file_get_contents($file['sched']['radio']);
 	$noti       = file_get_contents($file['noti']);
@@ -16,8 +18,6 @@
 	$schedAnime_data = json_decode($schedAnime, true);
 	$schedRadio_data = json_decode($schedRadio, true);
 	$noti_data       = json_decode($noti, true);
-
-	$path = getcwd();
 
 	/*
 	 * Создаются временные массивы без "секретных эфиров"

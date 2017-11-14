@@ -81,7 +81,7 @@ radio.toggle = function() {
 			btnData.state = 'stop'; return
 		})
 
-		this.addEventListener('canplaythrough', () => {
+		this.addEventListener('canplay', () => {
 			this.play()
 			btnData.state = 'play'
 		})

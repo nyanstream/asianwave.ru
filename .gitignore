@@ -6,5 +6,4 @@ build/**/*.html
 build/**/*.php
 build/**/*.json
 api/**/*.json
-api/**/*.ini
 npm-debug.log
