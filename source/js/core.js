@@ -47,7 +47,6 @@ var API = {
 
 Object.keys(API).forEach(key => {
 	API[key] = `/api/${API[key]}`
-
 	switch (location.hostname) {
 		case '127.0.0.1':
 		case 'localhost':

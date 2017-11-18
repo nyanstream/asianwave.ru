@@ -1,6 +1,5 @@
-- if (!projectVer)
-	include vars.pug
+include vars.pug
 
-script(src=`${paths.js}/bbiswu.min.js?v=${projectVer}` async)
+script(src=`${PATHS.js}/bbiswu.min.js?v=${VERSION}` async)
 noscript
 	img(src='https://mc.yandex.ru/watch/38037540' style='position:absolute; left:-9999px' alt='')

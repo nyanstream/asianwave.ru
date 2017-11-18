@@ -12,7 +12,7 @@ html(lang='ru')
 		link(rel='sitemap' href=`${URLs.sitemap}`)
 
 		each CSS in ['aw-fonts', 'apps/app-vk']
-			link(rel='stylesheet' href=`${paths.css}/${CSS}.min.css?v=${projectVer}`)
+			link(rel='stylesheet' href=`${PATHS.css}/${CSS}.min.css?v=${VERSION}`)
 	body
 		header.top-panel
 			div.container

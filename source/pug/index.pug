@@ -14,11 +14,12 @@ html(lang='ru')
 		each URL in ['radio', 'anime']
 			link(rel='prerender' href=`/${URL}`)
 
-		each URL in ['www.google-analytics.com', 'ssl.google-analytics.com', 'mc.yandex.ru', 'ymetrica.com', 'cdn.jsdelivr.net']
+		each URL in ['www.google-analytics.com', 'ssl.google-analytics.com', 'fonts.gstatic.com', 'mc.yandex.ru', 'ymetrica.com', 'cdn.jsdelivr.net']
 			link(rel='dns-prefetch' href=`//${URL}`)
 
-		each CSS in ['aw-fonts', 'main']
-			link(rel='stylesheet' href=`${paths.css}/${CSS}.min.css?v=${projectVer}`)
+		include inc/meta-font.pug
+
+		link(rel='stylesheet' href=`${PATHS.css}/main.min.css?v=${VERSION}`)
 	body
 		header.top-panel
 			div.container
@@ -34,6 +35,6 @@ html(lang='ru')
 		div.css-preload ¯\_(ツ)_/¯
 
 		each JS in ['kamina', 'langs', 'special/glados']
-			script(src=`${paths.js}/${JS}.min.js?v=${projectVer}` defer)
+			script(src=`${PATHS.js}/${JS}.min.js?v=${VERSION}` defer)
 
 		include inc/bbiswu.pug

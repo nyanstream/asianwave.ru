@@ -15,7 +15,7 @@ html(lang='ru')
 	body
 		form(name='login' action='/api/admin.php' method='post')
 			div
-				img(src=`${URLs.favicon}` alt='')
+				img(src=`${URLs.favicon}?v=${VERSION}` alt='')
 			p
 				label(for='login') Имя пользователя или e-mail
 				input(type='text' id='login' name='login' maxlength='42' autocomplete='off' required)

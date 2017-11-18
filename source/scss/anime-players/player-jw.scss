@@ -42,7 +42,7 @@ html, body {
 
 	&:not(.jw-state-playing):not(.jw-flag-flash-blocked) .jw-preview {
 		display: block !important;
-		background-image: url('#{$imgPath}/anime-offline.png?v=#{$projectVer}');
+		background-image: url('#{$imgPath}/anime-offline.png?v=#{$VERSION}');
 		background-repeat: no-repeat;
 		background-position: center bottom;
 		background-size: cover;

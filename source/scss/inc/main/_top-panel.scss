@@ -22,7 +22,7 @@
 	.logo {
 		width: 120px; height: 120px;
 		background-color: var(--prime-color);
-		background-image: url('#{$imgPath}/logo.png?v=#{$projectVer}');
+		background-image: url('#{$imgPath}/logo.png?v=#{$VERSION}');
 		background-position: center center;
 		background-repeat: no-repeat;
 		background-size: 60%;

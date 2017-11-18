@@ -55,7 +55,7 @@ a[href*='?cat=vip'],
 	&PopupMenuDiv1,
 	&PopupMenuDiv2,
 	&People ul.chatPeopleList li.hover {
-    background-color: #fff;
+		background-color: #fff;
 	}
 
 	&Footer {
@@ -114,7 +114,7 @@ a[href*='?cat=vip'],
 
 			a.chatLinkSmiles {
 				background: none;
-				background-image: url('#{$imgPath}/sm/zephir.png?v=#{$projectVer}');
+				background-image: url('#{$imgPath}/sm/zephir.png?v=#{$VERSION}');
 				background-color: transparent;
 				background-repeat: no-repeat;
 			}
@@ -187,7 +187,7 @@ a[href*='?cat=vip'],
 	&UserFrom,
 	&People ul.chatPeopleList li a.chatUser,
 	&People ul.chatPeopleList li a.chatUser span[style] {
-    color: var(--prime-color-10d) !important;
+		color: var(--prime-color-10d) !important;
 	}
 
 	&Header {
@@ -195,7 +195,7 @@ a[href*='?cat=vip'],
 		.chatTitle { display: none }
 
 		.chatTopLine {
-			background-color: transparent;
+			background-color: #fff;
 			border-color: #bdbdbd;
 			right: 10px;
 		}
@@ -214,6 +214,8 @@ a[href*='?cat=vip'],
 
 		& > ul > li > a {
 			text-shadow: none;
+			background-image: none !important;
+			border-right: 1px #bdbdbd solid;
 
 			&:hover {
 				background-color: rgba(#000, .1)

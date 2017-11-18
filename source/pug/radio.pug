@@ -8,12 +8,12 @@ html(lang='ru')
 
 		link(rel='canonical' href=`${URLs.same}/radio`)
 
-		each URL in ['www.google-analytics.com', 'ssl.google-analytics.com', 'mc.yandex.ru', 'ymetrica.com', 'counter.yadro.ru', 'fonts.googleapis.com', 'fonts.gstatic.com', 'cdn.jsdelivr.net', 'images.weserv.nl',  'st1.chatovod.ru', 'myradio24.com', 'listen1.myradio24.com']
+		each URL in ['www.google-analytics.com', 'ssl.google-analytics.com', 'fonts.gstatic.com', 'mc.yandex.ru', 'ymetrica.com', 'counter.yadro.ru', 'cdn.jsdelivr.net', 'images.weserv.nl',  'st1.chatovod.ru', 'myradio24.com', 'listen1.myradio24.com', `ryuko.${domain}`]
 			link(rel='dns-prefetch' href=`//${URL}`)
 
 		link(rel='stylesheet' href=`https://cdnjs.cloudflare.com/ajax/libs/balloon-css/${libsVer.baloon}/balloon.min.css`)
 		each CSS in ['aw-fonts', 'aw-every', 'radio']
-			link(rel='stylesheet' href=`${paths.css}/${CSS}.min.css?v=${projectVer}`)
+			link(rel='stylesheet' href=`${PATHS.css}/${CSS}.min.css?v=${VERSION}`)
 		noscript
 			style.
 				.radio .error-box { display: block } .radio > * { display: none }
@@ -61,6 +61,6 @@ html(lang='ru')
 			script(src=`https://cdnjs.cloudflare.com/ajax/libs/${lib}.js` defer)
 
 		each JS in ['kamina', 'special/ms-edge-suck', 'langs', 'core', 'parsers', 'radio']
-			script(src=`${paths.js}/${JS}.min.js?v=${projectVer}` defer)
+			script(src=`${PATHS.js}/${JS}.min.js?v=${VERSION}` defer)
 
 		include inc/bbiswu.pug

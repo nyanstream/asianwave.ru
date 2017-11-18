@@ -1,22 +1,24 @@
 'use strict'
 
 let
-	gulp =        require('gulp'),
-	bom =         require('gulp-bom'),
-	rename =      require('gulp-rename'),
-	watch =       require('gulp-watch'),
-	watch_sass =  require('gulp-watch-sass'),
-	plumber =     require('gulp-plumber'),
-	composer =    require('gulp-uglify/composer'),
-	uglifyjs =    require('uglify-es'),
-	sass =        require('gulp-sass'),
-	csso =        require('gulp-csso'),
-	pug =         require('gulp-pug'),
-	liveServer =  require('browser-sync')
+	project =      require('./package.json'),
+	gulp =         require('gulp'),
+	bom =          require('gulp-bom'),
+	rename =       require('gulp-rename'),
+	watch =        require('gulp-watch'),
+	watch_sass =   require('gulp-watch-sass'),
+	plumber =      require('gulp-plumber'),
+	composer =     require('gulp-uglify/composer'),
+	uglifyjs =     require('uglify-es'),
+	sass =         require('gulp-sass'),
+	sass_vars =    require('gulp-sass-variables'),
+	csso =         require('gulp-csso'),
+	pug =          require('gulp-pug'),
+	live_server =  require('browser-sync')
 
 let
 	minify = composer(uglifyjs, console),
-	reloadServer = () => liveServer.stream()
+	reloadServer = () => live_server.stream()
 
 let paths = {
 	html: {
@@ -34,7 +36,7 @@ let paths = {
 	}
 }
 
-gulp.task('liveReload', () => liveServer({
+gulp.task('liveReload', () => live_server({
 	server: { baseDir: 'build/' },
 	port: 8080,
 	notify: false
@@ -43,7 +45,7 @@ gulp.task('liveReload', () => liveServer({
 gulp.task('pug', () => gulp.src(paths.html.dev)
 	.pipe(plumber())
 	.pipe(watch(paths.html.dev))
-	.pipe(pug({}))
+	.pipe(pug({ locals: { VERSION: project.version } }))
 	.pipe(rename(file => {
 		switch (file.dirname) {
 			case 'api':
@@ -76,6 +78,7 @@ gulp.task('minify-js', () => gulp.src(paths.js.dev)
 gulp.task('scss', () => watch_sass(paths.css.dev)
 	//gulp.src(paths.css.dev)
 	.pipe(plumber())
+	.pipe(sass_vars({ $VERSION: project.version }))
 	.pipe(sass({outputStyle: 'compressed'}))
 	.pipe(csso())
 	.pipe(rename({suffix: '.min'}))

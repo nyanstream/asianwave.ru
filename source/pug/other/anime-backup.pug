@@ -10,17 +10,20 @@ html(lang='ru')
 		include ../inc/meta-viewport.pug
 		meta(name='robots' content='noindex, nofollow')
 
-		link(rel='dns-prefetch' href='//video.eientei.org')
+		each URL in ['video.eientei.org', 'fonts.gstatic.com']
+			link(rel='dns-prefetch' href=`//${URL}`)
+
+		include ../inc/meta-font.pug
 
 		each CSS in ['all-warning', 'player-flash']
-			link(rel='stylesheet' href=`${paths.css}/anime-players/${CSS}.min.css?v=${projectVer}`)
+			link(rel='stylesheet' href=`${PATHS.css}/anime-players/${CSS}.min.css?v=${VERSION}`)
 	body#vga-player
 		div.player
 		div.warning
 			include ../inc/noflash-text.pug
 
 		each JS in ['kamina', 'special/ms-edge-suck', 'special/flash', 'anime-players/player-flash']
-			script(src=`${paths.js}/${JS}.min.js?v=${projectVer}` defer)
+			script(src=`${PATHS.js}/${JS}.min.js?v=${VERSION}` defer)
 
 		script.
 			document.addEventListener('DOMContentLoaded', () => {

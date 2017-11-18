@@ -12,7 +12,7 @@ html(lang='ru')
 		link(rel='sitemap' href=`${URLs.sitemap}`)
 
 		each CSS in ['aw-fonts', 'apps/app-player']
-			link(rel='stylesheet' href=`${paths.css}/${CSS}.min.css?v=${projectVer}`)
+			link(rel='stylesheet' href=`${PATHS.css}/${CSS}.min.css?v=${VERSION}`)
 	body
 		div.player-container(contextmenu='autostart' data-theme='light')
 			div.player-elem.controls
@@ -38,5 +38,5 @@ html(lang='ru')
 		each lib in [`fetch/${libsVer.fetch}/fetch.min.js`, `ismobilejs/${libsVer.isMobile}/isMobile.min.js`]
 			script(src=`https://cdnjs.cloudflare.com/ajax/libs/${lib}` defer)
 
-		script(src=`${paths.js}/kamina.min.js?v=${projectVer}` defer)
-		script(src=`${paths.js}/apps/app-player.min.js?v=${projectVer}` data-port='7934' data-server='1' defer)
+		script(src=`${PATHS.js}/kamina.min.js?v=${VERSION}` defer)
+		script(src=`${PATHS.js}/apps/app-player.min.js?v=${VERSION}` data-port='7934' data-server='1' defer)

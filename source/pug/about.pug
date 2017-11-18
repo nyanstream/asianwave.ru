@@ -12,11 +12,12 @@ html(lang='ru')
 		mixin mailto(post)
 			a(href=`mailto:${post}`) #{post}
 
-		each URL in ['www.google-analytics.com', 'ssl.google-analytics.com', 'mc.yandex.ru', 'ymetrica.com', 'cdn.jsdelivr.net']
+		each URL in ['www.google-analytics.com', 'ssl.google-analytics.com', 'fonts.gstatic.com', 'mc.yandex.ru', 'ymetrica.com', 'cdn.jsdelivr.net']
 			link(rel='dns-prefetch' href=`//${URL}`)
 
-		each CSS in ['aw-fonts', 'pages']
-			link(rel='stylesheet' href=`${paths.css}/${CSS}.min.css?v=${projectVer}`)
+		include inc/meta-font.pug
+
+		link(rel='stylesheet' href=`${PATHS.css}/pages.min.css?v=${VERSION}`)
 	body
 		header.top-panel
 			div.container

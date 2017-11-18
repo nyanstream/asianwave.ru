@@ -23,8 +23,10 @@ html(lang='ru')
 		link(rel='manifest' href=`${URLs.manifest}`)
 		link(rel='sitemap' href=`${URLs.sitemap}`)
 
-		each CSS in ['aw-fonts', 'aw-every', 'admin-panel']
-			link(rel='stylesheet' href=`${paths.css}/${CSS}.min.css?v=${projectVer}`)
+		include ../inc/meta-font.pug
+
+		each CSS in ['aw-every', 'admin-panel']
+			link(rel='stylesheet' href=`${PATHS.css}/${CSS}.min.css?v=${VERSION}`)
 	body
 		div.container
 			header.top-panel
@@ -120,7 +122,7 @@ html(lang='ru')
 					p
 
 				footer.text-m
-					p Asian Wave v#{projectVer}, #{subTitle} v0.6
+					p Asian Wave v#{VERSION}, #{subTitle} v0.6
 					p Последнее обновление расписания /anime: #[span.tsAnime]
 					p Последнее обновление расписания /radio: #[span.tsRadio]
 					p Последнее обновление оповещения: #[span.tsNoti]
@@ -130,7 +132,7 @@ html(lang='ru')
 			script(src=`https://cdnjs.cloudflare.com/ajax/libs/${lib}` defer)
 
 		each JS in ['kamina', 'admin-panel']
-			script(src=`${paths.js}/${JS}.min.js?v=${projectVer}` defer)
+			script(src=`${PATHS.js}/${JS}.min.js?v=${VERSION}` defer)
 
 		include ../inc/php-script-data.pug
 

@@ -11,8 +11,9 @@ html(lang='ru')
 		link(rel='manifest' href=`${URLs.manifest}`)
 		link(rel='sitemap' href=`${URLs.sitemap}`)
 
-		each CSS in ['aw-fonts', 'apps/app-error-page']
-			link(rel='stylesheet' href=`${paths.css}/${CSS}.min.css?v=${projectVer}`)
+		include ../inc/meta-font.pug
+
+		link(rel='stylesheet' href=`${PATHS.css}/apps/app-error-page.min.css?v=${VERSION}`)
 	body
 		main.err-403
 			h1 Ошибка 403 #[small ヽ( `д´*)ノ]
@@ -27,4 +28,4 @@ html(lang='ru')
 			h2 Возникла неизвестная ошибка.
 			h3 Возможно, стоит перезагрузить страницу?
 
-		script(src=`${paths.js}/apps/app-error-page.min.js?v=${projectVer}` async)
+		script(src=`${PATHS.js}/apps/app-error-page.min.js?v=${VERSION}` async)
