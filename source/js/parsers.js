@@ -180,8 +180,8 @@ var $parser = {
 			notiHide.textContent = notiHideString
 		}
 
-		if (notiContent.querySelector('a[href]')) {
-			let notiLinks = notiContent.querySelectorAll('a[href]')
+		if ($make.qsf('a[href]', notiContent)) {
+			let notiLinks = $make.qsf('a[href]', notiContent, ['a'])
 
 			Array.from(notiLinks).forEach(link => {
 				link.setAttribute('target', '_blank')

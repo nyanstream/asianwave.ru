@@ -36,13 +36,13 @@ ErrorDocument 403 /apps/error.html
 Header set Strict-Transport-Security 'max-age=31536000; includeSubDomains; preload' env=HTTPS
 
 Header set Content-Security-Policy "default-src 'self'; \
- connect-src 'self' https://*.asianwave.ru https://mc.yandex.ru https://ymetrica.com https://myradio24.com; \
- child-src 'self' https://chatovod.ru https://asianwaveru.chatovod.ru https://*.vk.com https://vk.com https://*.youtube-nocookie.com https://player.twitch.tv; \
+ connect-src 'self' https://*.asianwave.ru https://mc.yandex.ru https://ymetrica.com; \
+ child-src 'self' https://chatovod.ru https://asianwaveru.chatovod.ru https://*.youtube-nocookie.com https://player.twitch.tv; \
  frame-ancestors 'self' https://vk.com; \
  style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com https://*.jwpcdn.com; \
  font-src 'self' https://fonts.gstatic.com https://*.jwpcdn.com; \
- img-src 'self' data: https://www.google-analytics.com https://ssl.google-analytics.com https://mc.yandex.ru https://ymetrica.com https://images.weserv.nl https://jwpltx.com; \
- media-src https://*.asianwave.ru 'self' blob: https://*.myradio24.com; \
+ img-src 'self' data: https://*.google-analytics.com https://mc.yandex.ru https://ymetrica.com https://images.weserv.nl https://jwpltx.com; \
+ media-src 'self' blob: https://*.asianwave.ru; \
  script-src 'self' 'unsafe-inline' https://www.google-analytics.com https://google-analytics.com https://cdn.jsdelivr.net https://mc.yandex.ru https://ymetrica.com https://*.cloudflare.com https://content.jwplatform.com https://*.jwpcdn.com https://*.jwpsrv.com; \
  object-src 'self' https://*.jwpcdn.com; \
  plugin-types application/x-shockwave-flash"
@@ -64,3 +64,4 @@ Redirect 301 /video https://video.asianwave.ru
 
 # фикс для расширения
 Redirect 301 /files/code/css/chrome-app-events.min.css /files/css/chrome-app-events.min.css
+Redirect 301 /api/api.json /api/radio.json

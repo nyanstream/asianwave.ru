@@ -115,9 +115,9 @@ radio.toPoint = function(point) {
 
 var
  	player = $make.qs('.player'),
- 	radioCtrl_pp = player.querySelector('[data-ctrl="playpause"]'),
- 	radioCtrl_vol = player.querySelector('[data-ctrl="volume"]'),
- 	pointButton = player.querySelectorAll('.player-change button')
+	radioCtrl_pp = $make.qsf('[data-ctrl="playpause"]', player),
+	radioCtrl_vol = $make.qsf('[data-ctrl="volume"]', player),
+	pointButton =  $make.qsf('.player-change button', player)
 
 ;(() => {
 	radioCtrl_pp.onclick = () => radio.toggle()

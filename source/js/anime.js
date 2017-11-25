@@ -99,7 +99,7 @@ var $init = {
 	player: () => {
 		let
 			player = $make.qs('.player'),
-			playerEmbed = player.querySelector('.embed'),
+			playerEmbed = $make.qsf('.embed', player),
 			playerFrame = $create.elem('iframe'),
 			playerPath = scriptData.playerPath,
 			playerHash = scriptData.playerHash ? '?' + encodeURIComponent(scriptData.playerHash) : '',
@@ -152,8 +152,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	let
 		tabs = $make.qs('.tabs'),
-		tabSсhed = tabs.querySelector('section[data-tab="sched"]'),
-		tabNews = tabs.querySelector('section[data-tab="news"]')
+		tabSсhed = $make.qsf('section[data-tab="sched"]', tabs),
+		tabNews = $make.qsf('section[data-tab="news"]', tabs)
 
 	let aw_timer = setInterval(() => {
 		$loadInfo.noti()

@@ -60,9 +60,9 @@
 			}
 
 			&[data-state='play']:before {
-				top: 12.5px;
-				width: 25px; height: 25px;
 				background-color: var(--prime-color-10d);
+				width: 25px; height: 25px;
+				top: 12.5px;
 			}
 
 			&:hover {

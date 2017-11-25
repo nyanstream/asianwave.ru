@@ -42,8 +42,19 @@
 					[data-ctrl='playpause'] {
 						width: $elemHeight;
 
-						.icon {
-							font-size: 3.5em;
+						&:before {
+							left: 15px;
+						}
+
+						&[data-state='stop']:before,
+						&[data-state='loading']:before {
+							top: 10px;
+							border-width: 25px 40px;
+						}
+
+						&[data-state='play']:before {
+							width: 40px; height: 40px;
+							top: 15px;
 						}
 					}
 				}
@@ -53,7 +64,7 @@
 					margin-left: 0;
 					margin-top: 10px;
 
-					input {
+					button {
 						width: 30%;
 						height: #{$elemHeight / 2}
 					}

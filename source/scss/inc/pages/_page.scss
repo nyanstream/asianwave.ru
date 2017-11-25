@@ -70,6 +70,14 @@
 	}
 }
 
+/*
+ * Фикс для Edge
+ */
+
+@supports (-ms-ime-align: auto) {
+	.page { line-height: 1.4 }
+}
+
 script {
 	display: none;
 	visibility: hidden;

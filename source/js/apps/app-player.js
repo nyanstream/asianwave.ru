@@ -191,8 +191,8 @@ var
 	dj_elem = $make.qs('.player-elem.djname'),
 	listeners_elem = $make.qs('.player-elem.listeners'),
 	srch_main = $make.qs('.player-song.search'),
-	srch_vk = srch_main.querySelector('.srch-vk'),
-	srch_google = srch_main.querySelector('.srch-google'),
+	srch_vk = $make.qsf('.srch-vk', srch_main),
+	srch_google = $make.qsf('.srch-google', srch_main),
 	data_song, data_dj, data_listeners, slsh = 'челове'
 
 /*
