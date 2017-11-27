@@ -45,9 +45,10 @@
 
 	/*
 	 * Компановка нового элемента расписания
+	 * @BUG если в названии есть символ "\", то элемент не добавляется
 	 */
 
-	function schedNew($_time, $_duration, $_title, $_link, $_is_secret) {
+	function schedNew($_time, $_duration, $_title, $_link, $_is_secret, $_is_backup) {
 		$time_start = strtotime($_time);
 		if ($_duration) { $duration = $_duration * 60; } else { $duration = 3600; }
 		$time_end = $time_start + $duration;
@@ -62,6 +63,7 @@
 
 		if ($_link != null) { $new['link'] = json_decode('"' . $link . '"'); }
 		if ($_is_secret == 'on') { $new['secret'] = true; }
+		if ($_is_backup == 'on') { $new['backup'] = true; }
 
 		return $new;
 	}
@@ -107,13 +109,15 @@
 			$_POST['duration'],
 			$_POST['air_name'],
 			$_POST['air_link'],
-			$_POST['air_is_secret']
+			$_POST['air_is_secret'],
+			$_POST['air_is_backup']
 		);
 
 		switch ($_POST['where']) {
 			case 'radio':
 				addShedData($file['sched']['radio'], $schedRadio_data, $newAir); break;
 			case 'anime':
+			default:
 				addShedData($file['sched']['anime'], $schedAnime_data, $newAir);
 		}
 	}

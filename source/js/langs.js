@@ -184,6 +184,10 @@ var trStrings = {
 		'ru': 'Чат',
 		'en': 'Chat'
 	},
+	'anime_backup': {
+		'ru': 'на бэкапе',
+		'en': 'on a backup stream'
+	}
 }
 
 /*

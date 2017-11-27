@@ -117,7 +117,7 @@ var
  	player = $make.qs('.player'),
 	radioCtrl_pp = $make.qsf('[data-ctrl="playpause"]', player),
 	radioCtrl_vol = $make.qsf('[data-ctrl="volume"]', player),
-	pointButton =  $make.qsf('.player-change button', player)
+	pointButton =  $make.qsf('.player-change button', player, ['a'])
 
 ;(() => {
 	radioCtrl_pp.onclick = () => radio.toggle()
@@ -310,7 +310,7 @@ var $init = {
 var $loadInfo = {
 	radio: () => doFetch({ URL: `https://${domain.radio}/api/nowplaying/${$currentPoint.id()}`, handler: $init.radio }),
 	schedule: () => doFetch({ URL: API.scheduleRadio, handler: $parser.schedule, handlerOptions: { mode: 'radio' } }),
-	noti: () => doFetch({ URL: API.noti, handler: $parser.noti }),
+	noti: () => doFetch({ URL: API.noti, handler: $parser.noti, handlerOptions: { mode: 'radio' } }),
 	vkNews: () => doFetch({ URL: API.vkNews, handler: $parser.vkNews }),
 	full() {
 		Object.keys(this).forEach(key => (key != 'full') ? this[key]() : '')

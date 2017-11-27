@@ -32,7 +32,7 @@ html(lang='ru')
 
 		each CSS in ['aw-every', 'admin-panel']
 			link(rel='stylesheet' href=`${PATHS.css}/${CSS}.min.css?v=${VERSION}`)
-	body
+	body(data-controls='add-air rm-air')
 		div.container
 			header.top-panel
 				div.brand
@@ -61,13 +61,10 @@ html(lang='ru')
 							input#air_link(name='air_link' type='text' placeholder='https://shikimori.org/animes/1639')
 							br
 							em.text-m-m Необязательно, но желательно.
-						p.hidden
-							input#where_anime(name='where' type='radio' value='anime' checked required hidden)
-						p(style='display: none')
-							label(for='air_is_secret') Эфир секретный?
-							input#air_is_secret(name='air_is_secret' type='checkbox')
+						p.add-air-as-backup
+							label(for='air_is_backup') Эфир на backup-потоке?
+							input#air_is_backup(name='air_is_backup' type='checkbox')
 							br
-							em.text-m-m Не будет отображаться в расписании, удалить его также будет нельзя.
 						p.submit
 							input(name='add_air' type='submit' value='Добавить')
 							label #[i.text-m Внимательно проверьте введённые данные!]
@@ -84,7 +81,6 @@ html(lang='ru')
 							input(name='rm_air' type='submit' value='Удалить')
 
 				footer.text-m
-					p Asian Wave v#{VERSION}, #{subTitle} v0.6
 					p Последнее обновление расписания /anime: #[span.tsAnime]
 					p Московское время (на сервере): #[span.tsCurrent]
 
@@ -96,12 +92,16 @@ html(lang='ru')
 
 		|<?php $PHP_data = [
 		|	'timezone' => date_default_timezone_get(),
-		|	'schedAnimeCount' => $schedAnime_count,
-		|	'schedAnimeLatest' => [
-		|		'is' => $schedAnime_latest ? true : false,
-		|		'title' => $schedAnime_latest ? $schedAnime_latest['title'] : '',
-		|		'start' => $schedAnime_latest ? $schedAnime_latest['s'] : null,
-		|		'end' => $schedAnime_latest ? $schedAnime_latest['e'] : null,
+		|	'sched' => [
+		|		'anime' => [
+		|			'count' => $schedAnime_count,
+		|			'latest' => [
+		|				'is' => $schedAnime_latest ? true : false,
+		|				'title' => $schedAnime_latest ? $schedAnime_latest['title'] : '',
+		|				'start' => $schedAnime_latest ? $schedAnime_latest['s'] : null,
+		|				'end' => $schedAnime_latest ? $schedAnime_latest['e'] : null,
+		|			]
+		|		]
 		|	],
 		|	'ts' => [
 		|		'anime' => filemtime($file['sched']['anime']),

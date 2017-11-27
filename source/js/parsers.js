@@ -46,7 +46,17 @@ var $parser = {
 				dayOfS = moment.unix(item['s']).dayOfYear(),
 				dayofE = moment.unix(item['e']).dayOfYear()
 
-			nazvaniue = item['link'] ? $create.link(item['link'], item['title'], ['e', 'html']) : $make.safe(item['title'])
+			nazvaniue = (item['link'] && item['link'] != '')
+				? $create.link(item['link'], item['title'], ['e', 'html'])
+				: $make.safe(item['title'])
+
+			/*
+			 * Сделать нормальную поддержку item['backup']
+			 */
+
+			nazvaniue += (item['backup'] && schedMode == 'anime')
+				? ` [${getString('anime_backup')}]`
+				: ''
 
 			if ((dayOfS - dayToday) < -1) {
 				return

@@ -27,7 +27,7 @@ html(lang='ru')
 
 		each CSS in ['aw-every', 'admin-panel']
 			link(rel='stylesheet' href=`${PATHS.css}/${CSS}.min.css?v=${VERSION}`)
-	body
+	body(data-controls='add-air rm-air expired-clear noti vk-link')
 		div.container
 			header.top-panel
 				div.brand
@@ -67,6 +67,10 @@ html(lang='ru')
 							input#air_is_secret(name='air_is_secret' type='checkbox')
 							br
 							em.text-m-m Не будет отображаться в расписании, удалить его также будет нельзя.
+						p.add-air-as-backup
+							label(for='air_is_backup') Эфир на backup-потоке?
+							input#air_is_backup(name='air_is_backup' type='checkbox')
+							br
 						p.submit
 							input(name='add_air' type='submit' value='Добавить')
 							label #[i.text-m Внимательно проверьте введённые данные!]
@@ -122,7 +126,6 @@ html(lang='ru')
 					p
 
 				footer.text-m
-					p Asian Wave v#{VERSION}, #{subTitle} v0.6
 					p Последнее обновление расписания /anime: #[span.tsAnime]
 					p Последнее обновление расписания /radio: #[span.tsRadio]
 					p Последнее обновление оповещения: #[span.tsNoti]
@@ -134,7 +137,48 @@ html(lang='ru')
 		each JS in ['kamina', 'admin-panel']
 			script(src=`${PATHS.js}/${JS}.min.js?v=${VERSION}` defer)
 
-		include ../inc/php-script-data.pug
+		|<?php $PHP_data = [
+		|	'timezone' => date_default_timezone_get(),
+		|	'sched' => [
+		|		'anime' => [
+		|			'count' => $schedAnime_count,
+		|			'countExpr' => countExprs($schedAnime_data_tmp),
+		|			'latest' => [
+		|				'is' => $schedAnime_latest ? true : false,
+		|				'title' => $schedAnime_latest ? $schedAnime_latest['title'] : '',
+		|				'start' => $schedAnime_latest ? $schedAnime_latest['s'] : null,
+		|				'end' => $schedAnime_latest ? $schedAnime_latest['e'] : null,
+		|			]
+		|		],
+		|		'radio' => [
+		|			'count' => $schedRadio_count,
+		|			'countExpr' => countExprs($schedRadio_data_tmp),
+		|			'latest' => [
+		|				'is' => $schedRadio_latest ? true : false,
+		|				'title' => $schedRadio_latest ? $schedRadio_latest['title'] : '',
+		|				'start' => $schedRadio_latest ? $schedRadio_latest['s'] : null,
+		|				'end' => $schedRadio_latest ? $schedRadio_latest['e'] : null,
+		|			]
+		|		]
+		|	],
+		|	'noti' => [
+		|		'enabled' => $noti_data['enabled'],
+		|		'text' => $noti_data['text'] ? $noti_data['text'] : '',
+		|		'color' => isset($noti_data['color']) ? $noti_data['color'] : false
+		|	],
+		|	'vk' => [
+		|		'URL' => $APIep['vk_au'],
+		|		'appID' => $vkData['id'],
+		|		'api' => 'api-backend-vk.php'
+		|	],
+		|	'server' => $_SERVER['SERVER_NAME'],
+		|	'ts' => [
+		|		'anime' => filemtime($file['sched']['anime']),
+		|		'radio' => filemtime($file['sched']['radio']),
+		|		'noti' => filemtime($file['noti']),
+		|		'current' => time()
+		|	]
+		|]; ?>
 
 		script
 			|<?php echo "document.addEventListener('DOMContentLoaded', () => { initAdminPanel(" . json_encode($PHP_data, JSON_UNESCAPED_UNICODE) . ") })" ?>

@@ -1,42 +1,50 @@
 'use strict'
 
-var initAdminPanel = PHP_data => {
-	let data = PHP_data
-
-	let hide = elem => elem.style.display = 'none'
+var initAdminPanel = data => {
+	/*
+	 * @TODO Сделать скрытие форм при ошибке обработчика
+	 */
 
 	moment.tz.setDefault(data.timezone)
 	Array.from($make.qs('form', ['a'])).forEach(form => { form.reset() })
 
 	try {
 		let
-			needChangeTime = (data.schedAnimeCount > 0) ? 'true' : 'false',
-			newTime = data.schedAnimeLatest.end
+			needChangeTime = (data.sched.anime.count > 0) ? 'true' : 'false',
+			newTime = data.sched.anime.latest.end
+
+		if ($make.qs('input[name="where"]')) {
+			Array.from($make.qs('input[name="where"]', ['a'])).forEach(input => {
+				input.addEventListener('change', e => {
+					$make.qs('.add-air-as-backup').style.display = (e.target.value == 'anime') ? null : 'none'
+				})
+			})
+		}
 
 		if (needChangeTime) {
 			$make.qs('.add-air input[type*=datetime]').setAttribute('value', moment.unix(newTime).format('YYYY-MM-DDTHH:mm'))
 		}
-	} catch (e) { hide($make.qs('.add-air')) }
+	} catch (e) { }
 
 	try {
-		let emptySched = {
-			anime: (data.schedAnimeCount == 0) ? true : false,
-			radio: (data.schedRadioCount == 0) ? true : false
-		}
-
 		let
 			animeInfoEl = $make.qs('.rm-air .info-anime'),
 			radioInfoEl = $make.qs('.rm-air .info-radio')
 
+		let emptySched = {
+			anime: (animeInfoEl && data.sched.anime.count == 0) ? true : false,
+			radio: (radioInfoEl && data.sched.radio.count == 0) ? true : false
+		}
+
 		if (animeInfoEl) {
-			if (data.schedAnimeCount > 0 && animeInfoEl) {
-				animeInfoEl.innerHTML = `Название: <q>${data.schedAnimeLatest.title}</q>. Начало ${moment.unix(data.schedAnimeLatest.start).format('LLL')}; Конец: ${moment.unix(data.schedAnimeLatest.end).format('LLL')}`
+			if (data.sched.anime.count > 0 && animeInfoEl) {
+				animeInfoEl.innerHTML = `Название: <q>${data.sched.anime.latest.title}</q>. Начало ${moment.unix(data.sched.anime.latest.start).format('LLL')}; Конец: ${moment.unix(data.sched.anime.latest.end).format('LLL')}`
 			} else { animeInfoEl.textContent = 'Расписание пустое' }
 		}
 
 		if (radioInfoEl) {
-			if (data.schedRadioCount > 0) {
-				radioInfoEl.innerHTML = `Название: <q>${data.schedRadioLatest.title}</q>. Начало ${moment.unix(data.schedRadioLatest.start).format('LLL')}; Конец: ${moment.unix(data.schedRadioLatest.end).format('LLL')}`
+			if (data.sched.radio.count > 0) {
+				radioInfoEl.innerHTML = `Название: <q>${data.sched.radio.latest.title}</q>. Начало ${moment.unix(data.sched.radio.latest.start).format('LLL')}; Конец: ${moment.unix(data.sched.radio.latest.end).format('LLL')}`
 			} else { radioInfoEl.textContent = 'Расписание пустое' }
 		}
 
@@ -51,12 +59,12 @@ var initAdminPanel = PHP_data => {
 		if (schedsNames.length == emptyScheds.length) {
 			Array.from($make.qs('.rm-air input', ['a'])).forEach(input => { input.setAttribute('disabled', '') })
 		}
-	} catch (e) { hide($make.qs('.rm-air')) }
+	} catch (e) { }
 
 	try {
 		let exprsSched = {
-			anime: data.schedAnimeCountExpr,
-			radio: data.schedRadioCountExpr
+			anime: data.sched.anime.countExpr,
+			radio: data.sched.radio.countExpr
 		}
 
 		if (!$make.qs('.expired-clear')) { throw 42 }
@@ -68,14 +76,14 @@ var initAdminPanel = PHP_data => {
 				input.setAttribute('disabled', '')
 			})
 		}
-	} catch (e) { hide($make.qs('.expired-clear')) }
+	} catch (e) { }
 
 	try {
 		let vkLink = $make.qs('.vk-link p')
 		if (!vkLink) { throw 42 }
 
 		vkLink.appendChild($create.link(`${data.vk.URL}?client_id=${data.vk.appID}&display=page&redirect_uri=https://${data.server}/api/${data.vk.api}&scope=video,offline&response_type=code&state=vk-get-code`, 'Просто нажми сюда', ['e']))
-	} catch (e) { hide($make.qs('.vk-link')) }
+	} catch (e) { }
 
 	try {
 		if (!$make.qs('.noti')) { throw 42 }
@@ -117,7 +125,7 @@ var initAdminPanel = PHP_data => {
 				notiSubmitBtn.value = notiSubmitBtnText
 			}
 		})
-	} catch (e) { hide($make.qs('.noti')) }
+	} catch (e) { }
 
 	try {
 		let

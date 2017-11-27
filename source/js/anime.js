@@ -132,7 +132,7 @@ var $init = {
  */
 
 var $loadInfo = {
-	schedule: () => doFetch({ URL: API.scheduleAnime, handler: $parser.schedule }),
+	schedule: () => doFetch({ URL: API.scheduleAnime, handler: $parser.schedule, handlerOptions: { mode: 'anime' } }),
 	noti: () => doFetch({ URL: API.noti, handler: $parser.noti, handlerOptions: { mode: 'anime' } }),
 	vkNews: () => doFetch({ URL: API.vkNews, handler: $parser.vkNews }),
 	full() {
