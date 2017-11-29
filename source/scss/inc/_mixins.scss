@@ -54,3 +54,17 @@
 	vertical-align: middle;
 	display: inline-block;
 }
+
+/*
+ * https://stackoverflow.com/q/21350537
+ */
+
+@function checkBool($value: false) {
+	@if
+		$value == false or
+		$value == "" or
+		$value == "false" or
+		$value == 'false' or
+		$value == 0 { @return false; }
+	@return true;
+}

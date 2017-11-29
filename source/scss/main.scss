@@ -1,7 +1,7 @@
 @import 'inc/vars';
 @import 'inc/mixins';
 
-$aw_isIndex: '';
+$aw__isIndex: true;
 
 :root {
 	--prime-color: $primeColor;
@@ -45,6 +45,6 @@ body {
 @import 'inc/main/btns';
 @import 'inc/main/footer';
 
-//@import 'inc/main/events';
+@import 'inc/main/events';
 
 @import 'inc/main/mediaq';

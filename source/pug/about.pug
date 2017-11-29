@@ -82,4 +82,7 @@ html(lang='ru')
 
 		include inc/footer.pug
 
+		each JS in ['kamina', 'langs', 'special/glados', 'special/snow']
+			script(src=`${PATHS.js}/${JS}.min.js?v=${VERSION}` defer)
+
 		include inc/bbiswu.pug

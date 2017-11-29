@@ -1,24 +1,37 @@
-$eventCode: 'halloween';
+$eventCode: 'new-year-2017';
+$event__isChangeBtns: false;
 
 body {
-	background-image: url('#{$imgPath}/main/#{$eventCode}/bckg.png?v=#{$VERSION}'), linear-gradient(to bottom, $gradientColorTop, $gradientColorBottom);
+	background-image: url('#{$imgPath}/events/#{$eventCode}/main/bckg.png?v=#{$VERSION}'), linear-gradient(to bottom, $gradientColorTop, $gradientColorBottom);
 }
 
-@if (variable-exists(aw_isIndex)) {
+@if checkBool($aw__isIndex) == true {
 	.btns {
 		@each $afon in radio, anime {
 			.container a[href*='#{$afon}'] {
+				background-color: rgba(67, 134, 159, .8);
+
 				&, &.disabled:hover {
-				background-image: url('#{$imgPath}/main/#{$eventCode}/#{$afon}-btn.png?v=#{$VERSION}'), url('#{$imgPath}/main/#{$eventCode}/#{$afon}-bckg.png?v=#{$VERSION}');}
+					@if checkBool($event__isChangeBtns) == true {
+						background-image: url('#{$imgPath}/events/#{$eventCode}/main/#{$afon}-btn.png?v=#{$VERSION}'), url('#{$imgPath}/events/#{$eventCode}/main/#{$afon}-bckg.png?v=#{$VERSION}');
+					} @else {
+						background-image: url('#{$imgPath}/main/#{$afon}-btn.png?v=#{$VERSION}'), url('#{$imgPath}/events/#{$eventCode}/main/#{$afon}-bckg.png?v=#{$VERSION}');}
+					}
 
 				&:hover {
-					background-image: url('#{$imgPath}/main/#{$eventCode}/hover-btn.png?v=#{$VERSION}'), url('#{$imgPath}/main/#{$eventCode}/#{$afon}-bckg.png?v=#{$VERSION}');
+					@if checkBool($event__isChangeBtns) == true {
+						background-image: url('#{$imgPath}/events/#{$eventCode}/main/hover-btn.png?v=#{$VERSION}'), url('#{$imgPath}/events/#{$eventCode}/main/#{$afon}-bckg.png?v=#{$VERSION}');
+					} @else {
+						background-image: url('#{$imgPath}/main/hover-btn.png?v=#{$VERSION}'), url('#{$imgPath}/events/#{$eventCode}/main/#{$afon}-bckg.png?v=#{$VERSION}');
+					}
 				}
 			}
 		}
 	}
 
-	.css-preload {
-		background-image: url('#{$imgPath}/main/#{$eventCode}/hover-btn.png?v=#{$VERSION}');
+	@if checkBool($event__isChangeBtns) == true {
+		.css-preload {
+			background-image: url('#{$imgPath}/events/#{$eventCode}/main/hover-btn.png?v=#{$VERSION}');
+		}
 	}
 }

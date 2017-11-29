@@ -1,6 +1,8 @@
 @import 'inc/vars';
 @import 'inc/mixins';
 
+$aw__isIndex: false;
+
 :root {
 	--prime-color: $primeColor;
 	--prime-color-5d: darken($primeColor, 5%);
@@ -46,6 +48,6 @@ body {
 @import 'inc/pages/page';
 @import 'inc/main/footer';
 
-//@import 'inc/main/events';
+@import 'inc/main/events';
 
 @import 'inc/pages/mediaq';
