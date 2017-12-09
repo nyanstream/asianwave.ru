@@ -36,17 +36,22 @@ $btnPercent: 65%;
 	@each $afon in radio, anime {
 		.container a[href*='#{$afon}'] {
 			&, &.disabled:hover {
-			background-image: url('#{$imgPath}/main/#{$afon}-btn.png?v=#{$VERSION}'), url('#{$imgPath}/main/#{$afon}-bckg.png?v=#{$VERSION}');}
+			background-image:
+				url('#{$imgPath}/main/#{$afon}-btn.png?v=#{$VERSION}'),
+				url('#{$imgPath}/main/#{$afon}-bckg.png?v=#{$VERSION}');}
 
 			&:hover {
-				background-image: url('#{$imgPath}/main/hover-btn.png?v=#{$VERSION}'), url('#{$imgPath}/main/#{$afon}-bckg.png?v=#{$VERSION}');
+				background-image:	url('#{$imgPath}/main/hover-btn.png?v=#{$VERSION}'),	url('#{$imgPath}/main/#{$afon}-bckg.png?v=#{$VERSION}');
 			}
 		}
 	}
-} // .btns
 
-.css-preload {
-	background-image: url('#{$imgPath}/main/hover-btn.png?v=#{$VERSION}');
-	width: 1px; height: 1px;
-	background-size: 0 0;
-}
+	/* предзагрузка кнопки для hover-эффекта */
+
+	&:before {
+		content: url('#{$imgPath}/main/hover-btn.png?v=#{$VERSION}');
+		width: 0; height: 0;
+		position: absolute;
+		overflow: hidden;
+	}
+} // .btns

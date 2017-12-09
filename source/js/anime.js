@@ -4,14 +4,12 @@
  * Проверка клиента на совместимость с сайтом
  */
 
-;(() => {
-	clientTests({
-		containers: {
-			main: $make.qs('.anime'),
-			error: $make.qs('.error-box')
-		}
-	})
-})()
+;(() => clientTests({
+	containers: {
+		main: $make.qs('.anime'),
+		error: $make.qs('.error-box')
+	}
+}))()
 
 /*
  * Скрипт создания табов (модифицированный)

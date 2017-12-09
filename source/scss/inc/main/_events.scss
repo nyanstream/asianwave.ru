@@ -5,6 +5,26 @@ body {
 	background-image: url('#{$imgPath}/events/#{$eventCode}/main/bckg.png?v=#{$VERSION}'), linear-gradient(to bottom, $gradientColorTop, $gradientColorBottom);
 }
 
+.nyanpasu {
+	background-image: url('#{$imgCDN}/sm/nyanpasu.png');
+	background-repeat: no-repeat;
+	background-color: transparent;
+	border: 0; outline: 0;
+
+	transform: scaleX(-1);
+
+	position: fixed;
+	width: 64px; height: 64px;
+	bottom: 0; left: 0;
+
+	@include transition(.1s);
+
+	&:not(.active) {
+		cursor: pointer;
+		bottom: -5px;
+	}
+}
+
 @if checkBool($aw__isIndex) == true {
 	.btns {
 		@each $afon in radio, anime {
@@ -27,11 +47,11 @@ body {
 				}
 			}
 		}
-	}
 
-	@if checkBool($event__isChangeBtns) == true {
-		.css-preload {
-			background-image: url('#{$imgPath}/events/#{$eventCode}/main/hover-btn.png?v=#{$VERSION}');
+		@if checkBool($event__isChangeBtns) == true {
+			&:before {
+				content: url('#{$imgPath}/events/#{$eventCode}/main/hover-btn.png?v=#{$VERSION}');
+			}
 		}
 	}
 }

@@ -17,17 +17,15 @@ $create.balloon = (elem, text, pos) => {
  * Проверка клиента на совместимость с сайтом
  */
 
-;(() => {
-	clientTests({
-		containers: {
-			main: $make.qs('.radio'),
-			error: $make.qs('.error-box')
-		}
-	})
-})()
+;(() => clientTests({
+	containers: {
+		main: $make.qs('.radio'),
+		error: $make.qs('.error-box')
+	}
+}))()
 
 /*
- * т.н. Поинты - объекты со инфой о потоках радивы (пока только название, сервер и порт)
+ * т.н. Поинты - объекты со инфой о потоках радивы (пока только название, порт и id радио в Азуре)
  * + $currentPoint - функции по взятию инфы о текущем выбранном потоке (по умолчанию выбирается ниппонский)
  */
 
@@ -48,9 +46,15 @@ var points = {
 }
 
 var $currentPoint = {
-	port: () => $ls.get('aw_radioPoint') ? points[$ls.get('aw_radioPoint')].port : points['jp'].port,
-	name: () => $ls.get('aw_radioPoint') ? points[$ls.get('aw_radioPoint')].name : points['jp'].name,
-	id: () => $ls.get('aw_radioPoint') ? points[$ls.get('aw_radioPoint')].id : points['jp'].id,
+	port: () => $ls.get('aw_radioPoint')
+		? points[$ls.get('aw_radioPoint')].port
+		: points['jp'].port,
+	name: () => $ls.get('aw_radioPoint')
+		? points[$ls.get('aw_radioPoint')].name
+		: points['jp'].name,
+	id: () => $ls.get('aw_radioPoint')
+		? points[$ls.get('aw_radioPoint')].id
+		: points['jp'].id,
 	key: () => $ls.get('aw_radioPoint') || 'jp'
 }
 
