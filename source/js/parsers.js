@@ -6,11 +6,6 @@
 
 var $parser = {
 	schedule: (data, options) => {
-		/*
-		 * @TODO пофиксить проблему нового года
-		 * @BUG на /аниме перед tbody вставляется tr
-		 */
-
 		options = options ? options : {}
 
 		let
@@ -29,9 +24,17 @@ var $parser = {
 			return
 		}
 
+		/*
+		 * Ранее здесь вместо дня со времени начала эпохи Unix вычислялся номер дня в году.
+		 * Это приводило к тому, что, например, если скрипт видел, что текущая дата – 2017 год, а дата item – 2018, то этот item просто-напросто не показывался, так как отсекался по первому исключению в списке if ниже.
+		 */
+
+		let unixToDays = ts => Math.floor(ts / 60 / 60 / 24)
+
 		let
-			dayToday = moment().dayOfYear(),
-			unixNow = moment().unix()
+			unixNow = moment().unix(),
+			yearNow = moment().year(),
+			dayNow = unixToDays(unixNow)
 
 		let nextAirs = data.filter(e => e['s'] > unixNow)
 
@@ -39,12 +42,13 @@ var $parser = {
 			if (item['secret']) { return } // пропуск секретных элементов
 
 			let
-				newsсhedData = `${moment.unix(item['s']).format('D MMMM')}<br>${moment.unix(item['s']).format('HH:mm')} &ndash; ${moment.unix(item['e']).format('HH:mm')}</td>`,
-				nazvaniue = ''
+				yearOfS = moment.unix(item['s']).year(),
+				dayOfS = unixToDays(item['s']),
+				dayofE = unixToDays(item['e'])
 
 			let
-				dayOfS = moment.unix(item['s']).dayOfYear(),
-				dayofE = moment.unix(item['e']).dayOfYear()
+				newsсhedData = `${yearNow != yearOfS ? yearOfS + '<br>' : ''}${moment.unix(item['s']).format('D MMMM')}<br>${moment.unix(item['s']).format('HH:mm')} &ndash; ${moment.unix(item['e']).format('HH:mm')}`,
+				nazvaniue = ''
 
 			nazvaniue = (item['link'] && item['link'] != '')
 				? $create.link(item['link'], item['title'], ['e', 'html'])
@@ -58,15 +62,20 @@ var $parser = {
 				? ` [${getString('anime_backup')}]`
 				: ''
 
-			if ((dayOfS - dayToday) < -1) {
+			if ((dayOfS - dayNow) < -1) {
+				/* если (день даты старта item минус текущий день) меньше -1 */
 				return
 			} else if (item['s'] < unixNow && unixNow < item['e']) {
+				/* если (таймштамп времени начала item меньше, чем текущий Unix-таймштамп) И если (текущий Unix-таймштамп меньше, чем время окончания item) */
 				tableBody += $create.elem('tr', `<td>${newsсhedData}</td><td><b>${getString('now')(moment.unix(item['e']).toNow(true))}:</b><br>${nazvaniue}</td>`, 'air--current', ['html'])
 			} else if (item['s'] > unixNow && item['s'] == nextAirs[0]['s']) {
+				/* если (таймштамп времени начала item больше, чем текущий Unix-таймштамп) И если (таймштамп времени начала item равен времени начала первого item из массива будущих эфиров) */
 				tableBody += $create.elem('tr', `<td>${newsсhedData}</td><td><b>${getString('within')} ${moment.unix(item['s']).fromNow()}:</b><br>${nazvaniue}</td>`, 'air--next', ['html'])
 			} else if (item['s'] < unixNow) {
+				/* если (таймштамп времени начала item меньше, чем текущий Unix-таймштамп) */
 				tableBody += (schedMode != 'radio') ? $create.elem('tr', `<td>${newsсhedData}</td><td>${nazvaniue}</td>`, 'air--finished', ['html']) : ''
-			} else if (dayOfS > dayToday) {
+			} else if (dayOfS > dayNow) {
+				/* если (день даты старта item больше, чем текущий день) */
 				tableBody += $create.elem('tr', `<td>${newsсhedData}</td><td>${nazvaniue}</td>`, 'air--notToday', ['html'])
 			} else {
 				tableBody += $create.elem('tr', `<td>${newsсhedData}</td><td>${nazvaniue}</td>`, '', ['html'])
@@ -75,7 +84,7 @@ var $parser = {
 
 		tableBodyTop = (schedMode == 'radio')
 			? $create.elem('caption', getString('airs_schedule'))
-			: $create.elem('tr', `<td colspan="2">${getString('latest_check')}: ${moment().format('D MMMM, HH:mm:ss')}</td>`)
+			: $create.elem('thead', `<tr><td colspan="2">${getString('latest_check')}: ${moment().format('D MMMM, HH:mm:ss')}</td></tr>`)
 
 		if (tableBody == '') {
 			if (schedMode == 'radio') { return }

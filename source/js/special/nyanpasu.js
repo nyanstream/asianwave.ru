@@ -5,22 +5,27 @@
  */
 
 ;(() => {
-	let nyanpasu = new Audio('/files/other/nyanpasu.opus')
+	let
+		nyanpasu = new Audio('/files/other/nyanpasu.opus'),
+		nyanpasuBtn = $create.elem('button', '', 'nyanpasu')
+
 	nyanpasu.preload = 'auto'
 	nyanpasu.volume = '.4'
 
-	let nyanpasuBtn = $create.elem('button', '', 'nyanpasu')
+	nyanpasu.onerror = e => {
+		nyanpasuBtn.style.display = 'none'
+	}
+
 	nyanpasuBtn.onclick = e => {
 		let _btn = e.target
 
 		if (nyanpasu.paused) {
 			nyanpasu.load()
 			nyanpasu.oncanplay = e => {
-				e.target.play()
+				nyanpasu.play()
 				_btn.classList.add('active')
 			}
 			nyanpasu.onended = e => {
-				e.currentTime = 0
 				_btn.classList.remove('active')
 			}
 		} else { return }
