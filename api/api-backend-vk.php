@@ -25,7 +25,7 @@
 		}
 	}
 
-	//get_vk_token();
+	get_vk_token();
 
 	function get_vk_info() {
 		$APIep =     $GLOBALS['APIep'];
