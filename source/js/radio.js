@@ -147,58 +147,6 @@ var
 })()
 
 /*
- * Слегка модифицированный скрипт для перключения вкладок из /anime
- * Индусский код, но работает!
- */
-
-;(() => {
-	Array.from(pointButton).forEach((button, i) => {
-		button.addEventListener('click', e => {
-			let clickedButt = e.target
-			clickedButt.classList.add('active')
-
-			for (let i = 0, pbLength = pointButton.length; i < pbLength; i++) {
-				if (clickedButt.value !== pointButton[i].value) {
-					pointButton[i].classList.remove('active')
-				}
-			}
-		})
-	})
-})()
-
-/*
- * Фича автостарта плеера для огнелиса (и хрома с флагом).
- */
-
-;(() => {
-	let
-		asMenu = $make.qs('menu[type="context"]#autostart menuitem'),
-		asLSItem = 'aw_radioAutostart',
-		autostphr = getString('player_autostart') + ': '
-
-	switch ($ls.get(asLSItem)) {
-		case '0':
-			asMenu.setAttribute('label', autostphr + '\u2716'); break
-		case '1':
-			asMenu.setAttribute('label', autostphr + '\u2713')
-			radio.toggle(); break
-		case 'null':
-		default:
-			$ls.set(asLSItem, 0)
-	}
-
-	asMenu.addEventListener('click', () => {
-		if ($ls.get(asLSItem) == '0') {
-			$ls.set(asLSItem, 1)
-			asMenu.setAttribute('label', autostphr + '\u2713')
-		} else {
-			$ls.set(asLSItem, 0)
-			asMenu.setAttribute('label', autostphr + '\u2716')
-		}
-	})
-})()
-
-/*
  * Парсер API азуры
  * @TODO сделать файлик плейлиста со всеми станциями сразу
  */
@@ -335,6 +283,24 @@ document.addEventListener('DOMContentLoaded', () => {
 	let
 		pointButtons = Array.from(pointButton),
 		pointKeys = Object.keys(points)
+
+	/*
+	 * Слегка модифицированный скрипт для перключения вкладок из /anime
+	 * Индусский код, но работает!
+	 */
+
+	pointButtons.forEach((button, i) => {
+		button.addEventListener('click', e => {
+			let clickedButt = e.target
+			clickedButt.classList.add('active')
+
+			for (let i = 0, pbLength = pointButton.length; i < pbLength; i++) {
+				if (clickedButt.value !== pointButton[i].value) {
+					pointButton[i].classList.remove('active')
+				}
+			}
+		})
+	})
 
 	// doFetch(API.api, data => {
 	// 	let
