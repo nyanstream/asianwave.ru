@@ -64,9 +64,13 @@
 					margin-left: 0;
 					margin-top: 10px;
 
-					button {
-						width: 30%;
-						height: #{$elemHeight / 2}
+					/*
+					 * 35px: 10px отступы у крайних + по 7.5px отступы у средней кнопки 
+					 */
+
+					li {
+						width: calc((100% - 35px) / 3);
+						height: #{$elemHeight / 2};
 					}
 				}
 			}

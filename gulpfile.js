@@ -6,18 +6,21 @@ let
 	bom =          require('gulp-bom'),
 	rename =       require('gulp-rename'),
 	watch =        require('gulp-watch'),
-	watch_sass =   require('gulp-watch-sass'),
 	plumber =      require('gulp-plumber'),
 	composer =     require('gulp-uglify/composer'),
 	uglifyjs =     require('uglify-es'),
-	sass =         require('gulp-sass'),
-	sass_vars =    require('gulp-sass-variables'),
 	csso =         require('gulp-csso'),
 	pug =          require('gulp-pug'),
 	live_server =  require('browser-sync')
 
+let sass = {
+	compile:  require('gulp-sass'),
+	watch:    require('gulp-watch-sass'),
+	vars:     require('gulp-sass-variables')
+}
+
 let
-	minify = composer(uglifyjs, console),
+	minifyJS = composer(uglifyjs, console),
 	reloadServer = () => live_server.stream()
 
 let paths = {
@@ -68,18 +71,18 @@ gulp.task('get-kamina', () => gulp.src(paths.js.kamina)
 gulp.task('minify-js', () => gulp.src(paths.js.dev)
 	.pipe(plumber())
 	.pipe(watch(paths.js.dev))
-	.pipe(minify({}))
+	.pipe(minifyJS({}))
 	.pipe(rename({suffix: '.min'}))
 	.pipe(bom())
 	.pipe(gulp.dest(paths.js.prod))
 	.pipe(reloadServer())
 )
 
-gulp.task('scss', () => watch_sass(paths.css.dev)
+gulp.task('scss', () => sass.watch(paths.css.dev)
 	//gulp.src(paths.css.dev)
 	.pipe(plumber())
-	.pipe(sass_vars({ $VERSION: project.version }))
-	.pipe(sass({outputStyle: 'compressed'}))
+	.pipe(sass.vars({ $VERSION: project.version }))
+	.pipe(sass.compile({outputStyle: 'compressed'}))
 	.pipe(csso())
 	.pipe(rename({suffix: '.min'}))
 	.pipe(bom())

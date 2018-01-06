@@ -45,8 +45,10 @@ html(lang='ru')
 							button(data-ctrl='playpause' data-state='stop' data-lang-label='play')
 							input(data-ctrl='volume' type='range' step='.1' min='0' max='100' data-lang-label='change_volume')
 						div.radio--pe.player-change
-							each point in ['jp', 'ru', 'kr']
-								button(role='radio' value=`${point}`) #{point}
+							ul
+								each point in ['jp', 'ru', 'kr']
+									li
+										button(role='radio' value=`${point}`) #{point}
 					div.side-content.radio--pe.noti
 					div.side-content.radio-live
 					div.side-content.radio-state
