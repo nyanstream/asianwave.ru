@@ -28,14 +28,16 @@ $create.tabs = selector => {
 			let clickedAnchor = e.target
 			clickedAnchor.classList.add('active')
 
-			for (let i = 0, tabsLength = tabs.length; i < tabsLength; i++) {
-				if (tabs[i].dataset.tab == clickedAnchor.dataset.tabRadio) {
-					tabs[i].style.display = 'block'
+			Array.from(tabs).forEach((tab, i) => {
+				if (tab.dataset.tab == clickedAnchor.dataset.tabRadio) {
+					tab.style.display = 'block'
 				} else {
-					tabs[i].style.display = 'none'
+					tab.style.display = 'none'
 					tabAnchors[i].classList.remove('active')
 				}
-			}
+			})
+
+			console.log('asda')
 		})
 	})
 }
@@ -109,12 +111,15 @@ var $init = {
 		if (backup == '') { backup = true }
 
 		if (backup) {
-			playerURL += 'backup'
+			playerURL += 'backup-'
 			switch (backup) {
-				case 'jw':
-					playerURL += '-jw'; break
+				case 'vga':
+					playerURL += 'vga'; break
 				case 'yukku':
-					playerURL += '-yukku'
+					playerURL += 'yukku'; break
+				case 'jw':
+				default:
+					playerURL += 'jw'; break
 			}
 		} else { playerURL = playerURL + 'main' }
 

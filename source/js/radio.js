@@ -118,10 +118,10 @@ radio.toPoint = function(point) {
  */
 
 var
- 	player = $make.qs('.player'),
-	radioCtrl_pp = $make.qsf('[data-ctrl="playpause"]', player),
-	radioCtrl_vol = $make.qsf('[data-ctrl="volume"]', player),
-	pointButton =  $make.qsf('.player-change button', player, ['a'])
+	player =         $make.qs('.player'),
+	radioCtrl_pp =   $make.qsf('[data-ctrl="playpause"]', player),
+	radioCtrl_vol =  $make.qsf('[data-ctrl="volume"]', player),
+	pointButtons =   $make.qsf('.player-change button', player, ['a'])
 
 ;(() => {
 	radioCtrl_pp.onclick = () => radio.toggle()
@@ -280,25 +280,23 @@ document.addEventListener('DOMContentLoaded', () => {
 	if ($ls.get('aw_l10n')) { moment.locale($ls.get('aw_l10n')) }
 	if (embedVkChecker) { $make.qs('.container').classList.add('embed-vk') }
 
-	let
-		pointButtons = Array.from(pointButton),
-		pointKeys = Object.keys(points)
-
 	/*
 	 * Слегка модифицированный скрипт для перключения вкладок из /anime
 	 * Индусский код, но работает!
 	 */
+
+	pointButtons = Array.from(pointButtons)
 
 	pointButtons.forEach((button, i) => {
 		button.addEventListener('click', e => {
 			let clickedButt = e.target
 			clickedButt.classList.add('active')
 
-			for (let i = 0, pbLength = pointButton.length; i < pbLength; i++) {
-				if (clickedButt.value !== pointButton[i].value) {
-					pointButton[i].classList.remove('active')
+			pointButtons.forEach(pointButton => {
+				if (clickedButt.value !== pointButton.value) {
+					pointButton.classList.remove('active')
 				}
-			}
+			})
 		})
 	})
 
@@ -306,13 +304,15 @@ document.addEventListener('DOMContentLoaded', () => {
 	// 	let
 	// 		radio = data['radio-v2'], count = 0,
 	// 		online = []
-	//
+  //
 	// 	Object.keys(radio).forEach((key, i) => {
 	// 		if (radio[key].online == 0) {
 	// 			count++; $make.qs(`.player-change input[value='${key}']`).setAttribute('disabled', '')
 	// 		}
 	// 	})
-	//
+  //
+	// 	let pointKeys = Object.keys(points)
+  //
 	// 	switch (count) {
 	// 		case pointKeys.length:
 	// 			$make.qs('.player').classList.add('mayday'); break
