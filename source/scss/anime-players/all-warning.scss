@@ -3,17 +3,24 @@
 
 .warning {
 	display: none;
-	font-family: Roboto, Arial, sans-serif;
+	overflow-y: auto;
 	background-color: #fff;
+
+	font-family: Roboto, Arial, sans-serif;
+	text-align: center;
 
 	div {
 		max-width: 940px;
 		padding: 5px;
-		overflow-y: auto;
+
+		/*
+		 * @HACK решение проблемы с обрезанием верха блока у флексбокса
+		 * взято отсюда https://stackoverflow.com/a/33485935
+		 */
+		margin: auto;
 	}
 
 	p {
-		text-align: center;
 		font-size: 1.1em;
 		line-height: 1.5;
 

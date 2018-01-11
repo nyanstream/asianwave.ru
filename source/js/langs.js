@@ -152,13 +152,9 @@ var trStrings = {
 		'ru': 'Новости',
 		'en': 'News'
 	},
-	'tabs_hide': {
-		'ru': 'Скрыть боковую панель',
-		'en': 'Hide sidebar'
-	},
-	'tabs_show': {
-		'ru': 'Показать боковую панель',
-		'en': 'Show sidebar'
+	'sidebar_trigger': {
+		'ru': 'Скрыть/показать боковую панель',
+		'en': 'Hide or show sidebar'
 	},
 	'within': {
 		'ru': 'Далее',

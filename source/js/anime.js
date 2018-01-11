@@ -36,33 +36,24 @@ $create.tabs = selector => {
 					tabAnchors[i].classList.remove('active')
 				}
 			})
-
-			console.log('asda')
 		})
 	})
 }
 
 /*
  * Скрытие табов
- * @TODO назначать класс на контейнер, символ менять через CSS
  */
 
 ;(() => {
 	let
-		closeTabsCtr = $make.qs('.closeTabs'),
-		mainCont = $make.qs('.anime .content').classList
+		containerData = $make.qs('.container').dataset,
+		trigger = $make.qs('button[data-js-action="sidebarTrigger"]')
 
-	closeTabsCtr.addEventListener('click', e => {
-		let _this = e.target
-
-		if (!mainCont.contains('no-tabs')) {
-			mainCont.add('no-tabs')
-			_this.textContent = '\u003C'
-			_this.setAttribute('title', getString('tabs_show'))
+	trigger.addEventListener('click', e => {
+		if (!containerData.sidebarHidden || containerData.sidebarHidden == '') {
+			containerData.sidebarHidden = 'true'
 		} else {
-			mainCont.remove('no-tabs')
-			_this.textContent = '\u00D7'
-			_this.setAttribute('title', getString('tabs_hide'))
+			delete containerData.sidebarHidden
 		}
 	})
 })()
@@ -73,18 +64,21 @@ $create.tabs = selector => {
 
 ;(() => {
 	let
-		rootData = document.documentElement.dataset,
-		chatTab = $make.qs('[data-tab-radio="chat"]')
+	 	containerData = $make.qs('.container').dataset,
+		trigger = $make.qs('[data-tab-radio="chat"]'),
+		storageItemName = 'aw_anime_grayTheme'
 
-	if ($ls.get('aw_iamoldfag')) { rootData.theme = 'old-gray' }
+	if ($ls.get(storageItemName) == 'true') {
+		containerData.theme = 'gray'
+	}
 
-	chatTab.addEventListener('dblclick', () => {
-		if (!rootData.theme) {
-			rootData.theme = 'old-gray'
-			$ls.set('aw_iamoldfag', '1')
+	trigger.addEventListener('dblclick', () => {
+		if (!containerData.theme || containerData.theme == '') {
+			containerData.theme = 'gray'
+			$ls.set(storageItemName, 'true')
 		} else {
-			delete rootData.theme
-			$ls.rm('aw_iamoldfag')
+			delete containerData.theme
+			$ls.rm(storageItemName)
 		}
 	})
 })()
@@ -154,9 +148,9 @@ document.addEventListener('DOMContentLoaded', () => {
 	$loadInfo.full()
 
 	let
-		tabs = $make.qs('.tabs'),
-		tabSсhed = $make.qsf('section[data-tab="sched"]', tabs),
-		tabNews = $make.qsf('section[data-tab="news"]', tabs)
+		sitebar = $make.qs('.sidebar'),
+		tabSсhed = $make.qsf('section[data-tab="sched"]', sitebar),
+		tabNews = $make.qsf('section[data-tab="news"]', sitebar)
 
 	let aw_timer = setInterval(() => {
 		$loadInfo.noti()
@@ -167,5 +161,5 @@ document.addEventListener('DOMContentLoaded', () => {
 	let aw_logo = $make.qs('.top-panel .logo')
 	aw_logo.addEventListener('dblclick', $init.player)
 
-	$create.tabs('.tabs')
+	$create.tabs('.sidebar')
 })

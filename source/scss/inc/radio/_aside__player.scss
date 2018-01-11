@@ -83,7 +83,11 @@
 
 				&::-#{$browser}-#{$track}-track {
 					height: 100%;
-					background-image: linear-gradient(to right, var(--prime-color-10d) 0%, var(--prime-color-10d) var(--volume), transparent var(--volume), transparent 100%);
+					background-image: linear-gradient(to right,
+						var(--prime-color-10d) 0%,
+						var(--prime-color-10d) var(--volume),
+						var(--pe-bckg-color) var(--volume),
+						var(--pe-bckg-color) 100%);
 				}
 
 				&::-#{$browser}-#{$range}-thumb {

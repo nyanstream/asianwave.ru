@@ -9,6 +9,7 @@ body {
 
 :root {
 	--volume: 50%;
+	--pe-bckg-color: #fff;
 }
 
 @keyframes loading-anim {
@@ -46,7 +47,7 @@ $fontSize: 16px;
 	}
 
 	&--pe { // page-element
-		background-color: #fff;
+		background-color: var(--pe-bckg-color);
 		box-shadow: 2px 2px 1px rgba(0, 0, 0, .1);
 		border-radius: 2px;
 	}

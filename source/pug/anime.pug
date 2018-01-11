@@ -31,7 +31,7 @@ html(lang='ru')
 					li.li--offset
 						a.right--elem(href=`${URLs.donate}` target='_blank' rel='nofollow noopener' data-lang-title='support') &#8381;
 					li
-						button.right--elem.closeTabs(data-lang-title='tabs_hide') &times;
+						button.right--elem.closeTabs(data-lang-title='sidebar_trigger' data-js-action='sidebarTrigger')
 			main.anime
 				div.error-box
 					noscript
@@ -49,7 +49,7 @@ html(lang='ru')
 								p(style='font-size: .8em') (но если нет, то начните возмущаться в чате или #[a(href='https://vk.me/asianwaveru' target='_blank' rel='nofollow noopener') напишите сюда], мы постараемся отреагировать как можно быстрее)
 								br
 								p(style='font-size: .7em') (a ещё можно попробовать #[a(href='?b') нажать сюда])
-					aside.tabs
+					aside.sidebar
 						ul
 							li
 								button.active(role='radio' data-lang='chat' data-tab-radio='chat') Чат

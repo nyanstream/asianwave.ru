@@ -12,6 +12,16 @@
 // }
 
 @media screen and (max-width: 949px) {
+	html, body {
+		height: 100vh;
+	}
+
+	.container {
+		&[data-sidebar-hidden] {
+			.player { height: 100% !important }
+		}
+	}
+
 	.anime {
 		.content {
 			& > * {
@@ -21,19 +31,11 @@
 			}
 
 			.player {
-				height: 40%;
-				min-height: 350px;
+				height: 35%;
 			}
 
-			.tabs {
-				height: 60%;
-				min-height: 400px;
-			}
-
-			&.no-tabs {
-				.player {
-					height: 100%;
-				}
+			.sidebar {
+				height: 65%;
 			}
 		}
 	}

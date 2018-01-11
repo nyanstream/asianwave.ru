@@ -14,6 +14,21 @@ $pagewidth: 1000px;
 
 //@import 'inc/anime/special';
 
+.container {
+	button[data-js-action='sidebarTrigger']:before {
+		content: '\00D7'
+	}
+
+	&[data-sidebar-hidden] {
+		button[data-js-action='sidebarTrigger']:before {
+			content: '\003C'
+		}
+
+		.player {	width: 100% }
+		.sidebar { display: none }
+	}
+}
+
 .anime {
 	width: 100%;
 	height: calc(100vh - #{$top-panel--height});
@@ -47,17 +62,17 @@ $pagewidth: 1000px;
 		height: 100%;
 	}
 
-	$tabswidth: 400px;
+	$sidebarWidth: 400px;
 	$resizeControl: 0; // @TODO сделать ресайз
 
 	.player {
-		width: calc(100% - #{$tabswidth + $resizeControl});
+		width: calc(100% - #{$sidebarWidth + $resizeControl});
 		position: relative;
 		overflow: hidden;
 	}
 
-	.tabs {
-		width: $tabswidth;
+	.sidebar {
+		width: $sidebarWidth;
 		background-color: #fff;
 
 		iframe {
@@ -65,11 +80,6 @@ $pagewidth: 1000px;
 			height: 100%;
 			border: 0;
 		}
-	}
-
-	&.no-tabs {
-		.player {	width: 100%; }
-		.tabs { display: none; }
 	}
 }
 

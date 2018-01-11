@@ -1,6 +1,6 @@
 // main: ../../anime.scss
 
-:root[data-theme='old-gray'] {
+.container[data-theme='gray'] {
 	$primeColor: #464646;
 
 	--prime-color: $primeColor;
