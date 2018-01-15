@@ -193,7 +193,7 @@ var
 	srch_main = $make.qs('.player-song.search'),
 	srch_vk = $make.qsf('.srch-vk', srch_main),
 	srch_google = $make.qsf('.srch-google', srch_main),
-	data_song, data_dj, data_listeners, slsh = 'челове'
+	data_song, data_dj, data_listeners
 
 /*
  * Функция, которая запрашивает инфу в плеер с серверов MyRadio24
@@ -244,7 +244,8 @@ function loadInfo() {
 						if (data_listeners == 0) {
 							listeners_elem.setAttribute('title', 'В данный момент радио никто не слушает \u003a\u0028')
 						} else {
-							listeners_elem.setAttribute('title', 'Сейчас радио слушает ' + declOfNum(data_listeners, [slsh+'к', slsh+'ка', slsh+'к']))
+							let slsh = 'челове'
+							listeners_elem.setAttribute('title', 'Сейчас радио слушает ' + declOfNum(data_listeners, [`${slsh}к`, `${slsh}ка`, `${slsh}к`]))
 						}
 					}	else {
 						song_elem.textContent = 'Радио оффлайн'
@@ -258,7 +259,7 @@ function loadInfo() {
 			})
 		})
 	} else {
-		song_elem.innerHTML = 'Для работы плеера необходим ' + $create.link('https://vk.com/badbrowser.php', 'современный браузер', ['e', 'html']) + '.'
+		song_elem.innerHTML = 'Для работы плеера необходим ' + $create.link('https://vk.com/badbrowser.php', 'современный браузер', '', ['e', 'html']) + '.'
 		if (!container.classList.contains('offline')) {
 			container.classList.add('offline')
 		}
@@ -266,7 +267,7 @@ function loadInfo() {
 	}
 }
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', () => {
 	loadInfo()
 	let pp_timer = setInterval(loadInfo, 5000)
-});
+})
