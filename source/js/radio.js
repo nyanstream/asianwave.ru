@@ -92,7 +92,7 @@ radio.toPoint = function(point) {
 	if (!Object.keys(points).includes(point)) { return }
 
 	$ls.set('aw_radioOnPause', this.paused)
-	$ls.set(storageCurrentPointItemName, point)
+	$ls.set('aw_radioPoint', point) // айтем должен быть такой же, как в переменной storageCurrentPointItemName
 
 	this.src = getRadioSrc()
 

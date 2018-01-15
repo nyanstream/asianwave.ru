@@ -63,10 +63,11 @@ gulp.task('pug', () => tube([
 	pug({ locals: {
 		VERSION: project.version,
 		PATHS: {
-			js: `/${folders.prod.main}/js`,
-			css: `/${folders.prod.main}/css`,
-			img: `/${folders.prod.main}/img`,
-			other: `/${folders.prod.main}/other`
+			js:      `/${folders.prod.main}/js`,
+			css:     `/${folders.prod.main}/css`,
+			img:     `/${folders.prod.main}/img`,
+			other:   `/${folders.prod.main}/other`,
+			frames:  `/${folders.prod.main}/frames`
 		}
 	}}),
 	bom(),
@@ -74,7 +75,7 @@ gulp.task('pug', () => tube([
 		switch (file.dirname) {
 			case 'api':
 				file.extname = '.php'; break
-			case 'other':
+			case 'frames':
 				file.dirname = `${folders.prod.main}/${file.dirname}`
 				file.extname = '.htm'
 		}

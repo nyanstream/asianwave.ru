@@ -4,7 +4,7 @@ html(lang='ru')
 		include ../inc/vars.pug
 
 		meta(charset='utf-8')
-		title #{title} / Anime Backup Player / VGA mode
+		title #{title} / Anime Backup Player / Yukku mode
 		link(rel='shortcut icon' href=`${URLs.favicon}`)
 
 		include ../inc/meta-viewport.pug
@@ -17,16 +17,16 @@ html(lang='ru')
 
 		each CSS in ['all-warning', 'player-flash']
 			link(rel='stylesheet' href=`${PATHS.css}/anime-players/${CSS}.min.css?v=${VERSION}`)
-	body#vga-player
+	body#yukku-player
 		div.player
 		div.warning
 			include ../inc/noflash-text.pug
 
-		each JS in ['kamina', 'special/ms-edge-suck', 'special/flash', 'anime-players/player-flash']
+		each JS in ['kamina', 'special/ms-edge-suck', 'special/flash', 'special/embed-attrs', 'anime-players/player-flash']
 			script(src=`${PATHS.js}/${JS}.min.js?v=${VERSION}` defer)
 
 		script.
 			document.addEventListener('DOMContentLoaded', () => {
 				let stream = $check.get('url') ? $check.get('url') : 'video.eientei.org/live/AsianWave'
-				playerInit({ file: 'vgaplayer', vars: `url=rtmp://${stream}${$check.get('debug') == '1' ? '&debug=1' : ''}&smoothing=1&fullscreen=1&imageUrl=../img/anime-offline.png&buttonBgColor=0&buttonHiBgColor=0`, wmode: 'direct' })
+				playerInit({ file: '../other/yukkuplayer', vars: `videoUrl=rtmp://${stream}&buffer=1&idleImageUrl=../other/spinner.gif`, wmode: 'transparent' })
 			})

@@ -73,7 +73,7 @@ html(lang='ru')
 		each JS in ['kamina', 'special/ms-edge-suck', 'langs', 'core', 'parsers']
 			script(src=`${PATHS.js}/${JS}.min.js?v=${VERSION}` defer)
 
-		script(src=`${PATHS.js}/anime.min.js?v=${VERSION}` data-player-path='/files/other/' defer)
+		script(src=`${PATHS.js}/anime.min.js?v=${VERSION}` data-player-path='/files/frames/' defer)
 		//- опция для загрузки бекап-плеера по-умолчанию: data-backup-bydefault
 
 		include inc/bbiswu.pug
