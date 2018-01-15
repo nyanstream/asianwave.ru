@@ -1,17 +1,6 @@
 'use strict'
 
 /*
- * Проверка клиента на совместимость с сайтом
- */
-
-;(() => clientTests({
-	containers: {
-		main: $make.qs('.anime'),
-		error: $make.qs('.error-box')
-	}
-}))()
-
-/*
  * Скрипт создания табов (модифицированный)
  * Найдено здесь: https://goo.gl/lsSkEe
  */
@@ -22,7 +11,9 @@ $create.tabs = selector => {
 		tabs = $make.qs(selector + ' [data-tab]', ['a'])
 
 	Array.from(tabAnchors).forEach((tabAnchor, i) => {
-		if (tabAnchor.classList.contains('active')) { tabs[i].style.display = 'block' }
+		if (tabAnchor.classList.contains('active')) {
+			tabs[i].style.display = 'block'
+		}
 
 		tabAnchor.addEventListener('click', e => {
 			let clickedAnchor = e.target
@@ -39,49 +30,6 @@ $create.tabs = selector => {
 		})
 	})
 }
-
-/*
- * Скрытие табов
- */
-
-;(() => {
-	let
-		containerData = $make.qs('.container').dataset,
-		trigger = $make.qs('button[data-js-action="sidebarTrigger"]')
-
-	trigger.addEventListener('click', e => {
-		if (!containerData.sidebarHidden || containerData.sidebarHidden == '') {
-			containerData.sidebarHidden = 'true'
-		} else {
-			delete containerData.sidebarHidden
-		}
-	})
-})()
-
-/*
- * Старый цвет шапки
- */
-
-;(() => {
-	let
-	 	containerData = $make.qs('.container').dataset,
-		trigger = $make.qs('[data-tab-radio="chat"]'),
-		storageItemName = 'aw_anime_grayTheme'
-
-	if ($ls.get(storageItemName) == 'true') {
-		containerData.theme = 'gray'
-	}
-
-	trigger.addEventListener('dblclick', () => {
-		if (!containerData.theme || containerData.theme == '') {
-			containerData.theme = 'gray'
-			$ls.set(storageItemName, 'true')
-		} else {
-			delete containerData.theme
-			$ls.rm(storageItemName)
-		}
-	})
-})()
 
 /*
  * Инициация плеера
@@ -137,29 +85,93 @@ var $loadInfo = {
 	}
 }
 
-/*
- * Инициации
- */
-
 document.addEventListener('DOMContentLoaded', () => {
+	/*
+	 * Проверка клиента на совместимость с сайтом
+	 */
+
+	clientTests({ containers: {
+			main: $make.qs('.anime'),
+			error: $make.qs('.error-box')
+	}})
+
+	/*
+	 * Инициации
+	 */
+	
 	if ($ls.get('aw_l10n')) { moment.locale($ls.get('aw_l10n')) }
 
 	$init.player()
 	$loadInfo.full()
 
-	let
-		sitebar = $make.qs('.sidebar'),
-		tabSсhed = $make.qsf('section[data-tab="sched"]', sitebar),
-		tabNews = $make.qsf('section[data-tab="news"]', sitebar)
-
-	let aw_timer = setInterval(() => {
-		$loadInfo.noti()
-		if (!isMobile.any || tabSсhed.style.display == 'block') { $loadInfo.schedule() }
-		if (!isMobile.any || tabNews.style.display == 'block') { $loadInfo.vkNews() }
-	}, 10000)
-
-	let aw_logo = $make.qs('.top-panel .logo')
-	aw_logo.addEventListener('dblclick', $init.player)
-
 	$create.tabs('.sidebar')
+
+	/*
+	 * Скрытие табов
+	 */
+
+	;(() => {
+		let
+			containerData = $make.qs('.container').dataset,
+			trigger = $make.qs('button[data-js-action="sidebarTrigger"]')
+
+		trigger.addEventListener('click', e => {
+			if (!containerData.sidebarHidden || containerData.sidebarHidden == '') {
+				containerData.sidebarHidden = 'true'
+			} else {
+				delete containerData.sidebarHidden
+			}
+		})
+	})()
+
+	/*
+	 * Старый цвет шапки
+	 */
+
+	;(() => {
+		let
+		 	containerData = $make.qs('.container').dataset,
+			trigger = $make.qs('[data-tab-radio="chat"]'),
+			storageItemName = 'aw_anime_grayTheme'
+
+		if ($ls.get(storageItemName) == 'true') {
+			containerData.theme = 'gray'
+		}
+
+		trigger.addEventListener('dblclick', () => {
+			if (!containerData.theme || containerData.theme == '') {
+				containerData.theme = 'gray'
+				$ls.set(storageItemName, 'true')
+			} else {
+				delete containerData.theme
+				$ls.rm(storageItemName)
+			}
+		})
+	})()
+
+	/*
+	 * Таймер обновления информации
+	 */
+
+	;(() => {
+		let
+			sitebar = $make.qs('.sidebar'),
+			tabSсhed = $make.qsf('section[data-tab="sched"]', sitebar),
+			tabNews = $make.qsf('section[data-tab="news"]', sitebar)
+
+		let aw_timer = setInterval(() => {
+			$loadInfo.noti()
+			if (!isMobile.any || tabSсhed.style.display == 'block') { $loadInfo.schedule() }
+			if (!isMobile.any || tabNews.style.display == 'block') { $loadInfo.vkNews() }
+		}, 10000)
+	})()
+
+	/*
+	 * Перезагрузка плеера по клику на лого в шапке
+	 */
+
+ ;(() => {
+		let aw_logo = $make.qs('.top-panel .logo')
+		if (aw_logo) { aw_logo.addEventListener('dblclick', $init.player) }
+	})()
 })

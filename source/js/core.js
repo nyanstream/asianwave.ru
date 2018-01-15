@@ -12,7 +12,7 @@
 	try {
 		let chrExtBtn = $make.qs('.right li a[href*="--chrome"]')
 
-		if (!isChrome) { chrExtBtn.style.display = 'none' }
+		if (!isChrome) { chrExtBtn.parentElement.style.display = 'none' }
 		if (isOpera) {
 			let icon = chrExtBtn.firstChild
 
@@ -73,6 +73,7 @@ var doFetch = options => {
 		})
 	}).catch(e => { handler(failData) })
 }
+
 /*
  * Функция для проверки клиента на совместимость с сайтом
  */
@@ -83,15 +84,15 @@ var clientTests = options => {
 	let
 		mainCont = options.containers.main,
 		errorBox = options.containers.error,
-		err = !1
+		isError = false
 
 	if (!$ls.test()) {
 		mainCont.classList.add('error')
-		errorBox.innerHTML = `<p>${getString('err_ls')}</p><br><p>${getString('err_ls_pls')}`
-		err = !0
+		errorBox.innerHTML = `<p>${getString('err_ls')}</p><br><p>${getString('err_ls_pls')}</p>`
+		isError = true
 	}
 
-	if (err) {
+	if (isError) {
 		errorBox.innerHTML += `<p>${getString('err_end')}</p><p><br>${getString('tnx')}! :3</p>`
 	}
 }

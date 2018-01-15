@@ -82,7 +82,7 @@ var initAdminPanel = data => {
 		let vkLink = $make.qs('.vk-link p')
 		if (!vkLink) { throw 42 }
 
-		vkLink.appendChild($create.link(`${data.vk.URL}?client_id=${data.vk.appID}&display=page&redirect_uri=https://${data.server}/api/${data.vk.api}&scope=video,offline&response_type=code&state=vk-get-code`, 'Просто нажми сюда', ['e']))
+		vkLink.appendChild($create.link(`${data.vk.URL}?client_id=${data.vk.appID}&display=page&redirect_uri=https://${data.server}/api/${data.vk.api}&scope=video,offline&response_type=code&state=vk-get-code`, 'Просто нажми сюда', '', ['e']))
 	} catch (e) { }
 
 	try {
@@ -98,7 +98,7 @@ var initAdminPanel = data => {
 			let
 				notiTextElemRoot = $make.qs('.noti .noti-text'),
 				notiTextElem = $create.elem('samp', data.noti.text, '', ['s']),
-				notiTextElemText = document.createTextNode('Текущее оповещение: ')
+				notiTextElemText = $create.text('Текущее оповещение: ')
 
 			if (data.noti.color) {
 				notiTextElem.style.backgroundColor = data.noti.color

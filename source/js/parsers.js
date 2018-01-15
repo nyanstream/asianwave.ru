@@ -51,7 +51,7 @@ var $parser = {
 				nazvaniue = ''
 
 			nazvaniue = (item['link'] && item['link'] != '')
-				? $create.link(item['link'], item['title'], ['e', 'html'])
+				? $create.link(item['link'], item['title'], '', ['e', 'html'])
 				: $make.safe(item['title'])
 
 			/*
@@ -126,7 +126,9 @@ var $parser = {
 				postImgElem.setAttribute('src', postImg['small'])
 				postImgElem.setAttribute('alt', '')
 
-				postImgLink = $create.link(postImg['big'] ? postImg['big'] : postImg['small'], '')
+				postImgLink = $create.link(postImg['big']
+					? postImg['big']
+					: postImg['small'])
 
 				postImgLink.classList.add('link2img')
 				postImgLink.appendChild(postImgElem)
@@ -141,11 +143,11 @@ var $parser = {
 			if (postLinkR) {
 				postLinkR.forEach(link => {
 					postLinkS = link.split('|')
-					postText = postText.replace(pLR, $create.link(`https://${domain.vk}/${postLinkS[0].replace(/\[/g, '')}`, postLinkS[1].replace(/]/g, ''), ['e', 'html']))
+					postText = postText.replace(pLR, $create.link(`https://${domain.vk}/${postLinkS[0].replace(/\[/g, '')}`, postLinkS[1].replace(/]/g, ''), '', ['e', 'html']))
 				})
 			}
 
-			let vkPostMetaLink = $create.link(`https://${domain.vk}/wall-${data['com']['id']}_${post['id']}`, moment.unix(post['time']).format('LLL'), ['e', 'html'])
+			let vkPostMetaLink = $create.link(`https://${domain.vk}/wall-${data['com']['id']}_${post['id']}`, moment.unix(post['time']).format('LLL'), '', ['e', 'html'])
 
 			if (post['type'] == 'copy') {
 				isCopy = ' is-repost'
