@@ -139,7 +139,7 @@ var $init = {
 
 		//console.log(data)
 
-		if (data == 'fail') { $make.qs('.radio-error').textContent = getString('err_api_radio'); return }
+		if (data == 'fail' || !('now_playing' in data)) { radioErrorBox.textContent = getString('err_api_radio'); return }
 
 		/* Блок с выводом текущего трека */
 
