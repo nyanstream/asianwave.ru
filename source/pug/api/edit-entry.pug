@@ -11,6 +11,7 @@ doctype html
 html(lang='ru')
 	head
 		include ../inc/vars.pug
+		include ../inc/mixins.pug
 		- var subTitle = 'Panel'
 
 		meta(charset='utf-8')
@@ -35,9 +36,7 @@ html(lang='ru')
 	body(data-controls='add-air rm-air')
 		div.container
 			header.top-panel
-				div.brand
-					div.logo
-					a(href='/' class='text' rel='home') #{title} #[span #{subTitle}]
+				+headerBrand(subTitle)
 			main.panel
 				form(action='?action' method='post')
 					fieldset.add-air

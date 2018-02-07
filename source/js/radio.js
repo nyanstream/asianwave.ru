@@ -139,7 +139,9 @@ var $init = {
 
 		//console.log(data)
 
-		if (data == 'fail' || !('now_playing' in data)) { radioErrorBox.textContent = getString('err_api_radio'); return }
+		if (data == 'fail' || !('now_playing' in data)) {
+			radioErrorBox.textContent = getString('err_api_radio'); return
+		}
 
 		/* Блок с выводом текущего трека */
 
@@ -166,6 +168,7 @@ var $init = {
 		//srchGo.setAttribute('title', `${getString('song_search_in')} Google`)
 
 		linksBoxBody = $create.elem('div', '', 'search radio--pe')
+
 		linksBoxBody.appendChild(srchVK)
 		linksBoxBody.appendChild(srchGo)
 
@@ -175,33 +178,25 @@ var $init = {
 
 		let plLink = $create.link('', '<i class="icon icon-music"></i>')
 
-		plLink.setAttribute('href', `data:audio/x-mpegurl;charset=utf-8;base64,${btoa(radio.src + '\n')}`)
+		plLink.setAttribute('href', `data:audio/x-mpegurl;charset=utf-8;base64,${btoa(getRadioSrc() + '\r\n')}`)
 		plLink.setAttribute('download', `Asian Wave ${$currentPoint.name()}.m3u`)
 
 		plBoxBody = $create.elem('div', plLink.outerHTML, 'dlm3u radio--pe')
 
 		$create.balloon(plBoxBody, getString('playlist_dl'), 'left')
 
-		/* Блок с выводом состояния прямого эфира (в остальных случаях скрыт) */
-		/* @TODO вернуть в том или ином виде, когда запилят фичу со стороны азуры */
+		/* Блок с выводом состояния прямого эфира (иначе скрыт) */
 
-		// let
-		// 	currRJ = $create.elem('div', `<p>${getString('rj_current')}:</p><p>${$make.safe(data['djname'])}</p>`, 'curr-rj radio--pe'),
-		// 	currLstn = $create.elem('div', `<div>${$make.safe(data['listeners'])}</div>`, 'curr-lstn radio--pe')
-		//
-		// $create.balloon(currLstn, getString('listeners_current'), 'left')
+		if (data['live']['is_live'] != false) {
+			let
+				currRJ = $create.elem('div', `<p>${getString('rj_current')}:</p><p>${$make.safe(data['live']['streamer_name'])}</p>`, 'curr-rj radio--pe'),
+				currLstn = $create.elem('div', `<div>${$make.safe(data['listeners']['unique'])}</div>`, 'curr-lstn radio--pe')
 
-		//currRJ.classList.add('radio--pe')
-		//currLstn.classList.add('radio--pe')
+			$create.balloon(currLstn, getString('listeners_current'), 'left')
 
-		// switch (data['djname'].toLowerCase()) {
-		// 	case '':
-		// 	case 'auto-dj':
-		// 		break
-		// 	default:
-		// 		liveBox.appendChild(currRJ)
-		// 		liveBox.appendChild(currLstn)
-		// }
+			liveBox.appendChild(currRJ)
+			liveBox.appendChild(currLstn)
+		}
 
 		/* Блок с выводом недавних треков */
 

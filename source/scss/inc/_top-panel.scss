@@ -22,13 +22,13 @@
 			vertical-align: middle;
 		}
 
-		.logo {
+		&__logo {
 			$top-panel--logo-height: $top-panel--brandHeight + 5px;
 
 			display: inline-block;
 			width: $top-panel--logo-height;
 			height: $top-panel--logo-height;
-			margin-right: 5px;
+			margin-right: 10px;
 
 			background-image: url('#{$imgPath}/logo.png?v=#{$VERSION}');
 			background-position: center center;
@@ -36,7 +36,7 @@
 			background-size: contain;
 		}
 
-		.text {
+		&__text {
 			@include transition(.5s);
 
 			text-transform: uppercase;
@@ -46,10 +46,8 @@
 			font-size: $top-panel--brandHeight;
 			color: #fff;
 
-			span {
-				&:before {
-					content: '/ ';
-				}
+			&--subtitle {
+				&:before { content: ' / ' }
 			}
 
 			&:hover {
@@ -70,6 +68,31 @@
 		user-select: none;
 		cursor: default;
 
+		&__elem {
+			@include flexbox(auto, center, center, auto);
+
+			background-color: transparent;
+			background-color: rgba(0, 0, 0, .1);
+
+			border: 0;
+			border-radius: 5px;
+			outline: 0;
+
+			height: 100%;
+			padding: 0 10px;
+			opacity: .7;
+
+			font-size: 1em;
+			color: #fff;
+
+			@include transition(.3s);
+			cursor: pointer;
+
+			&:hover {
+				opacity: .9;
+			}
+		}
+
 		li {
 			display: inline;
 			list-style: none;
@@ -79,32 +102,9 @@
 				margin-left: 5px;
 			}
 
-			.right--elem {
-				@include flexbox(auto, center, center, auto);
-
-				background-color: transparent;
-				background-color: rgba(0, 0, 0, .1);
-
-				border: 0;
-				border-radius: 5px;
-				outline: 0;
-
-				height: 100%;
-				padding: 0 10px;
-				opacity: .7;
-
-				font-size: 1em;
-				color: #fff;
-
-				@include transition(.3s);
-				cursor: pointer;
-
-				&:hover {
-					opacity: .9;
-				}
+			&.li {
+				&--offset { margin-right: 5px }
 			}
-
-			&.li--offset { margin-right: 5px }
 		}
 	}
 }
@@ -120,8 +120,8 @@
 @media screen and (max-width: 349px) {
 	.top-panel {
 		.brand {
-			.text {
-				span {
+			&__text {
+				&--title {
 					display: none;
 				}
 			}

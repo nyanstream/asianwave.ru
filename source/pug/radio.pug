@@ -2,6 +2,7 @@ doctype html
 html(lang='ru')
 	head
 		include inc/vars.pug
+		include inc/mixins.pug
 		- var subTitle = 'Radio'
 
 		include inc/metadata.pug
@@ -20,17 +21,15 @@ html(lang='ru')
 	body
 		div.container
 			header.top-panel
-				div.brand
-					div.logo
-					a(href='/' class='text' rel='home') #{title} #[span #{subTitle}]
+				+headerBrand(subTitle)
 				ul.right
 					li.li--offset
-						a.right--elem(href='/app--chrome' target='_blank' data-lang-title='ext_chrome')
+						a.right__elem(href='/app--chrome' target='_blank' data-lang-title='ext_chrome')
 							i.icon.icon-chrome
 					li
-						a.right--elem(href=`${URLs.requests.radio}` target='_blank' rel='nofollow noopener' data-lang-title='request_music') &#43;
+						a.right__elem(href=`${URLs.requests.radio}` target='_blank' rel='nofollow noopener' data-lang-title='request_music') &#43;
 					li
-						a.right--elem(href=`${URLs.donate}` target='_blank' rel='nofollow noopener' data-lang-title='support') &#8381;
+						a.right__elem(href=`${URLs.donate}` target='_blank' rel='nofollow noopener' data-lang-title='support') &#8381;
 			main.radio
 				div.radio--pe.error-box
 					noscript
