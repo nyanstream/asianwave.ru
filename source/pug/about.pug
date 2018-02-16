@@ -12,7 +12,7 @@ html(lang='ru')
 		mixin mailto(post)
 			a(href=`mailto:${post}`) #{post}
 
-		each URL in ['www.google-analytics.com', 'ssl.google-analytics.com', 'fonts.gstatic.com', 'mc.yandex.ru', 'ymetrica.com', 'cdn.jsdelivr.net']
+		each URL in ['www.google-analytics.com', 'fonts.gstatic.com', 'mc.yandex.ru']
 			link(rel='dns-prefetch' href=`//${URL}`)
 
 		include inc/meta-font.pug

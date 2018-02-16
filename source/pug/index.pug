@@ -14,7 +14,7 @@ html(lang='ru')
 		each URL in ['radio', 'anime']
 			link(rel='prerender' href=`/${URL}`)
 
-		each URL in ['aw-cdn.blyat.science', 'www.google-analytics.com', 'ssl.google-analytics.com', 'fonts.gstatic.com', 'mc.yandex.ru', 'ymetrica.com', 'cdn.jsdelivr.net']
+		each URL in ['aw-cdn.blyat.science', 'www.google-analytics.com', 'ssl.google-analytics.com', 'fonts.gstatic.com', 'mc.yandex.ru']
 			link(rel='dns-prefetch' href=`//${URL}`)
 
 		include inc/meta-font.pug
@@ -32,7 +32,7 @@ html(lang='ru')
 
 		include inc/footer.pug
 
-		each JS in ['kamina', 'langs', 'special/glados', 'special/nyanpasu', 'special/snow']
+		each JS in ['kamina', 'langs', 'special/glados', 'special/nyanpasu']
 			script(src=`${PATHS.js}/${JS}.min.js?v=${VERSION}` defer)
 
 		include inc/bbiswu.pug

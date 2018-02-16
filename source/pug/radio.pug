@@ -9,7 +9,7 @@ html(lang='ru')
 
 		link(rel='canonical' href=`${URLs.same}/radio`)
 
-		each URL in ['aw-cdn.blyat.science', 'www.google-analytics.com', 'ssl.google-analytics.com', 'fonts.gstatic.com', 'mc.yandex.ru', 'ymetrica.com', 'counter.yadro.ru', 'cdn.jsdelivr.net', 'images.weserv.nl',  'st1.chatovod.ru', `ryuko.${domain}`]
+		each URL in ['aw-cdn.blyat.science', 'www.google-analytics.com', 'ssl.google-analytics.com', 'fonts.gstatic.com', 'mc.yandex.ru', 'counter.yadro.ru', 'images.weserv.nl', 'st1.chatovod.ru', `ryuko.${domain}`]
 			link(rel='dns-prefetch' href=`//${URL}`)
 
 		link(rel='stylesheet' href=`https://cdnjs.cloudflare.com/ajax/libs/balloon-css/${libsVer.baloon}/balloon.min.css`)
