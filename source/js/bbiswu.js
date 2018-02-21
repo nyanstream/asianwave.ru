@@ -28,8 +28,10 @@ ga('send', 'pageview')
 ;(function(d, w, c) {
 	(w[c] = w[c] || []).push(function() {
 		try {
-			w.yaCounter22438144 = new Ya.Metrika({
-				id: 22438144,
+			var yandexMetrikaID = 22438144
+
+			w['yaCounter' + yandexMetrikaID] = new Ya.Metrika({
+				id: yandexMetrikaID,
 				clickmap: true,
 				trackLinks: true,
 				accurateTrackBounce: true,

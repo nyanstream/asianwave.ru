@@ -39,7 +39,7 @@
 				}
 
 				&-controls {
-					[data-ctrl='playpause'] {
+					[data-js-action='changePlayerState'] {
 						width: $elemHeight;
 
 						&:before {
@@ -65,7 +65,7 @@
 					margin-top: 10px;
 
 					/*
-					 * 35px: 10px отступы у крайних + по 7.5px отступы у средней кнопки 
+					 * 35px: 10px отступы у крайних + по 7.5px отступы у средней кнопки
 					 */
 
 					li {

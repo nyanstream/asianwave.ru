@@ -16,7 +16,7 @@
 		.player-controls {
 			width: 100%;
 
-			[data-ctrl='volume'] { width: 100% }
+			[data-js-action='changeVolume'] { width: 100% }
 			.on-mobile { width: auto }
 		}
 
@@ -28,7 +28,7 @@
 	&-controls {
 		font-size: 0;
 
-		[data-ctrl='playpause'] {
+		[data-js-action='changePlayerState'] {
 			height: 100%; width: $elemHeight;
 			position: relative;
 			border-right: 1px solid rgba(#000, .1);
@@ -70,7 +70,7 @@
 			}
 		}
 
-		[data-ctrl='volume'] {
+		[data-js-action='changeVolume'] {
 			$elemHeight: 15px;
 			cursor: pointer;
 			background-color: transparent;
@@ -115,11 +115,11 @@
 		}
 
 		&.on-mobile {
-			[data-ctrl='playpause'] {
+			[data-js-action='changePlayerState'] {
 				border-right: 0;
 			}
 
-			[data-ctrl='volume'] {
+			[data-js-action='changeVolume'] {
 				display: none;
 			}
 		}

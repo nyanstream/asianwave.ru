@@ -41,8 +41,8 @@ html(lang='ru')
 				aside
 					div.side-content.player
 						div.radio--pe.player-controls(contextmenu='autostart')
-							button(data-ctrl='playpause' data-state='stop' data-lang-label='play')
-							input(data-ctrl='volume' type='range' step='.1' min='0' max='100' data-lang-label='change_volume')
+							button(data-js-action='changePlayerState' data-state='stop' data-lang-label='play')
+							input(data-js-action='changeVolume' type='range' step='.1' min='0' max='100' data-lang-label='change_volume')
 						div.radio--pe.player-change
 							ul
 								each point in ['jp', 'ru', 'kr']
