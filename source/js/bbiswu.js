@@ -28,7 +28,7 @@ ga('send', 'pageview')
 ;(function(d, w, c) {
 	(w[c] = w[c] || []).push(function() {
 		try {
-			var yandexMetrikaID = 22438144
+			var yandexMetrikaID = 38037540
 
 			w['yaCounter' + yandexMetrikaID] = new Ya.Metrika({
 				id: yandexMetrikaID,
