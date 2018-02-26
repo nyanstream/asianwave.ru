@@ -2,77 +2,26 @@ doctype html
 html(lang='ru')
 	head
 		include inc/vars.pug
-		include inc/mixins.pug
 		- var subTitle = 'Anime'
+		- var nyanDomain = 'nyan.stream'
+		- var nyanTime = 10
 
 		include inc/metadata.pug
 
-		link(rel='canonical' href=`https://nyan.stream`)
+		link(rel='canonical' href=`https://${nyanDomain}`)
 
-		each URL in ['aw-cdn.blyat.science', 'www.google-analytics.com', 'ssl.google-analytics.com', 'fonts.gstatic.com', 'mc.yandex.ru', 'counter.yadro.ru', 'images.weserv.nl', 'st1.chatovod.ru']
+		each URL in [`${nyanDomain}`, 'www.google-analytics.com', 'fonts.gstatic.com', 'mc.yandex.ru']
 			link(rel='dns-prefetch' href=`//${URL}`)
 
-		each CSS in ['aw-fonts', 'aw-every', 'anime']
-			link(rel='stylesheet' href=`${PATHS.css}/${CSS}.min.css?v=${VERSION}`)
 		noscript
-			style.
-				.anime .error-box { display: block } .anime .content { display: none }
+			meta(http-equiv='refresh' content=`${nyanTime}; url=https://${nyanDomain}/?from=asianwave`)
+
+		style.
+			body { font-family: Roboto, Arial, sans-serif; }
 	body
-		div.container
-			header.top-panel
-				+headerBrand(subTitle)
-				ul.right
-					li.li--offset
-						a.right__elem(href='/app--chrome' target='_blank' data-lang-title='ext_chrome')
-							i.icon.icon-chrome
-					li
-						a.right__elem(href=`${URLs.requests.anime}` target='_blank' rel='nofollow noopener' data-lang-title='request_anime') &#43;
-					li.li--offset
-						a.right__elem(href=`${URLs.donate}` target='_blank' rel='nofollow noopener' data-lang-title='support') &#8381;
-					li
-						button.right__elem.closeTabs(data-lang-title='sidebar_trigger' data-js-action='sidebarTrigger')
-			main.anime
-				div.error-box
-					noscript
-						include inc/nojs-text.pug
-				div.content
-					div.player
-						div.embed
-						div.noti
-						div.warnings
-							div.api
-								p С нашим API возникла какая-то ошибка!
-								br
-								p Попробуйте дважды кликнуть на наш логотип в шапке сайта для перезагрузки. Скорее всего, всё уже починилось само.
-								br
-								p(style='font-size: .8em') (но если нет, то начните возмущаться в чате или #[a(href='https://vk.me/asianwaveru' target='_blank' rel='nofollow noopener') напишите сюда], мы постараемся отреагировать как можно быстрее)
-								br
-								p(style='font-size: .7em') (a ещё можно попробовать #[a(href='?b') нажать сюда])
-					aside.sidebar
-						ul
-							li
-								button.active(role='radio' data-lang='chat' data-tab-radio='chat') Чат
-							li
-								button(role='radio' data-lang='tab_sched' data-tab-radio='sched') Расписание
-							li
-								button(role='radio' data-lang='tab_news' data-tab-radio='news') Новости
-						section(data-tab='chat')
-							iframe(src=`${URLs.chat}` data-lang-title='chat')
-						section(data-tab='sched')
-							div.schedule
-						section(data-tab='news')
-							div.vk-news
-								div.vk-news-header
-									a(href=`${URLs.vk}` target='_blank' rel='nofollow noopener' data-lang='vk_com')
-								div.vk-posts
+		p Раздел #[q /anime] был закрыт и перенесён на домен #[a(href=`https://${nyanDomain}/?from=asianwave`) #{nyanDomain}].
+		p Вы будете автоматически перенаправлены туда через #[span.time #{nyanTime}] секунд#[span.end].
 
-		each lib in [`moment.js/${libsVer.moment.same}/moment.min.js`, `moment.js/${libsVer.moment.same}/locale/ru.js`, `ismobilejs/${libsVer.isMobile}/isMobile.min.js`]
-			script(src=`https://cdnjs.cloudflare.com/ajax/libs/${lib}` defer)
-
-		each JS in ['kamina', 'special/ms-edge-suck', 'langs', 'core', 'parsers']
-			script(src=`${PATHS.js}/${JS}.min.js?v=${VERSION}` defer)
-
-		script(src=`${PATHS.js}/anime.min.js?v=${VERSION}` data-player-path='/files/frames/' defer)
-		//- опция для загрузки бекап-плеера по-умолчанию: data-backup-bydefault
+		script(src=`${PATHS.js}/special/anime-timer.min.js?v=${VERSION}` data-domain=`${nyanDomain}` data-time=`${nyanTime}` defer)
 
 		include inc/bbiswu.pug

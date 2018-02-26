@@ -1,7 +1,7 @@
 User-agent: *
 Disallow: /api/
 Disallow: /apps/
-Disallow: /files/other/
+Disallow: /files/frames/
 Disallow: /app--*
 Disallow: /rdr--*
 Host: asianwave.ru

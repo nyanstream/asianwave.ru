@@ -1,5 +1,3 @@
-// main: ../../radio.scss
-
 @media screen and (max-width: #{$pageWidth - 1px}) {
 	.radio, footer div {
 		width: calc(100% - 20px);

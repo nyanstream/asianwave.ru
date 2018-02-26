@@ -1,5 +1,3 @@
-// main: ../aw-every.scss
-
 .top-panel {
 	@include flexbox(auto, center, center, auto);
 	position: relative;
@@ -118,7 +116,7 @@
 }
 
 @media screen and (max-width: 349px) {
-	.top-panel {
+	.top-panel[data-index='false'] {
 		.brand {
 			&__text {
 				&--title {

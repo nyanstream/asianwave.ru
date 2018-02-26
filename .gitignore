@@ -1,10 +1,5 @@
 node_modules/
-build/files/js/
-build/files/css/
-build/**/*.htm
-build/**/*.html
-build/**/*.php
-build/**/*.json
+dist/
 api/**/*.json
 package-lock.json
 npm-debug.log

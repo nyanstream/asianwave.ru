@@ -278,11 +278,47 @@ document.addEventListener('DOMContentLoaded', () => {
 	 * @TODO найти более умные тултипы, эти не перемещаются в другое место при ресайзе страницы
 	 */
 
-	 let embedVkChecker = $check.get('embed-vk')
+	 let embedVKchecker = $check.get('embed-vk')
 
 	;(() => {
 		if ($ls.get('aw_l10n')) { moment.locale($ls.get('aw_l10n')) }
-		if (embedVkChecker) { $make.qs('.container').classList.add('embed-vk') }
+		if (embedVKchecker) { $make.qs('.container').classList.add('embed-vk') }
+
+		/*
+		 * Получение хэшей в пригодном для дальнейшей работы виде из get-параметра hash при встраивании радио в VK
+		 */
+
+		let getVKhash = () => {
+			let hashs = []
+			if (embedVKchecker && $check.get('hash')) {
+				if ($check.get('hash') == true) { return hashs }
+				hashs = decodeURIComponent($check.get('hash')).split('&')
+				hashs.forEach((hash, i) => {
+					let tmp = hash.split('=')
+					hashs[i] = {
+						'key': tmp[0],
+						'value': tmp[1] ? tmp[1] : null
+					}
+				})
+			}
+			return hashs
+		}
+
+		/*
+		 * Если задан get-запрос "point" (или же такой хэш содержится в хэшах из VK) с ключом, который является действительным и входит в массив points, то радио при загрузке страницы автоматически переключается на нужный поток
+		 * Пример: asianwave.ru/radio?point=ru или vk.com/appID#point=ru
+		 */
+
+		let getPoint = $check.get('point')
+		getVKhash().forEach(hash => {
+			if (hash.key == 'point' && hash.value != null) {
+				getPoint = hash.value
+			}
+		})
+
+		if (getPoint && Object.keys(points).includes(getPoint)) {
+			radio.toPoint(getPoint)
+		}
 
 		/*
 		 * Слегка модифицированный скрипт для перключения вкладок из /anime
@@ -296,7 +332,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
 			button.setAttribute('title', `${getString('radio_station')} \u00AB${points[pointData].name}\u00BB`)
 
-			if (pointData == $currentPoint.key()) { button.classList.add('active') }
+			if (pointData == $currentPoint.key()) {
+				button.classList.add('active')
+			}
 
 			button.addEventListener('click', e => {
 				let clickedButt = e.target
@@ -335,42 +373,6 @@ document.addEventListener('DOMContentLoaded', () => {
 		// 			$make.qs('.player').classList.add('only-one')
 		// 	}
 		// })
-
-		/*
-		 * Получение хэшей в пригодном для дальнейшей работы виде из get-параметра hash при встраивании радио в VK
-		 */
-
-		let getVKhash = () => {
-			let hashs = []
-			if (embedVkChecker && $check.get('hash')) {
-				if ($check.get('hash') == true) { return hashs }
-				hashs = decodeURIComponent($check.get('hash')).split('&')
-				hashs.forEach((hash, i) => {
-					let tmp = hash.split('=')
-					hashs[i] = {
-						'key': tmp[0],
-						'value': tmp[1] ? tmp[1] : null
-					}
-				})
-			}
-			return hashs
-		}
-
-		/*
-		 * Если задан get-запрос "point" (или же такой ключ содержится в хэшах из VK) с ключом, который является действительным и входит в массив points, то радио при загрузке страницы автоматически переключается на нужный поток
-		 * Пример: asianwave.ru/radio?point=ru
-		 */
-
-		let getPoint = $check.get('point')
-		getVKhash().forEach(hash => {
-			if (hash.key == 'point' && hash.value != null) {
-				getPoint = hash.value
-			}
-		})
-
-		if (getPoint && Object.keys(points).includes(getPoint)) {
-			radio.toPoint(getPoint)
-		}
 	})()
 
 	//$create.balloon(pointButton[0].parentElement, 'Список потоков', 'down')
@@ -402,7 +404,7 @@ document.addEventListener('DOMContentLoaded', () => {
 			aw_timer_other = setInterval(() => {
 				$loadInfo.schedule()
 				$loadInfo.noti()
-				if (!embedVkChecker) { $loadInfo.vkNews() }
+				if (!embedVKchecker) { $loadInfo.vkNews() }
 			}, 30000)
 	 })()
 })

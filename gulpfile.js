@@ -27,32 +27,33 @@ let
 	minifyJS = uglify.composer(uglify.core, console),
 	reloadServer = () => liveServer.stream()
 
-let folders = {
+let dirs = {
 	dev: 'source',
 	prod: {
-		root: 'build',
+		build: 'dist',
+		content: 'dist_content',
 		main: 'files'
 	}
 }
 
 let paths = {
 	html: {
-		dev: [`${folders.dev}/pug/**/*.pug`, `!${folders.dev}/pug/inc/**/*.pug`],
-		prod: `${folders.prod.root}/`
+		dev: [`${dirs.dev}/pug/**/*.pug`, `!${dirs.dev}/pug/inc/**/*.pug`],
+		prod: `${dirs.prod.build}/`
 	},
 	js: {
-		dev: `${folders.dev}/js/**/*.js`,
-		prod: `${folders.prod.root}/${folders.prod.main}/js/`,
+		dev: `${dirs.dev}/js/**/*.js`,
+		prod: `${dirs.prod.build}/${dirs.prod.main}/js/`,
 		kamina: 'node_modules/kamina-js/dist/kamina.min.js',
 	},
 	css: {
-		dev: `${folders.dev}/scss/**/*.scss`,
-		prod: `${folders.prod.root}/${folders.prod.main}/css/`
+		dev: `${dirs.dev}/scss/**/*.scss`,
+		prod: `${dirs.prod.build}/${dirs.prod.main}/css/`
 	}
 }
 
 gulp.task('liveReload', () => liveServer({
-	server: { baseDir: paths.html.prod },
+	server: [dirs.prod.build, dirs.prod.content],
 	port: 8080,
 	notify: false
 }))
@@ -63,11 +64,11 @@ gulp.task('pug', () => tube([
 	pug({ locals: {
 		VERSION: project.version,
 		PATHS: {
-			js:      `/${folders.prod.main}/js`,
-			css:     `/${folders.prod.main}/css`,
-			img:     `/${folders.prod.main}/img`,
-			other:   `/${folders.prod.main}/other`,
-			frames:  `/${folders.prod.main}/frames`
+			js:      `/${dirs.prod.main}/js`,
+			css:     `/${dirs.prod.main}/css`,
+			img:     `/${dirs.prod.main}/img`,
+			other:   `/${dirs.prod.main}/other`,
+			frames:  `/${dirs.prod.main}/frames`
 		}
 	}}),
 	bom(),
@@ -76,7 +77,7 @@ gulp.task('pug', () => tube([
 			case 'api':
 				file.extname = '.php'; break
 			case 'frames':
-				file.dirname = `${folders.prod.main}/${file.dirname}`
+				file.dirname = `${dirs.prod.main}/${file.dirname}`
 				file.extname = '.htm'
 		}
 	}),
@@ -107,7 +108,10 @@ gulp.task('minify-js', () => tube([
 
 let scssTubes = [
 	plumber(),
-	sass.vars({ $VERSION: project.version }),
+	sass.vars({
+		$VERSION: project.version,
+		$imgPath: `/${dirs.prod.main}/img`
+	}),
 	sass.compile({outputStyle: 'compressed'}),
 	csso(),
 	bom(),

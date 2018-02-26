@@ -2,37 +2,64 @@ doctype html
 html(lang='ru')
 	head
 		include inc/vars.pug
-		- var isIndexTmpl = true
+		include inc/mixins.pug
+		- var subTitle = ''
 
 		include inc/metadata.pug
 
-		each verif in [{s: 'google-site-verification', code: 'Y-zrQS3gEUB2vkcCPbvcU7dhogBFKa_BV-rP_i2x79c'}, {s: 'yandex-verification', code: '37a9e7933989cd01'}, {s: 'msvalidate.01', code: '6EB38FA17104F2614498E05CF14876B9'}, {s: 'wmail-verification', code: '4520e9ca3d1a58da4ded056030b5bc6e'}]
-			meta(name=`${verif.s}` content=`${verif.code}`)
-
 		link(rel='canonical' href=`${URLs.same}`)
 
-		each URL in ['radio', 'anime']
-			link(rel='prerender' href=`/${URL}`)
-
-		each URL in ['aw-cdn.blyat.science', 'www.google-analytics.com', 'ssl.google-analytics.com', 'fonts.gstatic.com', 'mc.yandex.ru']
+		each URL in ['aw-cdn.blyat.science', 'www.google-analytics.com', 'ssl.google-analytics.com', 'fonts.gstatic.com', 'mc.yandex.ru', 'counter.yadro.ru', 'images.weserv.nl', 'st1.chatovod.ru', `ryuko.${domain}`]
 			link(rel='dns-prefetch' href=`//${URL}`)
 
-		include inc/meta-font.pug
-
-		link(rel='stylesheet' href=`${PATHS.css}/main.min.css?v=${VERSION}`)
+		link(rel='stylesheet' href=`https://cdnjs.cloudflare.com/ajax/libs/balloon-css/${libsVer.baloon}/balloon.min.css`)
+		each CSS in ['aw-fonts', 'aw-every', 'radio']
+			link(rel='stylesheet' href=`${PATHS.css}/${CSS}.min.css?v=${VERSION}`)
+		noscript
+			style.
+				.radio .error-box { display: block } .radio > * { display: none }
 	body
-		header.top-panel
-			div.container
-				a.logo(href='/' rel='home')
-				div.brand #{title}
-		main.btns
-			div.container
-				a(href='/radio' data-lang-title='radio') /radio
-				a(href='/anime' data-lang-title='anime') /anime
+		div.container
+			header.top-panel
+				+headerBrand(subTitle)
+				ul.right
+					li.li--offset
+						a.right__elem(href='/app--chrome' target='_blank' data-lang-title='ext_chrome')
+							i.icon.icon-chrome
+					li
+						a.right__elem(href=`${URLs.requests.radio}` target='_blank' rel='nofollow noopener' data-lang-title='request_music') &#43;
+					li
+						a.right__elem(href=`${URLs.donate}` target='_blank' rel='nofollow noopener' data-lang-title='support') &#8381;
+			main.radio
+				div.radio--pe.error-box
+					noscript
+						include inc/nojs-text.pug
+				div.content
+					div.radio--pe.chat
+						iframe(src=`${URLs.chat}` data-lang-title='chat')
+					div.radio--pe.vk-posts
+				aside
+					div.side-content.player
+						div.radio--pe.player-controls
+							button(data-js-action='changePlayerState' data-state='stop' data-lang-label='play')
+							input(data-js-action='changeVolume' type='range' step='.1' min='0' max='100' data-lang-label='change_volume')
+						div.radio--pe.player-change
+							ul
+								each point in ['jp', 'ru', 'kr']
+									li
+										button(role='radio' value=`${point}`) #{point}
+					div.side-content.radio--pe.noti
+					div.side-content.radio-live
+					div.side-content.radio-state
+					div.side-content.radio--pe.schedule
+					div.side-content.radio--pe.songs-box
+					div.side-content.radio--pe.radio-error
+			include inc/footer.pug
 
-		include inc/footer.pug
+		each lib in [`moment.js/${libsVer.moment.same}/moment.min`, `moment.js/${libsVer.moment.same}/locale/ru`, `ismobilejs/${libsVer.isMobile}/isMobile.min`]
+			script(src=`https://cdnjs.cloudflare.com/ajax/libs/${lib}.js` defer)
 
-		each JS in ['kamina', 'langs', 'special/glados', 'special/nyanpasu']
+		each JS in ['kamina', 'special/ms-edge-suck', 'langs', 'core', 'parsers', 'radio']
 			script(src=`${PATHS.js}/${JS}.min.js?v=${VERSION}` defer)
 
 		include inc/bbiswu.pug
