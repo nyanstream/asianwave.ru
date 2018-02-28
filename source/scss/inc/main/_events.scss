@@ -2,7 +2,7 @@ $eventCode: 'new-year-2017';
 $event__isChangeBtns: false;
 
 body {
-	background-image: url('#{$imgPath}/events/#{$eventCode}/main/bckg.png?v=#{$VERSION}'), linear-gradient(to bottom, $gradientColorTop, $gradientColorBottom);
+	background-image: url('#{$imgPath}/events/#{$eventCode}/bckg.png?v=#{$VERSION}'), linear-gradient(to bottom, $gradientColorTop, $gradientColorBottom);
 }
 
 .nyanpasu {
