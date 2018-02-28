@@ -36,7 +36,7 @@ ErrorDocument 403 /apps/error.html
 Header set Strict-Transport-Security 'max-age=31536000; includeSubDomains; preload' env=HTTPS
 
 Header set Content-Security-Policy "default-src 'self'; \
- connect-src 'self' https://*.asianwave.ru https://mc.yandex.ru; \
+ connect-src 'self' https://*.asianwave.ru https://aw-api.blyat.science https://mc.yandex.ru; \
  child-src 'self' https://chatovod.ru https://asianwaveru.chatovod.ru https://*.youtube-nocookie.com; \
  frame-ancestors 'self' https://vk.com; \
  style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; \

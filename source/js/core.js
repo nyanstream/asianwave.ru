@@ -29,8 +29,10 @@
  */
 
 var domain = {
-	'aw': 'asianwave.ru',
-	'vk': 'vk.com'
+	'self':  'asianwave.ru',
+	'api':   'aw-api.blyat.science',
+	'nyan':  'nyan.stream',
+	'vk':    'vk.com'
 }
 
 /*
@@ -38,20 +40,13 @@ var domain = {
  */
 
 var API = {
-	'scheduleAnime': 'anime-sched.json',
-	'scheduleRadio': 'radio-sched.json',
-	'noti': 'noti.json',
-	'vkNews': 'vk-info.json',
-	'vkStream': 'vk-stream.json'
+	'schedule': 'sched',
+	'noti': 'noti',
+	'vkNews': 'vk-news'
 }
 
 Object.keys(API).forEach(key => {
-	API[key] = `/api/${API[key]}`
-	switch (location.hostname) {
-		case '127.0.0.1':
-		case 'localhost':
-			API[key] = `https://${domain.aw}${API[key]}`
-	}
+	API[key] = `https://${domain.api}/api/${API[key]}`
 })
 
 /*
@@ -79,20 +74,27 @@ var doFetch = options => {
  */
 
 var clientTests = options => {
-	if (!options) { return }
+ if (!options) { return }
 
-	let
-		mainCont = options.containers.main,
-		errorBox = options.containers.error,
-		isError = false
+ let mainContainer = options.nodes.container
 
-	if (!$ls.test()) {
-		mainCont.classList.add('error')
-		errorBox.innerHTML = `<p>${getString('err_ls')}</p><br><p>${getString('err_ls_pls')}</p>`
-		isError = true
-	}
+ let
+	 errorBox =     options.nodes.errorBox,
+	 errorBoxDiv =  $create.elem('div')
 
-	if (isError) {
-		errorBox.innerHTML += `<p>${getString('err_end')}</p><p><br>${getString('tnx')}! :3</p>`
-	}
+ let isError = false
+
+ errorBox.textContent = ''
+
+ if (!$ls.test()) {
+	 mainContainer.classList.add('error')
+	 errorBoxDiv.innerHTML = `<p>${getString('err_ls')}</p><br><p>${getString('err_ls_pls')}</p>`
+	 isError = true
+ }
+
+ if (isError) {
+	 errorBoxDiv.innerHTML += `<p>${getString('err_end')}</p><p><br>${getString('tnx')}! :3</p>`
+
+	 errorBox.appendChild(errorBoxDiv)
+ }
 }

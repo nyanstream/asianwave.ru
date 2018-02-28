@@ -1,6 +1,15 @@
 'use strict'
 
 /*
+ * Проверка клиента на совместимость с сайтом
+ */
+
+clientTests({ nodes: {
+	container:  $make.qs('.radio'),
+	errorBox:   $make.qs('.error-box')
+}})
+
+/*
  * Дополнение к камине для создания тултипов
  */
 
@@ -55,7 +64,7 @@ var points = {
  * Инициация радио
  */
 
-domain.radio = `ryuko.${domain.aw}`
+domain.radio = `ryuko.${domain.self}`
 
 var getRadioSrc = () => `https://${domain.radio}/radio/${$currentPoint.port()}/listen`
 
@@ -226,7 +235,7 @@ var $init = {
 
 var $loadInfo = {
 	radio: () => doFetch({ URL: `https://${domain.radio}/api/nowplaying/${$currentPoint.id()}`, handler: $init.radio }),
-	schedule: () => doFetch({ URL: API.scheduleRadio, handler: $parser.schedule, handlerOptions: { mode: 'radio' } }),
+	schedule: () => doFetch({ URL: API.schedule, handler: $parser.schedule, handlerOptions: { mode: 'radio' } }),
 	noti: () => doFetch({ URL: API.noti, handler: $parser.noti, handlerOptions: { mode: 'radio' } }),
 	vkNews: () => doFetch({ URL: API.vkNews, handler: $parser.vkNews }),
 	full() {
@@ -235,17 +244,6 @@ var $loadInfo = {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-	/*
-	 * Проверка клиента на совместимость с сайтом
-	 */
-
-	clientTests({
-		containers: {
-			main: $make.qs('.radio'),
-			error: $make.qs('.error-box')
-		}
-	})
-
 	/*
 	 * Инициация радио
 	 */
