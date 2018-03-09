@@ -65,7 +65,7 @@ Redirect 301 /files/code/css/chrome-app-events.min.css /files/css/chrome-app-eve
 Redirect 301 /api/api.json /api/radio.json
 
 # фиксы разделов
-RedirectMatch 301 /anime/* /anime
+# RedirectMatch 301 /anime/* /anime
 RedirectMatch 301 /radio/* /
 Redirect 301 /radio /
 

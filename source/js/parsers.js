@@ -11,18 +11,11 @@ var $parser = {
 		let
 			streamSсhed = $make.qs('.schedule'),
 			table = $create.elem('table'),
-			tableBody = '', tableBodyTop = '',
-			schedMode = options.mode ? options.mode : ''
+			tableBody = '', tableBodyTop = ''
 
 		streamSсhed.textContent = ''
 
-		if (data == 'fail') {
-			if (schedMode != 'radio') {
-				table.appendChild($create.elem('tr', `<td>${getString('err_api')}</td>`))
-				streamSсhed.appendChild(table)
-			}
-			return
-		}
+		if (data == 'fail') { return }
 
 		/*
 		 * Ранее здесь вместо дня со времени начала эпохи Unix вычислялся номер дня в году.
@@ -54,14 +47,6 @@ var $parser = {
 				? $create.link(item['link'], item['title'], '', ['e', 'html'])
 				: $make.safe(item['title'])
 
-			/*
-			 * Сделать нормальную поддержку item['backup']
-			 */
-
-			nazvaniue += (item['backup'] && schedMode == 'anime')
-				? ` [${getString('anime_backup')}]`
-				: ''
-
 			if ((dayOfS - dayNow) < -1) {
 				/* если (день даты старта item минус текущий день) меньше -1 */
 				return
@@ -73,7 +58,7 @@ var $parser = {
 				tableBody += $create.elem('tr', `<td>${newsсhedData}</td><td><b>${getString('within')} ${moment.unix(item['s']).fromNow()}:</b><br>${nazvaniue}</td>`, 'air--next', ['html'])
 			} else if (item['s'] < unixNow) {
 				/* если (таймштамп времени начала item меньше, чем текущий Unix-таймштамп) */
-				tableBody += (schedMode != 'radio') ? $create.elem('tr', `<td>${newsсhedData}</td><td>${nazvaniue}</td>`, 'air--finished', ['html']) : ''
+				return
 			} else if (dayOfS > dayNow) {
 				/* если (день даты старта item больше, чем текущий день) */
 				tableBody += $create.elem('tr', `<td>${newsсhedData}</td><td>${nazvaniue}</td>`, 'air--notToday', ['html'])
@@ -82,15 +67,9 @@ var $parser = {
 			}
 		})
 
-		tableBodyTop = (schedMode == 'radio')
-			? $create.elem('caption', getString('airs_schedule'))
-			: $create.elem('thead', `<tr><td colspan="2">${getString('latest_check')}: ${moment().format('D MMMM, HH:mm:ss')}</td></tr>`)
+		tableBodyTop = $create.elem('caption', getString('airs_schedule'))
 
-		if (tableBody == '') {
-			if (schedMode == 'radio') { return }
-
-			tableBody += $create.elem('tr', `<td colspan="2">${getString('empty_schedule')} ¯\\_(ツ)_/¯</td>`, '', ['html'])
-		}
+		if (tableBody == '') { return }
 
 		table.appendChild(tableBodyTop)
 		table.appendChild($create.elem('tbody', tableBody))
@@ -182,8 +161,7 @@ var $parser = {
 		let
 			id = data['time'],
 			text = data['text'],
-			color = data['color'],
-			notiMode = options.mode ? options.mode : ''
+			color = data['color']
 
 		notiEl.style.backgroundColor = color ? color : null
 
@@ -195,11 +173,7 @@ var $parser = {
 			notiHideString = `${getString('hide')} ${getString('noti').toLowerCase()}`,
 			notiItems = []
 
-		if (notiMode == 'anime') {
-			notiHide.setAttribute('title', notiHideString)
-		} else {
-			notiHide.textContent = notiHideString
-		}
+		notiHide.textContent = notiHideString
 
 		if ($make.qsf('a[href]', notiContent)) {
 			let notiLinks = $make.qsf('a[href]', notiContent, ['a'])

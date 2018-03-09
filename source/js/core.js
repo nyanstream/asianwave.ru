@@ -32,7 +32,8 @@ var domain = {
 	'self':  'asianwave.ru',
 	'api':   'aw-api.blyat.science',
 	'nyan':  'nyan.stream',
-	'vk':    'vk.com'
+	'vk':    'vk.com',
+	'mr24':  'myradio24.com'
 }
 
 /*

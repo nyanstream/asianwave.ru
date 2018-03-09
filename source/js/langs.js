@@ -183,9 +183,9 @@ var getString = s => {
 			'ru': 'Чат',
 			'en': 'Chat'
 		},
-		'anime_backup': {
-			'ru': 'на бэкапе',
-			'en': 'on a backup stream'
+		'song_order': {
+			'ru': 'Заказать песню',
+			'en': 'Request a song'
 		}
 	}
 

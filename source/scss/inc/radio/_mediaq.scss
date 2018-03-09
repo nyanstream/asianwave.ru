@@ -73,8 +73,14 @@
 				}
 			}
 
-			.radio-state {
-				width: 100%;
+			.radio {
+				&-state {
+					width: 100%;
+				}
+
+				&-order {
+					display: none;
+				}
 			}
 
 			.songs-box { display: none }

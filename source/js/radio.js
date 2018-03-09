@@ -31,15 +31,19 @@ var points = {
 	'jp': {
 		'name': 'Japan',
 		'port': 8000,
-		'id': 1
+		'mr24port': 7934,
+		'id': 1,
+		'orderType': 'mr24'
 	}, 'ru': {
 		'name': 'Russia',
 		'port': 8010,
-		'id': 2
+		'id': 2,
+		'orderType': 'azura'
 	}, 'kr': {
 		'name': 'Korea',
 		'port': 8020,
-		'id': 3
+		'id': 3,
+		'orderType': 'azura'
 	}
 }
 
@@ -50,13 +54,19 @@ var points = {
 		port: () => $ls.get(storageCurrentPointItemName)
 			? points[$ls.get(storageCurrentPointItemName)].port
 			: points['jp'].port,
+		mr24port: () => $ls.get(storageCurrentPointItemName)
+			? points[$ls.get(storageCurrentPointItemName)].mr24port
+			: points['jp'].mr24port,
 		name: () => $ls.get(storageCurrentPointItemName)
 			? points[$ls.get(storageCurrentPointItemName)].name
 			: points['jp'].name,
 		id: () => $ls.get(storageCurrentPointItemName)
 			? points[$ls.get(storageCurrentPointItemName)].id
 			: points['jp'].id,
-		key: () => $ls.get(storageCurrentPointItemName) || 'jp'
+		key: () => $ls.get(storageCurrentPointItemName) || 'jp',
+		orderType: () => $ls.get(storageCurrentPointItemName)
+			? points[$ls.get(storageCurrentPointItemName)].orderType
+			: points['jp'].orderType
 	}
 })()
 
@@ -137,6 +147,7 @@ var $init = {
 			stateBoxBody = '', linksBoxBody = '', plBoxBody = '',
 			liveBox = $make.qs('.radio-live'),
 			liveBoxBody = '',
+			orderBox = $make.qs('.radio-order'),
 			songsBox = $make.qs('.songs-box'),
 			songsTableBody = '',
 			radioErrorBox = $make.qs('.radio-error')
@@ -145,6 +156,7 @@ var $init = {
 		liveBox.textContent = ''
 		songsBox.textContent = ''
 		radioErrorBox.textContent = ''
+		orderBox.textContent = ''
 
 		//console.log(data)
 
@@ -207,6 +219,19 @@ var $init = {
 			liveBox.appendChild(currLstn)
 		}
 
+		/* Блок с кнопкой заказа трека */
+
+		let orderURL = 'https://'
+
+		switch ($currentPoint.orderType()) {
+			case 'azura':
+				orderURL += `${domain.radio}/public/${$currentPoint.name().toLowerCase()}/embed-requests`; break
+			case 'mr24':
+				orderURL += `${domain.mr24}/?to=table&port=${$currentPoint.mr24port()}`;
+		}
+
+		orderBox.appendChild($create.link(orderURL, `<span>${getString('song_order')}</span>`))
+
 		/* Блок с выводом недавних треков */
 
 		songsTableBody = $create.elem('table')
@@ -236,7 +261,7 @@ var $init = {
 var $loadInfo = {
 	radio: () => doFetch({ URL: `https://${domain.radio}/api/nowplaying/${$currentPoint.id()}`, handler: $init.radio }),
 	schedule: () => doFetch({ URL: API.schedule, handler: $parser.schedule, handlerOptions: { mode: 'radio' } }),
-	noti: () => doFetch({ URL: API.noti, handler: $parser.noti, handlerOptions: { mode: 'radio' } }),
+	noti: () => doFetch({ URL: API.noti, handler: $parser.noti }),
 	vkNews: () => doFetch({ URL: API.vkNews, handler: $parser.vkNews }),
 	full() {
 		Object.keys(this).forEach(key => (key != 'full') ? this[key]() : '')
