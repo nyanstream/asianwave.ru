@@ -3,8 +3,6 @@
 var scriptData = document.currentScript.dataset
 
 document.addEventListener('DOMContentLoaded', () => {
-	console.log('sd')
-
 	let time = Number(scriptData.time)
 
 	let timeElem = document.querySelector('.time')

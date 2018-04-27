@@ -16,8 +16,8 @@
 		if (isOpera) {
 			let icon = chrExtBtn.firstChild
 
-			icon.classList.remove('icon-chrome')
-			icon.classList.add('icon-opera')
+			icon.classList.remove('fa-chrome')
+			icon.classList.add('fa-opera')
 			chrExtBtn.setAttribute('href', '/app--opera')
 			chrExtBtn.setAttribute('title', getString('ext_opera'))
 		}
@@ -54,21 +54,18 @@ Object.keys(API).forEach(key => {
  * Функция для запросов к API
  */
 
-var doFetch = options => {
-	let fetchOptions = { cache: 'no-store' }
-
-	let
-		fetchURL =        options.URL,
-		handler =         options.handler,
-		handlerOptions =  options.handlerOptions ? options.handlerOptions : {},
-		failData =        options.failData ? options.failData : 'fail'
-
-	fetch(`${fetchURL}?t=${Date.now()}`, fetchOptions).then(response => {
-		response.json().then(data => {
-			handler(data, handlerOptions)
-		})
-	}).catch(e => { handler(failData) })
-}
+let doFetch = ({ fetchURL, handler, handlerOptions = {}, failData = 'fail' }) =>
+	fetch(`${fetchURL}?t=${Date.now()}`, { cache: 'no-store' })
+		.then(response => response.json())
+		.then(data => handler({
+			data: data,
+			options: handlerOptions
+		}))
+		.catch(err => handler({
+			fetchFailed: true,
+			errorData: err,
+			options: handlerOptions
+		}))
 
 /*
  * Функция для проверки клиента на совместимость с сайтом

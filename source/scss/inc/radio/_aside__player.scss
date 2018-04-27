@@ -74,7 +74,7 @@
 			background-color: transparent;
 			width: 100px; height: $elemHeight;
 			margin: 0 10px;
-			border: 1px solid rgba(0, 0, 0, .1);
+			border: 1px solid rgba(#000, .1);
 
 			@each $browser, $track, $range in (webkit, 'slider-runnable', slider), (moz, range, range) {
 				-#{$browser}-appearance: none;
@@ -150,7 +150,7 @@
 			width: 100%; height: 100%;
 			background-color: transparent;
 			font-size: #{$fontSize * .9};
-			border: 1px solid rgba(0, 0, 0, .3);
+			border: 1px solid rgba(#000, .3);
 			outline: 0;
 			text-transform: uppercase;
 			cursor: pointer;

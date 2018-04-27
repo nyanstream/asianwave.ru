@@ -12,9 +12,20 @@ html(lang='ru')
 		each URL in ['aw-cdn.blyat.science', 'aw-api.blyat.science', 'www.google-analytics.com', 'ssl.google-analytics.com', 'fonts.gstatic.com', 'mc.yandex.ru', 'counter.yadro.ru', 'images.weserv.nl', 'st1.chatovod.ru', `ryuko.${domain}`]
 			link(rel='dns-prefetch' href=`//${URL}`)
 
+		each verif in [{ type: 'google-site-verification', content: 'Y-zrQS3gEUB2vkcCPbvcU7dhogBFKa_BV-rP_i2x79c' }]
+			meta(name=`${verif.type}`, content: `${verif.content}`)
+			
+		each CSS in [{ file: `balloon-css/${LIBS.css.balloon.v}/balloon`, sri: LIBS.css.balloon.sri }]
+			link(rel='stylesheet' href=`https://cdnjs.cloudflare.com/ajax/libs/${CSS.file}.min.css` integrity=`${CSS.sri}` crossorigin='anonymous')
+
+		each CSS in [{ file: 'solid', sri: LIBS.css.fa.sri.solid }, { file: 'brands', sri: LIBS.css.fa.sri.brands }, { file: 'fontawesome', sri: LIBS.css.fa.sri.same }]
+			link(rel='stylesheet' href=`https://use.fontawesome.com/releases/v${LIBS.css.fa.v}/css/${CSS.file}.css` integrity=`${CSS.sri}` crossorigin='anonymous')
+
 		link(rel='stylesheet' href=`https://cdnjs.cloudflare.com/ajax/libs/balloon-css/${libsVer.baloon}/balloon.min.css`)
-		each CSS in ['aw-fonts', 'aw-every', 'radio']
+
+		each CSS in ['aw-every', 'radio']
 			link(rel='stylesheet' href=`${PATHS.css}/${CSS}.min.css?v=${VERSION}`)
+
 		noscript
 			style.
 				.radio .error-box { display: block } .radio > * { display: none }
@@ -25,7 +36,7 @@ html(lang='ru')
 				ul.right
 					li.li--offset
 						a.right__elem(href='/app--chrome' target='_blank' data-lang-title='ext_chrome')
-							i.icon.icon-chrome
+							i.fab.fa-chrome
 					li
 						a.right__elem(href=`${URLs.requests.radio}` target='_blank' rel='nofollow noopener' data-lang-title='request_music') &#43;
 					li
@@ -57,8 +68,8 @@ html(lang='ru')
 					div.side-content.radio--pe.radio-error
 			include inc/footer.pug
 
-		each lib in [`moment.js/${libsVer.moment.same}/moment.min`, `moment.js/${libsVer.moment.same}/locale/ru`, `ismobilejs/${libsVer.isMobile}/isMobile.min`]
-			script(src=`https://cdnjs.cloudflare.com/ajax/libs/${lib}.js` defer)
+		each JS in [{ file: `url-search-params/${LIBS.js.urlSP_polyfill.v}/url-search-params.js`, sri: LIBS.js.urlSP_polyfill.sri }, { file: `moment.js/${LIBS.js.moment.v.same}/moment.min.js`, sri: LIBS.js.moment.sri.same }, { file: `moment.js/${LIBS.js.moment.v.same}/locale/ru.js`, sri: LIBS.js.moment.sri.locale }, { file: `ismobilejs/${LIBS.js.isMobile.v}/isMobile.min.js`, sri: LIBS.js.isMobile.sri }]
+			script(src=`https://cdnjs.cloudflare.com/ajax/libs/${JS.file}` integrity=`${JS.sri}` crossorigin='anonymous' defer)
 
 		each JS in ['kamina', 'special/ms-edge-suck', 'langs', 'core', 'parsers', 'radio']
 			script(src=`${PATHS.js}/${JS}.min.js?v=${VERSION}` defer)

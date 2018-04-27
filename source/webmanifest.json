@@ -1,25 +1,22 @@
 {
-	"name": "Asian Wave",
-	"short_name": "Asian Wave",
+	"name": "",
+	"short_name": "",
 	"lang": "ru",
 	"icons": [
 		{
-			"src": "/files/img/logo/color-logo-256.png",
+			"src": "app-icons/icon-256.png",
 			"sizes": "256x256",
 			"type": "image/png"
-		},
-		{
-			"src": "/files/img/logo/color-logo-128.png",
+		}, {
+			"src": "app-icons/icon-128.png",
 			"sizes": "128x128",
 			"type": "image/png"
-		},
-		{
-			"src": "/files/img/logo/color-logo-64.png",
+		}, {
+			"src": "app-icons/icon-64.png",
 			"sizes": "64x64",
 			"type": "image/png"
-		},
-		{
-			"src": "/files/img/logo/color-logo-32.png",
+		}, {
+			"src": "app-icons/icon-32.png",
 			"sizes": "32x32",
 			"type": "image/png"
 		}
@@ -27,6 +24,7 @@
 	"scope": "/",
 	"start_url": "/?from=mobile",
 	"display": "standalone",
-	"theme_color": "#7ed8d8",
+	"orientation": "portrait",
+	"theme_color": "",
 	"background_color": "#fff"
 }

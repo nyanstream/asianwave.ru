@@ -19,6 +19,10 @@
 			border-bottom: 0;
 			background-color: rgba(#000, .03);
 		}
+
+		i[class^='fa'] {
+			font-size: .9em;
+		}
 	}
 
 	$srchW: 40px;	$dlplW: 35px;
@@ -54,7 +58,7 @@
 			height: 50%;
 
 			&:first-child {
-				border-bottom: 1px solid rgba(0, 0, 0, .1);
+				border-bottom: 1px solid rgba(#000, .1);
 			}
 		}
 	}
@@ -80,7 +84,7 @@
 		border: 0;
 
 		&:hover {
-			background-color: rgba(0, 0, 0, .2)
+			background-color: rgba(#000, .03);
 		}
 	}
 }

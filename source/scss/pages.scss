@@ -4,10 +4,12 @@
 $aw__isIndex: false;
 
 :root {
-	--prime-color: $primeColor;
-	--prime-color-5d: darken($primeColor, 5%);
-	--gradint-color-top: rgb(214, 63, 105);
-	--gradint-color-bottom: rgb(134, 88, 136);
+	--prime-color:     #{$primeColor};
+	--prime-color-5d:  #{darken($primeColor, 5%)};
+
+	// --gradint-color-top:     rgb(214, 63, 105);
+	// --gradint-color-bottom:  rgb(134, 88, 136);
+
 	--shadow: 0 5px 20px rgba(0, 0, 0, .5);
 	--font-size: 18px;
 }
@@ -27,7 +29,7 @@ body {
 		font-size: 0;
 	}
 
-	background-image: url('#{$imgPath}/events/old/bckg.png?v=#{$VERSION}'), linear-gradient(to bottom, $gradientColorBottom, $gradientColorTop);
+	background-image: url('#{$imgPath}/events/old/bckg-spring.png?v=#{$VERSION}');
 	background-position: bottom center;
 	background-repeat: no-repeat;
 	background-size: 100%;
@@ -48,6 +50,6 @@ body {
 @import 'inc/pages/page';
 @import 'inc/main/footer';
 
-@import 'inc/main/events';
+//@import 'inc/main/events';
 
 @import 'inc/pages/mediaq';

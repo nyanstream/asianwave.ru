@@ -31,19 +31,25 @@ var points = {
 	'jp': {
 		'name': 'Japan',
 		'port': 8000,
-		'mr24port': 7934,
 		'id': 1,
-		'orderType': 'mr24'
+		'crutch': {
+			'mr24port': 7934,
+			'orderType': 'mr24'
+		}
 	}, 'ru': {
 		'name': 'Russia',
 		'port': 8010,
 		'id': 2,
-		'orderType': 'azura'
+		'crutch': {
+			'orderType': 'azura'
+		}
 	}, 'kr': {
 		'name': 'Korea',
 		'port': 8020,
 		'id': 3,
-		'orderType': 'azura'
+		'crutch': {
+			'orderType': 'azura'
+		}
 	}
 }
 
@@ -55,8 +61,8 @@ var points = {
 			? points[$ls.get(storageCurrentPointItemName)].port
 			: points['jp'].port,
 		mr24port: () => $ls.get(storageCurrentPointItemName)
-			? points[$ls.get(storageCurrentPointItemName)].mr24port
-			: points['jp'].mr24port,
+			? points[$ls.get(storageCurrentPointItemName)].crutch.mr24port
+			: points['jp'].crutch.mr24port,
 		name: () => $ls.get(storageCurrentPointItemName)
 			? points[$ls.get(storageCurrentPointItemName)].name
 			: points['jp'].name,
@@ -65,8 +71,8 @@ var points = {
 			: points['jp'].id,
 		key: () => $ls.get(storageCurrentPointItemName) || 'jp',
 		orderType: () => $ls.get(storageCurrentPointItemName)
-			? points[$ls.get(storageCurrentPointItemName)].orderType
-			: points['jp'].orderType
+			? points[$ls.get(storageCurrentPointItemName)].crutch.orderType
+			: points['jp'].crutch.orderType
 	}
 })()
 
@@ -141,7 +147,7 @@ var
  */
 
 var $init = {
-	radio: data => {
+	radio: ({ data = {}, fetchFailed = false, errorData = false }) => {
 		let
 			stateBox = $make.qs('.radio-state'),
 			stateBoxBody = '', linksBoxBody = '', plBoxBody = '',
@@ -160,7 +166,7 @@ var $init = {
 
 		//console.log(data)
 
-		if (data == 'fail' || !('now_playing' in data)) {
+		if (fetchFailed || !('now_playing' in data)) {
 			radioErrorBox.textContent = getString('err_api_radio'); return
 		}
 
@@ -182,8 +188,8 @@ var $init = {
 		/* Блоки со ссылками на текущий трек и на загрузку "плейлиста" */
 
 		let
-			srchVK = $create.link(`https://${domain.vk}/audio?q=${encodeURIComponent(currentFull)}`, '<i class="icon icon-vk"></i>', '', ['e']),
-			srchGo = $create.link(`https://google.com/search?q=${encodeURIComponent(currentFull)}`, '<i class="icon icon-google"></i>', '', ['e'])
+			srchVK = $create.link(`https://${domain.vk}/audio?q=${encodeURIComponent(currentFull)}`, '<i class="fab fa-vk"></i>', '', ['e']),
+			srchGo = $create.link(`https://google.com/search?q=${encodeURIComponent(currentFull)}`, '<i class="fab fa-google"></i>', '', ['e'])
 
 		//srchVK.setAttribute('title', `${getString('song_search_in')} VK`)
 		//srchGo.setAttribute('title', `${getString('song_search_in')} Google`)
@@ -197,7 +203,7 @@ var $init = {
 
 		/* Файл плейлиста */
 
-		let plLink = $create.link('', '<i class="icon icon-music"></i>')
+		let plLink = $create.link('', '<i class="fas fa-music"></i>')
 
 		plLink.setAttribute('href', `data:audio/x-mpegurl;charset=utf-8;base64,${btoa(getRadioSrc() + '\r\n')}`)
 		plLink.setAttribute('download', `Asian Wave ${$currentPoint.name()}.m3u`)
@@ -230,7 +236,7 @@ var $init = {
 				orderURL += `${domain.mr24}/?to=table&port=${$currentPoint.mr24port()}`;
 		}
 
-		orderBox.appendChild($create.link(orderURL, `<span>${getString('song_order')}</span>`))
+		orderBox.appendChild($create.link(orderURL, `<span>${getString('song_order')}</span>`, '', ['e']))
 
 		/* Блок с выводом недавних треков */
 
@@ -259,10 +265,26 @@ var $init = {
  */
 
 var $loadInfo = {
-	radio: () => doFetch({ URL: `https://${domain.radio}/api/nowplaying/${$currentPoint.id()}`, handler: $init.radio }),
-	schedule: () => doFetch({ URL: API.schedule, handler: $parser.schedule, handlerOptions: { mode: 'radio' } }),
-	noti: () => doFetch({ URL: API.noti, handler: $parser.noti }),
-	vkNews: () => doFetch({ URL: API.vkNews, handler: $parser.vkNews }),
+	radio: () => doFetch({
+		fetchURL: `https://${domain.radio}/api/nowplaying/${$currentPoint.id()}`,
+		handler: $init.radio
+	}),
+
+	schedule: () => doFetch({
+		fetchURL: API.schedule,
+		handler: $parser.schedule
+	}),
+
+	noti: () => doFetch({
+		fetchURL: API.noti,
+		handler: $parser.noti
+	}),
+
+	vkNews: () => doFetch({
+		fetchURL: API.vkNews,
+		handler: $parser.vkNews
+	}),
+
 	full() {
 		Object.keys(this).forEach(key => (key != 'full') ? this[key]() : '')
 	}

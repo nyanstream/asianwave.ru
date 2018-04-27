@@ -1,0 +1,36 @@
+{
+	"js": {
+		"moment": {
+			"v": {
+				"same": "2.22.1",
+				"timezone": "0.5.16"
+			},
+			"sri": {
+				"same": "sha256-L3S3EDEk31HcLA5C6T2ovHvOcD80+fgqaCDt2BAi92o=",
+				"locale": "sha256-qR4pdhxtx7dwKGJuYGoYjfnCQBPXv47hzLLU8jPLVUY="
+			}
+		},
+		"isMobile": {
+			"v": "0.4.1",
+			"sri": "sha256-aLR8fvqAYzAEIfWc+ip7mzCFBJXgGgYu6AXeAcgta5Q="
+		},
+		"urlSP_polyfill": {
+			"v": "0.10.0",
+			"sri": "sha256-Tj0IK7neOvGa1FUIZ433DRvlP/Kv0ffbyyrgQOhdOro="
+		}
+	},
+	"css": {
+		"fa": {
+			"v": "5.0.9",
+			"sri": {
+				"same": "sha384-Lyz+8VfV0lv38W729WFAmn77iH5OSroyONnUva4+gYaQTic3iI2fnUKtDSpbVf0J",
+				"solid": "sha384-29Ax2Ao1SMo9Pz5CxU1KMYy+aRLHmOu6hJKgWiViCYpz3f9egAJNwjnKGgr+BXDN",
+				"brands": "sha384-ATC/oZittI09GYIoscTZKDdBr/kI3lCwzw3oBMnOYCPVNJ4i7elNlCxSgLfdfFbl"
+			}
+		},
+		"balloon": {
+			"v": "0.5.0",
+			"sri": "sha256-NBgeI1K43CnPptaOS0A2PfGfTg+8gtmTyDEe7GmiP64="
+		}
+	}
+}

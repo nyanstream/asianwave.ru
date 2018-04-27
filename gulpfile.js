@@ -8,14 +8,15 @@ let
 	rename =      require('gulp-rename'),
 	watch =       require('gulp-watch'),
 	plumber =     require('gulp-plumber'),
-	csso =        require('gulp-csso'),
+	cleanCSS =    require('gulp-clean-css'),
 	pug =         require('gulp-pug'),
+	changeJSON =  require('gulp-json-transform'),
 	liveServer =  require('browser-sync')
 
 let sass = {
 	compile:  require('gulp-sass'),
 	watch:    require('gulp-watch-sass'),
-	vars:     require('gulp-sass-variables')
+	vars:     require('gulp-sass-vars')
 }
 
 let uglify = {
@@ -27,14 +28,11 @@ let
 	minifyJS = uglify.composer(uglify.core, console),
 	reloadServer = () => liveServer.stream()
 
-let dirs = {
-	dev: 'source',
-	prod: {
-		build: 'dist',
-		content: 'dist_content',
-		main: 'files'
-	}
-}
+let vendors = require('./vendors-data.json')
+
+let deps = Object.entries(Object.assign({}, project.dependencies, project.devDependencies))
+
+let dirs = project._config.dirs
 
 let paths = {
 	html: {
@@ -64,23 +62,49 @@ gulp.task('pug', () => tube([
 	pug({ locals: {
 		VERSION: project.version,
 		PATHS: {
-			js:      `/${dirs.prod.main}/js`,
-			css:     `/${dirs.prod.main}/css`,
-			img:     `/${dirs.prod.main}/img`,
-			other:   `/${dirs.prod.main}/other`,
-			frames:  `/${dirs.prod.main}/frames`
-		}
+			js:       `/${dirs.prod.main}/js`,
+			css:      `/${dirs.prod.main}/css`,
+			img:      `/${dirs.prod.main}/img`,
+			other:    `/${dirs.prod.main}/other`,
+			players:  `/${dirs.prod.main}/players`
+		},
+		LIBS: vendors,
+		DEPS: deps,
+		BBISWU: {
+			google: project._config.trackers.google,
+			yandex: project._config.trackers.yandex
+		},
+		title:       project._config.title,
+		domain:      project._config.domain,
+		primeColor:  project._config.prime_color
 	}}),
 	bom(),
 	rename(file => {
 		switch (file.dirname) {
-			case 'api':
-				file.extname = '.php'; break
-			case 'frames':
-				file.dirname = `${dirs.prod.main}/${file.dirname}`
+			case 'apps':
 				file.extname = '.htm'
 		}
 	}),
+	gulp.dest(paths.html.prod),
+	reloadServer()
+]))
+
+gulp.task('webmanifest', () => tube([
+	watch(`${dirs.dev}/webmanifest.json`, { ignoreInitial: false }),
+	plumber(),
+	changeJSON((data, file) => {
+		data.icons.forEach(icon => {
+			icon.src = `/${dirs.prod.main}/img/${icon.src}?v=${project.version}`
+		})
+
+		data.name =        project._config.title
+		data.short_name =  project._config.title
+
+		data.theme_color = project._config.prime_color
+
+		return data
+	}),
+	rename('wave.webmanifest'),
 	gulp.dest(paths.html.prod),
 	reloadServer()
 ]))
@@ -101,19 +125,16 @@ gulp.task('minify-js', () => tube([
 	reloadServer()
 ]))
 
-/*
- * Раньше здесь была проблема, связанная с тем, что для SCSS нужен нормальный вочер, который понимает @import-ы, а единственный такой на npm работает не совсем правильно, и его нельзя использовать совместно с gulp.src. Поэтому приходится делать вот так.
- * @TODO решение не сработало, найти новое
- */
-
 let scssTubes = [
 	plumber(),
 	sass.vars({
-		$VERSION: project.version,
-		$imgPath: `/${dirs.prod.main}/img`
+		VERSION:     project.version,
+		primeColor:  project._config.prime_color,
+		imgPath:     `/${dirs.prod.main}/img`,
+		otherPath:   `/${dirs.prod.main}/other`
 	}),
 	sass.compile({outputStyle: 'compressed'}),
-	csso(),
+	cleanCSS(),
 	bom(),
 	rename({suffix: '.min'}),
 	gulp.dest(paths.css.prod)
@@ -127,5 +148,5 @@ gulp.task('scss:dev', () => tube(
 	[sass.watch(paths.css.dev)].concat(scssTubes, [reloadServer()])
 ))
 
-gulp.task('default', ['pug', 'get-kamina', 'minify-js', 'scss:dev'])
+gulp.task('default', ['pug', 'webmanifest', 'get-kamina', 'minify-js', 'scss:dev'])
 gulp.task('dev', ['liveReload', 'default'])

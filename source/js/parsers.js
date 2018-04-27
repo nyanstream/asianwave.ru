@@ -5,9 +5,7 @@
  */
 
 var $parser = {
-	schedule: (data, options) => {
-		options = options ? options : {}
-
+	schedule: ({ data = [], options = {}, fetchFailed = false, errorData }) => {
 		let
 			streamSсhed = $make.qs('.schedule'),
 			table = $create.elem('table'),
@@ -15,7 +13,7 @@ var $parser = {
 
 		streamSсhed.textContent = ''
 
-		if (data == 'fail') { return }
+		if (fetchFailed) { console.warn(errorData); return }
 
 		/*
 		 * Ранее здесь вместо дня со времени начала эпохи Unix вычислялся номер дня в году.
@@ -41,9 +39,9 @@ var $parser = {
 
 			let
 				newsсhedData = `${yearNow != yearOfS ? yearOfS + '<br>' : ''}${moment.unix(item['s']).format('D MMMM')}<br>${moment.unix(item['s']).format('HH:mm')} &ndash; ${moment.unix(item['e']).format('HH:mm')}`,
-				nazvaniue = ''
+				itemTitle = ''
 
-			nazvaniue = (item['link'] && item['link'] != '')
+			itemTitle = (item['link'] && item['link'] != '')
 				? $create.link(item['link'], item['title'], '', ['e', 'html'])
 				: $make.safe(item['title'])
 
@@ -52,18 +50,18 @@ var $parser = {
 				return
 			} else if (item['s'] < unixNow && unixNow < item['e']) {
 				/* если (таймштамп времени начала item меньше, чем текущий Unix-таймштамп) И если (текущий Unix-таймштамп меньше, чем время окончания item) */
-				tableBody += $create.elem('tr', `<td>${newsсhedData}</td><td><b>${getString('now')(moment.unix(item['e']).toNow(true))}:</b><br>${nazvaniue}</td>`, 'air--current', ['html'])
+				tableBody += $create.elem('tr', `<td>${newsсhedData}</td><td><b>${getString('now')(moment.unix(item['e']).toNow(true))}:</b><br>${itemTitle}</td>`, 'air--current', ['html'])
 			} else if (item['s'] > unixNow && item['s'] == nextAirs[0]['s']) {
 				/* если (таймштамп времени начала item больше, чем текущий Unix-таймштамп) И если (таймштамп времени начала item равен времени начала первого item из массива будущих эфиров) */
-				tableBody += $create.elem('tr', `<td>${newsсhedData}</td><td><b>${getString('within')} ${moment.unix(item['s']).fromNow()}:</b><br>${nazvaniue}</td>`, 'air--next', ['html'])
+				tableBody += $create.elem('tr', `<td>${newsсhedData}</td><td><b>${getString('within')} ${moment.unix(item['s']).fromNow()}:</b><br>${itemTitle}</td>`, 'air--next', ['html'])
 			} else if (item['s'] < unixNow) {
 				/* если (таймштамп времени начала item меньше, чем текущий Unix-таймштамп) */
 				return
 			} else if (dayOfS > dayNow) {
 				/* если (день даты старта item больше, чем текущий день) */
-				tableBody += $create.elem('tr', `<td>${newsсhedData}</td><td>${nazvaniue}</td>`, 'air--notToday', ['html'])
+				tableBody += $create.elem('tr', `<td>${newsсhedData}</td><td>${itemTitle}</td>`, 'air--notToday', ['html'])
 			} else {
-				tableBody += $create.elem('tr', `<td>${newsсhedData}</td><td>${nazvaniue}</td>`, '', ['html'])
+				tableBody += $create.elem('tr', `<td>${newsсhedData}</td><td>${itemTitle}</td>`, '', ['html'])
 			}
 		})
 
@@ -76,15 +74,18 @@ var $parser = {
 
 		streamSсhed.appendChild(table)
 	},
-	vkNews: data => {
+	vkNews: ({ data = {}, fetchFailed = false, errorData = false }) => {
 		let
 			vkNews = $make.qs('.vk-posts'),
 			vkNewsBody = $create.elem('div')
 
-		if (data == 'fail' || !data.posts) {
+		if (fetchFailed || !('posts' in data)) {
 			vkNews.classList.add('api-err')
 			vkNews.textContent = ''
 			vkNews.appendChild($create.elem('p', getString('err_api')))
+
+			if (errorData) { console.warn(errorData) }
+
 			return
 		} else {
 			if (vkNews.classList.contains('api-err')) {
@@ -151,17 +152,21 @@ var $parser = {
 			vkNews.innerHTML = vkNewsBody.innerHTML
 		}
 	},
-	noti: (data, options) => {
+	noti: ({ data = {}, options = {}, fetchFailed = false, errorData = false }) => {
 		options = options ? options : {}
 
 		let notiEl = $make.qs('.noti')
 
-		if (data == 'fail' || !data['enabled']) { notiEl.style.display = 'none'; return }
+		if (fetchFailed || !('enabled' in data) || data['enabled'] == false) {
+			notiEl.style.display = 'none'
+			if (errorData) { console.warn(errorData) }
+			return
+		}
 
 		let
-			id = data['time'],
-			text = data['text'],
-			color = data['color']
+			id =     data['time'],
+			text =   data['text'],
+			color =  data['color']
 
 		notiEl.style.backgroundColor = color ? color : null
 
@@ -169,11 +174,11 @@ var $parser = {
 
 		let
 			notiContent = $create.elem('div', text, 'noti-content'),
-			notiHide = $create.elem('button', '', 'noti-hide'),
+			notiHideBtn = $create.elem('button', '', 'noti-hide'),
 			notiHideString = `${getString('hide')} ${getString('noti').toLowerCase()}`,
 			notiItems = []
 
-		notiHide.textContent = notiHideString
+		notiHideBtn.textContent = notiHideString
 
 		if ($make.qsf('a[href]', notiContent)) {
 			let notiLinks = $make.qsf('a[href]', notiContent, ['a'])
@@ -187,7 +192,7 @@ var $parser = {
 		}
 
 		notiEl.appendChild(notiContent)
-		notiEl.appendChild(notiHide)
+		notiEl.appendChild(notiHideBtn)
 
 		if ($ls.get('aw_noti')) {
 			notiItems = JSON.parse($ls.get('aw_noti'))
@@ -195,7 +200,7 @@ var $parser = {
 
 		notiEl.style.display = notiItems.includes(id) ? 'none' : 'block'
 
-		notiHide.addEventListener('click', () => {
+		notiHideBtn.addEventListener('click', () => {
 			notiItems[notiItems.length] = id
 			$ls.set('aw_noti', JSON.stringify(notiItems))
 			notiEl.style.display = 'none'

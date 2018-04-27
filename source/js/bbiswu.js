@@ -1,41 +1,31 @@
 'use strict'
 
+var _bbiswuScriptData = document.currentScript.dataset
+
 /*
  * Google Analytics
  */
 
-;(function(i, s, o, g, r, a, m) {
-	i['GoogleAnalyticsObject'] = r
+window.dataLayer = window.dataLayer || []
+function gtag() { dataLayer.push(arguments) }
 
-	i[r] = i[r] || function() {
-		(i[r].q = i[r].q || []).push(arguments)
-	}, i[r].l = 1 * new Date()
-
-	a = s.createElement(o), m = s.getElementsByTagName(o)[0]
-	a.async = 1
-	a.src = g
-
-	m.parentNode.insertBefore(a, m)
-})(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga')
-
-ga('create', 'UA-79528573-1', 'auto')
-ga('send', 'pageview')
+gtag('js', new Date())
+gtag('config', _bbiswuScriptData.bbiswuGoogle)
 
 /*
- * Yandex Metrika
+ * Yandex.Metriсa
  */
 
 ;(function(d, w, c) {
 	(w[c] = w[c] || []).push(function() {
 		try {
-			var yandexMetrikaID = 38037540
+			var yandexMetrikaID = _bbiswuScriptData.bbiswuYandex
 
 			w['yaCounter' + yandexMetrikaID] = new Ya.Metrika({
 				id: yandexMetrikaID,
 				clickmap: true,
 				trackLinks: true,
 				accurateTrackBounce: true,
-				webvisor: true,
 				trackHash: true
 			})
 		} catch (e) {}

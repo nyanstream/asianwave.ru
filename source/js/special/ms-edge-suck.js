@@ -5,21 +5,3 @@
  */
 
 var isEdge = (/Edge\//.test(navigator.userAgent)) ? true : false
-
-if (isEdge) {
-	$check.get = value => {
-		let
-			loc = location.search,
-			params = {}, parts = '', nv = ''
-
-		if (loc)
-			parts = location.search.substring(1).split('&');
-			for (let i = 0, pL = parts.length; i < pL; i++) {
-				nv = parts[i].split('=')
-				if (!nv[0]) continue;
-				params[nv[0]] = nv[1] || true;
-			}
-
-		return params[value] ? params[value] : false
-	}
-}
