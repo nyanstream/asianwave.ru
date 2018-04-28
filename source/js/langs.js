@@ -223,7 +223,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	 * Элементы должны иметь аттрибут "data-lang" с нужным значением из переменной trStrings
 	 */
 
-	;(() => {
+	void (() => {
 		let elems = $make.qs('[data-lang]', ['a'])
 		Array.from(elems).forEach(elem => {
 			let string = getString(elem.dataset.lang)

@@ -9,6 +9,8 @@ clientTests({ nodes: {
 	errorBox:   $make.qs('.error-box')
 }})
 
+$check.mediaSession = () => ('mediaSession' in navigator)
+
 /*
  * Дополнение к камине для создания тултипов
  */
@@ -53,7 +55,7 @@ var points = {
 	}
 }
 
-;(() => {
+void (() => {
 	let storageCurrentPointItemName = 'aw_radioPoint'
 
 	window.$currentPoint = {
@@ -107,9 +109,17 @@ radio.toggle = function() {
 			this.play()
 			btnData.state = 'play'
 		})
+
+		if ($check.mediaSession()) {
+			navigator.mediaSession.playbackState = 'playing'
+		}
 	} else {
 		this.pause()
 		btnData.state = 'stop'
+
+		if ($check.mediaSession()) {
+			navigator.mediaSession.playbackState = 'paused'
+		}
 	}
 }
 
@@ -184,6 +194,14 @@ var $init = {
 		stateBoxBody = $create.elem('div', `<p title="${getString('song_current_track')}: ${$make.safe(currentS)}">${$make.safe(currentS)}</p><p title="${getString('song_current_artist')}: ${$make.safe(currentA)}">${$make.safe(currentA)}</p>`, 'current radio--pe')
 
 		$create.balloon(stateBoxBody, getString('song_current'), 'down')
+
+		if ($check.mediaSession()) {
+			navigator.mediaSession.metadata = new MediaMetadata({
+				title: currentS,
+				artist: currentA,
+				album: `Asian Wave ${$currentPoint.name()}`
+			})
+		}
 
 		/* Блоки со ссылками на текущий трек и на загрузку "плейлиста" */
 
@@ -295,7 +313,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	 * Инициация радио
 	 */
 
-	;(() => {
+	void (() => {
 		radioCtrl_pp.onclick = () => radio.toggle()
 
 		radioCtrl_vol.value = radioVol
@@ -316,6 +334,11 @@ document.addEventListener('DOMContentLoaded', () => {
 		radioCtrl_vol.addEventListener('change', e => {
 			$ls.set('aw_radioVolume', e.target.value)
 		})
+
+		if ($check.mediaSession()) {
+			navigator.mediaSession.setActionHandler('play', () => radio.toggle())
+			navigator.mediaSession.setActionHandler('pause', () => radio.toggle())
+		}
 	})()
 
 	/*
@@ -325,7 +348,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	 let embedVKchecker = $check.get('embed-vk')
 
-	;(() => {
+	void (() => {
 		if ($ls.get('aw_l10n')) { moment.locale($ls.get('aw_l10n')) }
 		if (embedVKchecker) { $make.qs('.container').classList.add('embed-vk') }
 
@@ -442,7 +465,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	 * Таймеры
 	 */
 
-	;(() => {
+	void (() => {
 		$loadInfo.full()
 		let
 			aw_timer_state = setInterval(() => { $loadInfo.radio() }, 5000),

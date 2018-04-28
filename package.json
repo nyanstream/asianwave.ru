@@ -2,7 +2,7 @@
 	"name": "asianwave.ru",
 	"description": "Russian multimedia portal for Asian culture fans of all genres and types",
 	"private": true,
-	"version": "2.4.0",
+	"version": "2.4.1",
 	"author": "Dmitry <dmitry@cojam.ru> (https://e965.ru)",
 	"repository": "bitbucket:ruLait/asianwave.ru",
 	"license": "UNLICENSED",
