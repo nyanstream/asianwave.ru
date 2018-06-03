@@ -132,8 +132,8 @@ let scssTubes = [
 		primeColor:  project._config.prime_color,
 		imgPath:     `/${dirs.prod.main}/img`,
 		otherPath:   `/${dirs.prod.main}/other`
-	}),
-	sass.compile({outputStyle: 'compressed'}),
+	}, { verbose: false }),
+	sass.compile({ outputStyle: 'compressed' }),
 	cleanCSS(),
 	bom(),
 	rename({suffix: '.min'}),

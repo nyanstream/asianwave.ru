@@ -82,9 +82,171 @@ void (() => {
  * Инициация радио
  */
 
+let player = $make.qs('.player')
+
 domain.radio = `ryuko.${domain.self}`
 
 var getRadioSrc = () => `https://${domain.radio}/radio/${$currentPoint.port()}/listen`
+
+class Radio {
+	constructor() {
+		this.stream = new Audio(this.getSrc())
+
+		this.stream.preload = 'none'
+		this.stream.autoplay = false
+		this.stream.controls = false
+
+		this.points = {
+			'jp': {
+				'name': 'Japan',
+				'port': 8000,
+				'id': 1,
+				'crutch': {
+					'mr24port': 7934,
+					'orderType': 'mr24'
+				}
+			},
+
+			'ru': {
+				'name': 'Russia',
+				'port': 8010,
+				'id': 2,
+				'crutch': {
+					'orderType': 'azura'
+				}
+			},
+
+			'kr': {
+				'name': 'Korea',
+				'port': 8020,
+				'id': 3,
+				'crutch': {
+					'orderType': 'azura'
+				}
+			}
+		}
+
+		navigator.mediaSession.setActionHandler('play', () => this.toggle())
+		navigator.mediaSession.setActionHandler('pause', () => this.toggle())
+	}
+
+	getSrc() {
+		return `https://${domain.radio}/radio/${this.getCurrentPointInfo('port')}/listen`
+	}
+
+	getStorageItemName(name = 'radioPoint') {
+		let names = {
+			radioOnPause:  'aw_radioOnPause',
+			radioPoint:    'aw_radioPoint',
+			radioVolume:   'aw_radioVolume'
+		}
+
+		return names[name]
+	}
+
+	toggle({ button = $make.qsf('[data-js-action="changePlayerState"]', player) }) {
+		let btnData = button.dataset
+
+		if (this.stream.paused) {
+			this.stream.load()
+			btnData.state = 'loading'
+
+			this.stream.addEventListener('error', () => {
+				btnData.state = 'stop'; return
+			})
+
+			this.stream.addEventListener('canplay', () => {
+				this.stream.play()
+				btnData.state = 'play'
+			})
+
+			if ($check.mediaSession()) {
+				navigator.mediaSession.playbackState = 'playing'
+			}
+		} else {
+			this.stream.pause()
+			btnData.state = 'stop'
+
+			if ($check.mediaSession()) {
+				navigator.mediaSession.playbackState = 'paused'
+			}
+		}
+	}
+
+	changeVolume({ volume = 50, input = $make.qsf('[data-js-action="changeVolume"]', player) }) {
+		input.value = volume
+		this.stream.volume = volume/100
+
+		/*
+		 * @HACK текущая громкость пишется в CSS-переменную
+		 * @TODO если когда-нибудь починят совместимость fill в браузерах, то переписать на него
+		 */
+
+		document.documentElement.style.setProperty('--volume', volume + '%')
+		input.addEventListener('input', e => {
+			volume = e.target.value
+
+			radio.volume = volume/100
+			document.documentElement.style.setProperty('--volume', volume + '%')
+		})
+
+		input.addEventListener('change', e => {
+			$ls.set(this.getStorageItemName('radioVolume'), e.target.value)
+		})
+	}
+
+	toPoint(point = 'jp') {
+		if (!Object.keys(this.points).includes(point)) { return }
+
+		let _pa
+
+		$ls.set(this.getStorageItemName('radioOnPause'), this.stream.paused)
+		$ls.set(this.getStorageItemName('radioPoint'), point) // айтем должен быть такой же, как в переменной storageCurrentPointItemName
+
+		this.stream.src = this.getSrc()
+
+		if ($ls.get(this.getStorageItemName('radioOnPause')) == 'false') {
+			this.stream.load()
+			this.stream.play()
+		}
+
+		$ls.rm(this.getStorageItemName('radioOnPause'))
+
+		$loadInfo.radio()
+	}
+
+	getCurrentPointInfo(type = 'name') {
+		let _name = this.getStorageItemName('radioPoint')
+
+		let info = {
+			port: () => $ls.get(_name)
+				? this.points[$ls.get(_name)].port
+				: this.points['jp'].port,
+
+			mr24port: () => $ls.get(_name)
+				? this.points[$ls.get(_name)].crutch.mr24port
+				: this.points['jp'].crutch.mr24port,
+
+			name: () => $ls.get(_name)
+				? this.points[$ls.get(_name)].name
+				: this.points['jp'].name,
+
+			id: () => $ls.get(_name)
+				? this.points[$ls.get(_name)].id
+				: this.points['jp'].id,
+
+			key: () => $ls.get(_name) || 'jp',
+
+			orderType: () => $ls.get(_name)
+				? this.points[$ls.get(_name)].crutch.orderType
+				: this.points['jp'].crutch.orderType
+		}
+
+		return info[type]()
+	}
+}
+
+let d = new Radio()
 
 var
 	radio = new Audio(getRadioSrc()),
@@ -146,7 +308,6 @@ radio.toPoint = function(point) {
  */
 
 var
-	player =         $make.qs('.player'),
 	radioCtrl_pp =   $make.qsf('[data-js-action="changePlayerState"]', player),
 	radioCtrl_vol =  $make.qsf('[data-js-action="changeVolume"]', player),
 	pointButtons =   $make.qsf('.player-change button', player, ['a'])
