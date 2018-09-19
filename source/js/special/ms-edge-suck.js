@@ -1,7 +1,7 @@
 'use strict'
 
 /*
- * Временное переопределение чека из камины, пока эдж не научится в ес6 (к зиме убрать)
+ * var вместо let используется, чтобы было можно получить доступ к переменной с помощью window['isEdge']
  */
 
-var isEdge = (/Edge\//.test(navigator.userAgent)) ? true : false
+var isEdge = /Edge\//.test(navigator.userAgent)

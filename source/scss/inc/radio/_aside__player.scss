@@ -14,7 +14,7 @@
 		.player-controls {
 			width: 100%;
 
-			[data-js-action='changeVolume'] { width: 100% }
+			[data-action='changeVolume'] { width: 100% }
 			.on-mobile { width: auto }
 		}
 
@@ -26,7 +26,7 @@
 	&-controls {
 		font-size: 0;
 
-		[data-js-action='changePlayerState'] {
+		[data-action='changePlayerState'] {
 			height: 100%; width: $elemHeight;
 			position: relative;
 			border-right: 1px solid rgba(#000, .1);
@@ -68,7 +68,7 @@
 			}
 		}
 
-		[data-js-action='changeVolume'] {
+		[data-action='changeVolume'] {
 			$elemHeight: 15px;
 			cursor: pointer;
 			background-color: transparent;
@@ -113,11 +113,11 @@
 		}
 
 		&.on-mobile {
-			[data-js-action='changePlayerState'] {
+			[data-action='changePlayerState'] {
 				border-right: 0;
 			}
 
-			[data-js-action='changeVolume'] {
+			[data-action='changeVolume'] {
 				display: none;
 			}
 		}

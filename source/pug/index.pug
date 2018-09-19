@@ -12,7 +12,7 @@ html(lang='ru')
 			link(rel='dns-prefetch' href=`//${URL}`)
 
 		each verif in [{ type: 'google-site-verification', content: 'Y-zrQS3gEUB2vkcCPbvcU7dhogBFKa_BV-rP_i2x79c' }]
-			meta(name=`${verif.type}`, content: `${verif.content}`)
+			meta(name=`${verif.type}`, content=`${verif.content}`)
 
 		each CSS in [{ file: `fork-awesome/${LIBS.css.fa.v}/css/fork-awesome.min.css`, sri: LIBS.css.fa.sri }, { file: `balloon-css/${LIBS.css.balloon.v}/balloon.min.css`, sri: LIBS.css.balloon.sri }]
 			link(rel='stylesheet' href=`https://cdnjs.cloudflare.com/ajax/libs/${CSS.file}` integrity=`${CSS.sri}` crossorigin='anonymous')
@@ -24,7 +24,7 @@ html(lang='ru')
 			style.
 				.radio .error-box { display: block } .radio > * { display: none }
 	body
-		div.container
+		div.container(data-error='no-js')
 			header.top-panel
 				+headerBrand(subTitle)
 
@@ -53,8 +53,8 @@ html(lang='ru')
 				aside
 					div.side-content.player
 						div.radio--pe.player-controls
-							button(data-js-action='changePlayerState' data-state='stop' data-lang-label='play')
-							input(data-js-action='changeVolume' type='range' step='.1' min='0' max='100' data-lang-label='change_volume')
+							button(data-action='changePlayerState' data-state='stop' data-lang-label='play')
+							input(data-action='changeVolume' type='range' step='.1' min='0' max='100' data-lang-label='change_volume')
 
 						div.radio--pe.player-change
 							ul
@@ -68,12 +68,13 @@ html(lang='ru')
 							p На потоке #[q Talk] у нас ведутся эфиры. Если они тебе неинтересны, переключись на #[q Music].
 						button.noti__hide-btn OK, всё понятно
 
+					div.side-content.radio-live
+					div.side-content.radio-state
+
 					div.side-content.radio--pe.noti.noti(data-noti='prime')
 						div.noti__content
 						button.noti__hide-btn(data-lang='hide')
 
-					div.side-content.radio-live
-					div.side-content.radio-state
 					div.side-content.radio--pe.radio-order
 					div.side-content.radio--pe.schedule
 					div.side-content.radio--pe.songs-box
@@ -83,7 +84,7 @@ html(lang='ru')
 		each JS in [{ file: `url-search-params/${LIBS.js.urlSP_polyfill.v}/url-search-params.js`, sri: LIBS.js.urlSP_polyfill.sri }, { file: `moment.js/${LIBS.js.moment.v.same}/moment.min.js`, sri: LIBS.js.moment.sri.same }, { file: `moment.js/${LIBS.js.moment.v.same}/locale/ru.js`, sri: LIBS.js.moment.sri.locale }, { file: `ismobilejs/${LIBS.js.isMobile.v}/isMobile.min.js`, sri: LIBS.js.isMobile.sri }]
 			script(src=`https://cdnjs.cloudflare.com/ajax/libs/${JS.file}` integrity=`${JS.sri}` crossorigin='anonymous' defer)
 
-		each JS in ['kamina', 'special/ms-edge-suck', 'langs', 'core', 'parsers', 'radio']
+		each JS in ['kamina', 'special/ms-edge-suck', 'special/info-from-meta', 'core', 'every', 'langs', 'parsers', 'radio']
 			script(src=`${PATHS.js}/${JS}.min.js?v=${VERSION}` defer)
 
 		include inc/bbiswu.pug

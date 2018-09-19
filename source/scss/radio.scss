@@ -33,6 +33,22 @@ $fontSize: 16px;
 
 		.top-panel, .vk-posts, .noti, footer { display: none }
 	}
+
+	&[data-error] {
+		.radio > * { display: none }
+		.error-box { display: block }
+	}
+
+	.error-box {
+		display: none;
+		width: 100%;
+		padding: 10px;
+		text-align: center;
+
+		p {
+			margin: 5px 0;
+		}
+	}
 }
 
 .radio {
@@ -63,22 +79,6 @@ $fontSize: 16px;
 		width: $sideWidth;
 		min-width: $sideWidth;
 		order: 2;
-	}
-
-	&.error {
-		& > * { display: none }
-		.error-box { display: block }
-	}
-
-	.error-box {
-		display: none;
-		width: 100%;
-		padding: 10px;
-		text-align: center;
-
-		p {
-			margin: 5px 0;
-		}
 	}
 }
 
@@ -115,10 +115,11 @@ aside {
 		cursor: pointer;
 	}
 
-	@import 'inc/radio/aside__noti';
-	@import 'inc/radio/aside__player';
-	@import 'inc/radio/aside__radio-state';
-	@import 'inc/radio/aside__sched';
+	@import
+		'inc/radio/aside__noti',
+		'inc/radio/aside__player',
+		'inc/radio/aside__radio-state',
+		'inc/radio/aside__sched';
 
 	.radio-live {
 		$lstnWidth: 35px;
@@ -205,5 +206,6 @@ aside {
 	}
 }
 
-@import 'inc/radio/footer';
-@import 'inc/radio/mediaq';
+@import
+	'inc/radio/footer',
+	'inc/radio/mediaq';

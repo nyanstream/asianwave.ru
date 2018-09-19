@@ -46,9 +46,10 @@ body {
 	margin: 0 auto;
 }
 
-@import 'inc/main/top-panel';
-@import 'inc/pages/page';
-@import 'inc/main/footer';
+@import
+	'inc/main/top-panel',
+	'inc/pages/page',
+	'inc/main/footer';
 
 //@import 'inc/main/events';
 

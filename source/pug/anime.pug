@@ -21,7 +21,7 @@ html(lang='ru')
 			body { font-family: Roboto, Arial, sans-serif; }
 
 	body
-		p Раздел #[q /anime] был закрыт и перенесён на домен #[a(href=`https://${nyanStream.domain}/?from=asianwave`) #{nyanStream.domain}].
+		p Раздел #[q /anime] был перенесён на домен #[a(href=`https://${nyanStream.domain}/?from=asianwave`) #{nyanStream.domain}].
 		p Вы будете автоматически перенаправлены туда через #[span.time #{nyanStream.time}] секунд#[span.end].
 
 		script(src=`${PATHS.js}/special/anime-timer.min.js?v=${VERSION}` data-domain=`${nyanStream.domain}` data-time=`${nyanStream.time}` defer)

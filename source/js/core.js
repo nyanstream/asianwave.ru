@@ -1,5 +1,12 @@
 'use strict'
 
+const IS_DEBUG_MODE =
+	(
+		location.hostname == '127.0.0.1' ||
+		location.hostname == 'localhost'
+	)
+
+
 /*
  * Детект хрома
  */
@@ -14,26 +21,6 @@ const STRINGS = {
 	defaultPoint: 'ta'
 }
 
-void (() => {
-	let
-		isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor),
-		isOpera = /OPR\//.test(navigator.userAgent)
-
-	try {
-		let chrExtBtn = $make.qs('.right li a[href*="--chrome"]')
-
-		if (!isChrome) { chrExtBtn.parentElement.style.display = 'none' }
-		if (isOpera) {
-			let icon = chrExtBtn.firstChild
-
-			icon.classList.remove('fa-chrome')
-			icon.classList.add('fa-opera')
-			chrExtBtn.setAttribute('href', '/app--opera')
-			chrExtBtn.setAttribute('title', getString('ext_opera'))
-		}
-	} catch (e) {}
-})()
-
 /*
  * Используемые домены
  */
@@ -41,7 +28,6 @@ void (() => {
 const DOMAINS = {
 	self:  'asianwave.ru',
 	api:   'aw-api.blyat.science',
-	nyan:  'nyan.stream',
 	vk:    'vk.com',
 	mr24:  'myradio24.com'
 }
@@ -81,28 +67,38 @@ let doFetch = ({ fetchURL, handler, handlerOptions = {}, failData = 'fail' }) =>
  * Функция для проверки клиента на совместимость с сайтом
  */
 
-var clientTests = options => {
- if (!options) { return }
+let clientTests = ({ nodes = { container, errorBox } }) => {
+	if (!nodes.container.nodeName || !nodes.errorBox.nodeName) { return }
 
- let mainContainer = options.nodes.container
+	let
+		mainContainer =      nodes.container,
+		mainContainerData =  mainContainer.dataset
 
- let
-	 errorBox =     options.nodes.errorBox,
-	 errorBoxDiv =  $create.elem('div')
+	let
+		errorBox =     nodes.errorBox,
+		errorBoxDiv =  $create.elem('div')
 
- let isError = false
+	let isError = false
 
- errorBox.textContent = ''
+	if ('error' in mainContainerData && mainContainerData.error == 'no-js') {
+		delete mainContainer.dataset.error
 
- if (!$ls.test()) {
-	 mainContainer.classList.add('error')
-	 errorBoxDiv.innerHTML = `<p>${getString('err_ls')}</p><br><p>${getString('err_ls_pls')}</p>`
-	 isError = true
- }
+		let noscriptElems = $make.qs('noscript', ['a'])
+		noscriptElems.forEach(elem => elem.remove())
+	}
 
- if (isError) {
-	 errorBoxDiv.innerHTML += `<p>${getString('err_end')}</p><p><br>${getString('tnx')}! :3</p>`
+	errorBox.textContent = ''
 
-	 errorBox.appendChild(errorBoxDiv)
- }
+	if (!$ls.test()) {
+		mainContainer.dataset.error = 'no-ls'
+		errorBoxDiv.innerHTML = `<p>${getString('err_ls')}</p><br><p>${getString('err_ls_pls')}</p>`
+
+		isError = true
+	}
+
+	if (isError) {
+		errorBoxDiv.innerHTML += `<p>${getString('err_end')}</p><p><br>${getString('tnx')}! :3</p>`
+
+		errorBox.appendChild(errorBoxDiv)
+	}
 }

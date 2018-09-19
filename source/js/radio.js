@@ -5,7 +5,7 @@
  */
 
 clientTests({ nodes: {
-	container:  $make.qs('.radio'),
+	container:  $make.qs('.container'),
 	errorBox:   $make.qs('.error-box')
 }})
 
@@ -65,6 +65,16 @@ void (() => {
 		// orderType: () => $ls.get(storageCurrentPointItemName)
 		// 	? points[$ls.get(storageCurrentPointItemName)].crutch.orderType
 		// 	: points[STRINGS.defaultPoint].crutch.orderType
+	}
+
+	// фоллбек
+
+	if (
+		$currentPoint.key() == 'jp' ||
+		$currentPoint.key() == 'ru' ||
+		$currentPoint.key() == 'kr'
+	) {
+		$ls.set(storageCurrentPointItemName, STRINGS.defaultPoint)
 	}
 })()
 
@@ -138,8 +148,8 @@ radio.toPoint = function(point) {
  */
 
 var
-	radioCtrl_pp =   $make.qsf('[data-js-action="changePlayerState"]', player),
-	radioCtrl_vol =  $make.qsf('[data-js-action="changeVolume"]', player),
+	radioCtrl_pp =   $make.qsf('[data-action="changePlayerState"]', player),
+	radioCtrl_vol =  $make.qsf('[data-action="changeVolume"]', player),
 	pointButtons =   $make.qsf('.player-change button', player, ['a'])
 
 /*
@@ -180,7 +190,11 @@ var $init = {
 		if (!current) { currentA = '\u00af\u005c\u005f\u0028\u30c4\u0029\u005f\u002f\u00af' }
 		if (!currentS) { currentS = '' }
 
-		stateBoxBody = $create.elem('div', `<p title="${getString('song_current_track')}: ${$make.safe(currentS)}">${$make.safe(currentS)}</p><p title="${getString('song_current_artist')}: ${$make.safe(currentA)}">${$make.safe(currentA)}</p>`, 'current radio--pe')
+		stateBoxBody = $create.elem(
+			'div',
+			`<p title="${getString('song_current_track')}: ${$make.safe(currentS)}">${$make.safe(currentS)}</p><p title="${getString('song_current_artist')}: ${$make.safe(currentA)}">${$make.safe(currentA)}</p>`,
+			'current radio--pe'
+		)
 
 		$create.balloon(stateBoxBody, getString('song_current'), 'down')
 
@@ -247,7 +261,13 @@ var $init = {
 
 		for (let i = 0; i < numOfSongs; i++) {
 			let lastSongData = lastSongs[i]
-			songsTableBody.appendChild($create.elem('tr', `<td>${moment.unix(lastSongData['played_at']).format('HH:mm')}</td><td>${$make.safe(lastSongData['song']['text'].replace(' - ', ' – '))}`))
+
+			songsTableBody.appendChild(
+				$create.elem(
+					'tr',
+					`<td>${moment.unix(lastSongData['played_at']).format('HH:mm')}</td><td>${$make.safe(lastSongData['song']['text'].replace(' - ', ' – '))}</td>`
+				)
+			)
 		}
 
 		stateBox.appendChild(stateBoxBody)
@@ -486,5 +506,25 @@ document.addEventListener('DOMContentLoaded', () => {
 				$loadInfo.noti()
 				if (!embedVKchecker) { $loadInfo.vkNews() }
 			}, 30000)
+	})()
+
+	void (() => {
+		let
+			isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor),
+			isOpera = /OPR\//.test(navigator.userAgent)
+
+		try {
+			let chrExtBtn = $make.qs('.right li a[href*="--chrome"]')
+
+			if (!isChrome) { chrExtBtn.parentElement.style.display = 'none' }
+			if (isOpera) {
+				let icon = chrExtBtn.firstChild
+
+				icon.classList.remove('fa-chrome')
+				icon.classList.add('fa-opera')
+				chrExtBtn.setAttribute('href', '/app--opera')
+				chrExtBtn.setAttribute('title', getString('ext_opera'))
+			}
+		} catch (e) {}
 	})()
 })
