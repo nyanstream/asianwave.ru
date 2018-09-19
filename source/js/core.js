@@ -4,7 +4,17 @@
  * Детект хрома
  */
 
-;(() => {
+const STRINGS = {
+	// Название айтема в LocalStorage для локализации (langs.js)
+	l10n: 'aw_l10n',
+
+	// Название айтема в LocalStorage для нотификаций (parsers.js)
+	notiItem: 'aw_noti',
+
+	defaultPoint: 'ta'
+}
+
+void (() => {
 	let
 		isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor),
 		isOpera = /OPR\//.test(navigator.userAgent)
@@ -28,26 +38,26 @@
  * Используемые домены
  */
 
-var domain = {
-	'self':  'asianwave.ru',
-	'api':   'aw-api.blyat.science',
-	'nyan':  'nyan.stream',
-	'vk':    'vk.com',
-	'mr24':  'myradio24.com'
+const DOMAINS = {
+	self:  'asianwave.ru',
+	api:   'aw-api.blyat.science',
+	nyan:  'nyan.stream',
+	vk:    'vk.com',
+	mr24:  'myradio24.com'
 }
 
 /*
  * Эндпоинты API
  */
 
-var API = {
-	'schedule': 'sched',
-	'noti': 'noti',
-	'vkNews': 'vk-news'
+const API = {
+	schedule: 'sched',
+	noti: 'noti',
+	vkNews: 'vk-news'
 }
 
 Object.keys(API).forEach(key => {
-	API[key] = `https://${domain.api}/api/${API[key]}`
+	API[key] = `https://${DOMAINS.api}/api/${API[key]}`
 })
 
 /*

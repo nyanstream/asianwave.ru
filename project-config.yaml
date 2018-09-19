@@ -1,0 +1,36 @@
+title: Asian Wave
+
+domain: asianwave.ru
+
+prime_color: '#fba9ad'
+
+description:
+  ru: Мультимедийный портал для поклонников азиатской культуры всех жанров и типов
+  en: Russian multimedia portal for Asian culture fans of all genres and types
+
+dirs:
+  dev: source
+  build: build
+  dist: dist
+  dist_content: dist_content
+  assets: assets
+
+trackers:
+  google: UA-79528573-1
+  yandex: 38037540
+
+URLs:
+  chat: https://asianwaveru.chatovod.ru
+
+  links:
+    donate: https://asianwave.ru/rdr--donate
+    request: https://vk.com/topic-120842574_37042517
+
+  links_soc:
+    vk: https://vk.com/thenyan
+    tg: https://t.me/thenyan
+    discord: https://discord.gg/96cq8w8
+
+  extensions:
+    chrome: /app--chrome
+    opera: /app--opera

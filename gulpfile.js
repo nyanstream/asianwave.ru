@@ -1,16 +1,21 @@
 'use strict'
 
+let project = require('./package.json')
+
 let
-	project =     require('./package.json'),
+	fs =          require('fs'),
 	gulp =        require('gulp'),
 	tube =        require('gulp-pipe'),
 	bom =         require('gulp-bom'),
 	rename =      require('gulp-rename'),
 	watch =       require('gulp-watch'),
+	clean =       require('gulp-clean'),
 	plumber =     require('gulp-plumber'),
 	cleanCSS =    require('gulp-clean-css'),
 	pug =         require('gulp-pug'),
+	sequence =    require('gulp-sequence'),
 	changeJSON =  require('gulp-json-transform'),
+	parseYAML =   require('js-yaml'),
 	liveServer =  require('browser-sync')
 
 let sass = {
@@ -20,7 +25,7 @@ let sass = {
 }
 
 let uglify = {
-	core:      require('uglify-es'),
+	core:      require('terser'),
 	composer:  require('gulp-uglify/composer')
 }
 
@@ -28,55 +33,59 @@ let
 	minifyJS = uglify.composer(uglify.core, console),
 	reloadServer = () => liveServer.stream()
 
-let vendors = require('./vendors-data.json')
+let parseYAMLfile = fileName => parseYAML.load(fs.readFileSync(`./${fileName}.yaml`, 'utf8'))
 
-let deps = Object.entries(Object.assign({}, project.dependencies, project.devDependencies))
+let config = parseYAMLfile('project-config')
 
-let dirs = project._config.dirs
+let vendors = parseYAMLfile('project-vendors')
+
+let dirs = config.dirs
 
 let paths = {
 	html: {
 		dev: [`${dirs.dev}/pug/**/*.pug`, `!${dirs.dev}/pug/inc/**/*.pug`],
-		prod: `${dirs.prod.build}/`
+		prod: `${dirs.build}/`,
 	},
+
 	js: {
-		dev: `${dirs.dev}/js/**/*.js`,
-		prod: `${dirs.prod.build}/${dirs.prod.main}/js/`,
-		kamina: 'node_modules/kamina-js/dist/kamina.min.js',
+		dev:    [`${dirs.dev}/js/**/*.js`, `!${dirs.dev}/js/service-worker.js`],
+		dev_sw:  `${dirs.dev}/js/service-worker.js`,
+		prod:    `${dirs.build}/${dirs.assets}/js/`,
 	},
+
 	css: {
-		dev: `${dirs.dev}/scss/**/*.scss`,
-		prod: `${dirs.prod.build}/${dirs.prod.main}/css/`
+		dev:   `${dirs.dev}/scss/**/*.scss`,
+		prod:  `${dirs.build}/${dirs.assets}/css/`,
 	}
 }
 
 gulp.task('liveReload', () => liveServer({
-	server: [dirs.prod.build, dirs.prod.content],
+	server: [dirs.build, dirs.dist_content],
 	port: 8080,
-	notify: false
+	notify: false,
 }))
 
-gulp.task('pug', () => tube([
-	watch(paths.html.dev, { ignoreInitial: false }),
+/* Сборка pug */
+
+let pugTubes = [
 	plumber(),
 	pug({ locals: {
-		VERSION: project.version,
+		VERSION:     project.version,
+		title:       config.title,
+		domain:      config.domain,
+		primeColor:  config.prime_color,
 		PATHS: {
-			js:       `/${dirs.prod.main}/js`,
-			css:      `/${dirs.prod.main}/css`,
-			img:      `/${dirs.prod.main}/img`,
-			other:    `/${dirs.prod.main}/other`,
-			players:  `/${dirs.prod.main}/players`
+			js:       `/${dirs.assets}/js`,
+			css:      `/${dirs.assets}/css`,
+			img:      `/${dirs.assets}/img`,
 		},
 		LIBS: vendors,
-		DEPS: deps,
 		BBISWU: {
-			google: project._config.trackers.google,
-			yandex: project._config.trackers.yandex
+			google: config.trackers.google,
+			yandex: config.trackers.yandex,
 		},
-		title:       project._config.title,
-		domain:      project._config.domain,
-		primeColor:  project._config.prime_color
+		URLs:        config.URLs,
+		PLAYERS:     config.PLAYERS,
 	}}),
 	bom(),
 	rename(file => {
@@ -84,54 +93,98 @@ gulp.task('pug', () => tube([
 			case 'apps':
 				file.extname = '.htm'
 		}
-	}),
-	gulp.dest(paths.html.prod),
-	reloadServer()
-]))
 
-gulp.task('webmanifest', () => tube([
-	watch(`${dirs.dev}/webmanifest.json`, { ignoreInitial: false }),
+		if (file.basename == 'sitemap') {
+			file.extname = '.xml'
+		}
+	}),
+	gulp.dest(paths.html.prod)
+]
+
+gulp.task('pug:build', () => tube(
+	[gulp.src(paths.html.dev)]
+		.concat(pugTubes)
+))
+
+gulp.task('pug:dev', () => tube(
+	[watch(paths.html.dev, { ignoreInitial: false })]
+		.concat(pugTubes, [reloadServer()])
+))
+
+/* Сборка вебманифеста */
+
+let manifestTubes = [
 	plumber(),
 	changeJSON((data, file) => {
 		data.icons.forEach(icon => {
-			icon.src = `/${dirs.prod.main}/img/${icon.src}?v=${project.version}`
+			icon.src = `/${dirs.assets}/img/${icon.src}?v=${project.version}`
 		})
 
-		data.name =        project._config.title
-		data.short_name =  project._config.title
+		data.name =        project.name
+		data.short_name =  project.name
 
-		data.theme_color = project._config.prime_color
+		data.theme_color = config.prime_color
 
 		return data
 	}),
-	rename('wave.webmanifest'),
-	gulp.dest(paths.html.prod),
-	reloadServer()
-]))
+	rename('aw.webmanifest'),
+	gulp.dest(paths.html.prod)
+]
 
-gulp.task('get-kamina', () => tube([
-	gulp.src(paths.js.kamina),
+gulp.task('webmanifest:build', () => tube(
+	[gulp.src(`${dirs.dev}/webmanifest.json`)]
+		.concat(manifestTubes)
+))
+
+gulp.task('webmanifest:dev', () => tube(
+	[watch(`${dirs.dev}/webmanifest.json`, { ignoreInitial: false })]
+		.concat(manifestTubes, [reloadServer()])
+))
+
+/* Сборка JS */
+
+let jsTubes = (dest = paths.js.prod) => [
+	plumber(),
+	minifyJS({}),
+	bom(),
+	rename({ suffix: '.min' }),
+	gulp.dest(dest)
+]
+
+gulp.task('js:assets:build', () => tube(
+	[gulp.src(paths.js.dev)]
+		.concat(jsTubes())
+))
+
+gulp.task('js:assets:dev', () => tube(
+	[watch(paths.js.dev, { ignoreInitial: false })]
+		.concat(jsTubes(), [reloadServer()])
+))
+
+gulp.task('js:service-worker:build', () => tube(
+	[gulp.src(paths.js.dev_sw)]
+		.concat(jsTubes(paths.html.prod))
+))
+
+gulp.task('js:service-worker:dev', () => tube(
+	[watch(paths.js.dev_sw, { ignoreInitial: false })]
+		.concat(jsTubes(paths.html.prod), [reloadServer()])
+))
+
+gulp.task('js:get-kamina', () => tube([
+	gulp.src('node_modules/kamina-js/dist/kamina.min.js'),
 	bom(),
 	gulp.dest(paths.js.prod)
 ]))
 
-gulp.task('minify-js', () => tube([
-	watch(paths.js.dev, { ignoreInitial: false }),
-	plumber(),
-	minifyJS({}),
-	bom(),
-	rename({suffix: '.min'}),
-	gulp.dest(paths.js.prod),
-	reloadServer()
-]))
+/* Сборка SCSS */
 
 let scssTubes = [
 	plumber(),
 	sass.vars({
 		VERSION:     project.version,
-		primeColor:  project._config.prime_color,
-		imgPath:     `/${dirs.prod.main}/img`,
-		otherPath:   `/${dirs.prod.main}/other`
+		primeColor:  config.prime_color,
+		imgPath:     `/${dirs.assets}/img`,
 	}, { verbose: false }),
 	sass.compile({ outputStyle: 'compressed' }),
 	cleanCSS(),
@@ -140,13 +193,42 @@ let scssTubes = [
 	gulp.dest(paths.css.prod)
 ]
 
-gulp.task('scss:only-compile', () => tube(
-	[gulp.src(paths.css.dev)].concat(scssTubes)
+gulp.task('scss:build', () => tube(
+	[gulp.src(paths.css.dev)]
+		.concat(scssTubes)
 ))
 
 gulp.task('scss:dev', () => tube(
-	[sass.watch(paths.css.dev)].concat(scssTubes, [reloadServer()])
+	[sass.watch(paths.css.dev)]
+		.concat(scssTubes, [reloadServer()])
 ))
 
-gulp.task('default', ['pug', 'webmanifest', 'get-kamina', 'minify-js', 'scss:dev'])
-gulp.task('dev', ['liveReload', 'default'])
+/* Копирование файлов из dirs.build и dirs.dist_content в одну общую dirs.dist */
+
+gulp.task('dist:copy', () => tube([
+	gulp.src([
+		`${dirs.build}/**/*`, `${dirs.build}/**/.*`,
+		`${dirs.dist_content}/**/*`, `${dirs.dist_content}/**/.*`,
+	]),
+	gulp.dest(dirs.dist)
+]))
+
+gulp.task('dist:clean', () => tube([
+	gulp.src(dirs.dist, { read: false }),
+	clean()
+]))
+
+gulp.task('dist', sequence('dist:clean', 'dist:copy'))
+
+/* Команды для сборки и разработки */
+
+gulp.task('build', ['pug:build', 'webmanifest:build', 'js:assets:build', 'js:service-worker:build', 'js:get-kamina', 'scss:build'])
+
+gulp.task('build:clean', () => tube([
+	gulp.src(dirs.build, { read: false }),
+	clean()
+]))
+
+gulp.task('dev', ['liveReload', 'pug:dev', 'webmanifest:dev', 'js:assets:dev', 'js:service-worker:dev', 'js:get-kamina', 'scss:dev'])
+
+gulp.task('default', sequence('build', 'dist'))

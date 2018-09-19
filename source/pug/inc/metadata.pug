@@ -1,20 +1,20 @@
 meta(charset='utf-8')
-title #{title}#{subTitle ? ' / ' + subTitle : ''}
+title #{title}#{subPage ? ' / ' + subPage.title : ''}
 
 meta(name='description' content=`${description}`)
 meta(name='keywords' content='')
 
-each og in [{ what: 'locale', content: 'ru_RU' }, { what: 'type', content: 'website' }, { what: 'title', content: `${title}${subTitle ? ' / ' + subTitle : ''}` }, { what: 'description', content: `${description}` }, { what: 'url', content: `${URLs.same}` }, { what: 'site_name', content: `${title}` }, { what: 'image', content: '${PATHS.img}/share.png?v=${VERSION}' }]
+each og in [{ what: 'locale', content: 'ru_RU' }, { what: 'type', content: 'website' }, { what: 'title', content: `${title.toUpperCase()}${subPage ? ' / ' + subPage.title : ''}` }, { what: 'description', content: `${description}` }, { what: 'url', content: `${URLs.self}` }, { what: 'site_name', content: `${title}` }, { what: 'image', content: `${URLs.self}${PATHS.img}/share.png?v=${VERSION}` }]
 	meta(property=`og:${og.what}` content=`${og.content}`)
 
 meta(name='theme-color' content=`${primeColor}`)
 
-each og in [{ what: 'card', content: 'summary_large_image' }, { what: 'description', content: `${description}` }, { what: 'title', content: `${title}${subTitle ? ' / ' + subTitle : ''}` }, { what: 'image', content: `${PATHS.img}/share.png?v=${VERSION}` }]
+each og in [{ what: 'card', content: 'summary_large_image' }, { what: 'title', content: `${title.toUpperCase()}${subPage ? ' / ' + subPage.title : ''}` }, { what: 'description', content: `${description}` }, { what: 'image', content: `${URLs.self}${PATHS.img}/share.png?v=${VERSION}` }]
 	meta(name=`twitter:${og.what}` content=`${og.content}`)
 
-meta(name='telegram:channel' content='asianwave')
+meta(name='telegram:channel' content=`${URLs.links_soc.tg.replace('https://t.me/', '')}`)
 
-script(type='application/ld+json') {"@context":"https://schema.org", "@type":"WebSite", "url":"#{URLs.same}", "name":"#{title}", "description": "#{description}"}
+script(type='application/ld+json') { "@context": "https://schema.org", "@type": "WebSite", "url": "#{URLs.self}", "name": "#{title}", "description": "#{description}" }
 
 link(rel='shortcut icon' href=`${URLs.favicon}`)
 link(rel='manifest' href=`${URLs.manifest}`)

@@ -3,25 +3,19 @@ html(lang='ru')
 	head
 		include inc/vars.pug
 		include inc/mixins.pug
-		- var subTitle = ''
 
 		include inc/metadata.pug
 
-		link(rel='canonical' href=`${URLs.same}`)
+		link(rel='canonical' href=`${URLs.self}`)
 
 		each URL in ['aw-cdn.blyat.science', 'aw-api.blyat.science', 'www.google-analytics.com', 'ssl.google-analytics.com', 'fonts.gstatic.com', 'mc.yandex.ru', 'counter.yadro.ru', 'images.weserv.nl', 'st1.chatovod.ru', `ryuko.${domain}`]
 			link(rel='dns-prefetch' href=`//${URL}`)
 
 		each verif in [{ type: 'google-site-verification', content: 'Y-zrQS3gEUB2vkcCPbvcU7dhogBFKa_BV-rP_i2x79c' }]
 			meta(name=`${verif.type}`, content: `${verif.content}`)
-			
-		each CSS in [{ file: `balloon-css/${LIBS.css.balloon.v}/balloon`, sri: LIBS.css.balloon.sri }]
-			link(rel='stylesheet' href=`https://cdnjs.cloudflare.com/ajax/libs/${CSS.file}.min.css` integrity=`${CSS.sri}` crossorigin='anonymous')
 
-		each CSS in [{ file: 'solid', sri: LIBS.css.fa.sri.solid }, { file: 'brands', sri: LIBS.css.fa.sri.brands }, { file: 'fontawesome', sri: LIBS.css.fa.sri.same }]
-			link(rel='stylesheet' href=`https://use.fontawesome.com/releases/v${LIBS.css.fa.v}/css/${CSS.file}.css` integrity=`${CSS.sri}` crossorigin='anonymous')
-
-		link(rel='stylesheet' href=`https://cdnjs.cloudflare.com/ajax/libs/balloon-css/${libsVer.baloon}/balloon.min.css`)
+		each CSS in [{ file: `fork-awesome/${LIBS.css.fa.v}/css/fork-awesome.min.css`, sri: LIBS.css.fa.sri }, { file: `balloon-css/${LIBS.css.balloon.v}/balloon.min.css`, sri: LIBS.css.balloon.sri }]
+			link(rel='stylesheet' href=`https://cdnjs.cloudflare.com/ajax/libs/${CSS.file}` integrity=`${CSS.sri}` crossorigin='anonymous')
 
 		each CSS in ['aw-every', 'radio']
 			link(rel='stylesheet' href=`${PATHS.css}/${CSS}.min.css?v=${VERSION}`)
@@ -33,33 +27,51 @@ html(lang='ru')
 		div.container
 			header.top-panel
 				+headerBrand(subTitle)
+
 				ul.right
 					li.li--offset
 						a.right__elem(href='/app--chrome' target='_blank' data-lang-title='ext_chrome')
-							i.fab.fa-chrome
+							i.fa.fa-chrome
+
 					li
-						a.right__elem(href=`${URLs.requests.radio}` target='_blank' rel='nofollow noopener' data-lang-title='request_music') &#43;
+						a.right__elem(href=`${URLs.links.request}` target='_blank' rel='nofollow noopener' data-lang-title='request_music') &#43;
+
 					li
-						a.right__elem(href=`${URLs.donate}` target='_blank' rel='nofollow noopener' data-lang-title='support') &#8381;
+						a.right__elem(href=`${URLs.links.donate}` target='_blank' rel='nofollow noopener' data-lang-title='support') &#8381;
+
 			main.radio
 				div.radio--pe.error-box
 					noscript
 						include inc/nojs-text.pug
+
 				div.content
 					div.radio--pe.chat
 						iframe(src=`${URLs.chat}` data-lang-title='chat')
+
 					div.radio--pe.vk-posts
+
 				aside
 					div.side-content.player
 						div.radio--pe.player-controls
 							button(data-js-action='changePlayerState' data-state='stop' data-lang-label='play')
 							input(data-js-action='changeVolume' type='range' step='.1' min='0' max='100' data-lang-label='change_volume')
+
 						div.radio--pe.player-change
 							ul
-								each point in ['jp', 'ru', 'kr']
+								each point in [{ key: 'ta', name: 'Talk' }, { key: 'mu', name: 'Music'}]
 									li
-										button(role='radio' value=`${point}`) #{point}
-					div.side-content.radio--pe.noti
+										button(role='radio' value=`${point.key}`) #{point.name}
+
+					div.side-content.radio--pe.noti(data-noti='hello')
+						div.noti__content
+							p Добро пожаловать на #[b Asian Wave]!
+							p На потоке #[q Talk] у нас ведутся эфиры. Если они тебе неинтересны, переключись на #[q Music].
+						button.noti__hide-btn OK, всё понятно
+
+					div.side-content.radio--pe.noti.noti(data-noti='prime')
+						div.noti__content
+						button.noti__hide-btn(data-lang='hide')
+
 					div.side-content.radio-live
 					div.side-content.radio-state
 					div.side-content.radio--pe.radio-order

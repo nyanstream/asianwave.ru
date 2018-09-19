@@ -30,28 +30,18 @@ $create.balloon = (elem, text, pos) => {
  */
 
 var points = {
-	'jp': {
-		'name': 'Japan',
-		'port': 8000,
-		'id': 1,
-		'crutch': {
-			'mr24port': 7934,
-			'orderType': 'mr24'
-		}
-	}, 'ru': {
-		'name': 'Russia',
-		'port': 8010,
-		'id': 2,
-		'crutch': {
-			'orderType': 'azura'
-		}
-	}, 'kr': {
-		'name': 'Korea',
-		'port': 8020,
-		'id': 3,
-		'crutch': {
-			'orderType': 'azura'
-		}
+	mu: {
+		name: 'Music',
+		port: 8000,
+		mr24port: 7934,
+		id: 1,
+	},
+
+	ta: {
+		name: 'Talk',
+		port: 8010,
+		mr24port: 7934,
+		id: 2,
 	}
 }
 
@@ -61,20 +51,20 @@ void (() => {
 	window.$currentPoint = {
 		port: () => $ls.get(storageCurrentPointItemName)
 			? points[$ls.get(storageCurrentPointItemName)].port
-			: points['jp'].port,
+			: points[STRINGS.defaultPoint].port,
 		mr24port: () => $ls.get(storageCurrentPointItemName)
-			? points[$ls.get(storageCurrentPointItemName)].crutch.mr24port
-			: points['jp'].crutch.mr24port,
+			? points[$ls.get(storageCurrentPointItemName)].mr24port
+			: points[STRINGS.defaultPoint].mr24port,
 		name: () => $ls.get(storageCurrentPointItemName)
 			? points[$ls.get(storageCurrentPointItemName)].name
-			: points['jp'].name,
+			: points[STRINGS.defaultPoint].name,
 		id: () => $ls.get(storageCurrentPointItemName)
 			? points[$ls.get(storageCurrentPointItemName)].id
-			: points['jp'].id,
-		key: () => $ls.get(storageCurrentPointItemName) || 'jp',
-		orderType: () => $ls.get(storageCurrentPointItemName)
-			? points[$ls.get(storageCurrentPointItemName)].crutch.orderType
-			: points['jp'].crutch.orderType
+			: points[STRINGS.defaultPoint].id,
+		key: () => $ls.get(storageCurrentPointItemName) || STRINGS.defaultPoint,
+		// orderType: () => $ls.get(storageCurrentPointItemName)
+		// 	? points[$ls.get(storageCurrentPointItemName)].crutch.orderType
+		// 	: points[STRINGS.defaultPoint].crutch.orderType
 	}
 })()
 
@@ -84,169 +74,9 @@ void (() => {
 
 let player = $make.qs('.player')
 
-domain.radio = `ryuko.${domain.self}`
+DOMAINS.radio = `ryuko.${DOMAINS.self}`
 
-var getRadioSrc = () => `https://${domain.radio}/radio/${$currentPoint.port()}/listen`
-
-class Radio {
-	constructor() {
-		this.stream = new Audio(this.getSrc())
-
-		this.stream.preload = 'none'
-		this.stream.autoplay = false
-		this.stream.controls = false
-
-		this.points = {
-			'jp': {
-				'name': 'Japan',
-				'port': 8000,
-				'id': 1,
-				'crutch': {
-					'mr24port': 7934,
-					'orderType': 'mr24'
-				}
-			},
-
-			'ru': {
-				'name': 'Russia',
-				'port': 8010,
-				'id': 2,
-				'crutch': {
-					'orderType': 'azura'
-				}
-			},
-
-			'kr': {
-				'name': 'Korea',
-				'port': 8020,
-				'id': 3,
-				'crutch': {
-					'orderType': 'azura'
-				}
-			}
-		}
-
-		navigator.mediaSession.setActionHandler('play', () => this.toggle())
-		navigator.mediaSession.setActionHandler('pause', () => this.toggle())
-	}
-
-	getSrc() {
-		return `https://${domain.radio}/radio/${this.getCurrentPointInfo('port')}/listen`
-	}
-
-	getStorageItemName(name = 'radioPoint') {
-		let names = {
-			radioOnPause:  'aw_radioOnPause',
-			radioPoint:    'aw_radioPoint',
-			radioVolume:   'aw_radioVolume'
-		}
-
-		return names[name]
-	}
-
-	toggle({ button = $make.qsf('[data-js-action="changePlayerState"]', player) }) {
-		let btnData = button.dataset
-
-		if (this.stream.paused) {
-			this.stream.load()
-			btnData.state = 'loading'
-
-			this.stream.addEventListener('error', () => {
-				btnData.state = 'stop'; return
-			})
-
-			this.stream.addEventListener('canplay', () => {
-				this.stream.play()
-				btnData.state = 'play'
-			})
-
-			if ($check.mediaSession()) {
-				navigator.mediaSession.playbackState = 'playing'
-			}
-		} else {
-			this.stream.pause()
-			btnData.state = 'stop'
-
-			if ($check.mediaSession()) {
-				navigator.mediaSession.playbackState = 'paused'
-			}
-		}
-	}
-
-	changeVolume({ volume = 50, input = $make.qsf('[data-js-action="changeVolume"]', player) }) {
-		input.value = volume
-		this.stream.volume = volume/100
-
-		/*
-		 * @HACK текущая громкость пишется в CSS-переменную
-		 * @TODO если когда-нибудь починят совместимость fill в браузерах, то переписать на него
-		 */
-
-		document.documentElement.style.setProperty('--volume', volume + '%')
-		input.addEventListener('input', e => {
-			volume = e.target.value
-
-			radio.volume = volume/100
-			document.documentElement.style.setProperty('--volume', volume + '%')
-		})
-
-		input.addEventListener('change', e => {
-			$ls.set(this.getStorageItemName('radioVolume'), e.target.value)
-		})
-	}
-
-	toPoint(point = 'jp') {
-		if (!Object.keys(this.points).includes(point)) { return }
-
-		let _pa
-
-		$ls.set(this.getStorageItemName('radioOnPause'), this.stream.paused)
-		$ls.set(this.getStorageItemName('radioPoint'), point) // айтем должен быть такой же, как в переменной storageCurrentPointItemName
-
-		this.stream.src = this.getSrc()
-
-		if ($ls.get(this.getStorageItemName('radioOnPause')) == 'false') {
-			this.stream.load()
-			this.stream.play()
-		}
-
-		$ls.rm(this.getStorageItemName('radioOnPause'))
-
-		$loadInfo.radio()
-	}
-
-	getCurrentPointInfo(type = 'name') {
-		let _name = this.getStorageItemName('radioPoint')
-
-		let info = {
-			port: () => $ls.get(_name)
-				? this.points[$ls.get(_name)].port
-				: this.points['jp'].port,
-
-			mr24port: () => $ls.get(_name)
-				? this.points[$ls.get(_name)].crutch.mr24port
-				: this.points['jp'].crutch.mr24port,
-
-			name: () => $ls.get(_name)
-				? this.points[$ls.get(_name)].name
-				: this.points['jp'].name,
-
-			id: () => $ls.get(_name)
-				? this.points[$ls.get(_name)].id
-				: this.points['jp'].id,
-
-			key: () => $ls.get(_name) || 'jp',
-
-			orderType: () => $ls.get(_name)
-				? this.points[$ls.get(_name)].crutch.orderType
-				: this.points['jp'].crutch.orderType
-		}
-
-		return info[type]()
-	}
-}
-
-let d = new Radio()
+var getRadioSrc = () => `https://${DOMAINS.radio}/radio/${$currentPoint.port()}/listen`
 
 var
 	radio = new Audio(getRadioSrc()),
@@ -335,8 +165,6 @@ var $init = {
 		radioErrorBox.textContent = ''
 		orderBox.textContent = ''
 
-		//console.log(data)
-
 		if (fetchFailed || !('now_playing' in data)) {
 			radioErrorBox.textContent = getString('err_api_radio'); return
 		}
@@ -367,8 +195,8 @@ var $init = {
 		/* Блоки со ссылками на текущий трек и на загрузку "плейлиста" */
 
 		let
-			srchVK = $create.link(`https://${domain.vk}/audio?q=${encodeURIComponent(currentFull)}`, '<i class="fab fa-vk"></i>', '', ['e']),
-			srchGo = $create.link(`https://google.com/search?q=${encodeURIComponent(currentFull)}`, '<i class="fab fa-google"></i>', '', ['e'])
+			srchVK = $create.link(`https://${DOMAINS.vk}/audio?q=${encodeURIComponent(currentFull)}`, '<i class="fa fa-vk"></i>', '', ['e']),
+			srchGo = $create.link(`https://google.com/search?q=${encodeURIComponent(currentFull)}`, '<i class="fa fa-google"></i>', '', ['e'])
 
 		//srchVK.setAttribute('title', `${getString('song_search_in')} VK`)
 		//srchGo.setAttribute('title', `${getString('song_search_in')} Google`)
@@ -382,7 +210,7 @@ var $init = {
 
 		/* Файл плейлиста */
 
-		let plLink = $create.link('', '<i class="fas fa-music"></i>')
+		let plLink = $create.link('', '<i class="fa fa-music"></i>')
 
 		plLink.setAttribute('href', `data:audio/x-mpegurl;charset=utf-8;base64,${btoa(getRadioSrc() + '\r\n')}`)
 		plLink.setAttribute('download', `Asian Wave ${$currentPoint.name()}.m3u`)
@@ -406,16 +234,7 @@ var $init = {
 
 		/* Блок с кнопкой заказа трека */
 
-		let orderURL = 'https://'
-
-		switch ($currentPoint.orderType()) {
-			case 'azura':
-				orderURL += `${domain.radio}/public/${$currentPoint.name().toLowerCase()}/embed-requests`; break
-			case 'mr24':
-				orderURL += `${domain.mr24}/?to=table&port=${$currentPoint.mr24port()}`;
-		}
-
-		orderBox.appendChild($create.link(orderURL, `<span>${getString('song_order')}</span>`, '', ['e']))
+		orderBox.appendChild($create.link(`https://${DOMAINS.mr24}/?to=table&port=${$currentPoint.mr24port()}`, `<span>${getString('song_order')}</span>`, '', ['e']))
 
 		/* Блок с выводом недавних треков */
 
@@ -445,13 +264,16 @@ var $init = {
 
 var $loadInfo = {
 	radio: () => doFetch({
-		fetchURL: `https://${domain.radio}/api/nowplaying/${$currentPoint.id()}`,
+		fetchURL: `https://${DOMAINS.radio}/api/nowplaying/${$currentPoint.id()}`,
 		handler: $init.radio
 	}),
 
 	schedule: () => doFetch({
 		fetchURL: API.schedule,
-		handler: $parser.schedule
+		handler: $parser.schedule,
+		handlerOptions: {
+			disabledSections: ['latestCheck', 'emptySchedule', 'finished']
+		}
 	}),
 
 	noti: () => doFetch({
@@ -507,7 +329,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	 * @TODO найти более умные тултипы, эти не перемещаются в другое место при ресайзе страницы
 	 */
 
-	 let embedVKchecker = $check.get('embed-vk')
+	let embedVKchecker = $check.get('embed-vk')
 
 	void (() => {
 		if ($ls.get('aw_l10n')) { moment.locale($ls.get('aw_l10n')) }
@@ -622,6 +444,35 @@ document.addEventListener('DOMContentLoaded', () => {
 	// 	})
 	// })
 
+	void (() => {
+		let notiHello = $make.qs('.noti[data-noti="hello"]')
+
+		let notiItems = []
+
+		let helloNotiString = 'hello_noti'
+
+		let _storageNotiItemName = STRINGS.notiItem
+
+		if ($ls.get(_storageNotiItemName)) {
+			notiItems = JSON.parse($ls.get(_storageNotiItemName))
+		}
+
+		if (notiHello) {
+			if (!notiItems.includes(helloNotiString)) {
+				notiHello.dataset.notiIsEnabled = ''
+			}
+
+			let notiHideBtn = $make.qsf('[class*="__hide-btn"]', notiHello)
+
+			notiHideBtn.onclick = () => {
+				notiItems.push(helloNotiString)
+				$ls.set(_storageNotiItemName, JSON.stringify(notiItems))
+
+				delete notiHello.dataset.notiIsEnabled
+			}
+		}
+	})()
+
 	/*
 	 * Таймеры
 	 */
@@ -635,5 +486,5 @@ document.addEventListener('DOMContentLoaded', () => {
 				$loadInfo.noti()
 				if (!embedVKchecker) { $loadInfo.vkNews() }
 			}, 30000)
-	 })()
+	})()
 })

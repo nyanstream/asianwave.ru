@@ -4,4 +4,4 @@ Disallow: /apps/
 Disallow: /app--*
 Disallow: /rdr--*
 Host: asianwave.ru
-Sitemap: https://asianwave.ru/sitemap.php
+Sitemap: https://asianwave.ru/sitemap.xml

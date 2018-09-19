@@ -1,46 +1,37 @@
 {
 	"name": "asianwave.ru",
-	"description": "Russian multimedia portal for Asian culture fans of all genres and types",
+	"description": "Source code of AsianWave.ru project.",
 	"private": true,
-	"version": "2.4.2",
+	"version": "2.5.0",
 	"author": "Dmitry <dmitry@cojam.ru> (https://e965.ru)",
 	"repository": "bitbucket:ruLait/asianwave.ru",
 	"license": "UNLICENSED",
-	"_config": {
-		"title": "Asian Wave",
-		"domain": "asianwave.ru",
-		"prime_color": "#fba9ad",
-		"dirs": {
-			"dev": "source",
-			"prod": {
-				"build": "dist",
-				"content": "dist_content",
-				"main": "files"
-			}
-		},
-		"trackers": {
-			"google": "UA-79528573-1",
-			"yandex": "38037540"
-		}
+	"scripts": {
+		"build": "gulp build",
+		"dev": "gulp dev",
+		"dist": "gulp"
 	},
 	"dependencies": {
 		"kamina-js": "1.2.7"
 	},
 	"devDependencies": {
-		"browser-sync": "2.24.4",
+		"browser-sync": "2.24.7",
 		"gulp": "3.9.1",
 		"gulp-bom": "2.0.0",
-		"gulp-clean-css": "3.9.4",
+		"gulp-clean": "0.4.0",
+		"gulp-clean-css": "3.10.0",
 		"gulp-json-transform": "0.4.5",
 		"gulp-pipe": "1.0.4",
 		"gulp-plumber": "1.2.0",
 		"gulp-pug": "4.0.1",
-		"gulp-rename": "1.2.3",
+		"gulp-rename": "1.4.0",
 		"gulp-sass": "4.0.1",
 		"gulp-sass-vars": "1.3.0",
-		"gulp-uglify": "3.0.0",
-		"gulp-watch": "5.0.0",
+		"gulp-sequence": "1.0.0",
+		"gulp-uglify": "3.0.1",
+		"gulp-watch": "5.0.1",
 		"gulp-watch-sass": "1.4.1",
-		"uglify-es": "3.3.9"
+		"js-yaml": "3.12.0",
+		"terser": "3.8.2"
 	}
 }

@@ -27,8 +27,8 @@ RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI}
 
 # Обработка ошибок
 Options All -Indexes
-ErrorDocument 404 /apps/error.html
-ErrorDocument 403 /apps/error.html
+ErrorDocument 404 /apps/error.htm
+ErrorDocument 403 /apps/error.htm
 
 # Content Security Policy
 
@@ -53,16 +53,8 @@ Redirect 302 /app--vk https://vk.com/app4426688
 Redirect 302 /app--chrome https://chrome.google.com/webstore/detail/ecbegehkeefmdjnjhldeogkhbhhjhfje
 Redirect 302 /app--opera https://addons.opera.com/ru/extensions/details/asian-wave/
 
-# разное
-Redirect 301 /rdr--donate http://www.donationalerts.ru/r/asianwave
-Redirect 301 /rdr--twitch https://www.twitch.tv/asianwave
-
-# короткий адрес для видео-прожекта
-Redirect 301 /video https://video.asianwave.ru
-
 # фикс для расширения
-Redirect 301 /files/code/css/chrome-app-events.min.css /files/css/chrome-app-events.min.css
-Redirect 301 /api/api.json /api/radio.json
+Redirect 301 /files/code/css/chrome-app-events.min.css /assets/css/chrome-app-events.min.css
 
 # фиксы разделов
 # RedirectMatch 301 /anime/* /anime

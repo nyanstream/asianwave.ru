@@ -1,25 +1,29 @@
 'use strict'
 
-;(() => {
-	let undefinedBlock = document.querySelector('main[data-error="undefined"]')
+void (() => {
+	let doc = document
 
-	if (window.self != window.top) {
-		undefinedBlock.style.display = 'initial'; return
+	let styleOf = status => doc.querySelector(`main[data-error="${status}"]`).style
+
+	let undefinedBlock = styleOf('undefined')
+
+	if (self != top) {
+		undefinedBlock.display = 'initial'; return
 	}
 
 	fetch(document.URL)
 		.then(response => {
 			let status = response.status
 
-			document.title = document.title + ' ' + status
+			doc.title = `${doc.title} ${status}`
 
 			switch (status) {
 				case 403:
 				case 404:
-					document.querySelector(`main[data-error='${status}']`).style.display = 'initial'; break
+					styleOf(status).display = 'initial'; break
 				case 200:
 				default:
-					undefinedBlock.style.display = 'initial'; break
+					undefinedBlock.display = 'initial'; break
 			}
 		})
 })()

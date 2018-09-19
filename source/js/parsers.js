@@ -2,18 +2,48 @@
 
 /*
  * Парсеры для различных API и прочего (но пока только API)
+ * Файл зависим от core.js
  */
 
-var $parser = {
-	schedule: ({ data = [], options = {}, fetchFailed = false, errorData }) => {
-		let
-			streamSсhed = $make.qs('.schedule'),
-			table = $create.elem('table'),
-			tableBody = '', tableBodyTop = ''
+/*
+ * Вспомогательная функция, копирует контент из одной ноды в другую
+ * (принцип взят здесь: stackoverflow.com/a/955914)
+ */
 
-		streamSсhed.textContent = ''
+let cloneNode = (fromNode, toNode) => {
+	if (!fromNode.isEqualNode(toNode)) {
+		toNode.textContent = ''
+		while (fromNode.firstChild) {
+			toNode.appendChild(fromNode.firstChild)
+		}
+	}
+}
 
+let $parser = {
+	schedule: ({ data = [], options = {}, fetchFailed = false, errorData = false }) => {
 		if (fetchFailed) { console.warn(errorData); return }
+
+		let disabledSections = ('disabledSections' in options)
+			? options.disabledSections
+			: []
+
+		let streamSсhed = $make.qs('.schedule')
+
+		if (!streamSсhed.hasChildNodes()) {
+			let table = $create.elem('table')
+
+			table.appendChild($create.elem('thead'))
+			table.appendChild($create.elem('tbody'))
+
+			streamSсhed.appendChild(table)
+		}
+
+		let tableHead = $make.qsf('table thead', streamSсhed)
+			tableHead.textContent = ''
+
+		let tableBody = $make.qsf('table tbody', streamSсhed)
+
+		let tableBodyContent = $create.elem('tbody')
 
 		/*
 		 * Ранее здесь вместо дня со времени начала эпохи Unix вычислялся номер дня в году.
@@ -29,55 +59,131 @@ var $parser = {
 
 		let nextAirs = data.filter(e => e['s'] > unixNow)
 
+		let createTableBodyRow = (firstData, secondData, _class = '') =>
+			tableBodyContent.appendChild($create.elem(
+				'tr',
+				`<td>${firstData}</td><td>${secondData}</td>`,
+				_class
+			))
+
 		data.forEach(item => {
-			if (item['secret']) { return } // пропуск секретных элементов
+			if ('secret' in item && item.secret == true) { return } // пропуск секретных элементов
+
+			/* TODO: сделать нормальную поддержку item.secret (с временем окончания "секретности", например) */
 
 			let
-				yearOfS = moment.unix(item['s']).year(),
-				dayOfS = unixToDays(item['s']),
-				dayofE = unixToDays(item['e'])
+				itemStartTime =  item.s
+				itemEndTime =    item.e
 
 			let
-				newsсhedData = `${yearNow != yearOfS ? yearOfS + '<br>' : ''}${moment.unix(item['s']).format('D MMMM')}<br>${moment.unix(item['s']).format('HH:mm')} &ndash; ${moment.unix(item['e']).format('HH:mm')}`,
-				itemTitle = ''
+				itemStartTimeYear = moment.unix(itemStartTime).year(),
+				itemStartTimeDay = unixToDays(itemStartTime)
 
-			itemTitle = (item['link'] && item['link'] != '')
-				? $create.link(item['link'], item['title'], '', ['e', 'html'])
-				: $make.safe(item['title'])
+			let newSсhedData = `${yearNow != itemStartTimeYear ? itemStartTimeYear + '<br>' : ''}${moment.unix(itemStartTime).format('D MMMM')}<br>${moment.unix(itemStartTime).format('HH:mm')} &ndash; ${moment.unix(itemEndTime).format('HH:mm')}`
 
-			if ((dayOfS - dayNow) < -1) {
-				/* если (день даты старта item минус текущий день) меньше -1 */
+			let itemTitle = ('link' in item && item.link != '')
+				? $create.link(item.link, item.title, '', ['e', 'html'])
+				: $make.safe(item.title)
+
+			let _metaInfoPlayer = getInfoFromMeta('backup-player')
+
+			if (_metaInfoPlayer && _metaInfoPlayer != '') {
+				let backupPlayerLink = `?${STRINGS.playerGETparam}=` + encodeURIComponent(_metaInfoPlayer)
+
+				itemTitle += ('backup' in item && item.backup == true)
+					? ` [<a href="${backupPlayerLink}">${getString('anime_backup')}</a>]`
+					: ''
+			}
+
+			if (
+				!disabledSections.includes('tooOld') &&
+				(itemStartTimeDay - dayNow) < -1
+			) { // если (день даты старта item минус текущий день) меньше -1
 				return
-			} else if (item['s'] < unixNow && unixNow < item['e']) {
-				/* если (таймштамп времени начала item меньше, чем текущий Unix-таймштамп) И если (текущий Unix-таймштамп меньше, чем время окончания item) */
-				tableBody += $create.elem('tr', `<td>${newsсhedData}</td><td><b>${getString('now')(moment.unix(item['e']).toNow(true))}:</b><br>${itemTitle}</td>`, 'air--current', ['html'])
-			} else if (item['s'] > unixNow && item['s'] == nextAirs[0]['s']) {
-				/* если (таймштамп времени начала item больше, чем текущий Unix-таймштамп) И если (таймштамп времени начала item равен времени начала первого item из массива будущих эфиров) */
-				tableBody += $create.elem('tr', `<td>${newsсhedData}</td><td><b>${getString('within')} ${moment.unix(item['s']).fromNow()}:</b><br>${itemTitle}</td>`, 'air--next', ['html'])
-			} else if (item['s'] < unixNow) {
-				/* если (таймштамп времени начала item меньше, чем текущий Unix-таймштамп) */
-				return
-			} else if (dayOfS > dayNow) {
-				/* если (день даты старта item больше, чем текущий день) */
-				tableBody += $create.elem('tr', `<td>${newsсhedData}</td><td>${itemTitle}</td>`, 'air--notToday', ['html'])
-			} else {
-				tableBody += $create.elem('tr', `<td>${newsсhedData}</td><td>${itemTitle}</td>`, '', ['html'])
+			} else if (
+				!disabledSections.includes('current') &&
+				itemStartTime < unixNow &&
+				unixNow < itemEndTime
+			) { // если (таймштамп времени начала item меньше, чем текущий Unix-таймштамп) И если (текущий Unix-таймштамп меньше, чем время окончания item)
+				createTableBodyRow(
+					newSсhedData,
+					`<b>${getString('now')(moment.unix(itemEndTime).toNow(true))}:</b><br>${itemTitle}`,
+					'air--current'
+				)
+			} else if (
+				!disabledSections.includes('next') &&
+				itemStartTime > unixNow &&
+				itemStartTime == nextAirs[0]['s']
+			) { // если (таймштамп времени начала item больше, чем текущий Unix-таймштамп) И если (таймштамп времени начала item равен времени начала первого item из массива будущих эфиров)
+				createTableBodyRow(
+					newSсhedData,
+					`<b>${getString('within')} ${moment.unix(itemStartTime).fromNow()}:</b><br>${itemTitle}`,
+					'air--next'
+				)
+			} else if (
+				!disabledSections.includes('finished') &&
+				itemStartTime < unixNow
+			) { // если (таймштамп времени начала item меньше, чем текущий Unix-таймштамп)
+				createTableBodyRow(
+					newSсhedData,
+					itemTitle,
+					'air--finished'
+				)
+			} else if (
+				!disabledSections.includes('notToday') &&
+				itemStartTimeDay > dayNow
+			) { // если (день даты старта item больше, чем текущий день)
+				createTableBodyRow(
+					newSсhedData,
+					itemTitle,
+					'air--notToday'
+				)
+			} else if (
+				!disabledSections.includes('normal')
+			) {
+				createTableBodyRow(
+					newSсhedData,
+					itemTitle
+				)
 			}
 		})
 
-		tableBodyTop = $create.elem('caption', getString('airs_schedule'))
+		if (!disabledSections.includes('latestCheck')) {
+			tableHead.appendChild($create.elem(
+				'tr',
+				`<td colspan="2">${getString('latest_check')}: ${moment().format('D MMMM, HH:mm:ss')}</td>`
+			))
+		}
 
-		if (tableBody == '') { return }
+		if (
+			!tableBodyContent.hasChildNodes() &&
+			!disabledSections.includes('emptySchedule')
+		) {
+			tableBodyContent.appendChild($create.elem(
+				'tr',
+				`<td colspan="2">${getString('empty_schedule')} ¯\\_(ツ)_/¯</td>`
+			))
+		}
 
-		table.appendChild(tableBodyTop)
-		table.appendChild($create.elem('tbody', tableBody))
+		if (
+			disabledSections.includes('latestCheck') &&
+			disabledSections.includes('emptySchedule') &&
+			!tableBodyContent.hasChildNodes()
+		) {
+			streamSсhed.dataset.tableIsEmpty = ''
+		} else {
+			if ('tableIsEmpty' in streamSсhed.dataset) {
+				delete streamSсhed.dataset.tableIsEmpty
+			}
+		}
 
-		streamSсhed.appendChild(table)
+		cloneNode(tableBodyContent, tableBody)
 	},
+
 	vkNews: ({ data = {}, fetchFailed = false, errorData = false }) => {
 		let
 			vkNews = $make.qs('.vk-posts'),
-			vkNewsBody = $create.elem('div')
+			vkNewsContent = $create.elem('div')
 
 		if (fetchFailed || !('posts' in data)) {
 			vkNews.classList.add('api-err')
@@ -97,7 +203,7 @@ var $parser = {
 			if (post['pin'] == 1) { return }
 
 			let
-				postImgLink = '', isCopy = '', postLinkS = '',
+				postImgLink = '', isCopy = '',
 				postImg = post['pic']
 
 			if (postImg) {
@@ -122,12 +228,26 @@ var $parser = {
 			if (postText == '') { return }
 			if (postLinkR) {
 				postLinkR.forEach(link => {
-					postLinkS = link.split('|')
-					postText = postText.replace(pLR, $create.link(`https://${domain.vk}/${postLinkS[0].replace(/\[/g, '')}`, postLinkS[1].replace(/]/g, ''), '', ['e', 'html']))
+					let postLinkTmp = link.split('|')
+
+					postText = postText.replace(
+						pLR,
+						$create.link(
+							`https://${DOMAINS.vk}/${postLinkTmp[0].replace(/\[/g, '')}`,
+							postLinkTmp[1].replace(/]/g, ''),
+							'',
+							['e', 'html']
+						)
+					)
 				})
 			}
 
-			let vkPostMetaLink = $create.link(`https://${domain.vk}/wall-${data['com']['id']}_${post['id']}`, moment.unix(post['time']).format('LLL'), '', ['e', 'html'])
+			let vkPostMetaLink = $create.link(
+				`https://${DOMAINS.vk}/wall-${data['com']['id']}_${post['id']}`,
+				moment.unix(post['time']).format('LLL'),
+				'',
+				['e', 'html']
+			)
 
 			if (post['type'] == 'copy') {
 				isCopy = ' is-repost'
@@ -145,45 +265,62 @@ var $parser = {
 			vkPost.appendChild(vkPostMeta)
 			vkPost.appendChild(vkPostBody)
 
-			vkNewsBody.appendChild(vkPost)
+			vkNewsContent.appendChild(vkPost)
 		})
 
-		if (vkNews.innerHTML != vkNewsBody.innerHTML) {
-			vkNews.innerHTML = vkNewsBody.innerHTML
-		}
+		cloneNode(vkNewsContent, vkNews)
 	},
+
 	noti: ({ data = {}, options = {}, fetchFailed = false, errorData = false }) => {
-		options = options ? options : {}
+		let notiElem = $make.qs('.noti[data-noti="prime"]')
 
-		let notiEl = $make.qs('.noti')
+		let notiItems = []
 
-		if (fetchFailed || !('enabled' in data) || data['enabled'] == false) {
-			notiEl.style.display = 'none'
+		let _storageNotiItemName = STRINGS.notiItem
+
+		if ($ls.get(_storageNotiItemName)) {
+			notiItems = JSON.parse($ls.get(_storageNotiItemName))
+		}
+
+		// @TODO: сделать удаление из хранилища всех оповещений, которые были внесены более какого-то периода (например, более двух недель) назад
+
+		let
+			notiID =     ('time' in data) ?   data.time :   '',
+			notiText =   ('text' in data) ?   data.text :   '',
+			notiColor =  ('color' in data) ?  data.color :  ''
+
+		if (
+			fetchFailed ||
+			!('enabled' in data) ||
+			data.enabled == false ||
+			notiItems.includes(notiID)
+		) {
+			delete notiElem.dataset.notiIsEnabled
 			if (errorData) { console.warn(errorData) }
 			return
+		} else {
+			notiElem.dataset.notiIsEnabled = ''
 		}
 
-		let
-			id =     data['time'],
-			text =   data['text'],
-			color =  data['color']
-
-		notiEl.style.backgroundColor = color ? color : null
-
-		notiEl.textContent = ''
+		notiElem.style.backgroundColor = notiColor ? notiColor : null
 
 		let
-			notiContent = $create.elem('div', text, 'noti-content'),
-			notiHideBtn = $create.elem('button', '', 'noti-hide'),
-			notiHideString = `${getString('hide')} ${getString('noti').toLowerCase()}`,
-			notiItems = []
+			notiContent = $make.qsf('[class*="__content"]', notiElem)
+			notiHideBtn = $make.qsf('[class*="__hide-btn"]', notiElem)
 
-		notiHideBtn.textContent = notiHideString
+		let notiContentBody = $create.elem('div')
 
-		if ($make.qsf('a[href]', notiContent)) {
-			let notiLinks = $make.qsf('a[href]', notiContent, ['a'])
+		notiContentBody.innerHTML = notiText
 
-			Array.from(notiLinks).forEach(link => {
+		if ($make.qsf('script, style, *[onload]', notiContentBody)) {
+			let notiProhibitedElems = $make.qsf('script, style, *[onload]', notiContentBody, ['a'])
+			notiProhibitedElems.forEach(_script => _script.remove())
+		}
+
+		if ($make.qsf('a[href]', notiContentBody)) {
+			let notiLinks = $make.qsf('a[href]', notiContentBody, ['a'])
+
+			notiLinks.forEach(link => {
 				link.setAttribute('target', '_blank')
 				if (link.getAttribute('href').startsWith('http')) {
 					link.setAttribute('rel', 'nofollow noopener')
@@ -191,19 +328,14 @@ var $parser = {
 			})
 		}
 
-		notiEl.appendChild(notiContent)
-		notiEl.appendChild(notiHideBtn)
+		cloneNode(notiContentBody, notiContent)
 
-		if ($ls.get('aw_noti')) {
-			notiItems = JSON.parse($ls.get('aw_noti'))
+		notiHideBtn.onclick = () => {
+			notiItems.push(notiID)
+			$ls.set(_storageNotiItemName, JSON.stringify(notiItems))
+
+			notiElem.style.display = 'none'
+			delete notiElem.dataset.notiIsEnabled
 		}
-
-		notiEl.style.display = notiItems.includes(id) ? 'none' : 'block'
-
-		notiHideBtn.addEventListener('click', () => {
-			notiItems[notiItems.length] = id
-			$ls.set('aw_noti', JSON.stringify(notiItems))
-			notiEl.style.display = 'none'
-		})
 	}
 }

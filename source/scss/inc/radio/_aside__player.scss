@@ -124,8 +124,6 @@
 	}
 
 	&-change {
-		$btn-size: 30px;
-
 		margin-left: 10px;
 
 		ul {
@@ -134,22 +132,23 @@
 
 			li {
 				display: inline-block;
-				width: $btn-size; height: $btn-size;
+				width: 50px;
+				height: 30px;
 
 				list-style: none;
 
 				margin: 0 10px;
 
-				&:first-child { margin-right: 0 }
-				&:last-child { margin-left: 0 }
-				&:not(:first-child):not(:last-child) { margin: 0 7.5px }
+				&:first-child { margin-right: 2.5px }
+				&:last-child { margin-left: 2.5px }
+				// &:not(:first-child):not(:last-child) { margin: 0 7.5px }
 			}
 		}
 
 		button {
 			width: 100%; height: 100%;
 			background-color: transparent;
-			font-size: #{$fontSize * .9};
+			font-size: #{$fontSize * .8};
 			border: 1px solid rgba(#000, .3);
 			outline: 0;
 			text-transform: uppercase;

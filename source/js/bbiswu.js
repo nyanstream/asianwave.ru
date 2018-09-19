@@ -1,22 +1,30 @@
 'use strict'
 
+/*
+ * Код различных метрик
+ * (название файла - сокращение от "Big brother is watching you")
+ * Код специально оставлен (почти) таким же, каким был получен от сервисов аналитики, чтобы работать в большинстве браузеров
+ */
+
 var _bbiswuScriptData = document.currentScript.dataset
 
 /*
  * Google Analytics
  */
 
-window.dataLayer = window.dataLayer || []
-function gtag() { dataLayer.push(arguments) }
+void (function() {
+	window.dataLayer = window.dataLayer || []
+	function gtag() { dataLayer.push(arguments) }
 
-gtag('js', new Date())
-gtag('config', _bbiswuScriptData.bbiswuGoogle)
+	gtag('js', new Date())
+	gtag('config', _bbiswuScriptData.bbiswuGoogle)
+})()
 
 /*
  * Yandex.Metriсa
  */
 
-;(function(d, w, c) {
+void (function(d, w, c) {
 	(w[c] = w[c] || []).push(function() {
 		try {
 			var yandexMetrikaID = _bbiswuScriptData.bbiswuYandex
