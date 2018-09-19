@@ -69,22 +69,27 @@ html(lang='ru')
 						button.noti__hide-btn OK, всё понятно
 
 					div.side-content.radio-live
+
 					div.side-content.radio-state
+
+					div.side-content.radio--pe.radio-order
 
 					div.side-content.radio--pe.noti.noti(data-noti='prime')
 						div.noti__content
 						button.noti__hide-btn(data-lang='hide')
 
-					div.side-content.radio--pe.radio-order
 					div.side-content.radio--pe.schedule
+
 					div.side-content.radio--pe.songs-box
+
 					div.side-content.radio--pe.radio-error
+
 			include inc/footer.pug
 
 		each JS in [{ file: `url-search-params/${LIBS.js.urlSP_polyfill.v}/url-search-params.js`, sri: LIBS.js.urlSP_polyfill.sri }, { file: `moment.js/${LIBS.js.moment.v.same}/moment.min.js`, sri: LIBS.js.moment.sri.same }, { file: `moment.js/${LIBS.js.moment.v.same}/locale/ru.js`, sri: LIBS.js.moment.sri.locale }, { file: `ismobilejs/${LIBS.js.isMobile.v}/isMobile.min.js`, sri: LIBS.js.isMobile.sri }]
 			script(src=`https://cdnjs.cloudflare.com/ajax/libs/${JS.file}` integrity=`${JS.sri}` crossorigin='anonymous' defer)
 
-		each JS in ['kamina', 'special/ms-edge-suck', 'special/info-from-meta', 'core', 'every', 'langs', 'parsers', 'radio']
+		each JS in ['kamina', 'special/ms-edge-suck', 'special/info-from-meta', 'core', 'every', 'langs', 'special/client-tests', 'parsers', 'radio']
 			script(src=`${PATHS.js}/${JS}.min.js?v=${VERSION}` defer)
 
 		include inc/bbiswu.pug

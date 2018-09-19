@@ -12,7 +12,7 @@
  * getString('now')('час') -> "Сейчас (ещё час)"
  */
 
-var getString = s => {
+let getString = s => {
 	let trStrings = {
 		site_description: {
 			ru: 'Мультимедийный портал для поклонников азиатской культуры всех жанров и типов',
@@ -192,20 +192,25 @@ var getString = s => {
 		song_order: {
 			ru: 'Заказать песню',
 			en: 'Request a song'
-		}
+		},
 	}
 
 	let string = ''
 
-	switch ($ls.get(STRINGS.l10n)) {
-		case 'ru':
-		case 'en':
-			break
-		default:
-			$ls.set(STRINGS.l10n, 'ru')
+	if ($ls.test()) {
+		switch ($ls.get(STRINGS.l10n)) {
+			case 'ru':
+			case 'en':
+			case 'ja':
+				break
+			default:
+				$ls.set(STRINGS.l10n, 'ru')
+		}
 	}
 
-	let userLang = $ls.get(STRINGS.l10n)
+	let userLang = $ls.test()
+		? $ls.get(STRINGS.l10n)
+		: 'ru'
 
 	try {
 		if (!(userLang in trStrings[s]) || trStrings[s][userLang] == '') { throw 42 }
@@ -300,7 +305,12 @@ let l10n = () => {
 	/* Локализация Moment.js */
 
 	void (() => {
-		if ('moment' in window && moment() instanceof moment && 'locales' in moment) {
+		if (
+			'moment' in window &&
+			moment() instanceof moment &&
+			'locales' in moment &&
+			$ls.test()
+		) {
 			let momentLocales = moment.locales()
 
 			if (momentLocales.includes('ru') && momentLocales.includes('en')) {
