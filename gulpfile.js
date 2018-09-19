@@ -127,7 +127,7 @@ let manifestTubes = [
 
 		return data
 	}),
-	rename('aw.webmanifest'),
+	rename('wave.webmanifest'),
 	gulp.dest(paths.html.prod)
 ]
 

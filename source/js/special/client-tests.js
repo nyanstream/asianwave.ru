@@ -34,8 +34,6 @@ let clientTests = ({ nodes = { container, errorBox } }) => {
 		isError = true
 	}
 
-	console.log('asd')
-
 	if (isError) {
 		errorBoxDiv.innerHTML += `<p>${getString('err_end')}</p><p><br>${getString('tnx')}! :3</p>`
 
