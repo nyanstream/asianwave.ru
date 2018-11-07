@@ -39,8 +39,8 @@ Header set Content-Security-Policy "default-src 'self'; \
  connect-src 'self' https://*.asianwave.ru https://myradio24.com https://aw-api.blyat.science https://mc.yandex.ru; \
  child-src 'self' https://chatovod.ru https://asianwaveru.chatovod.ru https://*.youtube-nocookie.com; \
  frame-ancestors 'self' https://vk.com; \
- style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://use.fontawesome.com https://fonts.googleapis.com; \
- font-src 'self' https://fonts.gstatic.com https://use.fontawesome.com; \
+ style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; \
+ font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; \
  img-src 'self' data: https://aw-cdn.blyat.science https://*.google-analytics.com https://*.yandex.ru https://images.weserv.nl; \
  media-src 'self' blob: https://*.asianwave.ru https://*.myradio24.com; \
  script-src 'self' 'unsafe-inline' https://www.google-analytics.com https://www.googletagmanager.com https://cdn.jsdelivr.net https://mc.yandex.ru https://*.cloudflare.com"
