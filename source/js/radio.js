@@ -32,16 +32,20 @@ $create.balloon = (elem, text, pos) => {
 var points = {
 	mu: {
 		name: 'Music',
-		port: 8000,
-		mr24port: 7934,
-		id: 1,
+
+		// azura: {
+		// 	port: 8000,
+		// 	id: 1,
+		// },
+
+		mr24: {
+			server: 1,
+			port: 7934
+		},
 	},
 
 	ta: {
-		name: 'Talk',
-		port: 8010,
-		mr24port: 7934,
-		id: 2,
+		name: 'Talk'
 	}
 }
 
@@ -49,22 +53,35 @@ void (() => {
 	let storageCurrentPointItemName = 'aw_radioPoint'
 
 	window.$currentPoint = {
-		port: () => $ls.get(storageCurrentPointItemName)
-			? points[$ls.get(storageCurrentPointItemName)].port
-			: points[STRINGS.defaultPoint].port,
-		mr24port: () => $ls.get(storageCurrentPointItemName)
-			? points[$ls.get(storageCurrentPointItemName)].mr24port
-			: points[STRINGS.defaultPoint].mr24port,
+		azura: {
+			port: () => $ls.get(storageCurrentPointItemName)
+				? points[$ls.get(storageCurrentPointItemName)].azura.port
+				: points[STRINGS.defaultPoint].azura.port,
+
+			id: () => $ls.get(storageCurrentPointItemName)
+				? points[$ls.get(storageCurrentPointItemName)].azura.id
+				: points[STRINGS.defaultPoint].azura.id,
+		},
+
+		mr24: {
+			server: () => $ls.get(storageCurrentPointItemName)
+				? points[$ls.get(storageCurrentPointItemName)].mr24.server
+				: points[STRINGS.defaultPoint].mr24.server,
+
+			port: () => $ls.get(storageCurrentPointItemName)
+				? points[$ls.get(storageCurrentPointItemName)].mr24.port
+				: points[STRINGS.defaultPoint].mr24.port,
+		},
+
 		name: () => $ls.get(storageCurrentPointItemName)
 			? points[$ls.get(storageCurrentPointItemName)].name
 			: points[STRINGS.defaultPoint].name,
+
 		id: () => $ls.get(storageCurrentPointItemName)
 			? points[$ls.get(storageCurrentPointItemName)].id
 			: points[STRINGS.defaultPoint].id,
+
 		key: () => $ls.get(storageCurrentPointItemName) || STRINGS.defaultPoint,
-		// orderType: () => $ls.get(storageCurrentPointItemName)
-		// 	? points[$ls.get(storageCurrentPointItemName)].crutch.orderType
-		// 	: points[STRINGS.defaultPoint].crutch.orderType
 	}
 
 	// фоллбек
@@ -72,7 +89,8 @@ void (() => {
 	if (
 		$currentPoint.key() == 'jp' ||
 		$currentPoint.key() == 'ru' ||
-		$currentPoint.key() == 'kr'
+		$currentPoint.key() == 'kr' ||
+		$currentPoint.key() == 'ta'
 	) {
 		$ls.set(storageCurrentPointItemName, STRINGS.defaultPoint)
 	}
@@ -86,7 +104,7 @@ let player = $make.qs('.player')
 
 DOMAINS.radio = `ryuko.${DOMAINS.self}`
 
-var getRadioSrc = () => `https://${DOMAINS.radio}/radio/${$currentPoint.port()}/listen`
+var getRadioSrc = () => `https://listen${$currentPoint.mr24.server()}.${DOMAINS.mr24}/${$currentPoint.mr24.port()}`
 
 var
 	radio = new Audio(getRadioSrc()),
@@ -158,123 +176,279 @@ var
  */
 
 var $init = {
-	radio: ({ data = {}, fetchFailed = false, errorData = false }) => {
-		let
-			stateBox = $make.qs('.radio-state'),
-			stateBoxBody = '', linksBoxBody = '', plBoxBody = '',
-			liveBox = $make.qs('.radio-live'),
-			liveBoxBody = '',
-			orderBox = $make.qs('.radio-order'),
-			songsBox = $make.qs('.songs-box'),
-			songsTableBody = '',
-			radioErrorBox = $make.qs('.radio-error')
+	// azura: ({ data = {}, fetchFailed = false, errorData = false }) => {
+	// 	let
+	// 		stateBox = $make.qs('.radio-state'),
+	// 		stateBoxBody = '', linksBoxBody = '', plBoxBody = '',
+	// 		liveBox = $make.qs('.radio-live'),
+	// 		liveBoxBody = '',
+	// 		orderBox = $make.qs('.radio-order'),
+	// 		songsBox = $make.qs('.songs-box'),
+	// 		songsTableBody = '',
+	// 		radioErrorBox = $make.qs('.radio-error')
 
-		stateBox.textContent = ''
-		liveBox.textContent = ''
-		songsBox.textContent = ''
-		radioErrorBox.textContent = ''
-		orderBox.textContent = ''
+	// 	stateBox.textContent = ''
+	// 	liveBox.textContent = ''
+	// 	songsBox.textContent = ''
+	// 	radioErrorBox.textContent = ''
+	// 	orderBox.textContent = ''
 
-		if (fetchFailed || !('now_playing' in data)) {
-			radioErrorBox.textContent = getString('err_api_radio'); return
+	// 	if (fetchFailed || !('now_playing' in data)) {
+	// 		radioErrorBox.textContent = getString('err_api_radio'); return
+	// 	}
+
+	// 	/* Блок с выводом текущего трека */
+
+	// 	let
+	// 		current = data['now_playing']['song'],
+	// 		currentFull = current['text'],
+	// 		currentA = current['artist'],
+	// 		currentS = current['title']
+
+	// 	if (!current) { currentA = '\u00af\u005c\u005f\u0028\u30c4\u0029\u005f\u002f\u00af' }
+	// 	if (!currentS) { currentS = '' }
+
+	// 	stateBoxBody = $create.elem(
+	// 		'div',
+	// 		`<p title="${getString('song_current_track')}: ${$make.safe(currentS)}">${$make.safe(currentS)}</p><p title="${getString('song_current_artist')}: ${$make.safe(currentA)}">${$make.safe(currentA)}</p>`,
+	// 		'current radio--pe'
+	// 	)
+
+	// 	$create.balloon(stateBoxBody, getString('song_current'), 'down')
+
+	// 	if ($check.mediaSession()) {
+	// 		navigator.mediaSession.metadata = new MediaMetadata({
+	// 			title: currentS,
+	// 			artist: currentA,
+	// 			album: `Asian Wave ${$currentPoint.name()}`
+	// 		})
+	// 	}
+
+	// 	/* Блоки со ссылками на текущий трек и на загрузку "плейлиста" */
+
+	// 	let
+	// 		srchVK = $create.link(`https://${DOMAINS.vk}/audio?q=${encodeURIComponent(currentFull)}`, '<i class="fa fa-vk"></i>', '', ['e']),
+	// 		srchGo = $create.link(`https://google.com/search?q=${encodeURIComponent(currentFull)}`, '<i class="fa fa-google"></i>', '', ['e'])
+
+	// 	//srchVK.setAttribute('title', `${getString('song_search_in')} VK`)
+	// 	//srchGo.setAttribute('title', `${getString('song_search_in')} Google`)
+
+	// 	linksBoxBody = $create.elem('div', '', 'search radio--pe')
+
+	// 	linksBoxBody.appendChild(srchVK)
+	// 	linksBoxBody.appendChild(srchGo)
+
+	// 	$create.balloon(linksBoxBody, getString('song_search'), 'left')
+
+	// 	/* Файл плейлиста */
+
+	// 	let plLink = $create.link('', '<i class="fa fa-music"></i>')
+
+	// 	plLink.setAttribute('href', `data:audio/x-mpegurl;charset=utf-8;base64,${btoa(getRadioSrc() + '\r\n')}`)
+	// 	plLink.setAttribute('download', `Asian Wave ${$currentPoint.name()}.m3u`)
+
+	// 	plBoxBody = $create.elem('div', plLink.outerHTML, 'dlm3u radio--pe')
+
+	// 	$create.balloon(plBoxBody, getString('playlist_dl'), 'left')
+
+	// 	/* Блок с выводом состояния прямого эфира (иначе скрыт) */
+
+	// 	if (data['live']['is_live'] != false) {
+	// 		let
+	// 			currRJ = $create.elem('div', `<p>${getString('rj_current')}:</p><p>${$make.safe(data['live']['streamer_name'])}</p>`, 'curr-rj radio--pe'),
+	// 			currLstn = $create.elem('div', `<div>${$make.safe(data['listeners']['unique'])}</div>`, 'curr-lstn radio--pe')
+
+	// 		$create.balloon(currLstn, getString('listeners_current'), 'left')
+
+	// 		liveBox.appendChild(currRJ)
+	// 		liveBox.appendChild(currLstn)
+	// 	}
+
+	// 	/* Блок с кнопкой заказа трека */
+
+	// 	orderBox.appendChild($create.link(`https://${DOMAINS.mr24}/?to=table&port=${$currentPoint.mr24port()}`, `<span>${getString('song_order')}</span>`, '', ['e']))
+
+	// 	/* Блок с выводом недавних треков */
+
+	// 	songsTableBody = $create.elem('table')
+	// 	songsTableBody.appendChild($create.elem('caption', getString('prev_songs')))
+
+	// 	let
+	// 		lastSongs = data['song_history'],
+	// 		numOfSongs = lastSongs.length
+
+	// 	for (let i = 0; i < numOfSongs; i++) {
+	// 		let lastSongData = lastSongs[i]
+
+	// 		songsTableBody.appendChild(
+	// 			$create.elem(
+	// 				'tr',
+	// 				`<td>${moment.unix(lastSongData['played_at']).format('HH:mm')}</td><td>${$make.safe(lastSongData['song']['text'].replace(' - ', ' – '))}</td>`
+	// 			)
+	// 		)
+	// 	}
+
+	// 	stateBox.appendChild(stateBoxBody)
+	// 	stateBox.appendChild(linksBoxBody)
+	// 	stateBox.appendChild(plBoxBody)
+
+	// 	songsBox.appendChild(songsTableBody)
+	// },
+
+	mr24: ({ data = {}, fetchFailed = false, errorData = false }) => {
+		let radioErrorBox = $make.qs('.radio-error')
+			radioErrorBox.textContent = ''
+
+		if (
+			fetchFailed ||
+			!('online' in data) ||
+			Number(data.online) == 0 ||
+			!('song' in data)
+		) {
+			radioErrorBox.appendChild(
+				$create.elem(
+					'p',
+					getString('err_api_radio')
+				)
+			); return
 		}
 
-		/* Блок с выводом текущего трека */
+		let stateBox = $make.qs('.radio-state')
+			stateBox.textContent = ''
 
-		let
-			current = data['now_playing']['song'],
-			currentFull = current['text'],
-			currentA = current['artist'],
-			currentS = current['title']
+		let currentSong = {
+			full:    data.song,
+			artist:  data.artist,
+			title:   data.songtitle
+		}
 
-		if (!current) { currentA = '\u00af\u005c\u005f\u0028\u30c4\u0029\u005f\u002f\u00af' }
-		if (!currentS) { currentS = '' }
+		if (!currentSong.artist) {
+			currentSong.artist = '\u00af\u005c\u005f\u0028\u30c4\u0029\u005f\u002f\u00af'
+		}
 
-		stateBoxBody = $create.elem(
+		if (!currentSong.title) {
+			currentSong.title = ''
+		}
+
+		let stateBoxCurrent = $create.elem(
 			'div',
-			`<p title="${getString('song_current_track')}: ${$make.safe(currentS)}">${$make.safe(currentS)}</p><p title="${getString('song_current_artist')}: ${$make.safe(currentA)}">${$make.safe(currentA)}</p>`,
+			`<p title="${getString('song_current_track')}: ${$make.safe(currentSong.title)}">${$make.safe(currentSong.title)}</p><p title="${getString('song_current_artist')}: ${$make.safe(currentSong.artist)}">${$make.safe(currentSong.artist)}</p>`,
 			'current radio--pe'
 		)
 
-		$create.balloon(stateBoxBody, getString('song_current'), 'down')
+		$create.balloon(stateBoxCurrent, getString('song_current'), 'down')
+
+		stateBox.appendChild(stateBoxCurrent)
 
 		if ($check.mediaSession()) {
 			navigator.mediaSession.metadata = new MediaMetadata({
-				title: currentS,
-				artist: currentA,
-				album: `Asian Wave ${$currentPoint.name()}`
+				title: currentSong.title,
+				artist: currentSong.artist,
+				album: 'Asian Wave'
 			})
 		}
 
-		/* Блоки со ссылками на текущий трек и на загрузку "плейлиста" */
+		let linkVK = $create.link(
+			`https://${DOMAINS.vk}/audio?q=${encodeURIComponent(currentSong.full)}`,
+			'<i class="fa fa-vk"></i>',
+			'',
+			['e']
+		)
 
-		let
-			srchVK = $create.link(`https://${DOMAINS.vk}/audio?q=${encodeURIComponent(currentFull)}`, '<i class="fa fa-vk"></i>', '', ['e']),
-			srchGo = $create.link(`https://google.com/search?q=${encodeURIComponent(currentFull)}`, '<i class="fa fa-google"></i>', '', ['e'])
+		let linkGoogle = $create.link(
+			`https://google.com/search?q=${encodeURIComponent(currentSong.full)}`,
+			'<i class="fa fa-google"></i>',
+			'',
+			['e']
+		)
 
-		//srchVK.setAttribute('title', `${getString('song_search_in')} VK`)
-		//srchGo.setAttribute('title', `${getString('song_search_in')} Google`)
+		let linksBoxBody = $create.elem('div', '', 'search radio--pe')
 
-		linksBoxBody = $create.elem('div', '', 'search radio--pe')
-
-		linksBoxBody.appendChild(srchVK)
-		linksBoxBody.appendChild(srchGo)
+		linksBoxBody.appendChild(linkVK)
+		linksBoxBody.appendChild(linkGoogle)
 
 		$create.balloon(linksBoxBody, getString('song_search'), 'left')
 
+		stateBox.appendChild(linksBoxBody)
+
 		/* Файл плейлиста */
 
-		let plLink = $create.link('', '<i class="fa fa-music"></i>')
+		let playlistLinkElem = $create.elem('div', '', 'dlm3u radio--pe')
 
-		plLink.setAttribute('href', `data:audio/x-mpegurl;charset=utf-8;base64,${btoa(getRadioSrc() + '\r\n')}`)
-		plLink.setAttribute('download', `Asian Wave ${$currentPoint.name()}.m3u`)
+		let playlistLink = $create.link(
+			`data:audio/x-mpegurl;charset=utf-8;base64,${btoa(getRadioSrc() + '\r\n')}`,
+			'<i class="fa fa-music"></i>'
+		)
 
-		plBoxBody = $create.elem('div', plLink.outerHTML, 'dlm3u radio--pe')
+		playlistLink.setAttribute('download', `Asian Wave.m3u`)
 
-		$create.balloon(plBoxBody, getString('playlist_dl'), 'left')
+		playlistLinkElem.appendChild(playlistLink)
 
-		/* Блок с выводом состояния прямого эфира (иначе скрыт) */
+		$create.balloon(playlistLinkElem, getString('playlist_dl'), 'left')
 
-		if (data['live']['is_live'] != false) {
-			let
-				currRJ = $create.elem('div', `<p>${getString('rj_current')}:</p><p>${$make.safe(data['live']['streamer_name'])}</p>`, 'curr-rj radio--pe'),
-				currLstn = $create.elem('div', `<div>${$make.safe(data['listeners']['unique'])}</div>`, 'curr-lstn radio--pe')
+		stateBox.appendChild(playlistLinkElem)
 
-			$create.balloon(currLstn, getString('listeners_current'), 'left')
+		let liveBox = $make.qs('.radio-live')
+			liveBox.textContent = ''
 
-			liveBox.appendChild(currRJ)
-			liveBox.appendChild(currLstn)
+		if (Number(data.live) == 1) {
+			let currentRJ = $create.elem(
+				'div',
+				`<p>${getString('rj_current')}:</p><p>${$make.safe(data.djname)}</p>`,
+				'curr-rj radio--pe'
+			)
+
+			let currentListeners = $create.elem(
+				'div',
+				`<div>${$make.safe(data.listeners)}</div>`,'curr-lstn radio--pe'
+			)
+
+			$create.balloon(currentListeners, getString('listeners_current'), 'left')
+
+			liveBox.appendChild(currentRJ)
+			liveBox.appendChild(currentListeners)
 		}
 
-		/* Блок с кнопкой заказа трека */
+		let orderBox = $make.qs('.radio-order')
+			orderBox.textContent = ''
 
-		orderBox.appendChild($create.link(`https://${DOMAINS.mr24}/?to=table&port=${$currentPoint.mr24port()}`, `<span>${getString('song_order')}</span>`, '', ['e']))
+		orderBox.appendChild($create.link(`https://${DOMAINS.mr24}/?to=table&port=${$currentPoint.mr24.port()}`, `<span>${getString('song_order')}</span>`, '', ['e']))
 
-		/* Блок с выводом недавних треков */
+		let songsBox = $make.qs('.songs-box')
+			songsBox.textContent = ''
 
-		songsTableBody = $create.elem('table')
-		songsTableBody.appendChild($create.elem('caption', getString('prev_songs')))
+		let songsTable = $create.elem('table')
+			songsTable.appendChild(
+				$create.elem('caption', getString('prev_songs'))
+			)
 
-		let
-			lastSongs = data['song_history'],
-			numOfSongs = lastSongs.length
+		let songsTableBody = $create.elem('tbody')
 
-		for (let i = 0; i < numOfSongs; i++) {
-			let lastSongData = lastSongs[i]
+		let songsHistory = data.songs.reverse()
+
+		let songsHistoryLength = Math.floor(songsHistory.length / 2)
+
+		for (let i = 0; i < songsHistoryLength; i++) {
+			let lastSongData = songsHistory[i]
 
 			songsTableBody.appendChild(
 				$create.elem(
 					'tr',
-					`<td>${moment.unix(lastSongData['played_at']).format('HH:mm')}</td><td>${$make.safe(lastSongData['song']['text'].replace(' - ', ' – '))}</td>`
+					`<td>${lastSongData[0]}</td><td>${$make.safe(lastSongData[1].replace(' - ', ' – '))}</td>`
 				)
 			)
 		}
 
-		stateBox.appendChild(stateBoxBody)
-		stateBox.appendChild(linksBoxBody)
-		stateBox.appendChild(plBoxBody)
+		songsTable.appendChild(songsTableBody)
 
-		songsBox.appendChild(songsTableBody)
+		songsBox.appendChild(songsTable)
+
+		songsBox.appendChild(
+			$create.elem(
+				'div',
+				getString('msk_time_note'),
+				'aside-note')
+		)
 	}
 }
 
@@ -284,8 +458,8 @@ var $init = {
 
 var $loadInfo = {
 	radio: () => doFetch({
-		fetchURL: `https://${DOMAINS.radio}/api/nowplaying/${$currentPoint.id()}`,
-		handler: $init.radio
+		fetchURL: `https://${DOMAINS.mr24}/users/${$currentPoint.mr24.port()}/status.json`,
+		handler: $init.mr24
 	}),
 
 	schedule: () => doFetch({

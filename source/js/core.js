@@ -17,7 +17,7 @@ const STRINGS = {
 	// Название айтема в LocalStorage для нотификаций (parsers.js)
 	notiItem: 'aw_noti',
 
-	defaultPoint: 'ta'
+	defaultPoint: 'mu'
 }
 
 /*

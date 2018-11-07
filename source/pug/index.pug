@@ -8,7 +8,7 @@ html(lang='ru')
 
 		link(rel='canonical' href=`${URLs.self}`)
 
-		each URL in ['aw-cdn.blyat.science', 'aw-api.blyat.science', 'www.google-analytics.com', 'ssl.google-analytics.com', 'fonts.gstatic.com', 'mc.yandex.ru', 'counter.yadro.ru', 'images.weserv.nl', 'st1.chatovod.ru', `ryuko.${domain}`]
+		each URL in ['aw-cdn.blyat.science', 'aw-api.blyat.science', 'www.google-analytics.com', 'ssl.google-analytics.com', 'fonts.gstatic.com', 'mc.yandex.ru', 'counter.yadro.ru', 'images.weserv.nl', 'st1.chatovod.ru', 'myradio24.com', 'listen1.myradio24.com', `ryuko.${domain}`]
 			link(rel='dns-prefetch' href=`//${URL}`)
 
 		each verif in [{ type: 'google-site-verification', content: 'Y-zrQS3gEUB2vkcCPbvcU7dhogBFKa_BV-rP_i2x79c' }]
@@ -51,7 +51,7 @@ html(lang='ru')
 					div.radio--pe.vk-posts
 
 				aside
-					div.side-content.player
+					div.side-content.player.only-one
 						div.radio--pe.player-controls
 							button(data-action='changePlayerState' data-state='stop' data-lang-label='play')
 							input(data-action='changeVolume' type='range' step='.1' min='0' max='100' data-lang-label='change_volume')
@@ -62,11 +62,11 @@ html(lang='ru')
 									li
 										button(role='radio' value=`${point.key}`) #{point.name}
 
-					div.side-content.radio--pe.noti(data-noti='hello')
-						div.noti__content
-							p Добро пожаловать на #[b Asian Wave]!
-							p На потоке #[q Talk] у нас ведутся эфиры. Если они тебе неинтересны, переключись на #[q Music].
-						button.noti__hide-btn OK, всё понятно
+					//- div.side-content.radio--pe.noti(data-noti='hello')
+					//- 	div.noti__content
+					//- 		p Добро пожаловать на #[b Asian Wave]!
+					//- 		p На потоке #[q Talk] у нас ведутся эфиры. Если они тебе неинтересны, переключись на #[q Music].
+					//- 	button.noti__hide-btn OK, всё понятно
 
 					div.side-content.radio-live
 

@@ -14,7 +14,7 @@
 		.player-controls {
 			width: 100%;
 
-			[data-action='changeVolume'] { width: 100% }
+			[data-action='changeVolume'] { width: calc(100% - #{$elemHeight}) }
 			.on-mobile { width: auto }
 		}
 
