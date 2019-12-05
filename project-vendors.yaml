@@ -3,12 +3,12 @@ js:
   # cdnjs.com/libraries/moment-timezone (moment-timezone-with-data.min.js)
   moment:
     v:
-      same: 2.22.2
-      timezone: 0.5.21
+      same: 2.24.0
+      timezone: 0.5.26
     sri:
-      same: sha256-CutOzxCRucUsn6C6TcEYsauvvYilEniTXldPa6/wu0k=
+      same: sha256-4iQZ6BVL4qNKlQ27TExEhBN1HFPvAvAMbFavKKosSWQ=
       locale: sha256-qR4pdhxtx7dwKGJuYGoYjfnCQBPXv47hzLLU8jPLVUY=
-      timezone: sha256-VX6SyoDzanqBxHY3YQyaYB/R7t5TpgjF4ZvotrViKAY=
+      timezone: sha256-6EFCRhQs5e10gzbTAKzcFFWcpDGNAzJjkQR3i1lvqYE=
 
   # cdnjs.com/libraries/ismobilejs (isMobile.min.js)
   isMobile:
@@ -33,5 +33,5 @@ css:
 
   # cdnjs.com/libraries/balloon-css
   balloon:
-    v: 0.5.0
-    sri: sha256-NBgeI1K43CnPptaOS0A2PfGfTg+8gtmTyDEe7GmiP64=
+    v: 1.0.3
+    sri: sha256-/+spSPIfYJ8QYDcQgq2RKloYWcWV0MnRSXAeTT4TVaE=

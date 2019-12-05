@@ -16,12 +16,10 @@ $check.mediaSession = () => ('mediaSession' in navigator)
  */
 
 $create.balloon = (elem, text, pos) => {
-	let to = elem.dataset
+	if (!elem || isMobile.any) { return }
 
-	if (!to || isMobile.any) { return }
-
-	to.balloon = text ? text : ''
-	to.balloonPos = pos ? pos : 'up'
+	elem.setAttribute('aria-label', text ? text : '')
+	elem.dataset.balloonPos = pos ? pos : 'up'
 }
 
 /*
@@ -54,34 +52,34 @@ void (() => {
 
 	window.$currentPoint = {
 		azura: {
-			port: () => $ls.get(storageCurrentPointItemName)
-				? points[$ls.get(storageCurrentPointItemName)].azura.port
+			port: () => $storage.get(storageCurrentPointItemName)
+				? points[$storage.get(storageCurrentPointItemName)].azura.port
 				: points[STRINGS.defaultPoint].azura.port,
 
-			id: () => $ls.get(storageCurrentPointItemName)
-				? points[$ls.get(storageCurrentPointItemName)].azura.id
+			id: () => $storage.get(storageCurrentPointItemName)
+				? points[$storage.get(storageCurrentPointItemName)].azura.id
 				: points[STRINGS.defaultPoint].azura.id,
 		},
 
 		mr24: {
-			server: () => $ls.get(storageCurrentPointItemName)
-				? points[$ls.get(storageCurrentPointItemName)].mr24.server
+			server: () => $storage.get(storageCurrentPointItemName)
+				? points[$storage.get(storageCurrentPointItemName)].mr24.server
 				: points[STRINGS.defaultPoint].mr24.server,
 
-			port: () => $ls.get(storageCurrentPointItemName)
-				? points[$ls.get(storageCurrentPointItemName)].mr24.port
+			port: () => $storage.get(storageCurrentPointItemName)
+				? points[$storage.get(storageCurrentPointItemName)].mr24.port
 				: points[STRINGS.defaultPoint].mr24.port,
 		},
 
-		name: () => $ls.get(storageCurrentPointItemName)
-			? points[$ls.get(storageCurrentPointItemName)].name
+		name: () => $storage.get(storageCurrentPointItemName)
+			? points[$storage.get(storageCurrentPointItemName)].name
 			: points[STRINGS.defaultPoint].name,
 
-		id: () => $ls.get(storageCurrentPointItemName)
-			? points[$ls.get(storageCurrentPointItemName)].id
+		id: () => $storage.get(storageCurrentPointItemName)
+			? points[$storage.get(storageCurrentPointItemName)].id
 			: points[STRINGS.defaultPoint].id,
 
-		key: () => $ls.get(storageCurrentPointItemName) || STRINGS.defaultPoint,
+		key: () => $storage.get(storageCurrentPointItemName) || STRINGS.defaultPoint,
 	}
 
 	// фоллбек
@@ -92,7 +90,7 @@ void (() => {
 		$currentPoint.key() == 'kr' ||
 		$currentPoint.key() == 'ta'
 	) {
-		$ls.set(storageCurrentPointItemName, STRINGS.defaultPoint)
+		$storage.set(storageCurrentPointItemName, STRINGS.defaultPoint)
 	}
 })()
 
@@ -108,7 +106,7 @@ var getRadioSrc = () => `https://listen${$currentPoint.mr24.server()}.${DOMAINS.
 
 var
 	radio = new Audio(getRadioSrc()),
-	radioVol = $ls.get('aw_radioVolume') || (isMobile.any ? 100 : 20)
+	radioVol = $storage.get('aw_radioVolume') || (isMobile.any ? 100 : 20)
 
 radio.preload = 'none'
 radio.autoplay = false
@@ -146,17 +144,17 @@ radio.toggle = function() {
 radio.toPoint = function(point) {
 	if (!Object.keys(points).includes(point)) { return }
 
-	$ls.set('aw_radioOnPause', this.paused)
-	$ls.set('aw_radioPoint', point) // айтем должен быть такой же, как в переменной storageCurrentPointItemName
+	$storage.set('aw_radioOnPause', this.paused)
+	$storage.set('aw_radioPoint', point) // айтем должен быть такой же, как в переменной storageCurrentPointItemName
 
 	this.src = getRadioSrc()
 
-	if ($ls.get('aw_radioOnPause') == 'false') {
+	if ($storage.get('aw_radioOnPause') == 'false') {
 		this.load()
 		this.play()
 	}
 
-	$ls.rm('aw_radioOnPause')
+	$storage.rm('aw_radioOnPause')
 
 	$loadInfo.radio()
 }
@@ -509,7 +507,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		});
 
 		radioCtrl_vol.addEventListener('change', e => {
-			$ls.set('aw_radioVolume', e.target.value)
+			$storage.set('aw_radioVolume', e.target.value)
 		})
 
 		if ($check.mediaSession()) {
@@ -526,7 +524,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	let embedVKchecker = $check.get('embed-vk')
 
 	void (() => {
-		if ($ls.get('aw_l10n')) { moment.locale($ls.get('aw_l10n')) }
+		if ($storage.get('aw_l10n')) { moment.locale($storage.get('aw_l10n')) }
 		if (embedVKchecker) { $make.qs('.container').classList.add('embed-vk') }
 
 		/*
@@ -647,8 +645,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 		let _storageNotiItemName = STRINGS.notiItem
 
-		if ($ls.get(_storageNotiItemName)) {
-			notiItems = JSON.parse($ls.get(_storageNotiItemName))
+		if ($storage.get(_storageNotiItemName)) {
+			notiItems = JSON.parse($storage.get(_storageNotiItemName))
 		}
 
 		if (notiHello) {
@@ -660,7 +658,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 			notiHideBtn.onclick = () => {
 				notiItems.push(helloNotiString)
-				$ls.set(_storageNotiItemName, JSON.stringify(notiItems))
+				$storage.set(_storageNotiItemName, JSON.stringify(notiItems))
 
 				delete notiHello.dataset.notiIsEnabled
 			}

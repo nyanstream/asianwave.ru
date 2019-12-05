@@ -89,7 +89,7 @@ html(lang='ru')
 		each JS in [{ file: `url-search-params/${LIBS.js.urlSP_polyfill.v}/url-search-params.js`, sri: LIBS.js.urlSP_polyfill.sri }, { file: `moment.js/${LIBS.js.moment.v.same}/moment.min.js`, sri: LIBS.js.moment.sri.same }, { file: `moment.js/${LIBS.js.moment.v.same}/locale/ru.js`, sri: LIBS.js.moment.sri.locale }, { file: `ismobilejs/${LIBS.js.isMobile.v}/isMobile.min.js`, sri: LIBS.js.isMobile.sri }]
 			script(src=`https://cdnjs.cloudflare.com/ajax/libs/${JS.file}` integrity=`${JS.sri}` crossorigin='anonymous' defer)
 
-		each JS in ['kamina', 'special/ms-edge-suck', 'special/info-from-meta', 'core', 'every', 'langs', 'special/client-tests', 'parsers', 'radio']
+		each JS in ['vendors/kamina', 'special/ms-edge-suck', 'special/info-from-meta', 'core', 'every', 'langs', 'special/client-tests', 'parsers', 'radio']
 			script(src=`${PATHS.js}/${JS}.min.js?v=${VERSION}` defer)
 
 		include inc/bbiswu.pug

@@ -197,19 +197,19 @@ let getString = s => {
 
 	let string = ''
 
-	if ($ls.test()) {
-		switch ($ls.get(STRINGS.l10n)) {
+	if ($storage.test()) {
+		switch ($storage.get(STRINGS.l10n)) {
 			case 'ru':
 			case 'en':
 			case 'ja':
 				break
 			default:
-				$ls.set(STRINGS.l10n, 'ru')
+				$storage.set(STRINGS.l10n, 'ru')
 		}
 	}
 
-	let userLang = $ls.test()
-		? $ls.get(STRINGS.l10n)
+	let userLang = $storage.test()
+		? $storage.get(STRINGS.l10n)
 		: 'ru'
 
 	try {
@@ -309,12 +309,12 @@ let l10n = () => {
 			'moment' in window &&
 			moment() instanceof moment &&
 			'locales' in moment &&
-			$ls.test()
+			$storage.test()
 		) {
 			let momentLocales = moment.locales()
 
 			if (momentLocales.includes('ru') && momentLocales.includes('en')) {
-				moment.locale($ls.get(STRINGS.l10n))
+				moment.locale($storage.get(STRINGS.l10n))
 			}
 		}
 	})()

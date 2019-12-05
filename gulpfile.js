@@ -2,21 +2,32 @@
 
 let project = require('./package.json')
 
+/* Подключение встроенных модулей к проекту */
+
+let fs = require('fs'), path = require('path')
+
+/* Подключение Gulp к проекту */
+
+let gulp = require('gulp')
+
+/* Подключение сторонних плагинов Gulp к проекту */
+
 let
-	fs =          require('fs'),
-	gulp =        require('gulp'),
-	tube =        require('gulp-pipe'),
-	bom =         require('gulp-bom'),
-	rename =      require('gulp-rename'),
-	watch =       require('gulp-watch'),
-	clean =       require('gulp-clean'),
-	plumber =     require('gulp-plumber'),
-	cleanCSS =    require('gulp-clean-css'),
-	pug =         require('gulp-pug'),
-	sequence =    require('gulp-sequence'),
-	changeJSON =  require('gulp-json-transform'),
-	parseYAML =   require('js-yaml'),
-	liveServer =  require('browser-sync')
+	tube =			require('gulp-pipe'),
+	bom =			require('gulp-bom'),
+	rename =		require('gulp-rename'),
+	watch =			require('gulp-watch'),
+	clean =			require('gulp-clean'),
+	plumber =		require('gulp-plumber'),
+	cleanCSS =		require('gulp-clean-css'),
+	pug =			require('gulp-pug'),
+	transformJSON =	require('gulp-json-transform')
+
+/*  Подключение сторонних модулей к проекту */
+
+let
+	parseYAML =		require('js-yaml'),
+	liveServer =	require('browser-sync')
 
 let sass = {
 	compile:  require('gulp-sass'),
@@ -35,6 +46,8 @@ let
 
 let parseYAMLfile = fileName => parseYAML.load(fs.readFileSync(`./${fileName}.yaml`, 'utf8'))
 
+let getPackageDir = packageName => path.dirname(require.resolve(`${packageName}/package.json`))
+
 let config = parseYAMLfile('project-config')
 
 let vendors = parseYAMLfile('project-vendors')
@@ -50,19 +63,25 @@ let paths = {
 	js: {
 		dev:    [`${dirs.dev}/js/**/*.js`, `!${dirs.dev}/js/service-worker.js`],
 		dev_sw:  `${dirs.dev}/js/service-worker.js`,
-		prod:    `${dirs.build}/${dirs.assets}/js/`,
+
+		prod:          `${dirs.build}/${dirs.assets}/js/`,
+		prod_vendors:  `${dirs.build}/${dirs.assets}/js/vendors/`,
+
+		vendors: {
+			kamina: `${getPackageDir('kamina-js')}/dist/kamina.min.js`
+		},
 	},
 
 	css: {
 		dev:   `${dirs.dev}/scss/**/*.scss`,
 		prod:  `${dirs.build}/${dirs.assets}/css/`,
-	}
+	},
 }
 
 gulp.task('liveReload', () => liveServer({
 	server: [dirs.build, dirs.dist_content],
 	port: 8080,
-	notify: false,
+	notify: false
 }))
 
 /* Сборка pug */
@@ -71,25 +90,34 @@ let pugTubes = [
 	plumber(),
 	pug({ locals: {
 		VERSION:     project.version,
+
 		title:       config.title,
+
 		domain:      config.domain,
+
 		primeColor:  config.prime_color,
+
 		PATHS: {
 			js:       `/${dirs.assets}/js`,
 			css:      `/${dirs.assets}/css`,
 			img:      `/${dirs.assets}/img`,
 		},
+
 		LIBS: vendors,
+
 		BBISWU: {
 			google: config.trackers.google,
-			yandex: config.trackers.yandex,
+			yandex: config.trackers.yandex
 		},
+
 		URLs:        config.URLs,
+
 		PLAYERS:     config.PLAYERS,
 	}}),
 	bom(),
 	rename(file => {
 		switch (file.dirname) {
+			case 'players':
 			case 'apps':
 				file.extname = '.htm'
 		}
@@ -115,13 +143,13 @@ gulp.task('pug:dev', () => tube(
 
 let manifestTubes = [
 	plumber(),
-	changeJSON((data, file) => {
+	transformJSON((data, file) => {
 		data.icons.forEach(icon => {
 			icon.src = `/${dirs.assets}/img/${icon.src}?v=${project.version}`
 		})
 
-		data.name =        project.name
-		data.short_name =  project.name
+		data.name =        config.title
+		data.short_name =  config.title
 
 		data.theme_color = config.prime_color
 
@@ -171,10 +199,10 @@ gulp.task('js:service-worker:dev', () => tube(
 		.concat(jsTubes(paths.html.prod), [reloadServer()])
 ))
 
-gulp.task('js:get-kamina', () => tube([
-	gulp.src('node_modules/kamina-js/dist/kamina.min.js'),
+gulp.task('js:get-vendors', () => tube([
+	gulp.src(Object.values(paths.js.vendors)),
 	bom(),
-	gulp.dest(paths.js.prod)
+	gulp.dest(paths.js.prod_vendors)
 ]))
 
 /* Сборка SCSS */
@@ -183,13 +211,17 @@ let scssTubes = [
 	plumber(),
 	sass.vars({
 		VERSION:     project.version,
+
 		primeColor:  config.prime_color,
+
 		imgPath:     `/${dirs.assets}/img`,
+
+		otherPath:   `/${dirs.assets}/other`,
 	}, { verbose: false }),
-	sass.compile.sync({ outputStyle: 'compressed' }),
+	sass.compile({ outputStyle: 'compressed' }),
 	cleanCSS(),
+	rename({ suffix: '.min' }),
 	bom(),
-	rename({suffix: '.min'}),
 	gulp.dest(paths.css.prod)
 ]
 
@@ -208,27 +240,27 @@ gulp.task('scss:dev', () => tube(
 gulp.task('dist:copy', () => tube([
 	gulp.src([
 		`${dirs.build}/**/*`, `${dirs.build}/**/.*`,
-		`${dirs.dist_content}/**/*`, `${dirs.dist_content}/**/.*`,
+		`${dirs.dist_content}/**/*`, `${dirs.dist_content}/**/.*`
 	]),
 	gulp.dest(dirs.dist)
 ]))
 
 gulp.task('dist:clean', () => tube([
-	gulp.src(dirs.dist, { read: false }),
+	gulp.src(dirs.dist, { read: false, allowEmpty: true }),
 	clean()
 ]))
 
-gulp.task('dist', sequence('dist:clean', 'dist:copy'))
+gulp.task('dist', gulp.series('dist:clean', 'dist:copy'))
 
 /* Команды для сборки и разработки */
 
-gulp.task('build', ['pug:build', 'webmanifest:build', 'js:assets:build', 'js:service-worker:build', 'js:get-kamina', 'scss:build'])
+gulp.task('build', gulp.parallel('pug:build', 'webmanifest:build', 'js:assets:build', 'js:service-worker:build', 'js:get-vendors', 'scss:build'))
 
 gulp.task('build:clean', () => tube([
-	gulp.src(dirs.build, { read: false }),
+	gulp.src(dirs.build, { read: false, allowEmpty: true }),
 	clean()
 ]))
 
-gulp.task('dev', ['liveReload', 'pug:dev', 'webmanifest:dev', 'js:assets:dev', 'js:service-worker:dev', 'js:get-kamina', 'scss:dev'])
+gulp.task('dev', gulp.parallel('liveReload', 'pug:dev', 'webmanifest:dev', 'js:assets:dev', 'js:service-worker:dev', 'js:get-vendors', 'scss:dev'))
 
-gulp.task('default', sequence('build', 'dist'))
+gulp.task('default', gulp.series('build:clean', 'build', 'dist'))

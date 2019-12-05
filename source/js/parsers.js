@@ -278,8 +278,8 @@ let $parser = {
 
 		let _storageNotiItemName = STRINGS.notiItem
 
-		if ($ls.get(_storageNotiItemName)) {
-			notiItems = JSON.parse($ls.get(_storageNotiItemName))
+		if ($storage.get(_storageNotiItemName)) {
+			notiItems = JSON.parse($storage.get(_storageNotiItemName))
 		}
 
 		// @TODO: сделать удаление из хранилища всех оповещений, которые были внесены более какого-то периода (например, более двух недель) назад
@@ -332,7 +332,7 @@ let $parser = {
 
 		notiHideBtn.onclick = () => {
 			notiItems.push(notiID)
-			$ls.set(_storageNotiItemName, JSON.stringify(notiItems))
+			$storage.set(_storageNotiItemName, JSON.stringify(notiItems))
 
 			notiElem.style.display = 'none'
 			delete notiElem.dataset.notiIsEnabled
