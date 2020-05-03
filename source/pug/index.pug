@@ -8,7 +8,7 @@ html(lang='ru')
 
 		link(rel='canonical' href=`${URLs.self}`)
 
-		each URL in ['aw-cdn.blyat.science', 'aw-api.blyat.science', 'www.google-analytics.com', 'ssl.google-analytics.com', 'fonts.gstatic.com', 'mc.yandex.ru', 'counter.yadro.ru', 'images.weserv.nl', 'st1.chatovod.ru', 'myradio24.com', 'listen1.myradio24.com', `ryuko.${domain}`]
+		each URL in ['cdn.blyat.science', 'aw-api.blyat.science', 'www.google-analytics.com', 'ssl.google-analytics.com', 'fonts.gstatic.com', 'mc.yandex.ru', 'counter.yadro.ru', 'images.weserv.nl', 'st1.chatovod.ru', 'myradio24.com', 'myradio24.org']
 			link(rel='dns-prefetch' href=`//${URL}`)
 
 		each verif in [{ type: 'google-site-verification', content: 'Y-zrQS3gEUB2vkcCPbvcU7dhogBFKa_BV-rP_i2x79c' }]
@@ -86,7 +86,7 @@ html(lang='ru')
 
 			include inc/footer.pug
 
-		each JS in [{ file: `url-search-params/${LIBS.js.urlSP_polyfill.v}/url-search-params.js`, sri: LIBS.js.urlSP_polyfill.sri }, { file: `moment.js/${LIBS.js.moment.v.same}/moment.min.js`, sri: LIBS.js.moment.sri.same }, { file: `moment.js/${LIBS.js.moment.v.same}/locale/ru.js`, sri: LIBS.js.moment.sri.locale }, { file: `ismobilejs/${LIBS.js.isMobile.v}/isMobile.min.js`, sri: LIBS.js.isMobile.sri }]
+		each JS in [{ file: `url-search-params/${LIBS.js.urlSP_polyfill.v}/url-search-params.js`, sri: LIBS.js.urlSP_polyfill.sri }, { file: `moment.js/${LIBS.js.moment.v.same}/moment.min.js`, sri: LIBS.js.moment.sri.same }, { file: `moment.js/${LIBS.js.moment.v.same}/locale/ru.min.js`, sri: LIBS.js.moment.sri.locale }, { file: `ismobilejs/${LIBS.js.isMobile.v}/isMobile.min.js`, sri: LIBS.js.isMobile.sri }]
 			script(src=`https://cdnjs.cloudflare.com/ajax/libs/${JS.file}` integrity=`${JS.sri}` crossorigin='anonymous' defer)
 
 		each JS in ['vendors/kamina', 'special/ms-edge-suck', 'special/info-from-meta', 'core', 'every', 'langs', 'special/client-tests', 'parsers', 'radio']

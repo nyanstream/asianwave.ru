@@ -100,9 +100,8 @@ void (() => {
 
 let player = $make.qs('.player')
 
-DOMAINS.radio = `ryuko.${DOMAINS.self}`
-
-var getRadioSrc = () => `https://listen${$currentPoint.mr24.server()}.${DOMAINS.mr24}/${$currentPoint.mr24.port()}`
+//var getRadioSrc = () => `https://listen${$currentPoint.mr24.server()}.${DOMAINS.mr24}/${$currentPoint.mr24.port()}`
+var getRadioSrc = () => `https://${DOMAINS.mr24alt}/${$currentPoint.mr24.port()}`
 
 var
 	radio = new Audio(getRadioSrc()),

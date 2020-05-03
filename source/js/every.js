@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
 				{ scope: '/' }
 			).then(reg => {
 				if (reg.installing) {
-					console.info('Service Worker увлановлен.')
+					console.info('Service Worker установлен.')
 				} else if(reg.waiting) {
 					console.info('Service Worker устанавливается...')
 				} else if(reg.active) {

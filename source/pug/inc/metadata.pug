@@ -12,8 +12,6 @@ meta(name='theme-color' content=`${primeColor}`)
 each og in [{ what: 'card', content: 'summary_large_image' }, { what: 'title', content: `${title.toUpperCase()}${subPage ? ' / ' + subPage.title : ''}` }, { what: 'description', content: `${description}` }, { what: 'image', content: `${URLs.self}${PATHS.img}/share.png?v=${VERSION}` }]
 	meta(name=`twitter:${og.what}` content=`${og.content}`)
 
-meta(name='telegram:channel' content=`${URLs.links_soc.tg.replace('https://t.me/', '')}`)
-
 script(type='application/ld+json') { "@context": "https://schema.org", "@type": "WebSite", "url": "#{URLs.self}", "name": "#{title}", "description": "#{description}" }
 
 link(rel='shortcut icon' href=`${URLs.favicon}`)

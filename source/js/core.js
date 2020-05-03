@@ -25,10 +25,11 @@ const STRINGS = {
  */
 
 const DOMAINS = {
-	self:  'asianwave.ru',
-	api:   'aw-api.blyat.science',
-	vk:    'vk.com',
-	mr24:  'myradio24.com'
+	self:     'asianwave.ru',
+	api:      'aw-api.blyat.science',
+	vk:       'vk.com',
+	mr24:     'myradio24.com',
+	mr24alt:  'myradio24.org',
 }
 
 /*

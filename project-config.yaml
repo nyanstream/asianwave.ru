@@ -2,7 +2,7 @@ title: Asian Wave
 
 domain: asianwave.ru
 
-prime_color: '#00bfff'
+prime_color: '#fba9ad'
 
 description:
   ru: Мультимедийный портал для поклонников азиатской культуры всех жанров и типов
@@ -28,7 +28,7 @@ URLs:
 
   links_soc:
     vk: https://vk.com/asianwaveru
-    tg: https://tlg.wtf/asianwave
+    tg: https://tgrm.github.io/asianwave
 
   extensions:
     chrome: /app--chrome

@@ -1,14 +1,11 @@
 js:
-  # cdnjs.com/libraries/moment.js (moment.min.js & ru.js)
-  # cdnjs.com/libraries/moment-timezone (moment-timezone-with-data.min.js)
+  # cdnjs.com/libraries/moment.js (moment.min.js & ru.min.js)
   moment:
     v:
-      same: 2.24.0
-      timezone: 0.5.26
+      same: 2.25.1
     sri:
-      same: sha256-4iQZ6BVL4qNKlQ27TExEhBN1HFPvAvAMbFavKKosSWQ=
-      locale: sha256-qR4pdhxtx7dwKGJuYGoYjfnCQBPXv47hzLLU8jPLVUY=
-      timezone: sha256-6EFCRhQs5e10gzbTAKzcFFWcpDGNAzJjkQR3i1lvqYE=
+      same: sha256-epLhbUf8psw8cUHu0hJ5eabk6CPexNJpCbsc0q4ougI=
+      locale: sha256-OIz8S7fIG7M5nqyxd35nQyU7saRDir8NorBqT8Vu/5U=
 
   # cdnjs.com/libraries/ismobilejs (isMobile.min.js)
   isMobile:
@@ -28,10 +25,10 @@ js:
 css:
   # cdnjs.com/libraries/fork-awesome (fork-awesome.min.css)
   fa:
-    v: 1.0.4 # обновлять только если понадобятся новые иконки
-    sri: sha256-tjfjH2pLkP1K9tzW8y7R1b/Ji7SNq8hgZoldn74zw1o=
+    v: 1.1.7
+    sri: sha256-gsmEoJAws/Kd3CjuOQzLie5Q3yshhvmo7YNtBG7aaEY=
 
   # cdnjs.com/libraries/balloon-css
   balloon:
-    v: 1.0.3
-    sri: sha256-/+spSPIfYJ8QYDcQgq2RKloYWcWV0MnRSXAeTT4TVaE=
+    v: 1.0.4
+    sri: sha256-pfno2mJJPc18/fMxcMqCbNmQfBYs/FSn8ltQ/Ct3n5E=

@@ -35,6 +35,8 @@ let sass = {
 	vars:     require('gulp-sass-vars')
 }
 
+sass.compile.compiler = require('sass')
+
 let uglify = {
 	core:      require('terser'),
 	composer:  require('gulp-uglify/composer')
